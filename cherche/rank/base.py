@@ -6,12 +6,11 @@ __all__ = ["Ranker"]
 class Ranker(abc.ABC):
     """Abstract class for ranking models."""
 
-    def __init__(self) -> None:
-        super().__init__()
-
     def __repr__(self) -> str:
-        pass
+        repr = f"{self.__class__.__name__} ranker"
+        repr += f"\n \t on: {self.on}"
+        return repr
 
     @abc.abstractmethod
-    def __call__(self, documents: list[dict], k: int, on: str) -> list:
+    def __call__(self, documents: list, on: str, k: int = None) -> list:
         pass

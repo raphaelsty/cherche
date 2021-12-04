@@ -21,6 +21,8 @@ setuptools.setup(
         "scipy == 1.6.2",
         "sentence-transformers==2.1.0",
         "transformers == 4.12.0",
+        "pytest-cov == 3.0.0",
+        "rank-bm25 == 0.2.1",
     ],
     package_data={},
     classifiers=[

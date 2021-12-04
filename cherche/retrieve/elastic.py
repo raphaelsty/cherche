@@ -2,8 +2,10 @@ __all__ = ["Elastic"]
 
 from elasticsearch import Elasticsearch, helpers
 
+from .base import Retriever
 
-class Elastic:
+
+class Elastic(Retriever):
     """ElasticSearch retriever.
 
     Parameters
@@ -14,9 +16,12 @@ class Elastic:
 
     Examples
     --------
-    >>> from anotherrr import retrieve
+
+    >>> from pprint import pprint as print
+    >>> from cherche import retrieve
     >>> from elasticsearch import Elasticsearch
 
+    >>> retriever = retrieve.Elastic(on="title", es=Elasticsearch(), index="test")
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers.", "date": "10-11-2021"},
@@ -24,42 +29,46 @@ class Elastic:
     ...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers.", "date": "22-11-2020"},
     ... ]
 
-    >>> retriever = retrieve.Elastic(
-    ...     es = Elasticsearch(),
-    ...     index = "test",
-    ... )
+    >>> retriever = retriever.reset()
+    >>> retriever = retriever.add(documents=documents)
 
-    >>> model = model.reset_index()
+    >>> retriever
+    Elastic retriever
+         on: title
+         documents: 3
 
-    >>> model = model.add(documents=documents)
-
-    >>> model(q = "Transformers", k=1)
+    >>> print(retriever(q="Transformers", k=2))
+    [{'date': '10-11-2021',
+      'title': 'Github library with PyTorch and Transformers.',
+      'url': 'ckb/github.com'},
+     {'date': '22-11-2020',
+      'title': 'Github Library with Pytorch and Transformers.',
+      'url': 'blp/github.com'}]
 
 
     References
     ----------
-        1. [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.1/)
+    1. [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.1/)
 
     """
 
     def __init__(self, on: str, es=None, index: str = "nlapi") -> None:
+        self.on = on
         self.es = Elasticsearch() if es is None else es
         self.index = index
-        self.on = on
 
         if not self.es.indices.exists(index=self.index):
             self.es.indices.create(index=self.index)
 
-    def reset(self):
-        """Delete the selected index from ElasticSearch."""
-        if self.es.indices.exists(index=self.index):
-            self.es.delete_by_query(index=self.index, body={"query": {"match_all": {}}})
-            self.es.indices.refresh(index=self.index)
-        return self
+    def __len__(self):
+        return len(
+            self.es.search(index=self.index, body={"query": {"match_all": {}}},)[
+                "hits"
+            ]["hits"]
+        )
 
     def add(self, documents: list):
         """ElasticSearch bulk indexing."""
-        # Format input documents to add them to ElasticSearch
         documents = [
             {
                 "_index": self.index,
@@ -71,16 +80,18 @@ class Elastic:
         self.es.indices.refresh(index=self.index)
         return self
 
-    def __call__(self, q: str, k: int):
+    def __call__(self, q: str, k: int = None):
         """ElasticSearch query.
+
         Parameters
         ----------
-            q: User query as a string.
-            k: Retrieves top k.
-            fields: Field to match the query
+
+            q: User query.
+            k: Number of documents to retrieve.
+            on: Field to match the query.
+
         """
         query = {
-            "size": k,
             "query": {
                 "multi_match": {
                     "query": q,
@@ -91,15 +102,19 @@ class Elastic:
             },
         }
 
+        if k is not None:
+            query["size"] = k
+
         documents = self.es.search(
             index=self.index,
             body=query,
         )
 
-        ranked = []
+        return [document["_source"] for document in documents["hits"]["hits"]]
 
-        for document in documents["hits"]["hits"]:
-            document["_source"]["score"] = document["_score"]
-            ranked.append(document["_source"])
-
-        return ranked
+    def reset(self):
+        """Delete the selected index from ElasticSearch."""
+        if self.es.indices.exists(index=self.index):
+            self.es.delete_by_query(index=self.index, body={"query": {"match_all": {}}})
+            self.es.indices.refresh(index=self.index)
+        return self
