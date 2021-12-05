@@ -31,13 +31,13 @@ class TfIdf(Retriever):
          on: title
          documents: 3
 
-    >>> print(retriever(q=q))
-    [{'date': '10-11-2021',
+    >>> print(retriever(q="Github"))
+    [{'date': '22-11-2021',
+      'title': 'Github Library with PyTorch.',
+      'url': 'mkb/github.com'},
+     {'date': '10-11-2021',
       'title': 'Github library with PyTorch and Transformers.',
-      'url': 'ckb/github.com'},
-     {'date': '22-11-2020',
-      'title': 'Github Library with Pytorch and Transformers.',
-      'url': 'blp/github.com'}]
+      'url': 'ckb/github.com'}]
 
     References
     ----------

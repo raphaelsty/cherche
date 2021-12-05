@@ -1,6 +1,6 @@
 __all__ = ["ZeroShot"]
 
-from ..pipeline import Pipeline
+from ..compose import Compose
 
 
 class ZeroShot:
@@ -108,7 +108,7 @@ class ZeroShot:
 
     def __add__(self, other):
         """Custom operator to make pipeline."""
-        if isinstance(other, Pipeline):
+        if isinstance(other, Compose):
             return other + self
         else:
-            return Pipeline(models=[other, self])
+            return Compose(models=[other, self])

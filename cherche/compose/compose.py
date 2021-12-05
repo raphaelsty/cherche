@@ -1,7 +1,7 @@
-__all__ = ["Pipeline"]
+__all__ = ["Compose"]
 
 
-class Pipeline:
+class Compose:
     """Cherche pipeline.
 
     Parameters

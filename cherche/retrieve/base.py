@@ -1,6 +1,6 @@
 import abc
 
-from cherche.pipeline.pipeline import Pipeline
+from ..compose import Compose
 
 __all__ = ["Retriever"]
 
@@ -33,7 +33,7 @@ class Retriever(abc.ABC):
 
     def __add__(self, other):
         """Custom operator to make pipeline."""
-        if isinstance(other, Pipeline):
+        if isinstance(other, Compose):
             return other + self
         else:
-            return Pipeline(models=[self, other])
+            return Compose(models=[self, other])

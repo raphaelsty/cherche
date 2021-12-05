@@ -2,7 +2,7 @@ __all__ = ["QA"]
 
 from operator import itemgetter
 
-from ..pipeline import Pipeline
+from ..compose import Compose
 
 
 class QA:
@@ -16,6 +16,7 @@ class QA:
 
     Examples
     --------
+
 
     >>> from pprint import pprint as print
     >>> from transformers import pipeline
@@ -79,29 +80,30 @@ class QA:
         if not documents:
             return []
 
-        k = min(k, len(documents)) if k is not None else len(documents)
-
         answers = self.model(
             {
                 "question": [q for _ in documents],
                 "context": [document[self.on] for document in documents],
             },
-            top_k=k,
         )
 
         top_answers = []
-        for list_answer, document in zip(answers, documents):
-            for answer in list_answer:
-                if isinstance(document, dict):
+        for answer, document in zip(answers, documents):
+            if isinstance(document, dict):
+                if isinstance(answer, list):
+                    for a in answer:
+                        a.update(**document)
+                        top_answers.append(a)
+                else:
                     answer.update(**document)
-                top_answers.append(answer)
+                    top_answers.append(answer)
 
         answers = sorted(top_answers, key=itemgetter("score"), reverse=True)
         return answers[:k] if k is not None else answers
 
     def __add__(self, other):
         """Custom operator to make pipeline."""
-        if isinstance(other, Pipeline):
+        if isinstance(other, Compose):
             return other + self
         else:
-            return Pipeline(models=[other, self])
+            return Compose(models=[other, self])
