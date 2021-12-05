@@ -18,7 +18,7 @@ class Flash(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.Flash(on="tag")
+    >>> retriever = retrieve.Flash(on="tag", k=2)
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "tag": "Transformers", "date": "10-11-2021", "label": "Transformers are heavy."},
@@ -28,7 +28,7 @@ class Flash(Retriever):
 
     >>> retriever = retriever.add(documents=documents)
 
-    >>> print(retriever(q="Transformers with Pytorch", k=3))
+    >>> print(retriever(q="Transformers with Pytorch"))
     [{'date': '10-11-2021',
       'label': 'Transformers are heavy.',
       'tag': 'Transformers',
@@ -46,8 +46,8 @@ class Flash(Retriever):
 
     """
 
-    def __init__(self, on: str, keywords=None) -> None:
-        super().__init__(on)
+    def __init__(self, on: str, k: int = None, keywords=None) -> None:
+        super().__init__(on=on, k=k)
         self.documents = collections.defaultdict(list)
         self.keywords = KeywordProcessor() if keywords is None else keywords
 
@@ -69,7 +69,7 @@ class Flash(Retriever):
             self.keywords.add_keyword(document)
         return self
 
-    def __call__(self, q: list, k: int = None) -> list:
+    def __call__(self, q: str) -> list:
         """Retrieve tagss."""
         documents = list(
             chain.from_iterable([self.documents[tag] for tag in self.keywords.extract_keywords(q)])
@@ -77,4 +77,4 @@ class Flash(Retriever):
 
         # Remove duplicates documents
         documents = [i for n, i in enumerate(documents) if i not in documents[n + 1 :]]
-        return documents[:k] if k is not None else documents
+        return documents[: self.k] if self.k is not None else documents

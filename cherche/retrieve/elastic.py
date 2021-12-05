@@ -10,6 +10,8 @@ class Elastic(Retriever):
 
     Parameters
     ----------
+        on: Field to use to retrieve documents.
+        k: Number of documents to retrieve.
         es: ElasticSearch Python client with selected configuration. Default configuration is used
             if es is set to None.
         index: ElasticSearch index to use.
@@ -21,29 +23,27 @@ class Elastic(Retriever):
     >>> from cherche import retrieve
     >>> from elasticsearch import Elasticsearch
 
-    >>> retriever = retrieve.Elastic(on="title", es=Elasticsearch(), index="test")
+    >>> es = Elasticsearch()
 
-    >>> documents = [
-    ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers.", "date": "10-11-2021"},
-    ...     {"url": "mkb/github.com", "title": "Github Library with PyTorch.", "date": "22-11-2021"},
-    ...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers.", "date": "22-11-2020"},
-    ... ]
-
-    >>> retriever = retriever.reset()
-    >>> retriever = retriever.add(documents=documents)
-
-    >>> retriever
-    Elastic retriever
-         on: title
-         documents: 3
-
-    >>> print(retriever(q="Transformers", k=2))
+    >>> if es.ping():
+    ...     retriever = retrieve.Elastic(on="title", k=2, es=es, index="test")
+    ...
+    ...     documents = [
+    ...         {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers.", "date": "10-11-2021"},
+    ...         {"url": "mkb/github.com", "title": "Github Library with PyTorch.", "date": "22-11-2021"},
+    ...         {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers.", "date": "22-11-2020"},
+    ...     ]
+    ...
+    ...     retriever = retriever.reset()
+    ...     retriever = retriever.add(documents=documents)
+    ...
+    ...     print(retriever(q="Transformers"))
     [{'date': '10-11-2021',
-      'title': 'Github library with PyTorch and Transformers.',
-      'url': 'ckb/github.com'},
-     {'date': '22-11-2020',
-      'title': 'Github Library with Pytorch and Transformers.',
-      'url': 'blp/github.com'}]
+    'title': 'Github library with PyTorch and Transformers.',
+    'url': 'ckb/github.com'},
+    {'date': '22-11-2020',
+    'title': 'Github Library with Pytorch and Transformers.',
+    'url': 'blp/github.com'}]
 
     References
     ----------
@@ -51,8 +51,9 @@ class Elastic(Retriever):
 
     """
 
-    def __init__(self, on: str, es=None, index: str = "nlapi") -> None:
+    def __init__(self, on: str, k: int = None, es=None, index: str = "cherche") -> None:
         self.on = on
+        self.k = k
         self.es = Elasticsearch() if es is None else es
         self.index = index
 
@@ -79,14 +80,13 @@ class Elastic(Retriever):
         self.es.indices.refresh(index=self.index)
         return self
 
-    def __call__(self, q: str, k: int = None):
+    def __call__(self, q: str):
         """ElasticSearch query.
 
         Parameters
         ----------
 
             q: User query.
-            k: Number of documents to retrieve.
             on: Field to match the query.
 
         """
@@ -101,8 +101,8 @@ class Elastic(Retriever):
             },
         }
 
-        if k is not None:
-            query["size"] = k
+        if self.k is not None:
+            query["size"] = self.k
 
         documents = self.es.search(
             index=self.index,

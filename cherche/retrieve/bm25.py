@@ -14,7 +14,7 @@ class BM25(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.BM25(on="title")
+    >>> retriever = retrieve.BM25(on="title", k=2)
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
@@ -29,7 +29,7 @@ class BM25(Retriever):
         on: title
         documents: 3
 
-    >>> print(retriever(q="Transformers", k=2))
+    >>> print(retriever(q="Transformers"))
     [{'date': '10-11-2021',
       'title': 'Github library with PyTorch and Transformers .',
       'url': 'ckb/github.com'},
@@ -43,8 +43,8 @@ class BM25(Retriever):
 
     """
 
-    def __init__(self, on: str, tokenizer=None) -> None:
-        super().__init__(on)
+    def __init__(self, on: str, tokenizer=None, k: int = None) -> None:
+        super().__init__(on=on, k=k)
         self.bm25 = None
         self.tokenizer = tokenizer
 
@@ -59,9 +59,9 @@ class BM25(Retriever):
         )
         return self
 
-    def __call__(self, q: str, k: int = None) -> list:
+    def __call__(self, q: str) -> list:
         """Retrieve the right document."""
         q = q.split(" ") if self.tokenizer is None else self.tokenizer(q)
         similarities = self.bm25.get_scores(q)
         documents = [self.documents[index] for index in similarities.argsort()]
-        return documents[:k] if k is not None else documents
+        return documents[: self.k] if self.k is not None else documents

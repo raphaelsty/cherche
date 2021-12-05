@@ -12,6 +12,7 @@ class Encoder(Ranker):
 
         on: Field of the documents to use for ranking.
         encoder: Encoding function to computes embeddings of the documents.
+        k: Number of documents to keep.
         path: Path of the file dedicated to store the embeddings as a pickle file.
         metric: Distance / similarity measure to use i.e cherche.metric.cosine_distance or
             cherche.metric.dot_similarity.
@@ -26,8 +27,16 @@ class Encoder(Ranker):
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    on = "title",
+    ...    k = 2,
     ...    path = "encoder.pkl"
     ... )
+
+    >>> ranker
+    Encoder ranker
+         on: title
+         k: 2
+         Metric: cosine_distance
+         Embeddings stored at: encoder.pkl
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
@@ -35,9 +44,10 @@ class Encoder(Ranker):
     ...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers .", "date": "22-11-2020"},
     ... ]
 
+    Pre-compute embeddings of documents
     >>> ranker = ranker.add(documents=documents)
 
-    >>> print(ranker(q="Transformers", documents=documents, k=2))
+    >>> print(ranker(q="Transformers", documents=documents))
     [{'cosine_distance': 0.6396294832229614,
       'date': '10-11-2021',
       'title': 'Github library with PyTorch and Transformers .',
@@ -49,10 +59,12 @@ class Encoder(Ranker):
 
     """
 
-    def __init__(self, encoder, on: str, path: str = None, metric=cosine_distance) -> None:
-        super().__init__(on=on, encoder=encoder, path=path, metric=metric)
+    def __init__(
+        self, encoder, on: str, k: int = None, path: str = None, metric=cosine_distance
+    ) -> None:
+        super().__init__(on=on, encoder=encoder, k=k, path=path, metric=metric)
 
-    def __call__(self, q: str, documents: list, k: int = None) -> list:
+    def __call__(self, q: str, documents: list, **kwargs) -> list:
         """Encode inputs query and ranks documents based on the similarity between the query and
         the selected field of the documents.
 
@@ -61,14 +73,16 @@ class Encoder(Ranker):
 
             q: Query.
             documents: List of documents to re-rank.
-            k: Number of documents to keeps.
 
         """
-        emb_q = self.encoder(q) if q not in self.embeddings else q
+        if not documents:
+            return []
+
+        emb_q = self.encoder(q) if q not in self.embeddings else self.embeddings[q]
         emb_documents = [
             self.embeddings.get(document[self.on], self.encoder(document[self.on]))
             for document in documents
         ]
 
-        distances = self.metric(q=emb_q, documents=emb_documents)
-        return self._rank(distances=distances, documents=documents, k=k)
+        distances = self.metric(emb_q=emb_q, emb_documents=emb_documents)
+        return self._rank(distances=distances, documents=documents)

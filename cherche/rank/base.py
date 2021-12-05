@@ -5,6 +5,7 @@ import os
 import pickle
 
 from ..metric import cosine_distance
+from ..pipeline import Pipeline
 
 
 class Ranker(abc.ABC):
@@ -15,27 +16,36 @@ class Ranker(abc.ABC):
 
         on: Field of the documents to use for ranking.
         encoder: Encoding function to computes embeddings of the documents.
+        k: Number of documents to keep.
         path: Path of the file dedicated to store the embeddings as a pickle file.
         metric: Distance / similarity measure to use i.e cherche.metric.cosine_distance or
             cherche.metric.dot_similarity.
 
     """
 
-    def __init__(self, on: str, encoder, path: str = None, metric=cosine_distance) -> None:
+    def __init__(self, on: str, encoder, k: int, path: str, metric) -> None:
         self.on = on
         self.encoder = encoder
+        self.k = k
         self.path = path
         self.metric = metric
         self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
 
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} ranker"
-        repr += f"\n \t on: {self.on}"
+        repr += f"\n\t on: {self.on}"
+        repr += f"\n\t k: {self.k}"
+        repr += f"\n\t Metric: {self.metric.__name__}"
+        if self.path is not None:
+            repr += f"\n\t Embeddings stored at: {self.path}"
+
         return repr
 
     @abc.abstractmethod
-    def __call__(self, q: str, documents: list, k: int = None) -> list:
-        pass
+    def __call__(self, q: str, documents: list, **kwargs) -> list:
+        if not documents:
+            return []
+        return self
 
     def add(self, documents):
         """Pre-compute embeddings and store them at the selected path.
@@ -57,18 +67,17 @@ class Ranker(abc.ABC):
 
         return self
 
-    def _rank(self, distances: list, documents: list, k: int = None):
+    def _rank(self, distances: list, documents: list):
         """Rank inputs documents ordered by relevance among the top k.
 
         Parameters
         ----------
 
-            distances: List of tuples of index among the list of documents and distances.
+            distances: List of tuples (index, distances) among the list of documents to rank.
             documents: List of documents.
-            k: Number of documents to keep.
 
         """
-        distances = distances[:k] if k is not None else k
+        distances = distances[: self.k] if self.k is not None else distances
         ranked = []
         for index, distance in distances:
             document = documents[index]
@@ -90,3 +99,10 @@ class Ranker(abc.ABC):
         """Dump embeddings to the selected directory."""
         with open(path, "wb") as ouput_embeddings:
             pickle.dump(embeddings, ouput_embeddings)
+
+    def __add__(self, other):
+        """Custom operator to make pipeline."""
+        if isinstance(other, Pipeline):
+            return other + self
+        else:
+            return Pipeline(models=[other, self])

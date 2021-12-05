@@ -16,7 +16,7 @@ class TfIdf(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.TfIdf(on="title")
+    >>> retriever = retrieve.TfIdf(on="title", k=2)
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers.", "date": "10-11-2021"},
@@ -31,7 +31,7 @@ class TfIdf(Retriever):
          on: title
          documents: 3
 
-    >>> print(retriever(q="Transformers", k=2))
+    >>> print(retriever(q=q))
     [{'date': '10-11-2021',
       'title': 'Github library with PyTorch and Transformers.',
       'url': 'ckb/github.com'},
@@ -46,8 +46,8 @@ class TfIdf(Retriever):
 
     """
 
-    def __init__(self, on: str, tfidf: TfidfVectorizer = None) -> None:
-        super().__init__(on=on)
+    def __init__(self, on: str, k: int = None, tfidf: TfidfVectorizer = None) -> None:
+        super().__init__(on=on, k=k)
         self.tfidf = TfidfVectorizer() if tfidf is None else tfidf
         self.matrix = None
 
@@ -57,8 +57,8 @@ class TfIdf(Retriever):
         self.matrix = self.tfidf.fit_transform([doc[self.on] for doc in self.documents])
         return self
 
-    def __call__(self, q: list, k: int = None) -> list:
+    def __call__(self, q: str) -> list:
         """Retrieve the right document."""
         similarities = linear_kernel(self.tfidf.transform([q]), self.matrix).flatten()
         documents = [self.documents[index] for index in (-similarities).argsort()]
-        return documents[:k] if k is not None else documents
+        return documents[: self.k] if self.k is not None else documents
