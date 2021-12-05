@@ -1,12 +1,11 @@
-__all__ = ["DPR"]
+__all__ = ["Encoder"]
 
-from ..metric import dot_similarity
+from ..metric import cosine_distance
 from .base import Ranker
 
 
-class DPR(Ranker):
-    """DPR is dedicated to rank documents using distinct models to encode the query and the
-    documents contents.
+class Encoder(Ranker):
+    """SentenceBert Ranker.
 
     Parameters
     ----------
@@ -24,11 +23,10 @@ class DPR(Ranker):
     >>> from cherche import rank
     >>> from sentence_transformers import SentenceTransformer
 
-    >>> ranker = rank.DPR(
-    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
-    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
+    >>> ranker = rank.Encoder(
+    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    on = "title",
-    ...    path = "dpr.pkl"
+    ...    path = "encoder.pkl"
     ... )
 
     >>> documents = [
@@ -40,22 +38,19 @@ class DPR(Ranker):
     >>> ranker = ranker.add(documents=documents)
 
     >>> print(ranker(q="Transformers", documents=documents, k=2))
-    [{'date': '10-11-2021',
-      'dot_similarity': 54.095573,
+    [{'cosine_distance': 0.6396294832229614,
+      'date': '10-11-2021',
       'title': 'Github library with PyTorch and Transformers .',
       'url': 'ckb/github.com'},
-     {'date': '22-11-2020',
-      'dot_similarity': 54.095573,
+     {'cosine_distance': 0.6396294832229614,
+      'date': '22-11-2020',
       'title': 'Github Library with Pytorch and Transformers .',
       'url': 'blp/github.com'}]
 
     """
 
-    def __init__(
-        self, encoder, query_encoder, on: str, path: str = None, metric=dot_similarity
-    ) -> None:
+    def __init__(self, encoder, on: str, path: str = None, metric=cosine_distance) -> None:
         super().__init__(on=on, encoder=encoder, path=path, metric=metric)
-        self.query_encoder = query_encoder
 
     def __call__(self, q: str, documents: list, k: int = None) -> list:
         """Encode inputs query and ranks documents based on the similarity between the query and
@@ -69,7 +64,7 @@ class DPR(Ranker):
             k: Number of documents to keeps.
 
         """
-        emb_q = self.query_encoder(q)
+        emb_q = self.encoder(q) if q not in self.embeddings else q
         emb_documents = [
             self.embeddings.get(document[self.on], self.encoder(document[self.on]))
             for document in documents

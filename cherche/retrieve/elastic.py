@@ -45,7 +45,6 @@ class Elastic(Retriever):
       'title': 'Github Library with Pytorch and Transformers.',
       'url': 'blp/github.com'}]
 
-
     References
     ----------
     1. [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.1/)

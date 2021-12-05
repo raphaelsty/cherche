@@ -1,1 +1,1 @@
-__all__ = ["rank", "retrieve"]
+__all__ = ["metric", "rank", "retrieve"]
