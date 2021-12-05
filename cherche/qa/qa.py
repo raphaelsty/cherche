@@ -17,7 +17,6 @@ class QA:
     Examples
     --------
 
-
     >>> from pprint import pprint as print
     >>> from transformers import pipeline
     >>> from cherche import qa
