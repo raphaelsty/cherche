@@ -14,6 +14,7 @@ Cherche models allows to index a set of documents. These documents shall be form
 
 ```python
 from cherche import data
+
 documents = data.load_towns()
 
 documents[:3]
@@ -164,7 +165,7 @@ The retriever, ranker approach speed up the question answering process.
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
   'cosine_distance': 0.31821733713150024},
- {'score': 0.20747852325439453,
+ {'qa_score': 0.20747852325439453,
   'start': 12,
   'end': 17,
   'answer': 'Paris',
@@ -172,7 +173,7 @@ The retriever, ranker approach speed up the question answering process.
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
   'cosine_distance': 0.399497926235199},
- {'score': 0.07703403383493423,
+ {'qa_score': 0.07703403383493423,
   'start': 165,
   'end': 169,
   'answer': 'Nice',

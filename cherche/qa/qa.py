@@ -42,14 +42,14 @@ class QA:
     [{'answer': 'Github Library',
       'date': '22-11-2020',
       'end': 14,
-      'score': 0.2863011956214905,
+      'qa_score': 0.2863011956214905,
       'start': 0,
       'title': 'Github Library with Pytorch and Transformers .',
       'url': 'blp/github.com'},
      {'answer': 'Github library',
       'date': '10-11-2021',
       'end': 14,
-      'score': 0.2725629210472107,
+      'qa_score': 0.2725629210472107,
       'start': 0,
       'title': 'Github library with PyTorch and Transformers .',
       'url': 'ckb/github.com'}]
@@ -92,13 +92,15 @@ class QA:
             if isinstance(document, dict):
                 if isinstance(answer, list):
                     for a in answer:
+                        a["qa_score"] = a.pop("score")
                         a.update(**document)
                         top_answers.append(a)
                 else:
+                    answer["qa_score"] = answer.pop("score")
                     answer.update(**document)
                     top_answers.append(answer)
 
-        answers = sorted(top_answers, key=itemgetter("score"), reverse=True)
+        answers = sorted(top_answers, key=itemgetter("qa_score"), reverse=True)
         return answers[:k] if k is not None else answers
 
     def __add__(self, other):
