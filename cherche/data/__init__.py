@@ -1,0 +1,1 @@
+from .towns import load_towns
