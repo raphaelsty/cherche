@@ -121,6 +121,9 @@ As you can see, for the same query, the ranker manages to improve the results of
 
 ## Question Answering 😶
 
+Cherche provide a solution to connect extractive question answering models to retriever and ranker.
+The retriever, ranker approach speed up the question answering process.
+
 ```python
 >>> from cherche import data, retrieve, rank, qa
 >>> from sentence_transformers import SentenceTransformer
@@ -183,7 +186,8 @@ It is possible to use the question answering module with a simple retriever or w
 
 ## Summary 👾
 
-Cherche provides a summary of relevant documents for a query using HuggingFace's pre-trained models.
+Cherche provides a summary of relevant documents for a query using HuggingFace's pre-trained models. The retriever and the rankers allows to reduce speed up
+the summarization process.
 
 ```python
 >>> from cherche import data, retrieve, rank, summary
@@ -221,3 +225,12 @@ Cherche provides a summary of relevant documents for a query using HuggingFace's
 ```
 
 It is possible to connect the summarizer to a question answering model to summarise a set of responses to a query.
+
+## See also
+
+Cherche is a minimalist solution and meets a need for modularity. Do not hesitate to look at Haystack,
+Jina and TxtAi which offer very advanced solutions for neural search.
+
+- [Haystack](https://github.com/deepset-ai/haystack)
+- [Jina](https://github.com/jina-ai/jina)
+- [txtai](https://github.com/neuml/txtai)
