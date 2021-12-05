@@ -157,7 +157,7 @@ The retriever, ranker approach speed up the question answering process.
 >>> search = search.add(documents)
 
 >>> search("What is the capital of france?")
-[{'score': 0.6114194989204407,
+[{'qa_score': 0.6114194989204407,
   'start': 0,
   'end': 5,
   'answer': 'Paris',
