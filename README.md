@@ -1,2 +1,3 @@
 # Cherche
-Another Retriever Ranker Reader.
+
+Retrievers, Rankers and Readers pipelines.
