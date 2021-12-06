@@ -2,8 +2,6 @@
 
 Cherche (search in French) allows you to create a simple neural search pipeline using pre-trained language models. Cherche retrieves the right documents from a natural language query.
 
-![Alt text](./docs/explain.svg)
-
 ![Alt text](./docs/explain.png)
 
 ## Installation 🛠
