@@ -16,6 +16,7 @@ setuptools.setup(
     url="https://github.com/raphaelsty/anotherrr",
     packages=setuptools.find_packages(),
     install_requires=[
+        "creme == 0.6.1",
         "elasticsearch == 7.10.0",
         "flashtext == 2.7",
         "numpy == 1.21.4",
