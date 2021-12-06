@@ -39,7 +39,7 @@ documents[:3]
 
 ## Retrieve 🔎
 
-Cherche offers different retrievers for information retrieval. A retriever is a very fast model that allows to filter the most relevant documents for a query. 
+Cherche offers different retrievers for information retrieval. A retriever is a very fast model that allows to filter the most relevant documents for a query.
 
 - retrieve.ElasticSearch
 - retrieve.TfIdf
@@ -53,7 +53,7 @@ Cherche offers different retrievers for information retrieval. A retriever is a 
 >>> documents = data.load_towns() 
 
 # Initialize retriever
->>> retriever = retrieve.TfIdf(on="article", k=3)
+>>> retriever = retrieve.TfIdf(on="article", k=3) # on correspond au champ des dictionnaires sur lesquels on va effectuer la recherche.
 
 # Index documents
 >>> retriever.add(documents=documents)
@@ -148,7 +148,7 @@ The retriever, ranker approach speed up the question answering process.
 >>> question_answer = qa.QA(
 ...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
 ...     on = "article",
-...  )
+... )
 
 # Intialize the pipeline
 >>> search = retriever + ranker + question_answer
@@ -196,7 +196,7 @@ the summarization process.
 >>> from transformers import pipeline
 
 # Load the list of dicts
->>> documents = data.load_towns() 
+>>> documents = data.load_towns()
 
 # Initialize retriever
 >>> retriever = retrieve.TfIdf(on="article", k=30)
@@ -225,52 +225,7 @@ the summarization process.
 ' The City of Paris is the centre and seat of government of the region and province of Île-de-France. It is'
 ```
 
-## Retrieve + Rank + Question Answering + Summarizer 🤯
-
-We can easily create a pipeline that simultaneously retrieves documents, classifies them using models based on semantic similarity, retrieves answers using extractive question answering and finally summarises the answers. Incredible, isn't it?
-
-```python
->>> from cherche import data, retrieve, rank, qa, summary
->>> from sentence_transformers import SentenceTransformer
->>> from transformers import pipeline
-
-# Load the list of dicts
->>> documents = data.load_towns() 
-
-# Initialize retriever
->>> retriever = retrieve.TfIdf(on="article", k=30)
-
-# Initialize the ranker
->>> ranker = rank.Encoder(
-...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "article",
-...    k = 3,
-...    path = "encoder.pkl"
-... )
-
-# Intialize the question answering model
->>> question_answer = qa.QA(
-...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
-...     on = "article",
-...  )
-
-# Intialize the summarizer ask it to summarize the answer
->>> summarizer = summary.Summary(
-...    model = pipeline("summarization", model="sshleifer/distilbart-cnn-6-6", tokenizer="sshleifer/distilbart-cnn-6-6", framework="pt"),
-...    on = "answer", # Answer in output of the QA model.
-... )
-
-# Intialize the pipeline
->>> search = retriever + ranker + question_answer + summarizer
-
-# Index documents
->>> search = search.add(documents)
-
->>> search("What is the capital of france?")
-' Paris is a major city in Paris. It is also a city of French capital Paris. Nice, France, is a great place to'
-```
-
-The choice of the pre-trained model is crucial to obtain meaningful answers.
+The choice of the pre-trained model (ranker, question answering and summary) is crucial to obtain meaningful answers.
 
 ## See also
 
