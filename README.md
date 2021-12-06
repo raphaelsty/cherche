@@ -43,7 +43,9 @@ Cherche offers different retrievers for information retrieval. A retriever is a 
 
 - retrieve.ElasticSearch
 - retrieve.TfIdf
-- retrieve.BM25
+- retrieve.BM25Okapi
+- retrieve.BM25L
+- retrieve.BM25Plus
 - retrieve.Flash
 
 ```python
@@ -227,7 +229,7 @@ the summarization process.
 
 The choice of the pre-trained model (ranker, question answering and summary) is crucial to obtain meaningful answers.
 
-## See also
+## References
 
 Cherche is a minimalist solution and meets a need for modularity. Do not hesitate to look at Haystack,
 Jina and TxtAi which offer very advanced solutions for neural search.
@@ -235,3 +237,5 @@ Jina and TxtAi which offer very advanced solutions for neural search.
 - [Haystack](https://github.com/deepset-ai/haystack)
 - [Jina](https://github.com/jina-ai/jina)
 - [txtai](https://github.com/neuml/txtai)
+
+The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.

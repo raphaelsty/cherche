@@ -7,7 +7,9 @@ def cherche_retrievers(on: str, k: int = None):
     """List of retrievers available in cherche."""
     yield from [
         retrieve.TfIdf(on=on, k=k),
-        retrieve.BM25(on=on, k=k),
+        retrieve.BM25Okapi(on=on, k=k),
+        retrieve.BM25L(on=on, k=k),
+        retrieve.BM25Plus(on=on, k=k),
     ]
 
 

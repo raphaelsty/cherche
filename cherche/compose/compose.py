@@ -84,52 +84,26 @@ class Compose:
       'cosine_distance': 0.6396294832229614,
       'date': '22-11-2020',
       'end': 45,
-      'score': 1.2880965186923277e-05,
+      'qa_score': 1.2880965186923277e-05,
       'start': 0,
       'title': 'Github Library with Pytorch and Transformers.',
       'url': 'blp/github.com'},
-     {'answer': 'Pytorch and Transformers.',
+     {'answer': 'Github library with PyTorch and Transformers.',
       'cosine_distance': 0.6396294832229614,
-      'date': '22-11-2020',
+      'date': '10-11-2021',
       'end': 45,
-      'score': 1.2100194908271078e-05,
-      'start': 20,
-      'title': 'Github Library with Pytorch and Transformers.',
-      'url': 'blp/github.com'},
-     {'answer': 'Github Library with Pytorch',
-      'cosine_distance': 0.6396294832229614,
-      'date': '22-11-2020',
-      'end': 27,
-      'score': 8.924549547373317e-06,
+      'qa_score': 8.694544703757856e-06,
       'start': 0,
-      'title': 'Github Library with Pytorch and Transformers.',
-      'url': 'blp/github.com'}]
-
-    Retriever, Ranker, Question Answering, Summarization:
-    >>> search += summary.Summary(
-    ...    model = pipeline("summarization", model="sshleifer/distilbart-cnn-6-6", tokenizer="sshleifer/distilbart-cnn-6-6", framework="pt"),
-    ...    on = "answer",
-    ... )
-
-    >>> search
-    TfIdf retriever
-         on: title
-         documents: 3
-    Encoder ranker
-         on: title
-         k: None
-         Metric: cosine_distance
-         Embeddings stored at: pipeline_encoder.pkl
-    Question Answering
-         model: deepset/roberta-base-squad2
-         on: title
-    Summarization model
-         on: answer
-         min length: 5
-         max length: 30
-
-    >>> print(search(q = "Transformers"))
-    ' Github Library with Pytorch is a free, free, open-source library.'
+      'title': 'Github library with PyTorch and Transformers.',
+      'url': 'ckb/github.com'},
+     {'answer': '.',
+      'cosine_distance': 0.8993543088436127,
+      'date': '22-11-2021',
+      'end': 28,
+      'qa_score': 1.7178444977616891e-06,
+      'start': 27,
+      'title': 'Github Library with PyTorch.',
+      'url': 'mkb/github.com'}]
 
     """
 
@@ -141,7 +115,7 @@ class Compose:
         return repr
 
     def __call__(self, q: str):
-        """Pipeline
+        """Compose pipeline
 
         Parameters
         ----------
