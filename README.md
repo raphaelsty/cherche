@@ -71,7 +71,7 @@ Cherche offers different retrievers for information retrieval. A retriever is a 
   'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.'}]
 ```
 
-## Rank 🤖
+## Retrieve + Rank 🤖
 
 Cherche proposes different models to re-rank the documents out of the retriever. Rankers are based on semantic similarity between the query and the documents proposed by the retriever to establish a new order. We can select the retriever and the ranker of our choice and combine them to improve the search.
 
@@ -120,7 +120,7 @@ Cherche proposes different models to re-rank the documents out of the retriever.
 
 As you can see, for the same query, the ranker manages to improve the results of the retriever.
 
-## Question Answering 😶
+## Retrieve + Rank + Question Answering 😶
 
 Cherche provide a solution to connect extractive question answering models to retriever and ranker.
 The retriever, ranker approach speed up the question answering process.
@@ -185,7 +185,7 @@ The retriever, ranker approach speed up the question answering process.
 
 It is possible to use the question answering module with a simple retriever or with a retriever and a ranker easily.
 
-## Summary 👾
+## Retrieve + Rank + Summary 👾
 
 Cherche provides a summary of relevant documents for a query using HuggingFace's pre-trained models. The retriever and the rankers allows to reduce speed up
 the summarization process.
@@ -225,7 +225,52 @@ the summarization process.
 ' The City of Paris is the centre and seat of government of the region and province of Île-de-France. It is'
 ```
 
-It is possible to connect the summarizer to a question answering model to summarise a set of responses to a query.
+## Retrieve + Rank + Question Answering + Summarizer 🤯
+
+We can easily create a pipeline that simultaneously retrieves documents, classifies them using models based on semantic similarity, retrieves answers using extractive question answering and finally summarises the answers. Incredible, isn't it?
+
+```python
+>>> from cherche import data, retrieve, rank, qa, summary
+>>> from sentence_transformers import SentenceTransformer
+>>> from transformers import pipeline
+
+# Load the list of dicts
+>>> documents = data.load_towns() 
+
+# Initialize retriever
+>>> retriever = retrieve.TfIdf(on="article", k=30)
+
+# Initialize the ranker
+>>> ranker = rank.Encoder(
+...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    on = "article",
+...    k = 3,
+...    path = "encoder.pkl"
+... )
+
+# Intialize the question answering model
+>>> question_answer = qa.QA(
+...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
+...     on = "article",
+...  )
+
+# Intialize the summarizer ask it to summarize the answer
+>>> summarizer = summary.Summary(
+...    model = pipeline("summarization", model="sshleifer/distilbart-cnn-6-6", tokenizer="sshleifer/distilbart-cnn-6-6", framework="pt"),
+...    on = "answer", # Answer in output of the QA model.
+... )
+
+# Intialize the pipeline
+>>> search = retriever + ranker + question_answer + summarizer
+
+# Index documents
+>>> search = search.add(documents)
+
+>>> search("What is the capital of france?")
+' Paris is a major city in Paris. It is also a city of French capital Paris. Nice, France, is a great place to'
+```
+
+The choice of the pre-trained model is crucial to obtain meaningful answers.
 
 ## See also
 
