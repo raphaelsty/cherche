@@ -55,9 +55,10 @@ class QA:
 
     """
 
-    def __init__(self, model, on: str) -> None:
+    def __init__(self, model, on: str, k: int = None) -> None:
         self.model = model
         self.on = on
+        self.k = k
 
     def __repr__(self) -> str:
         repr = "Question Answering"
@@ -65,7 +66,7 @@ class QA:
         repr += f"\n\t on: {self.on}"
         return repr
 
-    def __call__(self, q: str, documents: list, k: int = None, **kwargs) -> list:
+    def __call__(self, q: str, documents: list, **kwargs) -> list:
         """Question answering main method.
 
         Parameters
@@ -100,7 +101,7 @@ class QA:
                     top_answers.append(answer)
 
         answers = sorted(top_answers, key=itemgetter("qa_score"), reverse=True)
-        return answers[:k] if k is not None else answers
+        return answers[: self.k] if self.k is not None else answers
 
     def __add__(self, other):
         """Custom operator to make pipeline."""

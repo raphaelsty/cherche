@@ -23,17 +23,16 @@ class Compose:
     ...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers.", "date": "22-11-2020"},
     ... ]
 
-    >>> retriever = retrieve.TfIdf(on="title")
+    >>> search = retrieve.TfIdf(on="title")
 
+    Retriever, Ranker:
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    on = "title",
     ...    path = "pipeline_encoder.pkl"
     ... )
 
-    Retriever, Ranker:
-    >>> search = retriever + ranker
-
+    >>> search += ranker
     >>> search = search.add(documents=documents)
 
     >>> search
