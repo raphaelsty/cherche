@@ -8,7 +8,7 @@ __pycache__/
 *.ipynb_checkpoints
 *.pickle
 *.pkl
-
+cache/
 # C extensions
 *.so
 
