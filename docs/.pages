@@ -1,4 +1,6 @@
-site_name: MkLorum
+site_name: Cherche
 nav:
     - Home: index.md
     - About: about.md
+    - Api: api
+    - Rank: rank.md

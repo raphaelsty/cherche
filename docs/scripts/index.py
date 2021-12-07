@@ -14,6 +14,8 @@ from numpydoc.docscrape import ClassDoc, FunctionDoc
 
 package = "cherche"
 
+# shutil.copy("README.md", "docs/index.md")
+
 
 def paragraph(text):
     return f"{text}\n"

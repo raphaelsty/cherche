@@ -1,171 +1,243 @@
-<p align=center>Contextual Knowledge Bases</p>
+# Cherche
 
----
+Cherche (search in French) allows you to create a simple neural search pipeline using pre-trained language models. Cherche find the right documents from a list of JSON using the keys of your choice. 
 
-[![Build Status](https://travis-ci.com/raphaelsty/ckb.svg?branch=main)](https://travis-ci.com/raphaelsty/ckb)[![Coverage Status](https://coveralls.io/repos/github/raphaelsty/ckb/badge.svg?branch=main)](https://coveralls.io/github/raphaelsty/ckb?branch=main)<a href="https://raphaelsty.github.io/ckb/">
-<img src="https://img.shields.io/website?label=docs&style=flat-square&url=https%3A%2F%2Fraphaelsty.github.io/ckb/%2F" alt="documentation">
-</a>
+![Alt text](img/explain.png)
 
-CKB is an informal implementation of the model focusing on the link prediction task [Inductive Entity Representations from Text via Link Prediction](https://arxiv.org/abs/2010.03496). 
-
-This tool allows to train transformers i.e. Bert (and all his friends) to build embeddings of the entities of a knowledge graph. 
-
-The CKB library is dedicated to knowledge bases and allows to fine-tune HuggingFace models using the link prediction task. The objective of this fine-tuning task is to make accurate embeddings of the knowledge graph entities. The link prediction task aims at training a model to find the missing element of an RDF triplet. For the triplet `(France, is_part_of, ?)`, the model should retrieve the entity `Europe`.
-
-After fine-tuning the transformer on the link prediction task, it can be used to build an entity search engine. It can perform tasks related to the completion of knowledge graphs. Finally, it can be used for any downstream task such as classification.
-
-The original paper replaces the embeddings traditionally used with models dedicated to knowledge graphs with an encoder (TransE vs BERT). Here, the encoder is a pre-trained transformer. The use of a transformer has many advantages such as the construction of contextualized latent representations of entities. In addition, this model can encode entities that it has never seen with the textual description of the entity. The learning time is much longer than a classical TransE model, but the model converges with fewer epochs.
-
-#### [Documentation](https://raphaelsty.github.io/ckb/)
-
-## Installation
+## Installation 🛠
 
 ```sh
-pip install git+https://github.com/raphaelsty/ckb
+pip install cherche
 ```
 
-## Train your own model:
+## Documents 📜
+
+Cherche models allows to index a set of documents. These documents shall be formatted as a Python dictionary list. The names of the dictionary keys do not matter. You will select the dictionary field of your choice to perform the search. Here is a list of documents suitable for neural search with Cherche:
 
 ```python
-from ckb import compose
-from ckb import datasets
-from ckb import evaluation
-from ckb import losses
-from ckb import models
-from ckb import sampling
-from ckb import scoring
+from cherche import data
 
-from transformers import BertTokenizer
-from transformers import BertModel
+documents = data.load_towns()
 
-import torch
-
-_ = torch.manual_seed(42)
-
-device = 'cuda' #  You should own a GPU, it is very slow with cpu.
-
-# Train, valid and test sets are a list of triples.
-train = [
-    ('My Favorite Carrot Cake Recipe', 'made_with', 'Brown Sugar'),
-    ('My Favorite Carrot Cake Recipe', 'made_with', 'Oil'),
-    ('My Favorite Carrot Cake Recipe', 'made_with', 'Applesauce'),
-    
-    ('Classic Cheesecake Recipe', 'made_with', 'Block cream cheese'),
-    ('Classic Cheesecake Recipe', 'made_with', 'Sugar'),
-    ('Classic Cheesecake Recipe', 'made_with', 'Sour cream'),
-]
-
-valid = [
-    ('My Favorite Carrot Cake Recipe', 'made_with', 'A bit of sugar'), 
-    ('Classic Cheesecake Recipe', 'made_with', 'Eggs')
-]
-
-test = [
-    ('My Favorite Strawberry Cake Recipe', 'made_with', 'Fresh Strawberry')
-]
-
-# Initialize the dataset, batch size should be small to avoid RAM exceed. 
-dataset = datasets.Dataset(
-    batch_size = 1,
-    train = train,
-    valid = valid,
-    test = test,
-    seed = 42,
-)
-
-model = models.Transformer(
-    model = BertModel.from_pretrained('bert-base-uncased'),
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased'),
-    entities = dataset.entities,
-    relations = dataset.relations,
-    gamma = 9,
-    scoring = scoring.TransE(),
-    device = device,
-)
-
-model = model.to(device)
-
-optimizer = torch.optim.Adam(
-    filter(lambda p: p.requires_grad, model.parameters()),
-    lr = 0.00005,
-)
-    
-evaluation = evaluation.Evaluation(
-    entities = dataset.entities,
-    relations = dataset.relations,
-    true_triples = dataset.train + dataset.valid + dataset.test,
-    batch_size = 1,
-    device = device,
-)
-
-# Number of negative samples to show to the model for each batch.
-# Should be small to avoid memory error.
-sampling = sampling.NegativeSampling(
-    size = 1,
-    entities = dataset.entities,
-    relations = dataset.relations,
-    train_triples = dataset.train,
-)
-
-pipeline = compose.Pipeline(
-    epochs = 20,
-    eval_every = 3, # Eval the model every {eval_every} epochs.
-    early_stopping_rounds = 1, 
-    device = device,
-)
-
-pipeline = pipeline.learn(
-    model = model,
-    dataset = dataset,
-    evaluation = evaluation,
-    sampling = sampling,
-    optimizer = optimizer,
-    loss = losses.Adversarial(alpha=0.5),
-)
+documents[:3]
+[{'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the '
+             'capital and most populous city of France, with an estimated '
+             'population of 2,175,601 residents as of 2018, in an area of more '
+             'than 105 square kilometres (41 square miles).',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris'},
+ {'article': "Since the 17th century, Paris has been one of Europe's major "
+             'centres of finance, diplomacy, commerce, fashion, gastronomy, '
+             'science, and arts.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris'},
+ {'article': 'The City of Paris is the centre and seat of government of the '
+             'region and province of Île-de-France, or Paris Region, which has '
+             'an estimated population of 12,174,880, or about 18 percent of '
+             'the population of France as of 2017.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris'}]
 ```
 
-## Encode entities:
+## Retrieve 🔎
+
+Cherche offers different retrievers for information retrieval. A retriever is a very fast model that allows to filter the most relevant documents for a query.
+
+- retrieve.ElasticSearch
+- retrieve.TfIdf
+- retrieve.BM25Okapi
+- retrieve.BM25L
+- retrieve.BM25Plus
+- retrieve.Flash
 
 ```python
-embeddings = {}
+>>> from cherche import data, retrieve
 
-for _, e in model.entities.items():
-    with torch.no_grad():
-        embeddings[e] = model.encoder([e]).cpu()
+# Load the list of dicts
+>>> documents = data.load_towns() 
+
+# Initialize retriever
+>>> retriever = retrieve.TfIdf(on="article", k=3) # on correspond au champ des dictionnaires sur lesquels on va effectuer la recherche.
+
+# Index documents
+>>> retriever.add(documents=documents)
+
+# Most relevant documents using TF-IDF
+>>> retriever("capital of france")
+[{'title': 'Toulouse',
+  'url': 'https://en.wikipedia.org/wiki/Toulouse',
+  'article': 'Founded by the Romans, the city was the capital of the Visigothic Kingdom in the 5th century and the capital of the province of Languedoc in the Late Middle Ages and early modern period (provinces were abolished during the French Revolution), making it the unofficial capital of the cultural region of Occitania (Southern France).'},
+ {'title': 'Toulouse',
+  'url': 'https://en.wikipedia.org/wiki/Toulouse',
+  'article': 'It is now the capital of the Occitanie region, the second largest region in Metropolitan France.'},
+ {'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.'}]
 ```
 
+## Retrieve + Rank 🤖
 
-## Encode new entities:
+Cherche proposes different models to re-rank the documents out of the retriever. Rankers are based on semantic similarity between the query and the documents proposed by the retriever to establish a new order. We can select the retriever and the ranker of our choice and combine them to improve the search.
+
+- rank.Encoder
+- rank.DPR
+- rank.ZeroShot
 
 ```python
-new_entities = [
-    'My favourite apple pie',
-    'How to make croissant',
-    'Pain au chocolat with coffee',
-]
+>>> from cherche import data, retrieve, rank
+>>> from sentence_transformers import SentenceTransformer
 
-embeddings = {}
+# Load the list of dicts
+>>> documents = data.load_towns() 
 
-for e in new_entities:
-    with torch.no_grad():
-        embeddings[e] = model.encoder([e]).cpu()
+# Initialize retriever
+>>> retriever = retrieve.TfIdf(on="article", k=30)
+
+# Initialize the ranker
+>>> ranker = rank.Encoder(
+...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    on = "article",
+...    k = 3,
+...    path = "encoder.pkl"
+... )
+
+# Intialize the pipeline
+>>> search = retriever + ranker
+
+# Index documents
+>>> search = search.add(documents)
+
+>>> search("capital of france")
+[{'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
+  'cosine_distance': 0.3019077181816101},
+ {'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
+  'cosine_distance': 0.3593599200248718},
+ {'title': 'Toulouse',
+  'url': 'https://en.wikipedia.org/wiki/Toulouse',
+  'article': 'It is now the capital of the Occitanie region, the second largest region in Metropolitan France.',
+  'cosine_distance': 0.44300907850265503}]
 ```
 
-## Save trained model:
+As you can see, for the same query, the ranker manages to improve the results of the retriever.
+
+## Retrieve + Rank + Question Answering 😶
+
+Cherche provide a solution to connect extractive question answering models to retriever and ranker.
+The retriever, ranker approach speed up the question answering process.
 
 ```python
-torch.save(model, 'model_ckb.pth')
+>>> from cherche import data, retrieve, rank, qa
+>>> from sentence_transformers import SentenceTransformer
+>>> from transformers import pipeline
+
+# Load the list of dicts
+>>> documents = data.load_towns() 
+
+# Initialize retriever
+>>> retriever = retrieve.TfIdf(on="article", k=30)
+
+# Initialize the ranker
+>>> ranker = rank.Encoder(
+...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    on = "article",
+...    k = 3,
+...    path = "encoder.pkl"
+... )
+
+# Intialize the question answering model
+>>> question_answer = qa.QA(
+...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
+...     on = "article",
+... )
+
+# Intialize the pipeline
+>>> search = retriever + ranker + question_answer
+
+# Index documents
+>>> search = search.add(documents)
+
+>>> search("What is the capital of france?")
+[{'qa_score': 0.6114194989204407,
+  'start': 0,
+  'end': 5,
+  'answer': 'Paris',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
+  'cosine_distance': 0.31821733713150024},
+ {'qa_score': 0.20747852325439453,
+  'start': 12,
+  'end': 17,
+  'answer': 'Paris',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
+  'cosine_distance': 0.399497926235199},
+ {'qa_score': 0.07703403383493423,
+  'start': 165,
+  'end': 169,
+  'answer': 'Nice',
+  'title': 'Toulouse',
+  'url': 'https://en.wikipedia.org/wiki/Toulouse',
+  'article': 'It is the fourth-largest commune in France, with 479,553 inhabitants within its municipal boundaries (as of January 2017), after Paris, Marseille and Lyon, ahead of Nice; it has a population of 1,360,829 within its wider metropolitan area (also as of January 2017).',
+  'cosine_distance': 0.4340791702270508}]
 ```
 
-## Load saved model:
+It is possible to use the question answering module with a simple retriever or with a retriever and a ranker easily.
+
+## Retrieve + Rank + Summary 👾
+
+Cherche provides a summary of relevant documents for a query using HuggingFace's pre-trained models. The retriever and the rankers allows to reduce speed up
+the summarization process.
 
 ```python
-model = torch.load(f'model_ckb.pth')
-device = 'cuda'
-model.device = device 
-model.to(device)
+>>> from cherche import data, retrieve, rank, summary
+>>> from sentence_transformers import SentenceTransformer
+>>> from transformers import pipeline
+
+# Load the list of dicts
+>>> documents = data.load_towns()
+
+# Initialize retriever
+>>> retriever = retrieve.TfIdf(on="article", k=30)
+
+# Initialize the ranker
+>>> ranker = rank.Encoder(
+...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    on = "article",
+...    k = 3,
+...    path = "encoder.pkl"
+... )
+
+# Intialize the summarizer
+>>> summarizer = summary.Summary(
+...    model = pipeline("summarization", model="sshleifer/distilbart-cnn-6-6", tokenizer="sshleifer/distilbart-cnn-6-6", framework="pt"),
+...    on = "article",
+... )
+
+# Intialize the pipeline
+>>> search = retriever + ranker + summarizer
+
+# Index documents
+>>> search = search.add(documents)
+
+>>> search("What is the capital of france?")
+' The City of Paris is the centre and seat of government of the region and province of Île-de-France. It is'
 ```
 
-## Official repository 👍
+The choice of the pre-trained model (ranker, question answering and summary) is crucial to obtain meaningful answers.
 
-The official repository is available at [dfdazac/blp](https://github.com/dfdazac/blp). 
+## References
+
+Cherche is a minimalist solution and meets a need for modularity. Do not hesitate to look at Haystack,
+Jina and TxtAi which offer very advanced solutions for neural search.
+
+- [Haystack](https://github.com/deepset-ai/haystack)
+- [Jina](https://github.com/jina-ai/jina)
+- [txtai](https://github.com/neuml/txtai)
+
+The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
