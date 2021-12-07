@@ -89,9 +89,10 @@ class DPR(Ranker):
 
         emb_q = self.query_encoder(q)
         emb_documents = [
-            self.embeddings.get(document[self.on], self.encoder(document[self.on]))
+            self.embeddings[document[self.on]]
+            if document[self.on] in self.embeddings
+            else self.encoder(document[self.on])
             for document in documents
         ]
-
         distances = self.metric(emb_q=emb_q, emb_documents=emb_documents)
         return self._rank(distances=distances, documents=documents)

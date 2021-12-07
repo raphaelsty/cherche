@@ -5,8 +5,8 @@ from scipy.spatial import distance
 
 
 def cosine_distance(emb_q: np.ndarray, emb_documents: list):
-    """Computes cosine distance (lower is better) between input query embedding and documents
-    embeddings.
+    """Computes cosine distance between input query embedding and documents embeddings.
+    Lower is better.
 
     Parameters
     ----------
@@ -41,8 +41,8 @@ def cosine_distance(emb_q: np.ndarray, emb_documents: list):
 
 
 def dot_similarity(emb_q: np.ndarray, emb_documents: list):
-    """Computes dot product (higher is better) between input query embedding and documents
-    embeddings
+    """Computes dot product between input query embedding and documents embeddings.
+    Higher is better.
 
     Parameters
     ----------

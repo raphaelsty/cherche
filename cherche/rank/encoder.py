@@ -80,7 +80,9 @@ class Encoder(Ranker):
 
         emb_q = self.encoder(q) if q not in self.embeddings else self.embeddings[q]
         emb_documents = [
-            self.embeddings.get(document[self.on], self.encoder(document[self.on]))
+            self.embeddings[document[self.on]]
+            if document[self.on] in self.embeddings
+            else self.encoder(document[self.on])
             for document in documents
         ]
 
