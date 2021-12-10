@@ -1,6 +1,6 @@
 __all__ = ["DPR"]
 
-from ..metric import dot_similarity
+from ..distance import dot_similarity
 from .base import Ranker
 
 
@@ -30,15 +30,15 @@ class DPR(Ranker):
     ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
     ...    on = "title",
     ...    k = 2,
-    ...    path = "dpr.pkl"
+    ...    path = "test_dpr.pkl"
     ... )
 
     >>> ranker
     DPR ranker
          on: title
          k: 2
-         Metric: dot_similarity
-         Embeddings stored at: dpr.pkl
+         distance: dot_similarity
+         embeddings stored at: test_dpr.pkl
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
@@ -68,9 +68,9 @@ class DPR(Ranker):
         on: str,
         k: int = None,
         path: str = None,
-        metric=dot_similarity,
+        distance=dot_similarity,
     ) -> None:
-        super().__init__(on=on, encoder=encoder, k=k, path=path, metric=metric)
+        super().__init__(on=on, encoder=encoder, k=k, path=path, distance=distance)
         self.query_encoder = query_encoder
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
@@ -94,5 +94,5 @@ class DPR(Ranker):
             else self.encoder(document[self.on])
             for document in documents
         ]
-        distances = self.metric(emb_q=emb_q, emb_documents=emb_documents)
+        distances = self.distance(emb_q=emb_q, emb_documents=emb_documents)
         return self._rank(distances=distances, documents=documents)

@@ -10,6 +10,8 @@ Question Answering model.
 
 - **on** (*str*)
 
+- **k** (*int*) – defaults to `None`
+
 
 
 ## Examples
@@ -62,6 +64,5 @@ Question Answering
 
     - **q**     (*str*)    
     - **documents**     (*list*)    
-    - **k**     (*int*)     – defaults to `None`    
     - **kwargs**    
     

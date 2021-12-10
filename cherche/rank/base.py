@@ -17,26 +17,26 @@ class Ranker(abc.ABC):
         encoder: Encoding function to computes embeddings of the documents.
         k: Number of documents to keep.
         path: Path of the file dedicated to store the embeddings as a pickle file.
-        metric: Distance / similarity measure to use i.e cherche.metric.cosine_distance or
-            cherche.metric.dot_similarity.
+        distance: Distance / similarity measure to use i.e cherche.distance.cosine_distance or
+            cherche.distance.dot_similarity.
 
     """
 
-    def __init__(self, on: str, encoder, k: int, path: str, metric) -> None:
+    def __init__(self, on: str, encoder, k: int, path: str, distance) -> None:
         self.on = on
         self.encoder = encoder
         self.k = k
         self.path = path
-        self.metric = metric
+        self.distance = distance
         self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
 
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} ranker"
         repr += f"\n\t on: {self.on}"
         repr += f"\n\t k: {self.k}"
-        repr += f"\n\t Metric: {self.metric.__name__}"
+        repr += f"\n\t distance: {self.distance.__name__}"
         if self.path is not None:
-            repr += f"\n\t Embeddings stored at: {self.path}"
+            repr += f"\n\t embeddings stored at: {self.path}"
 
         return repr
 
@@ -58,11 +58,12 @@ class Ranker(abc.ABC):
             document[self.on] for document in documents if document[self.on] not in self.embeddings
         ]
 
-        for document, embedding in zip(documents, self.encoder(documents)):
-            self.embeddings[document] = embedding
+        if documents:
+            for document, embedding in zip(documents, self.encoder(documents)):
+                self.embeddings[document] = embedding
 
-        if self.path is not None:
-            self.dump_embeddings(embeddings=self.embeddings, path=self.path)
+            if self.path is not None:
+                self.dump_embeddings(embeddings=self.embeddings, path=self.path)
 
         return self
 
@@ -80,7 +81,7 @@ class Ranker(abc.ABC):
         ranked = []
         for index, distance in distances:
             document = documents[index]
-            document[self.metric.__name__] = distance
+            document[self.distance.__name__] = distance
             ranked.append(document)
         return ranked
 

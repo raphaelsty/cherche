@@ -48,7 +48,7 @@ markdown_extensions:
 
 plugins:
   - search
-
+  - awesome-pages
 
 extra_javascript:
   - javascripts/config.js
@@ -59,3 +59,4 @@ extra_javascript:
 extra_css:
   - stylesheets/extra.css
   - css/version-select.css
+

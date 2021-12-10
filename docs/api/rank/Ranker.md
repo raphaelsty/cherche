@@ -14,7 +14,7 @@ Abstract class for ranking models.
 
 - **path** (*str*)
 
-- **metric**
+- **distance**
 
 
 

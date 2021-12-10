@@ -39,6 +39,7 @@ class TfIdf(Retriever):
       'title': 'Github library with PyTorch and Transformers.',
       'url': 'ckb/github.com'}]
 
+
     References
     ----------
     1. [sklearn.feature_extraction.text.TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
@@ -60,5 +61,7 @@ class TfIdf(Retriever):
     def __call__(self, q: str) -> list:
         """Retrieve the right document."""
         similarities = linear_kernel(self.tfidf.transform([q]), self.matrix).flatten()
-        documents = [self.documents[index] for index in (-similarities).argsort()]
+        documents = [
+            self.documents[index] for index in (-similarities).argsort() if similarities[index] > 0
+        ]
         return documents[: self.k] if self.k is not None else documents

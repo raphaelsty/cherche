@@ -42,8 +42,8 @@ class Compose:
     Encoder ranker
          on: title
          k: None
-         Metric: cosine_distance
-         Embeddings stored at: pipeline_encoder.pkl
+         distance: cosine_distance
+         embeddings stored at: pipeline_encoder.pkl
 
     >>> print(search(q = "Transformers"))
     [{'cosine_distance': 0.6396294832229614,
@@ -72,8 +72,8 @@ class Compose:
     Encoder ranker
          on: title
          k: None
-         Metric: cosine_distance
-         Embeddings stored at: pipeline_encoder.pkl
+         distance: cosine_distance
+         embeddings stored at: pipeline_encoder.pkl
     Question Answering
          model: deepset/roberta-base-squad2
          on: title

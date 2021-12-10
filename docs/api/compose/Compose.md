@@ -24,20 +24,19 @@ Cherche pipeline.
 ...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers.", "date": "22-11-2020"},
 ... ]
 
->>> retriever = retrieve.TfIdf(on="title")
+>>> search = retrieve.TfIdf(on="title")
 
+```
+
+Retriever, Ranker:
+```python
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    on = "title",
 ...    path = "pipeline_encoder.pkl"
 ... )
 
-```
-
-Retriever, Ranker:
-```python
->>> search = retriever + ranker
-
+>>> search += ranker
 >>> search = search.add(documents=documents)
 
 >>> search
@@ -47,8 +46,8 @@ TfIdf retriever
 Encoder ranker
      on: title
      k: None
-     Metric: cosine_distance
-     Embeddings stored at: pipeline_encoder.pkl
+     distance: cosine_distance
+     embeddings stored at: pipeline_encoder.pkl
 
 >>> print(search(q = "Transformers"))
 [{'cosine_distance': 0.6396294832229614,
@@ -80,8 +79,8 @@ TfIdf retriever
 Encoder ranker
      on: title
      k: None
-     Metric: cosine_distance
-     Embeddings stored at: pipeline_encoder.pkl
+     distance: cosine_distance
+     embeddings stored at: pipeline_encoder.pkl
 Question Answering
      model: deepset/roberta-base-squad2
      on: title

@@ -1,6 +1,6 @@
 __all__ = ["Encoder"]
 
-from ..metric import cosine_distance
+from ..distance import cosine_distance
 from .base import Ranker
 
 
@@ -35,8 +35,8 @@ class Encoder(Ranker):
     Encoder ranker
          on: title
          k: 2
-         Metric: cosine_distance
-         Embeddings stored at: encoder.pkl
+         distance: cosine_distance
+         embeddings stored at: encoder.pkl
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
@@ -60,9 +60,9 @@ class Encoder(Ranker):
     """
 
     def __init__(
-        self, encoder, on: str, k: int = None, path: str = None, metric=cosine_distance
+        self, encoder, on: str, k: int = None, path: str = None, distance=cosine_distance
     ) -> None:
-        super().__init__(on=on, encoder=encoder, k=k, path=path, metric=metric)
+        super().__init__(on=on, encoder=encoder, k=k, path=path, distance=distance)
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
         """Encode inputs query and ranks documents based on the similarity between the query and
@@ -86,5 +86,5 @@ class Encoder(Ranker):
             for document in documents
         ]
 
-        distances = self.metric(emb_q=emb_q, emb_documents=emb_documents)
+        distances = self.distance(emb_q=emb_q, emb_documents=emb_documents)
         return self._rank(distances=distances, documents=documents)

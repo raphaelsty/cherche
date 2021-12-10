@@ -18,7 +18,7 @@ def cosine_distance(emb_q: np.ndarray, emb_documents: list):
     --------
 
     >>> from pprint import pprint as print
-    >>> from cherche import metric
+    >>> from cherche import distance
 
     >>> emb_q = np.array([1, 1])
 
@@ -27,7 +27,7 @@ def cosine_distance(emb_q: np.ndarray, emb_documents: list):
     ...     np.array([1, 1]),
     ... ]
 
-    >>> print(metric.cosine_distance(emb_q=emb_q, emb_documents=emb_documents))
+    >>> print(distance.cosine_distance(emb_q=emb_q, emb_documents=emb_documents))
     [(1, 0.0), (0, 0.29289321881345254)]
 
     """
@@ -54,7 +54,7 @@ def dot_similarity(emb_q: np.ndarray, emb_documents: list):
     --------
 
     >>> from pprint import pprint as print
-    >>> from cherche import metric
+    >>> from cherche import distance
 
     >>> emb_q = np.array([1, 1])
 
@@ -63,7 +63,7 @@ def dot_similarity(emb_q: np.ndarray, emb_documents: list):
     ...     np.array([1, 1]),
     ... ]
 
-    >>> print(metric.dot_similarity(emb_q=emb_q, emb_documents=emb_documents))
+    >>> print(distance.dot_similarity(emb_q=emb_q, emb_documents=emb_documents))
     [(0, 10), (1, 2)]
 
     """

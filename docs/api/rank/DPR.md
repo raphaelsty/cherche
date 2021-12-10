@@ -16,7 +16,7 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
 - **path** (*str*) – defaults to `None`
 
-- **metric** – defaults to `<function dot_similarity at 0x7fdfb2f7f0d0>`
+- **distance** – defaults to `<function dot_similarity at 0x7f77a873ff70>`
 
 
 
@@ -32,15 +32,15 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
 ...    on = "title",
 ...    k = 2,
-...    path = "dpr.pkl"
+...    path = "test_dpr.pkl"
 ... )
 
 >>> ranker
 DPR ranker
      on: title
      k: 2
-     Metric: dot_similarity
-     Embeddings stored at: dpr.pkl
+     distance: dot_similarity
+     embeddings stored at: test_dpr.pkl
 
 >>> documents = [
 ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},

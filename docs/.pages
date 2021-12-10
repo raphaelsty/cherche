@@ -1,6 +1,8 @@
-site_name: Cherche
 nav:
     - Home: index.md
-    - About: about.md
-    - Api: api
-    - Rank: rank.md
+    - documents
+    - retrieve
+    - rank
+    - pipeline
+    - examples
+    - api

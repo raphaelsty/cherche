@@ -26,7 +26,7 @@ BM25Plus
 >>> from pprint import pprint as print
 >>> from cherche import retrieve
 
->>> retriever = retrieve.BM25L(on="title", k=3, k1=1.5, b=0.75, delta=0.5)
+>>> retriever = retrieve.BM25Plus(on="title", k=3, k1=1.5, b=0.75, delta=0.5)
 
 >>> documents = [
 ...     {"url": "ckb/github.com", "title": "It is quite windy in London.", "date": "10-11-2021"},
@@ -39,7 +39,7 @@ BM25Plus
 >>> retriever = retriever.add(documents=documents)
 
 >>> retriever
-BM25L retriever
+BM25Plus retriever
     on: title
     documents: 5
 
@@ -76,4 +76,5 @@ BM25L retriever
 ## References
 
 1. [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25)
+2. [Improvements to BM25 and Language Models Examined](http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf)
 

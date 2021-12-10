@@ -8,14 +8,14 @@
 
 - [load_towns](../data/load-towns)
 
+## distance
+
+- [cosine_distance](../distance/cosine-distance)
+- [dot_similarity](../distance/dot-similarity)
+
 ## eval
 
 - [eval](../eval/eval)
-
-## metric
-
-- [cosine_distance](../metric/cosine-distance)
-- [dot_similarity](../metric/dot-similarity)
 
 ## qa
 

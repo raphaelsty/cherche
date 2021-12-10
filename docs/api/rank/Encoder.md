@@ -14,7 +14,7 @@ SentenceBert Ranker.
 
 - **path** (*str*) – defaults to `None`
 
-- **metric** – defaults to `<function cosine_distance at 0x7fdfb2f71820>`
+- **distance** – defaults to `<function cosine_distance at 0x7f77a873fee0>`
 
 
 
@@ -36,8 +36,8 @@ SentenceBert Ranker.
 Encoder ranker
      on: title
      k: 2
-     Metric: cosine_distance
-     Embeddings stored at: encoder.pkl
+     distance: cosine_distance
+     embeddings stored at: encoder.pkl
 
 >>> documents = [
 ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},

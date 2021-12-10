@@ -50,6 +50,7 @@ class BM25Okapi(_BM25):
     References
     ----------
     1. [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25)
+    2. [Improvements to BM25 and Language Models Examined](http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf)
 
     """
 
@@ -119,7 +120,7 @@ class BM25L(_BM25):
     References
     ----------
     1. [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25)
-
+    2. [Improvements to BM25 and Language Models Examined](http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf)
 
     """
 
@@ -156,7 +157,7 @@ class BM25Plus(_BM25):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.BM25L(on="title", k=3, k1=1.5, b=0.75, delta=0.5)
+    >>> retriever = retrieve.BM25Plus(on="title", k=3, k1=1.5, b=0.75, delta=0.5)
 
     >>> documents = [
     ...     {"url": "ckb/github.com", "title": "It is quite windy in London.", "date": "10-11-2021"},
@@ -169,7 +170,7 @@ class BM25Plus(_BM25):
     >>> retriever = retriever.add(documents=documents)
 
     >>> retriever
-    BM25L retriever
+    BM25Plus retriever
         on: title
         documents: 5
 
@@ -187,6 +188,7 @@ class BM25Plus(_BM25):
     References
     ----------
     1. [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25)
+    2. [Improvements to BM25 and Language Models Examined](http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf)
 
     """
 

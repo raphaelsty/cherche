@@ -73,5 +73,7 @@ class _BM25(Retriever):
         """Retrieve the right document using BM25."""
         q = q.split(" ") if self.tokenizer is None else self.tokenizer(q)
         similarities = abs(self.bm25.get_scores(q))
-        documents = [self.documents[index] for index in (-similarities).argsort()]
+        documents = [
+            self.documents[index] for index in (-similarities).argsort() if similarities[index] > 0
+        ]
         return documents[: self.k] if self.k is not None else documents

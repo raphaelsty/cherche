@@ -76,4 +76,5 @@ BM25Okapi retriever
 ## References
 
 1. [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25)
+2. [Improvements to BM25 and Language Models Examined](http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf)
 
