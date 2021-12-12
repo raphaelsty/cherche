@@ -2,7 +2,7 @@ __all__ = ["QA"]
 
 from operator import itemgetter
 
-from ..compose import Compose
+from ..compose import Pipeline
 
 
 class QA:
@@ -105,7 +105,15 @@ class QA:
 
     def __add__(self, other):
         """Custom operator to make pipeline."""
-        if isinstance(other, Compose):
+        if isinstance(other, Pipeline):
             return other + self
         else:
-            return Compose(models=[other, self])
+            return Pipeline(models=[other, self])
+
+    def __or__(self):
+        """Or operator is only available on retrievers and rankers."""
+        raise NotImplementedError
+
+    def __and__(self):
+        """And operator is only available on retrievers and rankers."""
+        raise NotImplementedError

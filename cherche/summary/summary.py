@@ -1,6 +1,6 @@
 __all__ = ["Summary"]
 
-from ..compose import Compose
+from ..compose import Pipeline
 
 
 class Summary:
@@ -39,7 +39,7 @@ class Summary:
     ... ]
 
     >>> print(model(documents=documents))
-    CKB is a Github library with Pytorch and Transformers dedicated to KB. MKB Github Library with PyTorch dedicated toKB
+    CKB is a Github library with Pytorch and Transformers dedicated to KB. MKB Github Library with PyTorch  dedicated to
 
     """
 
@@ -74,27 +74,26 @@ class Summary:
         if not documents:
             return []
 
-        summary = self.model(
-            [document[self.on] for document in documents],
-            min_length=self.min_length,
-            max_length=self.max_length,
-            return_text=True,
-            clean_up_tokenization_spaces=True,
-            return_tensors=False,
-        )
-
         return self.model(
-            " ".join([document["summary_text"] for document in summary]),
+            " ".join([document[self.on] for document in documents]),
             min_length=self.min_length,
             max_length=self.max_length,
             return_text=True,
             clean_up_tokenization_spaces=True,
             return_tensors=False,
-        )[0]["summary_text"]
+        )[0]["summary_text"].strip()
 
     def __add__(self, other):
         """Custom operator to make pipeline."""
-        if isinstance(other, Compose):
+        if isinstance(other, Pipeline):
             return other + self
         else:
-            return Compose(models=[other, self])
+            return Pipeline(models=[other, self])
+
+    def __or__(self):
+        """Or operator is only available on retrievers and rankers."""
+        raise NotImplementedError
+
+    def __and__(self):
+        """And operator is only available on retrievers and rankers."""
+        raise NotImplementedError

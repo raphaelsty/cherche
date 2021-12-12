@@ -1,1 +1,1 @@
-__all__ = ["compose", "data", "eval", "distance", "qa", "rank", "retrieve", "summary"]
+__all__ = ["compose", "data", "eval", "similarity", "qa", "rank", "retrieve", "summary"]

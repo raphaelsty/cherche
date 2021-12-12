@@ -4,7 +4,7 @@ import abc
 import os
 import pickle
 
-from ..compose import Compose
+from ..compose import Intersection, Pipeline, Union
 
 
 class Ranker(abc.ABC):
@@ -17,24 +17,23 @@ class Ranker(abc.ABC):
         encoder: Encoding function to computes embeddings of the documents.
         k: Number of documents to keep.
         path: Path of the file dedicated to store the embeddings as a pickle file.
-        distance: Distance / similarity measure to use i.e cherche.distance.cosine_distance or
-            cherche.distance.dot_similarity.
+        similarity: Similarity measure to use i.e similarity.cosine or similarity.dot.
 
     """
 
-    def __init__(self, on: str, encoder, k: int, path: str, distance) -> None:
+    def __init__(self, on: str, encoder, k: int, path: str, similarity) -> None:
         self.on = on
         self.encoder = encoder
         self.k = k
         self.path = path
-        self.distance = distance
+        self.similarity = similarity
         self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
 
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} ranker"
         repr += f"\n\t on: {self.on}"
         repr += f"\n\t k: {self.k}"
-        repr += f"\n\t distance: {self.distance.__name__}"
+        repr += f"\n\t similarity: {self.similarity.__name__}"
         if self.path is not None:
             repr += f"\n\t embeddings stored at: {self.path}"
 
@@ -67,21 +66,21 @@ class Ranker(abc.ABC):
 
         return self
 
-    def _rank(self, distances: list, documents: list):
+    def _rank(self, similarities: list, documents: list):
         """Rank inputs documents ordered by relevance among the top k.
 
         Parameters
         ----------
 
-            distances: List of tuples (index, distances) among the list of documents to rank.
+            similarities: List of tuples (index, similarity) among the list of documents to rank.
             documents: List of documents.
 
         """
-        distances = distances[: self.k] if self.k is not None else distances
+        similarities = similarities[: self.k] if self.k is not None else similarities
         ranked = []
-        for index, distance in distances:
+        for index, similarity in similarities:
             document = documents[index]
-            document[self.distance.__name__] = distance
+            document["similarity"] = similarity
             ranked.append(document)
         return ranked
 
@@ -101,8 +100,20 @@ class Ranker(abc.ABC):
             pickle.dump(embeddings, ouput_embeddings)
 
     def __add__(self, other):
-        """Custom operator to make pipeline."""
-        if isinstance(other, Compose):
+        """Pipeline operator."""
+        if isinstance(other, Pipeline):
             return other + self
         else:
-            return Compose(models=[other, self])
+            return Pipeline(models=[other, self])
+
+    def __or__(self, other):
+        """Union operator."""
+        if isinstance(other, Union):
+            return Union([self] + other.models)
+        return Union([self, other])
+
+    def __and__(self, other):
+        """Intersection operator."""
+        if isinstance(other, Intersection):
+            return Intersection([self] + other.models)
+        return Intersection([self, other])

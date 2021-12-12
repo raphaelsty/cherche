@@ -9,7 +9,6 @@ def cherche_retrievers(on: str, k: int = None):
         retrieve.TfIdf(on=on, k=k),
         retrieve.BM25Okapi(on=on, k=k),
         retrieve.BM25L(on=on, k=k),
-        retrieve.BM25Plus(on=on, k=k),
     ]
 
 

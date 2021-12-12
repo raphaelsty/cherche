@@ -1,6 +1,6 @@
 __all__ = ["DPR"]
 
-from ..distance import dot_similarity
+from ..similarity import dot
 from .base import Ranker
 
 
@@ -15,8 +15,7 @@ class DPR(Ranker):
         encoder: Encoding function to computes embeddings of the documents.
         k: Number of documents to keep.
         path: Path of the file dedicated to store the embeddings as a pickle file.
-        metric: Distance / similarity measure to use i.e cherche.metric.cosine_distance or
-            cherche.metric.dot_similarity.
+        similarity: Similarity measure to use i.e similarity.cosine or similarity.dot.
 
     Examples
     --------
@@ -25,39 +24,36 @@ class DPR(Ranker):
     >>> from cherche import rank
     >>> from sentence_transformers import SentenceTransformer
 
+    >>> documents = [
+    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ... ]
+
     >>> ranker = rank.DPR(
     ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
     ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-    ...    on = "title",
+    ...    on = "article",
     ...    k = 2,
     ...    path = "test_dpr.pkl"
     ... )
 
-    >>> ranker
+    >>> ranker.add(documents=documents)
     DPR ranker
-         on: title
+         on: article
          k: 2
-         distance: dot_similarity
+         similarity: dot
          embeddings stored at: test_dpr.pkl
 
-    >>> documents = [
-    ...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
-    ...     {"url": "mkb/github.com", "title": "Github Library with PyTorch .", "date": "22-11-2021"},
-    ...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers .", "date": "22-11-2020"},
-    ... ]
-
-    Pre-compute embeddings of documents
-    >>> ranker = ranker.add(documents=documents)
-
-    >>> print(ranker(q="Transformers", documents=documents, k=2))
-    [{'date': '10-11-2021',
-      'dot_similarity': 54.095573,
-      'title': 'Github library with PyTorch and Transformers .',
-      'url': 'ckb/github.com'},
-     {'date': '22-11-2020',
-      'dot_similarity': 54.095573,
-      'title': 'Github Library with Pytorch and Transformers .',
-      'url': 'blp/github.com'}]
+    >>> print(ranker(q="Paris", documents=documents, k=2))
+    [{'article': 'Eiffel tower is based in Paris',
+      'author': 'Wiki',
+      'similarity': 69.8168,
+      'title': 'Eiffel tower'},
+     {'article': 'This town is the capital of France',
+      'author': 'Wiki',
+      'similarity': 67.30965,
+      'title': 'Paris'}]
 
     """
 
@@ -68,9 +64,9 @@ class DPR(Ranker):
         on: str,
         k: int = None,
         path: str = None,
-        distance=dot_similarity,
+        similarity=dot,
     ) -> None:
-        super().__init__(on=on, encoder=encoder, k=k, path=path, distance=distance)
+        super().__init__(on=on, encoder=encoder, k=k, path=path, similarity=similarity)
         self.query_encoder = query_encoder
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
@@ -94,5 +90,8 @@ class DPR(Ranker):
             else self.encoder(document[self.on])
             for document in documents
         ]
-        distances = self.distance(emb_q=emb_q, emb_documents=emb_documents)
-        return self._rank(distances=distances, documents=documents)
+
+        return self._rank(
+            similarities=self.similarity(emb_q=emb_q, emb_documents=emb_documents),
+            documents=documents,
+        )

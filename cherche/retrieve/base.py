@@ -1,6 +1,6 @@
 import abc
 
-from ..compose import Compose
+from ..compose import Intersection, Pipeline, Union
 
 __all__ = ["Retriever"]
 
@@ -21,7 +21,7 @@ class Retriever(abc.ABC):
         return repr
 
     @abc.abstractclassmethod
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, **kwargs) -> list:
         pass
 
     @abc.abstractclassmethod
@@ -32,11 +32,22 @@ class Retriever(abc.ABC):
         return len(self.documents)
 
     def __add__(self, other):
-        """Custom operator to make pipeline."""
-        if isinstance(other, Compose):
-            return other + self
-        else:
-            return Compose(models=[self, other])
+        """Pipeline operator."""
+        if isinstance(other, Pipeline):
+            return Pipeline(self, other.models)
+        return Pipeline([self, other])
+
+    def __or__(self, other):
+        """Union operator."""
+        if isinstance(other, Union):
+            return Union([self] + other.models)
+        return Union([self, other])
+
+    def __and__(self, other):
+        """Intersection operator."""
+        if isinstance(other, Intersection):
+            return Intersection([self] + other.models)
+        return Intersection([self, other])
 
 
 class _BM25(Retriever):
@@ -58,22 +69,20 @@ class _BM25(Retriever):
         self.bm25 = bm25
         self.tokenizer = tokenizer
 
-    def add(self, documents: list):
-        """Add documents."""
-        self.documents += documents
-        self.bm25 = self.bm25(
-            [
-                doc[self.on].split(" ") if self.tokenizer is None else self.tokenizer(doc[self.on])
-                for doc in self.documents
-            ]
-        )
-        return self
-
     def __call__(self, q: str) -> list:
         """Retrieve the right document using BM25."""
         q = q.split(" ") if self.tokenizer is None else self.tokenizer(q)
-        similarities = abs(self.bm25.get_scores(q))
-        documents = [
-            self.documents[index] for index in (-similarities).argsort() if similarities[index] > 0
-        ]
+        similarities = abs(self.model.get_scores(q))
+        indexes, scores = [], []
+        for index, score in enumerate(similarities):
+            if score > 0:
+                indexes.append(index)
+                scores.append(score)
+
+        # Empty
+        if not indexes:
+            return []
+
+        scores, indexes = zip(*sorted(zip(scores, indexes), reverse=True))
+        documents = [self.documents[index] for index in indexes]
         return documents[: self.k] if self.k is not None else documents

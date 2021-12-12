@@ -4,9 +4,9 @@ import numpy as np
 from scipy.spatial import distance
 
 
-def cosine_distance(emb_q: np.ndarray, emb_documents: list):
+def cosine(emb_q: np.ndarray, emb_documents: list):
     """Computes cosine distance between input query embedding and documents embeddings.
-    Lower is better.
+    Higher is better.
 
     Parameters
     ----------
@@ -18,7 +18,7 @@ def cosine_distance(emb_q: np.ndarray, emb_documents: list):
     --------
 
     >>> from pprint import pprint as print
-    >>> from cherche import distance
+    >>> from cherche import similarity
 
     >>> emb_q = np.array([1, 1])
 
@@ -27,20 +27,22 @@ def cosine_distance(emb_q: np.ndarray, emb_documents: list):
     ...     np.array([1, 1]),
     ... ]
 
-    >>> print(distance.cosine_distance(emb_q=emb_q, emb_documents=emb_documents))
-    [(1, 0.0), (0, 0.29289321881345254)]
+    >>> print(similarity.cosine(emb_q=emb_q, emb_documents=emb_documents))
+    [(1, 0.9999999999999998), (0, 0.7071067811865475)]
 
     """
     distances = {}
     for index, emb_document in enumerate(emb_documents):
-        distances[index] = distance.cosine(emb_q, emb_document)
+        distances[index] = (emb_q @ emb_document) / (
+            np.linalg.norm(emb_q) * np.linalg.norm(emb_document)
+        )
     return [
         (index, distance)
-        for index, distance in sorted(distances.items(), key=lambda item: item[1])
+        for index, distance in sorted(distances.items(), key=lambda item: item[1], reverse=True)
     ]
 
 
-def dot_similarity(emb_q: np.ndarray, emb_documents: list):
+def dot(emb_q: np.ndarray, emb_documents: list):
     """Computes dot product between input query embedding and documents embeddings.
     Higher is better.
 
@@ -54,7 +56,7 @@ def dot_similarity(emb_q: np.ndarray, emb_documents: list):
     --------
 
     >>> from pprint import pprint as print
-    >>> from cherche import distance
+    >>> from cherche import similarity
 
     >>> emb_q = np.array([1, 1])
 
@@ -63,7 +65,7 @@ def dot_similarity(emb_q: np.ndarray, emb_documents: list):
     ...     np.array([1, 1]),
     ... ]
 
-    >>> print(distance.dot_similarity(emb_q=emb_q, emb_documents=emb_documents))
+    >>> print(similarity.dot(emb_q=emb_q, emb_documents=emb_documents))
     [(0, 10), (1, 2)]
 
     """

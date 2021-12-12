@@ -1,6 +1,6 @@
 import pytest
 
-from .. import rank, retrieve
+from .. import retrieve
 
 
 def cherche_retrievers(on: str, k: int = None):
@@ -9,39 +9,18 @@ def cherche_retrievers(on: str, k: int = None):
         retrieve.TfIdf(on=on, k=k),
         retrieve.BM25Okapi(on=on, k=k),
         retrieve.BM25L(on=on, k=k),
-        retrieve.BM25Plus(on=on, k=k),
     ]
 
 
 def documents():
     return [
+        {"title": "Paris", "article": "This town is the capital of France", "author": "Wikipedia"},
         {
-            "url": "ckb/github.com",
-            "title": "Github library with Pytorch and Transformers.",
-            "date": "10-11-2021",
+            "title": "Eiffel tower",
+            "article": "Eiffel tower is based in Paris",
+            "author": "Wikipedia",
         },
-        {"url": "mkb/github.com", "title": "Github Library with PyTorch.", "date": "22-11-2021"},
-        {
-            "url": "blp/github.com",
-            "title": "Github library with Pytorch and Transformers.",
-            "date": "22-11-2020",
-        },
-    ]
-
-
-def tags():
-    return [
-        {"tags": ["Github", "git"], "title": "Github is a great tool.", "uri": "tag:github"},
-        {
-            "tags": ["cherche", "tool"],
-            "title": "Cherche is a tool to retrieve informations.",
-            "uri": "tag:cherche",
-        },
-        {
-            "tags": ["python", "programming"],
-            "title": "Python is a programming Language",
-            "uri": "tag:python",
-        },
+        {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wikipedia"},
     ]
 
 
@@ -55,28 +34,99 @@ def tags():
             id=f"retriever: {retriever.__class__.__name__}, k: {k}",
         )
         for k in [None, 0, 2, 4]
-        for retriever in cherche_retrievers(on="title", k=k)
+        for retriever in cherche_retrievers(on="article", k=k)
     ],
 )
 def test_retriever(retriever, documents: list, k: int):
     """Test retriever. Test if the number of retrieved documents is coherent.
-    Check if the retriever do not find any document.
+    Check for unknown tokens in the corpus, should returns an empty list.
     """
-    retriever = retriever.add(documents)
+    # Reset retriever
+    retriever.documents = []
+    retriever.add(documents)
 
-    # All documents contains Github
-    answers = retriever(q="Github")
-    if k is None:
-        assert len(answers) == len(documents)
-    elif k == 0:
-        assert len(answers) == 0
+    # A single document contains town.
+    answers = retriever(q="town")
+    if k is None or k >= 1:
+        assert len(answers) == 1
     else:
-        assert len(answers) == min(k, len(documents))
+        assert len(answers) == 0
 
     for sample in answers:
-        for key in ["url", "title", "date"]:
+        for key in ["title", "article", "author"]:
             assert key in sample
 
     # Unknown token.
     answers = retriever(q="Unknown")
     assert len(answers) == 0
+
+    # All documents contains is
+    answers = retriever(q="is")
+
+    if k is None or k >= len(documents):
+        assert len(answers) == len(documents)
+    else:
+        assert len(answers) == k
+
+
+@pytest.mark.parametrize(
+    "documents, k",
+    [
+        pytest.param(
+            documents(),
+            k,
+            id=f"retriever: Flash, k: {k}",
+        )
+        for k in [None, 0, 2, 4]
+    ],
+)
+def test_flash(documents: list, k: int):
+    """Test Flash retriever."""
+    # Reset retriever
+    retriever = retrieve.Flash(k=k, on="title")
+    retriever.add(documents)
+
+    # A single document contains town.
+    answers = retriever(q="Paris")
+    if k is None or k >= 1:
+        assert len(answers) == 1
+    else:
+        assert len(answers) == 0
+
+    for sample in answers:
+        for key in ["title", "article", "author"]:
+            assert key in sample
+
+    # Unknown token.
+    answers = retriever(q="Unknown")
+    assert len(answers) == 0
+
+    # All documents contains is
+    answers = retriever(q="Paris Eiffel tower Montreal")
+
+    if k is None or k >= len(documents):
+        assert len(answers) == len(documents)
+    else:
+        assert len(answers) == k
+
+
+@pytest.mark.parametrize(
+    "documents, k",
+    [
+        pytest.param(
+            documents(),
+            k,
+            id=f"retriever: ElasticSearch, k: {k}",
+        )
+        for k in [None, 0, 2, 4]
+    ],
+)
+def test_elastic(documents, k):
+    """Test Elasticsearch if elastic server is running."""
+    from elasticsearch import Elasticsearch
+
+    es = Elasticsearch()
+    if es.ping():
+        retriever = retrieve.Elastic(on="article", k=k, es=es, index="test")
+        retriever.reset()
+        test_retriever(retriever=retriever, documents=documents, k=k)

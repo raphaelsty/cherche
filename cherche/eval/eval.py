@@ -39,17 +39,17 @@ def eval(search, query_answers: list, on: str):
     ...      ]),
     ...     ("Toulouse", [
     ...          {"label": "Toulouse is the capital of Occitanie .", "tags": ["Toulouse", "Occitanie"], "uri": "tag:Occitanie"},
-    ...          {"label": "It is known as the pink city .", "tags": ["Toulouse", "pink", "rose"], "uri": "tag:PinkCity"},
+    ...          {"label": "It is known as the pink city .", "tags": ["pink", "rose"], "uri": "tag:PinkCity"},
     ...          {"label": "Toulouse has a famous rugby club .", "tags": ["Toulouse", "rugby"], "uri": "tag:ToulouseRugby"},
     ...      ]),
     ... ]
 
-    >>> retriever = retrieve.Flash(on="tags")
+    >>> retriever = retrieve.Flash(on="tags") | retrieve.TfIdf(on="label")
 
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    on = "label",
-    ...    k = 3,
+    ...    k = 4,
     ...    path = "encoder.pkl"
     ... )
 
@@ -61,33 +61,36 @@ def eval(search, query_answers: list, on: str):
     {'Precision@1': '100.00%', 'Precision@2': '100.00%', 'Precision@3': '100.00%', 'R-Precision': '100.00%', 'Precision': '100.00%'}
 
     >>> print(search("Paris"))
-    [{'cosine_distance': 0.2754606008529663,
-      'label': 'Paris is the capital of France .',
+    [{'label': 'Paris is the capital of France .',
+      'similarity': 0.72453946,
       'tags': 'Paris',
       'uri': 'tag:FranceCapital'},
-     {'cosine_distance': 0.4790869355201721,
-      'label': 'The Eiffel Tower can be found in Paris .',
+     {'label': 'The Eiffel Tower can be found in Paris .',
+      'similarity': 0.52091306,
       'tags': ['Eiffel', 'Paris'],
       'uri': 'tag:EiffelTower'},
-     {'cosine_distance': 0.5744942128658295,
-      'label': 'It is known as the city of lights .',
+     {'label': 'It is known as the city of lights .',
+      'similarity': 0.42550576,
       'tags': ['lights', 'Paris'],
       'uri': 'tag:ParisLights'}]
 
-
-    >>> print(search("Toulouse"))
-    [{'cosine_distance': 0.2715187072753906,
-      'label': 'Toulouse has a famous rugby club .',
+    >>> print(search("Toulouse city"))
+    [{'label': 'Toulouse has a famous rugby club .',
+      'similarity': 0.7541945,
       'tags': ['Toulouse', 'rugby'],
       'uri': 'tag:ToulouseRugby'},
-     {'cosine_distance': 0.3184468746185303,
-      'label': 'Toulouse is the capital of Occitanie .',
+     {'label': 'Toulouse is the capital of Occitanie .',
+      'similarity': 0.6744734,
       'tags': ['Toulouse', 'Occitanie'],
       'uri': 'tag:Occitanie'},
-     {'cosine_distance': 0.7183035612106323,
-      'label': 'It is known as the pink city .',
+     {'label': 'It is known as the pink city .',
+      'similarity': 0.42794573,
       'tags': ['Toulouse', 'pink', 'rose'],
-      'uri': 'tag:PinkCity'}]
+      'uri': 'tag:PinkCity'},
+     {'label': 'It is known as the city of lights .',
+      'similarity': 0.3985046,
+      'tags': ['lights', 'Paris'],
+      'uri': 'tag:ParisLights'}]
 
     """
     precision = collections.defaultdict(lambda: stats.Mean())
