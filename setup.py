@@ -13,7 +13,7 @@ setuptools.setup(
     description="Another retriever, ranker, reader.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/raphaelsty/anotherrr",
+    url="https://github.com/raphaelsty/cherche",
     packages=setuptools.find_packages(),
     install_requires=[
         "creme == 0.6.1",

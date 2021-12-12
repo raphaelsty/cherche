@@ -1,10 +1,16 @@
 # Cherche
 
-Cherche (search in French) allows you to create a simple neural search pipeline using pre-trained language models. Cherche find the right documents from a list of JSON using the keys of your choice. 
+Cherche (search in French) allows you to create a simple neural search pipeline using pre-trained language models. Cherche find the right documents from a list of JSON using the keys of your choice.
 
 ![Alt text](docs/img/explain.png)
 
 ## Installation 🛠
+
+```sh
+pip install git+https://github.com/raphaelsty/cherche
+```
+
+Soon:
 
 ```sh
 pip install cherche
@@ -111,15 +117,15 @@ Cherche proposes different models to re-rank the documents out of the retriever.
 [{'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
-  'cosine_distance': 0.3019077181816101},
+  'similarity': 0.3019077181816101},
  {'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
-  'cosine_distance': 0.3593599200248718},
+  'similarity': 0.3593599200248718},
  {'title': 'Toulouse',
   'url': 'https://en.wikipedia.org/wiki/Toulouse',
   'article': 'It is now the capital of the Occitanie region, the second largest region in Metropolitan France.',
-  'cosine_distance': 0.44300907850265503}]
+  'similarity': 0.44300907850265503}]
 ```
 
 As you can see, for the same query, the ranker manages to improve the results of the retriever.
@@ -168,7 +174,7 @@ The retriever, ranker approach speed up the question answering process.
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
-  'cosine_distance': 0.31821733713150024},
+  'similarity': 0.31821733713150024},
  {'qa_score': 0.20747852325439453,
   'start': 12,
   'end': 17,
@@ -176,7 +182,7 @@ The retriever, ranker approach speed up the question answering process.
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
-  'cosine_distance': 0.399497926235199},
+  'similarity': 0.399497926235199},
  {'qa_score': 0.07703403383493423,
   'start': 165,
   'end': 169,
@@ -184,7 +190,7 @@ The retriever, ranker approach speed up the question answering process.
   'title': 'Toulouse',
   'url': 'https://en.wikipedia.org/wiki/Toulouse',
   'article': 'It is the fourth-largest commune in France, with 479,553 inhabitants within its municipal boundaries (as of January 2017), after Paris, Marseille and Lyon, ahead of Nice; it has a population of 1,360,829 within its wider metropolitan area (also as of January 2017).',
-  'cosine_distance': 0.4340791702270508}]
+  'similarity': 0.4340791702270508}]
 ```
 
 It is possible to use the question answering module with a simple retriever or with a retriever and a ranker easily.
