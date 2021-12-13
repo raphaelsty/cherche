@@ -8,11 +8,19 @@ ZeroShot classifier for ranking.
 
 - **encoder**
 
+    Zero shot classifier to use for ranking
+
 - **on** (*str*)
+
+    Field to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+
 - **multi_class** (*bool*) – defaults to `True`
+
+    If more than one candidate label can be correct, pass multi_class=True to calculate each class independently.
 
 
 

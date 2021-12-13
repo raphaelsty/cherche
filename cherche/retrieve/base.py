@@ -6,7 +6,17 @@ __all__ = ["Retriever"]
 
 
 class Retriever(abc.ABC):
-    """Retriever base class."""
+    """Retriever base class.
+
+    Parameters
+    ----------
+    on
+        Field to use to match the query to the documents.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+
+    """
 
     def __init__(self, on: str, k: int) -> None:
         super().__init__()
@@ -26,6 +36,14 @@ class Retriever(abc.ABC):
 
     @abc.abstractclassmethod
     def add(self, documents: list):
+        """Add documents to the retriever.
+
+        Parameters
+        ----------
+        documents
+            List of documents to add to the retriever.
+
+        """
         return self
 
     def __len__(self):
@@ -55,12 +73,16 @@ class _BM25(Retriever):
 
     Parameters
     ----------
-
-        on: Field that BM25 will use to search relevant documents.
-        bm25: Model from https://github.com/dorianbrown/rank_bm25.
-        tokenizer: Default tokenizer consist by splitting on space. This tokenizer should have a
-            tokenizer.__call__ method that returns the list of tokens from an input sentence.
-        k: Number of documents to retrieve.
+    on
+        Field to use to match the query to the documents.
+    bm25
+        BM25 model from [Rank BM25](https://github.com/dorianbrown/rank_bm25).
+    tokenizer
+        Tokenizer to use, the default one split on spaces. This tokenizer should have a
+        `tokenizer.__call__` method that returns the list of tokenized tokens.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
 
     """
 

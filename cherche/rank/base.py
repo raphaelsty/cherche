@@ -12,12 +12,16 @@ class Ranker(abc.ABC):
 
     Parameters
     ----------
-
-        on: Field of the documents to use for ranking.
-        encoder: Encoding function to computes embeddings of the documents.
-        k: Number of documents to keep.
-        path: Path of the file dedicated to store the embeddings as a pickle file.
-        similarity: Similarity measure to use i.e similarity.cosine or similarity.dot.
+    on
+        Field of the documents to use for ranking.
+    encoder
+        Encoding function to computes embeddings of the documents.
+    k
+        Number of documents to keep.
+    path
+        Path of the file dedicated to store the embeddings as a pickle file.
+    similarity
+        Similarity measure to use i.e similarity.cosine or similarity.dot.
 
     """
 
@@ -50,7 +54,8 @@ class Ranker(abc.ABC):
 
         Parameters
         ----------
-            documents: List of documents.
+        documents
+            List of documents.
 
         """
         documents = [
@@ -71,9 +76,10 @@ class Ranker(abc.ABC):
 
         Parameters
         ----------
-
-            similarities: List of tuples (index, similarity) among the list of documents to rank.
-            documents: List of documents.
+        similarities
+            List of tuples (index, similarity) among the list of documents to rank.
+        documents
+            List of documents.
 
         """
         similarities = similarities[: self.k] if self.k is not None else similarities

@@ -10,10 +10,19 @@ from .base import Retriever
 
 
 class Flash(Retriever):
-    """FlashText Retriever.
+    """FlashText Retriever. Flash aims to find documents that contain keywords such as a list of
+    tags for example.
 
     Parameters
     ----------
+    on
+        Field to use to match the query to the documents.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    keywords
+        Keywords extractor from [FlashText](https://github.com/vi3k6i5/flashtext). If set to None,
+        a default one is created.
 
     Examples
     --------
@@ -54,6 +63,14 @@ class Flash(Retriever):
         self.keywords = KeywordProcessor() if keywords is None else keywords
 
     def add(self, documents: list):
+        """Add keywords to the retriever.
+
+        Parameters
+        ----------
+        documents
+            List of documents to add to the retriever.
+
+        """
         for document in documents:
             if isinstance(document[self.on], list):
                 for tag in document[self.on]:

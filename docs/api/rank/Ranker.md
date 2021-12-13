@@ -8,13 +8,23 @@ Abstract class for ranking models.
 
 - **on** (*str*)
 
+    Field of the documents to use for ranking.
+
 - **encoder**
+
+    Encoding function to computes embeddings of the documents.
 
 - **k** (*int*)
 
+    Number of documents to keep.
+
 - **path** (*str*)
 
+    Path of the file dedicated to store the embeddings as a pickle file.
+
 - **similarity**
+
+    Similarity measure to use i.e similarity.cosine or similarity.dot.
 
 
 
@@ -47,10 +57,12 @@ Abstract class for ranking models.
 
     - **embeddings**    
     - **path**     (*str*)    
+        Path of the file dedicated to store the embeddings as a pickle file.
     
 ???- note "load_embeddings"
 
     Load embeddings from an existing directory.
 
     - **path**     (*str*)    
+        Path of the file dedicated to store the embeddings as a pickle file.
     

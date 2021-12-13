@@ -8,10 +8,24 @@ from .base import _BM25
 
 
 class BM25Okapi(_BM25):
-    """BM25Okapi
+    """BM25Okapi model from [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25).
 
     Parameters
     ----------
+    on
+        Field to use to match the query to the documents.
+    tokenizer
+        Tokenizer to use, the default one split on spaces. This tokenizer should have a
+        `tokenizer.__call__` method that returns the list of tokenized tokens.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    k1
+        Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
+    b
+        Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
+    epsilon
+        Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
     Examples
     --------
@@ -61,7 +75,14 @@ class BM25Okapi(_BM25):
         self.epsilon = epsilon
 
     def add(self, documents: list):
-        """Add documents."""
+        """Add documents to the retriever.
+
+        Parameters
+        ----------
+        documents
+            List of documents to add to the retriever.
+
+        """
         self.documents += documents
         self.model = self.bm25(
             [
@@ -76,10 +97,24 @@ class BM25Okapi(_BM25):
 
 
 class BM25L(_BM25):
-    """BM25L
+    """BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25).
 
     Parameters
     ----------
+    on
+        Field to use to match the query to the documents.
+    tokenizer
+        Tokenizer to use, the default one split on spaces. This tokenizer should have a
+        `tokenizer.__call__` method that returns the list of tokenized tokens.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    k1
+        Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
+    b
+        Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
+    delta
+        Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
     Examples
     --------
@@ -127,7 +162,14 @@ class BM25L(_BM25):
         self.model = None
 
     def add(self, documents: list):
-        """Add documents."""
+        """Add documents to the retriever.
+
+        Parameters
+        ----------
+        documents
+            List of documents to add to the retriever.
+
+        """
         self.documents += documents
         self.model = self.bm25(
             [

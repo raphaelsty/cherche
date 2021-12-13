@@ -4,16 +4,21 @@ from ..compose import Pipeline
 
 
 class Summary:
-    """Summarization model. Returns a single summary for inputs documents.
+    """Summarization model. Returns a single summary for an input list of documents.
 
     Parameters
     ----------
-
-        model: Summarization pipeline from HuggingFace.
-        on: Fild of documents to use to create the summary.
-        min_lenght: Minimum number of token of the summary.
-        max_lenght: Maximum number of token of the summary.
-
+    model
+        Hugging Face summarization model available [here](https://huggingface.co/models?pipeline_tag=summarization).
+    on
+        Field to use to answer to the question.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    min_lenght
+        Minimum number of token of the summary.
+    max_lenght
+        Maximum number of token of the summary.
 
     Examples
     --------
@@ -62,13 +67,13 @@ class Summary:
         repr += f"\n\t max length: {self.max_length}"
         return repr
 
-    def __call__(self, documents: list, **kwargs) -> list:
+    def __call__(self, documents: list, **kwargs) -> str:
         """Summarize input text.
 
         Parameters
         ----------
-
-            documents: List of documents to summarize.
+        documents
+            List of documents to summarize.
 
         """
         if not documents:

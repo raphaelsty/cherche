@@ -9,12 +9,19 @@ class Encoder(Ranker):
 
     Parameters
     ----------
-
-        on: Field of the documents to use for ranking.
-        encoder: Encoding function to computes embeddings of the documents.
-        k: Number of documents to keep.
-        path: Path of the file dedicated to store the embeddings as a pickle file.
-        similarity: Similarity measure to use i.e similarity.cosine or similarity.dot.
+    on
+        Field to use to match the query to the documents.
+    encoder
+        Encoding function dedicated to documents and query.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    path
+        Path to the file dedicated to storing the embeddings. The ranker will read this file if it
+        already exists to load the embeddings and will update it when documents are added.
+    similarity
+        Similarity measure to compare documents embeddings and query embedding (similarity.cosine
+        or similarity.dot).
 
     Examples
     --------
@@ -66,9 +73,10 @@ class Encoder(Ranker):
 
         Parameters
         ----------
-
-            q: Query.
-            documents: List of documents to re-rank.
+        q
+            Input query.
+        documents
+            List of documents to rank.
 
         """
         if not documents:

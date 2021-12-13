@@ -10,9 +10,10 @@ def cosine(emb_q: np.ndarray, emb_documents: list):
 
     Parameters
     ----------
-
-        emb_q: Embedding of the query.
-        emb_documents: List of embeddings of the documents.
+    emb_q
+        Embedding of the query.
+    emb_documents
+        List of embeddings of the documents.
 
     Examples
     --------
@@ -48,9 +49,10 @@ def dot(emb_q: np.ndarray, emb_documents: list):
 
     Parameters
     ----------
-
-        emb_q: Embedding of the query.
-        emb_documents: List of embeddings of the documents.
+    emb_q
+        Embedding of the query.
+    emb_documents
+        List of embeddings of the documents.
 
     Examples
     --------

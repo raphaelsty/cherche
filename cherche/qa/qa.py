@@ -10,9 +10,13 @@ class QA:
 
     Parameters
     ----------
-
-        model: HuggingFace QA model.
-        on: Field to use to answer the questions.
+    model
+        Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
+    on
+        Field to use to answer to the question.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
 
     Examples
     --------
@@ -71,10 +75,10 @@ class QA:
 
         Parameters
         ----------
-
-            q: Question.
-            documents: List of documents in which the model will retrieve the answer.
-            k: Number of candidates answers to retrieve.
+        q
+            Input question.
+        documents
+            List of documents in which the model will retrieve the answer.
 
         """
         if not documents:

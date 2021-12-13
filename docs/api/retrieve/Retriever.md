@@ -8,7 +8,11 @@ Retriever base class.
 
 - **on** (*str*)
 
+    Field to use to match the query to the documents.
+
 - **k** (*int*)
+
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
 
 
 
@@ -26,3 +30,7 @@ Retriever base class.
     
 ???- note "add"
 
+    Add documents to the retriever.
+
+    - **documents**     (*list*)    
+    

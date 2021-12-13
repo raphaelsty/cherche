@@ -8,7 +8,11 @@ Computes dot product between input query embedding and documents embeddings. Hig
 
 - **emb_q** (*numpy.ndarray*)
 
+    Embedding of the query.
+
 - **emb_documents** (*list*)
+
+    List of embeddings of the documents.
 
 
 

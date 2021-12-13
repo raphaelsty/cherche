@@ -28,7 +28,8 @@ class Union(UnionIntersection):
 
     Parameters
     ----------
-        model: List of models of the union.
+    model
+        List of models of the union.
 
     Examples
     --------
@@ -86,6 +87,13 @@ class Union(UnionIntersection):
         self.models = models
 
     def __call__(self, q: str, **kwargs):
+        """
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
         query = {"q": q, **kwargs}
         documents = []
         for model in self.models:
@@ -105,11 +113,12 @@ class Union(UnionIntersection):
 
 class Intersection(UnionIntersection):
     """Intersection gathers retrieved documents from multiples retrievers and ranked documents from
-    multiples rankers only if they appears in all proposed documents.
+    multiples rankers only if they are proposed by all models of the intersection pipeline.
 
     Parameters
     ----------
-        model: List of models of the union.
+    model
+        List of models of the union.
 
     Examples
     --------
@@ -162,6 +171,13 @@ class Intersection(UnionIntersection):
         super().__init__(models=models)
 
     def __call__(self, q: str, **kwargs):
+        """
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
         query = {"q": q, **kwargs}
         counter_docs = collections.defaultdict(int)
         for model in self.models:

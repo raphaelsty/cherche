@@ -8,9 +8,15 @@ FlashText Retriever.
 
 - **on** (*str*)
 
+    Field to use to match the query to the documents.
+
 - **k** (*int*) – defaults to `None`
 
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+
 - **keywords** – defaults to `None`
+
+    Keywords extractor from [FlashText](https://github.com/vi3k6i5/flashtext). If set to None, a default one is created.
 
 
 
@@ -53,6 +59,12 @@ FlashText Retriever.
     
 ???- note "add"
 
+    Add keywords to the retriever.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    
 ## References
 
 1. [FlashText](https://github.com/vi3k6i5/flashtext)

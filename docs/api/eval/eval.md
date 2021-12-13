@@ -8,9 +8,15 @@ Evaluate a pipeline using query and answers.
 
 - **search**
 
+    Cherche pipeline.
+
 - **query_answers** (*list*)
 
+    Pair of query and answers.
+
 - **on** (*str*)
+
+    Field to use compare retrieved documents and test set.
 
 
 

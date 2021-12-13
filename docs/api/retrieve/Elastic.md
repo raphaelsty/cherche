@@ -8,11 +8,19 @@ ElasticSearch retriever.
 
 - **on** (*str*)
 
+    Field to use to match the query to the documents.
+
 - **k** (*int*) – defaults to `None`
+
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
 
 - **es** – defaults to `None`
 
+    ElasticSearch Python client. The default configuration is used if set to None.
+
 - **index** (*str*) – defaults to `cherche`
+
+    Elasticsearch index to use to index documents. Elastic will create the index if it does not exist.
 
 
 

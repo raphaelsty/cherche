@@ -6,14 +6,16 @@ from creme import stats
 
 
 def eval(search, query_answers: list, on: str):
-    """Evaluate a pipeline using query and answers.
+    """Evaluate a pipeline using pairs of query and answers.
 
     Parameters
     ----------
-
-        search: Cherche pipeline.
-        query_answers: Pair of query and answers.
-        on: Field to use compare retrieved documents and test set.
+    search
+        Neural search pipeline.
+    query_answers
+        Pairs of query and answers.
+    on
+        Field to use compare retrieved documents and test set.
 
     Examples
     --------

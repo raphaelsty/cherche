@@ -8,12 +8,16 @@ class ZeroShot:
 
     Parameters
     ----------
-
-        encoder: HuggingFace pipeline for zero shot classification.
-        on: Field to use for the zero shot classification.
-        k: Number of documents to keep.
-        multi_class: If more than one candidate label can be correct, pass multi_class=True to
-            calculate each class independently.
+    on
+        Field to use to match the query to the documents.
+    encoder
+        Zero shot classifier to use for ranking
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    multi_class
+        If more than one candidate label can be correct, pass multi_class=True to calculate each
+        class independently.
 
     Examples
     --------
@@ -78,9 +82,10 @@ class ZeroShot:
 
         Parameters
         ----------
-
-            q: Query of the user.
-            documents: List of documents to rank.
+        q
+            Inputs query.
+        documents
+            List of documents to rank.
 
         """
         if not documents:
@@ -89,7 +94,7 @@ class ZeroShot:
         scores = self.encoder(
             q,
             [document[self.on] for document in documents],
-            multi_class=self.multi_class,
+            multi_label=self.multi_class,
         )
 
         ranked = []

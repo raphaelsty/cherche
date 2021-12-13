@@ -8,15 +8,27 @@ BM25Okapi
 
 - **on** (*str*)
 
+    Field to use to match the query to the documents.
+
 - **tokenizer** – defaults to `None`
+
+    Tokenizer to use, the default one split on spaces. This tokenizer should have a `tokenizer.__call__` method that returns the list of tokenized tokens.
 
 - **k** (*int*) – defaults to `None`
 
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+
 - **k1** – defaults to `1.5`
+
+    Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
 - **b** – defaults to `0.75`
 
+    Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
+
 - **epsilon** – defaults to `0.25`
+
+    Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
 
 
@@ -64,7 +76,7 @@ BM25Okapi retriever
     
 ???- note "add"
 
-    Add documents.
+    Add documents to the retriever.
 
     **Parameters**
 

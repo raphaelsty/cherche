@@ -8,7 +8,11 @@ Question Answering model.
 
 - **model**
 
+    HuggingFace QA model.
+
 - **on** (*str*)
+
+    Field to use to answer the questions.
 
 - **k** (*int*) – defaults to `None`
 

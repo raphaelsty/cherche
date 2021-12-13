@@ -8,13 +8,23 @@ SentenceBert Ranker.
 
 - **encoder**
 
+    Encoding function dedicated to documents and query.
+
 - **on** (*str*)
+
+    Field to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+
 - **path** (*str*) – defaults to `None`
 
-- **similarity** – defaults to `<function cosine at 0x7fb6020d3af0>`
+    Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
+
+- **similarity** – defaults to `<function cosine at 0x7f9148a53af0>`
+
+    Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
 
 
@@ -84,10 +94,12 @@ Encoder ranker
 
     - **embeddings**    
     - **path**     (*str*)    
+        Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
     
 ???- note "load_embeddings"
 
     Load embeddings from an existing directory.
 
     - **path**     (*str*)    
+        Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
     

@@ -4,11 +4,12 @@ from .base import Compose
 
 
 class Pipeline(Compose):
-    """Cherche pipeline.
+    """Neurals search pipeline.
 
     Parameters
     ----------
-        models: List of models to use in the pipeline.
+    models
+        List of models of the pipeline.
 
     Examples
     --------
@@ -110,7 +111,8 @@ class Pipeline(Compose):
 
         Parameters
         ----------
-            q: Query of the user.
+        q
+            Input query.
 
         """
         query = {}

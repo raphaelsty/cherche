@@ -8,7 +8,11 @@ Summarization model. Returns a single summary for inputs documents.
 
 - **model**
 
+    Summarization pipeline from HuggingFace.
+
 - **on** (*str*)
+
+    Fild of documents to use to create the summary.
 
 - **min_length** (*int*) – defaults to `5`
 

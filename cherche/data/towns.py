@@ -5,7 +5,7 @@ __all__ = ["load_towns"]
 
 
 def load_towns():
-    """Sample of Wikipedia dataset that contains informations about Toulouse, Paris, Lyon,
+    """Sample of Wikipedia dataset that contains informations about Toulouse, Paris, Lyon and
     Bordeaux.
 
     Examples

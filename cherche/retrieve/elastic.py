@@ -6,15 +6,20 @@ from .base import Retriever
 
 
 class Elastic(Retriever):
-    """ElasticSearch retriever.
+    """ElasticSearch retriever based on the [Python client of Elasticsearch](https://elasticsearch-py.readthedocs.io/en/v7.15.1/).
 
     Parameters
     ----------
-        on: Field to use to retrieve documents.
-        k: Number of documents to retrieve.
-        es: ElasticSearch Python client with selected configuration. Default configuration is used
-            if es is set to None.
-        index: ElasticSearch index to use.
+    on
+        Field to use to match the query to the documents.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    es
+        ElasticSearch Python client. The default configuration is used if set to None.
+    index
+        Elasticsearch index to use to index documents. Elastic will create the index if it does not
+        exist.
 
     Examples
     --------
@@ -63,7 +68,14 @@ class Elastic(Retriever):
         )
 
     def add(self, documents: list):
-        """ElasticSearch bulk indexing."""
+        """ElasticSearch bulk indexing.
+
+        Parameters
+        ----------
+        documents
+            List of documents to upload to Elasticsearch.
+
+        """
         documents = [
             {
                 "_index": self.index,

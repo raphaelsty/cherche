@@ -8,6 +8,8 @@ Cherche pipeline.
 
 - **models** (*list*)
 
+    List of models to use in the pipeline.
+
 
 
 ## Examples

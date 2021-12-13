@@ -8,9 +8,15 @@ TfIdf retriever based on cosine similarities.
 
 - **on** (*str*)
 
+    Field to use to match the query to the documents.
+
 - **k** (*int*) – defaults to `None`
 
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+
 - **tfidf** (*sklearn.feature_extraction.text.TfidfVectorizer*) – defaults to `None`
+
+    TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
 
 
 

@@ -10,6 +10,16 @@ from .base import Retriever
 class TfIdf(Retriever):
     """TfIdf retriever based on cosine similarities.
 
+    Parameters
+    ----------
+    on
+        Field to use to match the query to the documents.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+    tfidf
+        TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
+
     Examples
     --------
 
@@ -53,7 +63,14 @@ class TfIdf(Retriever):
         self.matrix = None
 
     def add(self, documents: list):
-        """Add documents."""
+        """Add documents to the retriever.
+
+        Parameters
+        ----------
+        documents
+            List of documents to add to the retriever.
+
+        """
         self.documents += documents
         self.matrix = self.tfidf.fit_transform([doc[self.on] for doc in self.documents])
         return self
