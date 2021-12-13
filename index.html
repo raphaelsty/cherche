@@ -371,50 +371,35 @@
       
         <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
-    Installation 🛠
+    Installation 🤖
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    QuickStart 💨
+  </a>
+  
+    <nav class="md-nav" aria-label="QuickStart 💨">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#documents" class="md-nav__link">
-    Documents 📜
+    Documents 📑
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve" class="md-nav__link">
-    Retrieve 🔎
+        
+          <li class="md-nav__item">
+  <a href="#retriever-ranker" class="md-nav__link">
+    Retriever ranker 🔍
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve-rank" class="md-nav__link">
-    Retrieve + Rank 🤖
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve-rank-question-answering" class="md-nav__link">
-    Retrieve + Rank + Question Answering 😶
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve-rank-summary" class="md-nav__link">
-    Retrieve + Rank + Summary 👾
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#references" class="md-nav__link">
-    References
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1426,50 +1411,35 @@
       
         <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
-    Installation 🛠
+    Installation 🤖
   </a>
   
 </li>
       
         <li class="md-nav__item">
+  <a href="#quickstart" class="md-nav__link">
+    QuickStart 💨
+  </a>
+  
+    <nav class="md-nav" aria-label="QuickStart 💨">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#documents" class="md-nav__link">
-    Documents 📜
+    Documents 📑
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve" class="md-nav__link">
-    Retrieve 🔎
+        
+          <li class="md-nav__item">
+  <a href="#retriever-ranker" class="md-nav__link">
+    Retriever ranker 🔍
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve-rank" class="md-nav__link">
-    Retrieve + Rank 🤖
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve-rank-question-answering" class="md-nav__link">
-    Retrieve + Rank + Question Answering 😶
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#retrieve-rank-summary" class="md-nav__link">
-    Retrieve + Rank + Summary 👾
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#references" class="md-nav__link">
-    References
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1487,13 +1457,14 @@
                 
 
 <h1 id="cherche">Cherche<a class="headerlink" href="#cherche" title="Permanent link">&para;</a></h1>
-<p>Cherche (search in French) allows you to create a simple neural search pipeline using pre-trained language models. Cherche find the right documents from a list of JSON using the keys of your choice. </p>
-<p><img alt="Alt text" src="img/explain.png" /></p>
-<h2 id="installation">Installation 🛠<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>pip install cherche
+<p>Cherche (search in French) allows you to create a simple neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is dedicated to corpus of small to middle size.</p>
+<p><img alt="Alt text" src="img/doc.png" /></p>
+<h2 id="installation">Installation 🤖<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>pip install git+https://github.com/raphaelsty/cherche
 </code></pre></div>
-<h2 id="documents">Documents 📜<a class="headerlink" href="#documents" title="Permanent link">&para;</a></h2>
-<p>Cherche models allows to index a set of documents. These documents shall be formatted as a Python dictionary list. The names of the dictionary keys do not matter. You will select the dictionary field of your choice to perform the search. Here is a list of documents suitable for neural search with Cherche:</p>
+<h2 id="quickstart">QuickStart 💨<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h2>
+<h3 id="documents">Documents 📑<a class="headerlink" href="#documents" title="Permanent link">&para;</a></h3>
+<p>Cherche allows to find the right document within a list of JSON. Here is an example of a corpus.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span>
 
 <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
@@ -1517,190 +1488,56 @@
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>
-<h2 id="retrieve">Retrieve 🔎<a class="headerlink" href="#retrieve" title="Permanent link">&para;</a></h2>
-<p>Cherche offers different retrievers for information retrieval. A retriever is a very fast model that allows to filter the most relevant documents for a query.</p>
-<ul>
-<li>retrieve.ElasticSearch</li>
-<li>retrieve.TfIdf</li>
-<li>retrieve.BM25Okapi</li>
-<li>retrieve.BM25L</li>
-<li>retrieve.BM25Plus</li>
-<li>retrieve.Flash</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">retrieve</span>
+<h3 id="retriever-ranker">Retriever ranker 🔍<a class="headerlink" href="#retriever-ranker" title="Permanent link">&para;</a></h3>
+<p>Here is an example of a neural search pipeline composed of a TfIdf that quickly retrieves documents followed by a ranking model that sorts the documents at the output of the retriever based on the semantic similarity between the query and the documents.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span>
+<span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
 
-<span class="c1"># Load the list of dicts</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span> 
+<span class="c1"># List of dicts</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span> 
 
-<span class="c1"># Initialize retriever</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># on correspond au champ des dictionnaires sur lesquels on va effectuer la recherche.</span>
+<span class="c1"># Retrieve on field article</span>
+<span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
-<span class="c1"># Index documents</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="c1"># Rank on field article</span>
+<span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
+<span class="p">)</span>
 
-<span class="c1"># Most relevant documents using TF-IDF</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;capital of france&quot;</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Founded by the Romans, the city was the capital of the Visigothic Kingdom in the 5th century and the capital of the province of Languedoc in the Late Middle Ages and early modern period (provinces were abolished during the French Revolution), making it the unofficial capital of the cultural region of Occitania (Southern France).&#39;</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;It is now the capital of the Occitanie region, the second largest region in Metropolitan France.&#39;</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.&#39;</span><span class="p">}]</span>
+<span class="c1"># Neural search pipeline</span>
+<span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
+
+<span class="c1"># Create index for documents</span>
+<span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="retrieve-rank">Retrieve + Rank 🤖<a class="headerlink" href="#retrieve-rank" title="Permanent link">&para;</a></h2>
-<p>Cherche proposes different models to re-rank the documents out of the retriever. Rankers are based on semantic similarity between the query and the documents proposed by the retriever to establish a new order. We can select the retriever and the ranker of our choice and combine them to improve the search.</p>
-<ul>
-<li>rank.Encoder</li>
-<li>rank.DPR</li>
-<li>rank.ZeroShot</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-
-<span class="c1"># Load the list of dicts</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span> 
-
-<span class="c1"># Initialize retriever</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-
-<span class="c1"># Initialize the ranker</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Intialize the pipeline</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-
-<span class="c1"># Index documents</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;capital of france&quot;</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="n">TfIdf</span> <span class="n">retriever</span>
+  <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
+  <span class="n">documents</span><span class="p">:</span> <span class="mi">105</span>
+<span class="n">Encoder</span> <span class="n">ranker</span>
+  <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
+  <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
+  <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Relevant documents</span>
+<span class="n">search</span><span class="p">(</span><span class="s2">&quot;capital of france&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cosine_distance&#39;</span><span class="p">:</span> <span class="mf">0.3019077181816101</span><span class="p">},</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.69809234</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cosine_distance&#39;</span><span class="p">:</span> <span class="mf">0.3593599200248718</span><span class="p">},</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.64064014</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Toulouse&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Toulouse&#39;</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;It is now the capital of the Occitanie region, the second largest region in Metropolitan France.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cosine_distance&#39;</span><span class="p">:</span> <span class="mf">0.44300907850265503</span><span class="p">}]</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.556991</span><span class="p">}]</span>
 </code></pre></div>
-<p>As you can see, for the same query, the ranker manages to improve the results of the retriever.</p>
-<h2 id="retrieve-rank-question-answering">Retrieve + Rank + Question Answering 😶<a class="headerlink" href="#retrieve-rank-question-answering" title="Permanent link">&para;</a></h2>
-<p>Cherche provide a solution to connect extractive question answering models to retriever and ranker.
-The retriever, ranker approach speed up the question answering process.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">qa</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
-
-<span class="c1"># Load the list of dicts</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span> 
-
-<span class="c1"># Initialize retriever</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-
-<span class="c1"># Initialize the ranker</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Intialize the question answering model</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">question_answer</span> <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="n">QA</span><span class="p">(</span>
-<span class="o">...</span>     <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;question-answering&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">),</span>
-<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Intialize the pipeline</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">question_answer</span>
-
-<span class="c1"># Index documents</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;What is the capital of france?&quot;</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.6114194989204407</span><span class="p">,</span>
-  <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-  <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cosine_distance&#39;</span><span class="p">:</span> <span class="mf">0.31821733713150024</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.20747852325439453</span><span class="p">,</span>
-  <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
-  <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cosine_distance&#39;</span><span class="p">:</span> <span class="mf">0.399497926235199</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.07703403383493423</span><span class="p">,</span>
-  <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">165</span><span class="p">,</span>
-  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">169</span><span class="p">,</span>
-  <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Nice&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;It is the fourth-largest commune in France, with 479,553 inhabitants within its municipal boundaries (as of January 2017), after Paris, Marseille and Lyon, ahead of Nice; it has a population of 1,360,829 within its wider metropolitan area (also as of January 2017).&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cosine_distance&#39;</span><span class="p">:</span> <span class="mf">0.4340791702270508</span><span class="p">}]</span>
-</code></pre></div>
-<p>It is possible to use the question answering module with a simple retriever or with a retriever and a ranker easily.</p>
-<h2 id="retrieve-rank-summary">Retrieve + Rank + Summary 👾<a class="headerlink" href="#retrieve-rank-summary" title="Permanent link">&para;</a></h2>
-<p>Cherche provides a summary of relevant documents for a query using HuggingFace's pre-trained models. The retriever and the rankers allows to reduce speed up
-the summarization process.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">summary</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
-
-<span class="c1"># Load the list of dicts</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
-
-<span class="c1"># Initialize retriever</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-
-<span class="c1"># Initialize the ranker</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Intialize the summarizer</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">summarizer</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;summarization&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-6-6&quot;</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-6-6&quot;</span><span class="p">,</span> <span class="n">framework</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">),</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Intialize the pipeline</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">summarizer</span>
-
-<span class="c1"># Index documents</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;What is the capital of france?&quot;</span><span class="p">)</span>
-<span class="s1">&#39; The City of Paris is the centre and seat of government of the region and province of Île-de-France. It is&#39;</span>
-</code></pre></div>
-<p>The choice of the pre-trained model (ranker, question answering and summary) is crucial to obtain meaningful answers.</p>
-<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
-<p>Cherche is a minimalist solution and meets a need for modularity. Do not hesitate to look at Haystack,
-Jina and TxtAi which offer very advanced solutions for neural search.</p>
-<ul>
-<li><a href="https://github.com/deepset-ai/haystack">Haystack</a></li>
-<li><a href="https://github.com/jina-ai/jina">Jina</a></li>
-<li><a href="https://github.com/neuml/txtai">txtai</a></li>
-</ul>
-<p>The BM25 models available in Cherche are a wrapper of <a href="https://github.com/dorianbrown/rank_bm25">rank_bm25</a>. Elastic retriever is a wrapper of <a href="https://elasticsearch-py.readthedocs.io/en/v7.15.2/">Python Elasticsearch Client</a>. TfIdf retriever is a wrapper of <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">Sklearn</a>. TfidfVectorizer. Flash retriever is a wrapper of <a href="https://github.com/vi3k6i5/flashtext">FlashText</a>. DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of <a href="https://www.sbert.net/docs/pretrained_models.html">SentenceTransformers</a> in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of <a href="https://huggingface.co/models?pipeline_tag=zero-shot-classification&amp;sort=downloads">Hugging Face</a> in a neural search pipeline.</p>
 
               
             </article>
