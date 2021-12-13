@@ -53,27 +53,30 @@ documents[:3]
 Here is an example of a neural search pipeline composed of a TfIdf that quickly retrieves documents followed by a ranking model that sorts the documents at the output of the retriever based on the semantic similarity between the query and the documents.
 
 ```python
->>> from cherche import data, retrieve, rank
->>> from sentence_transformers import SentenceTransformer
+from cherche import data, retrieve, rank
+from sentence_transformers import SentenceTransformer
 
 # List of dicts
->>> documents = data.load_towns() 
+documents = data.load_towns() 
 
-# Retriever
->>> retriever = retrieve.TfIdf(on="article", k=30) # on correspond au champ des dictionnaires sur lesquels on va effectuer la recherche.
+# Retriever on article field
+retriever = retrieve.TfIdf(on="article", k=30)
 
-# Ranker
->>> ranker = rank.Encoder(
-...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "article",
-...    k = 3,
-...    path = "encoder.pkl"
-... )
+# Ranker on article field
+ranker = rank.Encoder(
+    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    on = "article",
+    k = 3,
+    path = "encoder.pkl"
+)
 
->>> search = retriever + ranker
+search = retriever + ranker
 
 # Index documents
->>> search.add(documents=documents)
+search.add(documents=documents)
+```
+
+```python
 TfIdf retriever
   on: article
   documents: 105
@@ -82,9 +85,14 @@ Encoder ranker
   k: 3
   similarity: cosine
   embeddings stored at: encoder.pkl
+```
 
+```python
 # Relevant documents
->>> search("capital of france")
+search("capital of france")
+```
+
+```python
 [{'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
