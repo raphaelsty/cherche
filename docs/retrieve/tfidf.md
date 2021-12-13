@@ -34,8 +34,8 @@ TfIdf retriever
 You can also initialise the retriever with a custom [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html).
 
 ```python
->>> from sklearn.feature_extraction.text import TfidfVectorizer
 >>> from cherche import retrieve
+>>> from sklearn.feature_extraction.text import TfidfVectorizer
 
 >>> documents = [
 ...    {
@@ -55,7 +55,7 @@ You can also initialise the retriever with a custom [TfidfVectorizer](https://sc
 ...    }
 ... ]
 
->>> tfidf = TfidfVectorizer(lowercase=True, stop_words="english", min_df=2, max_df=0.7)
+>>> tfidf = TfidfVectorizer(lowercase=True, min_df=1, max_df=0.5, ngram_range=(4, 10), analyzer="char_wb")
 
 >>> retriever = retrieve.TfIdf(tfidf=tfidf, on="article", k=30)
 

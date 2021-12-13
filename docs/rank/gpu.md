@@ -56,9 +56,23 @@ To use the `zero-shot-classification` models with a GPU, the `device` parameter 
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
+
 
 >>> ranker = rank.ZeroShot(
 ...     encoder = pipeline("zero-shot-classification", 

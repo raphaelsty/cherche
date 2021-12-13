@@ -1,15 +1,17 @@
-# Distance
+# Similarity
 
-Cherche provides two functions to measure the semantic similarity between a query and a document: `distance.cosine_distance` (lower is better) and `distance.dot_similarity` (higher is better).
+Cherche provides two functions to measure the semantic similarity between a query and a document: `similarity.cosine` (higher is better) and `similarity.dot` (higher is better).
 
-The choice of this function depends above all on the pre-trained model you are using for the ranking. If the model has been trained with the cosine similarity then you should use `distance.cosine_distance` otherwise if it has been trained with the dot product you should use `distance.cosine_distance`.
+The choice of this function depends above all on the pre-trained model you are using for the ranking. If the model has been trained with the cosine similarity then you should use `similarity.cosine` otherwise if it has been trained with the dot product you should use `similarity.dot`.
 
 These functions are only used by the `rank.Encoder` and `rank.DPR` models.
+
+## Cosine
 
 Initialization of a `rank.Encoder` model with a model trained using cosine similarity:
 
 ```python
->>> from cherche import rank
+>>> from cherche import rank, similarity
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
@@ -34,17 +36,38 @@ Initialization of a `rank.Encoder` model with a model trained using cosine simil
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
 ...    on = "article",
 ...    k = 30,
-...    distance = distance.cosine_distance,
+...    similarity = similarity.cosine,
 ...    path = "encoder.pkl"
 ... )
 
 >>> ranker.add(documents)
+Encoder ranker
+    on: article
+    k: 30
+    similarity: cosine
+    embeddings stored at: encoder.pkl
+
+>>> ranker(q = "fashion and gastronomy", documents=documents)
+[{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.40531972},
+ {'article': 'Paris is the capital and most populous city of France',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.2509912},
+ {'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.13647239}]
 ```
+
+## Dot
 
 Initialization of a `rank.DPR` model with a model trained using dot product:
 
 ```python
->>> from cherche import rank, distance
+>>> from cherche import rank, similarity
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
@@ -70,7 +93,28 @@ Initialization of a `rank.DPR` model with a model trained using dot product:
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
 ...    on = "article",
 ...    k = 30,
-...    distance = distance.dot_similarity,
+...    similarity = similarity.dot,
 ...    path = "dpr.pkl"
 ... )
+
+>>> ranker.add(documents)
+DPR ranker
+    on: article
+    k: 30
+    similarity: dot
+    embeddings stored at: dpr.pkl
+
+>>> ranker(q = "fashion and gastronomy", documents=documents)
+[{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 63.076904},
+ {'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 58.065662},
+ {'article': 'Paris is the capital and most populous city of France',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 55.83678}]
 ```

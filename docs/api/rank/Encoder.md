@@ -14,7 +14,7 @@ SentenceBert Ranker.
 
 - **path** (*str*) – defaults to `None`
 
-- **similarity** – defaults to `<function cosine at 0x7fcbb1f0baf0>`
+- **similarity** – defaults to `<function cosine at 0x7fb6020d3af0>`
 
 
 

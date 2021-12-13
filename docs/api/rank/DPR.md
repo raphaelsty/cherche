@@ -16,7 +16,7 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
 - **path** (*str*) – defaults to `None`
 
-- **similarity** – defaults to `<function dot at 0x7fcbb1f133a0>`
+- **similarity** – defaults to `<function dot at 0x7fb6020dc3a0>`
 
 
 

@@ -12,6 +12,9 @@ from .base import Retriever
 class Flash(Retriever):
     """FlashText Retriever.
 
+    Parameters
+    ----------
+
     Examples
     --------
 
@@ -42,7 +45,6 @@ class Flash(Retriever):
     ----------
     1. [FlashText](https://github.com/vi3k6i5/flashtext)
     2. [Replace or Retrieve Keywords In Documents at Scale](https://arxiv.org/abs/1711.00046)
-
 
     """
 
