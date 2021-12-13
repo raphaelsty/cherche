@@ -26,6 +26,7 @@ ElasticSearch retriever.
 >>> es = Elasticsearch()
 
 >>> if es.ping():
+...
 ...     retriever = retrieve.Elastic(on="title", k=2, es=es, index="test")
 ...
 ...     documents = [
@@ -37,13 +38,7 @@ ElasticSearch retriever.
 ...     retriever = retriever.reset()
 ...     retriever = retriever.add(documents=documents)
 ...
-...     print(retriever(q="Transformers"))
-[{'date': '10-11-2021',
-'title': 'Github library with PyTorch and Transformers.',
-'url': 'ckb/github.com'},
-{'date': '22-11-2020',
-'title': 'Github Library with Pytorch and Transformers.',
-'url': 'blp/github.com'}]
+...     candidates = retriever(q="Transformers")
 ```
 
 ## Methods

@@ -2,16 +2,13 @@
 
 ## compose
 
-- [Compose](../compose/Compose)
+- [Intersection](../compose/Intersection)
+- [Pipeline](../compose/Pipeline)
+- [Union](../compose/Union)
 
 ## data
 
 - [load_towns](../data/load-towns)
-
-## distance
-
-- [cosine_distance](../distance/cosine-distance)
-- [dot_similarity](../distance/dot-similarity)
 
 ## eval
 
@@ -32,11 +29,15 @@
 
 - [BM25L](../retrieve/BM25L)
 - [BM25Okapi](../retrieve/BM25Okapi)
-- [BM25Plus](../retrieve/BM25Plus)
 - [Elastic](../retrieve/Elastic)
 - [Flash](../retrieve/Flash)
 - [Retriever](../retrieve/Retriever)
 - [TfIdf](../retrieve/TfIdf)
+
+## similarity
+
+- [cosine](../similarity/cosine)
+- [dot](../similarity/dot)
 
 ## summary
 

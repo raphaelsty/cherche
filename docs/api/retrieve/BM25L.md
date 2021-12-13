@@ -26,33 +26,30 @@ BM25L
 >>> from pprint import pprint as print
 >>> from cherche import retrieve
 
->>> retriever = retrieve.BM25L(on="title", k=3, k1=1.5, b=0.75, delta=0.5)
+>>> retriever = retrieve.BM25L(on="article", k=3, k1=1.5, b=0.75, delta=0.5)
 
 >>> documents = [
-...     {"url": "ckb/github.com", "title": "It is quite windy in London.", "date": "10-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch and Transformers .", "date": "22-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch .", "date": "22-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with Transformers .", "date": "22-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch and Transformers .", "date": "22-11-2021"},
+...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
 >>> retriever = retriever.add(documents=documents)
 
 >>> retriever
 BM25L retriever
-    on: title
-    documents: 5
+    on: article
+    documents: 3
 
->>> print(retriever(q="PyTorch Transformers"))
-[{'date': '22-11-2021',
-  'title': 'Github Library with PyTorch and Transformers .',
-  'url': 'mkb/github.com'},
- {'date': '22-11-2021',
-  'title': 'Github Library with PyTorch and Transformers .',
-  'url': 'mkb/github.com'},
- {'date': '22-11-2021',
-  'title': 'Github Library with PyTorch .',
-  'url': 'mkb/github.com'}]
+>>> print(retriever(q="France"))
+[{'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'title': 'Paris'}]
+
+>>> retriever.add(documents=documents)
+BM25L retriever
+    on: article
+    documents: 6
 ```
 
 ## Methods

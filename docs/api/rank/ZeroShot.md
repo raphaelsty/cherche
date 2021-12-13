@@ -22,35 +22,36 @@ ZeroShot classifier for ranking.
 >>> from pprint import pprint as print
 >>> from cherche import rank
 >>> from transformers import pipeline
+>>> from sentence_transformers import SentenceTransformer
+
+>>> documents = [
+...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+... ]
 
 >>> ranker = rank.ZeroShot(
 ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
-...     on = "title",
+...     on = "article",
 ...     k = 2,
 ... )
 
 >>> ranker
 Zero Shot Classifier
      model: typeform/distilbert-base-uncased-mnli
-     on: title
+     on: article
      k: 2
      multi class: True
 
->>> documents = [
-...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch .", "date": "22-11-2021"},
-...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers .", "date": "22-11-2020"},
-... ]
-
->>> print(ranker(q="Transformers", documents=documents))
-[{'_zero_shot_score': 0.3513341546058655,
-  'date': '22-11-2020',
-  'title': 'Github Library with Pytorch and Transformers .',
-  'url': 'blp/github.com'},
- {'_zero_shot_score': 0.3513341546058655,
-  'date': '10-11-2021',
-  'title': 'Github library with PyTorch and Transformers .',
-  'url': 'ckb/github.com'}]
+>>> print(ranker(q="Paris", documents=documents))
+[{'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'similarity': 0.4519128203392029,
+  'title': 'Paris'},
+ {'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'similarity': 0.33974456787109375,
+  'title': 'Eiffel tower'}]
 ```
 
 ## Methods
@@ -64,6 +65,14 @@ Zero Shot Classifier
     - **q**     (*str*)    
     - **documents**     (*list*)    
     - **kwargs**    
+    
+???- note "add"
+
+    Zero shot do not pre-compute embeddings.
+
+    **Parameters**
+
+    - **documents**    
     
 ## References
 

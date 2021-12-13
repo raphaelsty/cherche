@@ -14,7 +14,7 @@ SentenceBert Ranker.
 
 - **path** (*str*) – defaults to `None`
 
-- **distance** – defaults to `<function cosine_distance at 0x7f77a873fee0>`
+- **similarity** – defaults to `<function cosine at 0x7fcbb1f0baf0>`
 
 
 
@@ -25,41 +25,35 @@ SentenceBert Ranker.
 >>> from cherche import rank
 >>> from sentence_transformers import SentenceTransformer
 
+>>> documents = [
+...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+... ]
+
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "title",
+...    on = "article",
 ...    k = 2,
 ...    path = "encoder.pkl"
 ... )
 
->>> ranker
+>>> ranker.add(documents=documents)
 Encoder ranker
-     on: title
+     on: article
      k: 2
-     distance: cosine_distance
+     similarity: cosine
      embeddings stored at: encoder.pkl
 
->>> documents = [
-...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch .", "date": "22-11-2021"},
-...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers .", "date": "22-11-2020"},
-... ]
-
-```
-
-Pre-compute embeddings of documents
-```python
->>> ranker = ranker.add(documents=documents)
-
->>> print(ranker(q="Transformers", documents=documents))
-[{'cosine_distance': 0.6396294832229614,
-  'date': '10-11-2021',
-  'title': 'Github library with PyTorch and Transformers .',
-  'url': 'ckb/github.com'},
- {'cosine_distance': 0.6396294832229614,
-  'date': '22-11-2020',
-  'title': 'Github Library with Pytorch and Transformers .',
-  'url': 'blp/github.com'}]
+>>> print(ranker(q="Paris", documents=documents))
+[{'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'similarity': 0.49121392,
+  'title': 'Eiffel tower'},
+ {'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'similarity': 0.44376045,
+  'title': 'Paris'}]
 ```
 
 ## Methods

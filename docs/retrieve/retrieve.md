@@ -7,7 +7,6 @@ Here is the list of available retrievers:
 - `retrieve.TfIdf`
 - `retrieve.BM25L`
 - `retrieve.BM25Okapi`
-- `retrieve.BM25Plus`
 - `retrieve.Elastic`
 - `retrieve.Flash`
 
@@ -19,11 +18,27 @@ Retrievers index and store the set of documents with the `add` method.
 >>> from cherche import retrieve
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
 
-retriever = retrieve.TfIdf(on="document", k=30)
+retriever = retrieve.TfIdf(on="article", k=30)
 
 retriever.add(documents=documents)
+TfIdf retriever
+    on: article
+    documents: 3
 ```

@@ -6,13 +6,29 @@ The TfIdf retriever is based on the [TfidfVectorizer](https://scikit-learn.org/s
 >>> from cherche import retrieve
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
 
->>> retriever = retrieve.TfIdf(on="document", k=30)
+>>> retriever = retrieve.TfIdf(on="article", k=30)
 
 >>> retriever.add(documents=documents)
+TfIdf retriever
+    on: article
+    documents: 3
 ```
 
 You can also initialise the retriever with a custom [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html).
@@ -22,13 +38,29 @@ You can also initialise the retriever with a custom [TfidfVectorizer](https://sc
 >>> from cherche import retrieve
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
 
->>> tfidf = TfidfVectorizer(lowercase=True, stop_words="english",min_df=2, max_df=0.7)
+>>> tfidf = TfidfVectorizer(lowercase=True, stop_words="english", min_df=2, max_df=0.7)
 
->>> retriever = retrieve.TfIdf(tfidf=tfidf, on="document", k=30)
+>>> retriever = retrieve.TfIdf(tfidf=tfidf, on="article", k=30)
 
 >>> retriever.add(documents=documents)
+TfIdf retriever
+    on: article
+    documents: 3
 ```

@@ -1,4 +1,4 @@
-# dot_similarity
+# dot
 
 Computes dot product between input query embedding and documents embeddings. Higher is better.
 
@@ -16,7 +16,7 @@ Computes dot product between input query embedding and documents embeddings. Hig
 
 ```python
 >>> from pprint import pprint as print
->>> from cherche import distance
+>>> from cherche import similarity
 
 >>> emb_q = np.array([1, 1])
 
@@ -25,7 +25,7 @@ Computes dot product between input query embedding and documents embeddings. Hig
 ...     np.array([1, 1]),
 ... ]
 
->>> print(distance.dot_similarity(emb_q=emb_q, emb_documents=emb_documents))
+>>> print(similarity.dot(emb_q=emb_q, emb_documents=emb_documents))
 [(0, 10), (1, 2)]
 ```
 

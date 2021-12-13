@@ -50,14 +50,27 @@ Here's how to load a Bert Sentence template into the `search.Encoder` template:
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
 
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "document",
-...    k = 30,
+...    on = "article",
+...    k = 5,
 ...    path = "encoder.pkl"
 ... )
 
@@ -78,15 +91,28 @@ The [Dense Passage Retrieval](https://arxiv.org/abs/2004.04906) framework aims t
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
 
 >>> ranker = rank.DPR(
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    on = "document",
-...    k = 30,
+...    on = "article",
+...    k = 5,
 ...    path = "dpr.pkl"
 ... )
 ```
@@ -100,13 +126,26 @@ Pre-trained models for the zero shot classification task are available from [Hug
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"document": "Lorem ipsum dolor sit amet"},
-...    {"document": " Duis aute irure dolor in reprehenderit"},
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
 ... ]
 
 >>> ranker = rank.ZeroShot(
 ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
-...     on = "document",
-...     k = 2,
+...     on = "article",
+...     k = 5,
 ... )
 ```

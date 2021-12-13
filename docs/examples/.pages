@@ -1,4 +1,5 @@
-title: Examples
 nav:
-    - 1.md
-
+    - retriever_ranker.ipynb
+    - retriever_ranker_qa.ipynb
+    - retriever_ranker_summary.ipynb
+    - union_intersection_rankers.ipynb

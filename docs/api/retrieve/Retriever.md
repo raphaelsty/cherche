@@ -19,7 +19,10 @@ Retriever base class.
 
     Call self as a function.
 
+    **Parameters**
+
     - **q**     (*str*)    
+    - **kwargs**    
     
 ???- note "add"
 

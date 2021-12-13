@@ -16,7 +16,7 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
 - **path** (*str*) – defaults to `None`
 
-- **distance** – defaults to `<function dot_similarity at 0x7f77a873ff70>`
+- **similarity** – defaults to `<function dot at 0x7fcbb1f133a0>`
 
 
 
@@ -27,42 +27,36 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 >>> from cherche import rank
 >>> from sentence_transformers import SentenceTransformer
 
+>>> documents = [
+...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+... ]
+
 >>> ranker = rank.DPR(
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    on = "title",
+...    on = "article",
 ...    k = 2,
 ...    path = "test_dpr.pkl"
 ... )
 
->>> ranker
+>>> ranker.add(documents=documents)
 DPR ranker
-     on: title
+     on: article
      k: 2
-     distance: dot_similarity
+     similarity: dot
      embeddings stored at: test_dpr.pkl
 
->>> documents = [
-...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch .", "date": "22-11-2021"},
-...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers .", "date": "22-11-2020"},
-... ]
-
-```
-
-Pre-compute embeddings of documents
-```python
->>> ranker = ranker.add(documents=documents)
-
->>> print(ranker(q="Transformers", documents=documents, k=2))
-[{'date': '10-11-2021',
-  'dot_similarity': 54.095573,
-  'title': 'Github library with PyTorch and Transformers .',
-  'url': 'ckb/github.com'},
- {'date': '22-11-2020',
-  'dot_similarity': 54.095573,
-  'title': 'Github Library with Pytorch and Transformers .',
-  'url': 'blp/github.com'}]
+>>> print(ranker(q="Paris", documents=documents, k=2))
+[{'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'similarity': 69.8168,
+  'title': 'Eiffel tower'},
+ {'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'similarity': 67.30965,
+  'title': 'Paris'}]
 ```
 
 ## Methods

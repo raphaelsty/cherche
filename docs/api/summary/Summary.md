@@ -40,7 +40,7 @@ Summarization model
 ... ]
 
 >>> print(model(documents=documents))
-CKB is a Github library with Pytorch and Transformers dedicated to KB. MKB Github Library with PyTorch dedicated toKB
+CKB is a Github library with Pytorch and Transformers dedicated to KB. MKB Github Library with PyTorch  dedicated to
 ```
 
 ## Methods
