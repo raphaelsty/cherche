@@ -5,7 +5,7 @@ import collections
 from creme import stats
 
 
-def eval(search, query_answers: list, on: str):
+def eval(search, query_answers: list):
     """Evaluate a pipeline using pairs of query and answers.
 
     Parameters
@@ -14,8 +14,6 @@ def eval(search, query_answers: list, on: str):
         Neural search pipeline.
     query_answers
         Pairs of query and answers.
-    on
-        Field to use compare retrieved documents and test set.
 
     Examples
     --------
@@ -41,7 +39,7 @@ def eval(search, query_answers: list, on: str):
     ...      ]),
     ...     ("Toulouse", [
     ...          {"label": "Toulouse is the capital of Occitanie .", "tags": ["Toulouse", "Occitanie"], "uri": "tag:Occitanie"},
-    ...          {"label": "It is known as the pink city .", "tags": ["pink", "rose"], "uri": "tag:PinkCity"},
+    ...          {"label": "It is known as the pink city .", "tags": ["Toulouse", "pink", "rose"], "uri": "tag:PinkCity"},
     ...          {"label": "Toulouse has a famous rugby club .", "tags": ["Toulouse", "rugby"], "uri": "tag:ToulouseRugby"},
     ...      ]),
     ... ]
@@ -59,7 +57,7 @@ def eval(search, query_answers: list, on: str):
 
     >>> search = search.add(documents)
 
-    >>> eval.eval(search=search, query_answers=query_answers, on="label")
+    >>> eval.eval(search=search, query_answers=query_answers)
     {'Precision@1': '100.00%', 'Precision@2': '100.00%', 'Precision@3': '100.00%', 'R-Precision': '100.00%', 'Precision': '100.00%'}
 
     >>> print(search("Paris"))
@@ -102,8 +100,9 @@ def eval(search, query_answers: list, on: str):
     for q, answers in query_answers:
         documents = search(q=q)
 
-        answers = [answer[on] for answer in answers]
-        documents = [document[on] for document in documents]
+        for document in documents:
+            if "similarity" in document:
+                document.pop("similarity")
 
         # Precision @ k
         for k, document in enumerate(documents):
