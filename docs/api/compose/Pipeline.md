@@ -1,6 +1,6 @@
 # Pipeline
 
-Cherche pipeline.
+Neurals search pipeline.
 
 
 
@@ -8,7 +8,7 @@ Cherche pipeline.
 
 - **models** (*list*)
 
-    List of models to use in the pipeline.
+    List of models of the pipeline.
 
 
 

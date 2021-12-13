@@ -1,6 +1,6 @@
 # Flash
 
-FlashText Retriever.
+FlashText Retriever. Flash aims to find documents that contain keywords such as a list of tags for example.
 
 
 

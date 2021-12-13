@@ -8,13 +8,15 @@ Question Answering model.
 
 - **model**
 
-    HuggingFace QA model.
+    Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
 
 - **on** (*str*)
 
-    Field to use to answer the questions.
+    Field to use to answer to the question.
 
 - **k** (*int*) – defaults to `None`
+
+    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
 
 
 

@@ -62,7 +62,7 @@ TfIdf retriever
     
 ???- note "add"
 
-    Add documents.
+    Add documents to the retriever.
 
     **Parameters**
 

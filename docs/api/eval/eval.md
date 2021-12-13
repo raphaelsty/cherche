@@ -1,6 +1,6 @@
 # eval
 
-Evaluate a pipeline using query and answers.
+Evaluate a pipeline using pairs of query and answers.
 
 
 
@@ -8,11 +8,11 @@ Evaluate a pipeline using query and answers.
 
 - **search**
 
-    Cherche pipeline.
+    Neural search pipeline.
 
 - **query_answers** (*list*)
 
-    Pair of query and answers.
+    Pairs of query and answers.
 
 - **on** (*str*)
 

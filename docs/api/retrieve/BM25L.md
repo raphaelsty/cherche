@@ -1,6 +1,6 @@
 # BM25L
 
-BM25L
+BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25).
 
 
 

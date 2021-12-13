@@ -1,6 +1,6 @@
 # Elastic
 
-ElasticSearch retriever.
+ElasticSearch retriever based on the [Python client of Elasticsearch](https://elasticsearch-py.readthedocs.io/en/v7.15.1/).
 
 
 

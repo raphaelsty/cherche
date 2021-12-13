@@ -1,6 +1,6 @@
 # load_towns
 
-Sample of Wikipedia dataset that contains informations about Toulouse, Paris, Lyon, Bordeaux.
+Sample of Wikipedia dataset that contains informations about Toulouse, Paris, Lyon and Bordeaux.
 
 
 

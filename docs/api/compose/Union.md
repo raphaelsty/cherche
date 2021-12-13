@@ -65,7 +65,7 @@ Flash retriever
 
 ???- note "__call__"
 
-    Call self as a function.
+    
 
     **Parameters**
 

@@ -1,6 +1,6 @@
 # BM25Okapi
 
-BM25Okapi
+BM25Okapi model from [Rank-BM25: A two line search engine](https://github.com/dorianbrown/rank_bm25).
 
 
 

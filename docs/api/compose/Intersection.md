@@ -1,6 +1,6 @@
 # Intersection
 
-Intersection gathers retrieved documents from multiples retrievers and ranked documents from multiples rankers only if they appears in all proposed documents.
+Intersection gathers retrieved documents from multiples retrievers and ranked documents from multiples rankers only if they are proposed by all models of the intersection pipeline.
 
 
 
@@ -60,7 +60,7 @@ TfIdf retriever
 
 ???- note "__call__"
 
-    Call self as a function.
+    
 
     **Parameters**
 
