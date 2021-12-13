@@ -17,7 +17,7 @@ pip install git+https://github.com/raphaelsty/cherche
 Documentation is available [here](https://raphaelsty.github.io/cherche/). It provides details
 about retrievers, rankers, pipelines, question answering, summarization and examples.
 
-## QuickStart 🤯
+## QuickStart 💨
 
 ### Documents 📑
 
@@ -59,10 +59,10 @@ from sentence_transformers import SentenceTransformer
 # List of dicts
 documents = data.load_towns() 
 
-# Retriever on article field
+# Retrieve on field article
 retriever = retrieve.TfIdf(on="article", k=30)
 
-# Ranker on article field
+# Rank on field article
 ranker = rank.Encoder(
     encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     on = "article",
@@ -70,9 +70,10 @@ ranker = rank.Encoder(
     path = "encoder.pkl"
 )
 
+# Neural search pipeline
 search = retriever + ranker
 
-# Index documents
+# Create index for documents
 search.add(documents=documents)
 ```
 
@@ -111,7 +112,7 @@ search("capital of france")
 
 Cherche provides different retrievers that filter input documents based on a query.
 
-- retrieve.ElasticSearch
+- retrieve.Elastic
 - retrieve.TfIdf
 - retrieve.BM25Okapi
 - retrieve.BM25L

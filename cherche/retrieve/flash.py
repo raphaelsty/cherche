@@ -30,25 +30,25 @@ class Flash(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.Flash(on="tag", k=2)
+    >>> retriever = retrieve.Flash(on="tags", k=2)
 
     >>> documents = [
-    ...     {"url": "ckb/github.com", "tag": "Transformers", "date": "10-11-2021", "label": "Transformers are heavy."},
-    ...     {"url": "mkb/github.com", "tag": ["Transformers", "Pytorch"], "date": "22-11-2021", "label": "Transformers with Pytorch"},
-    ...     {"url": "blp/github.com", "tag": "Github", "date": "22-11-2020", "label": "Github is a great tool."},
+    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
+    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
+    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
     ... ]
 
     >>> retriever = retriever.add(documents=documents)
 
-    >>> print(retriever(q="Transformers with Pytorch"))
-    [{'date': '10-11-2021',
-      'label': 'Transformers are heavy.',
-      'tag': 'Transformers',
-      'url': 'ckb/github.com'},
-     {'date': '22-11-2021',
-      'label': 'Transformers with Pytorch',
-      'tag': ['Transformers', 'Pytorch'],
-      'url': 'mkb/github.com'}]
+    >>> print(retriever(q="paris"))
+    [{'article': 'This town is the capital of France',
+      'author': 'Wiki',
+      'tags': ['paris', 'capital'],
+      'title': 'Paris'},
+     {'article': 'Eiffel tower is based in Paris',
+      'author': 'Wiki',
+      'tags': ['paris', 'eiffel', 'tower'],
+      'title': 'Eiffel tower'}]
 
     References
     ----------
