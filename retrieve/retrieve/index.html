@@ -450,9 +450,54 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Retrieve
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Retrieve
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#retrievers" class="md-nav__link">
+    Retrievers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k-and-on-parameters" class="md-nav__link">
+    k and on parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-on-multiples-fields" class="md-nav__link">
+    Search on multiples fields
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1347,6 +1392,35 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#retrievers" class="md-nav__link">
+    Retrievers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#k-and-on-parameters" class="md-nav__link">
+    k and on parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-on-multiples-fields" class="md-nav__link">
+    Search on multiples fields
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1360,6 +1434,7 @@
 
 <h1 id="retrieve">Retrieve<a class="headerlink" href="#retrieve" title="Permanent link">&para;</a></h1>
 <p>Retrievers are models that can filter all documents from a query very quickly. They speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers that are slower will then be able to pull up the most relevant documents based on semantic similarity.</p>
+<h2 id="retrievers">Retrievers<a class="headerlink" href="#retrievers" title="Permanent link">&para;</a></h2>
 <p>Here is the list of available retrievers:</p>
 <ul>
 <li><code>retrieve.TfIdf</code></li>
@@ -1368,7 +1443,9 @@
 <li><code>retrieve.Elastic</code></li>
 <li><code>retrieve.Flash</code></li>
 </ul>
-<p>The retrievers all have a k-parameter during the initialization which allows to select the number of documents to retrieve. The default value is <code>None</code>, i.e the retrievers will retrieves all documents that match the query. If you choose a value for k, retriever will only retrieves k top documents that are more likely to match the query.</p>
+<h2 id="k-and-on-parameters">k and on parameters<a class="headerlink" href="#k-and-on-parameters" title="Permanent link">&para;</a></h2>
+<p>The main parameter of retrievers is <code>on</code>. This is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the order provided. All the fields defined in <code>on</code> must be present in every documents.</p>
+<p>The retrievers all have a <code>k</code>-parameter during the initialization which allows to select the number of documents to retrieve. The default value is <code>None</code>, i.e the retrievers will retrieves all documents that match the query. If you choose a value for k, retriever will only retrieves k top documents that are more likely to match the query.</p>
 <p>Retrievers index and store the set of documents with the <code>add</code> method.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
@@ -1390,12 +1467,39 @@
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
-<span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
-<span class="n">TfIdf</span> <span class="n">retriever</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
-    <span class="n">documents</span><span class="p">:</span> <span class="mi">3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;Paris&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
+</code></pre></div>
+<h2 id="search-on-multiples-fields">Search on multiples fields<a class="headerlink" href="#search-on-multiples-fields" title="Permanent link">&para;</a></h2>
+<p>It is possible to search on more than one field of the document to find more documents.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;Paris&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>
 
               

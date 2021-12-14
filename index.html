@@ -1497,12 +1497,12 @@
 <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span> 
 
 <span class="c1"># Retrieve on field article</span>
-<span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="c1"># Rank on field article</span>
 <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
     <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
 <span class="p">)</span>
@@ -1514,10 +1514,10 @@
 <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">TfIdf</span> <span class="n">retriever</span>
-  <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
+  <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
   <span class="n">documents</span><span class="p">:</span> <span class="mi">105</span>
 <span class="n">Encoder</span> <span class="n">ranker</span>
-  <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
+  <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
   <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
   <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
   <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
@@ -1528,15 +1528,15 @@
 <div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.69809234</span><span class="p">},</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.7400897</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.64064014</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Toulouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;It is now the capital of the Occitanie region, the second largest region in Metropolitan France.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.556991</span><span class="p">}]</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.6600144</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Lyon&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Lyon&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Lyon or Lyons (UK: , US: , French: [ljɔ̃] (listen); Arpitan: Liyon, pronounced [ʎjɔ̃]) is the third-largest city and second-largest urban area of France.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.58004653</span><span class="p">}]</span>
 </code></pre></div>
 
               

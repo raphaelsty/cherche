@@ -1453,39 +1453,8 @@
 <p>The ranker <code>rank.ZeroShot</code> is a wrapper for Zero shot classification pipeline from <a href="https://huggingface.co/models?pipeline_tag=zero-shot-classification">Hugging Face</a>. These models cannot pre-compute embeddings, so it is essential to use a GPU with this ranker to get satisfactory performance.</p>
 <h2 id="rankencoder">Rank.Encoder<a class="headerlink" href="#rankencoder" title="Permanent link">&para;</a></h2>
 <p>Sentence Transformers as an encoder on GPU:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;document&quot;</span><span class="p">:</span> <span class="s2">&quot;Lorem Ipsum.&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;document&quot;</span><span class="p">:</span> <span class="s2">&quot;Ipsum Lorem.&quot;</span><span class="p">}]</span>
-
-<span class="c1"># Ask the model to load and save embeddings at ./encoder.pkl</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;document&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Pre compute embeddings using GPU.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="rankdpr">Rank.DPR<a class="headerlink" href="#rankdpr" title="Permanent link">&para;</a></h2>
-<p>Dense Passage Retrieval models on GPU:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;document&quot;</span><span class="p">:</span> <span class="s2">&quot;Lorem Ipsum.&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;document&quot;</span><span class="p">:</span> <span class="s2">&quot;Ipsum Lorem.&quot;</span><span class="p">}]</span>
-
-<span class="c1"># Ask the model to load and save embeddings at ./dpr.pkl</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">DPR</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;facebook-dpr-ctx_encoder-single-nq-base&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">query_encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;facebook-dpr-question_encoder-single-nq-base&#39;</span><span class="p">,</span> <span class="n">devica</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;dpr.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="c1"># Pre compute embeddings using GPU.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="rankzeroshot">rank.ZeroShot<a class="headerlink" href="#rankzeroshot" title="Permanent link">&para;</a></h2>
-<p>To use the <code>zero-shot-classification</code> models with a GPU, the <code>device</code> parameter must be specified. By default the parameter <code>device</code> is set to -1 to run on cpu. You needs to set it as a positive integer that match your cuda device id to run it on GPU.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
@@ -1505,14 +1474,82 @@
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
+<span class="c1"># Ask the model to load and save embeddings at ./encoder.pkl</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
+<span class="o">...</span> <span class="p">)</span>
+
+<span class="c1"># Pre compute embeddings using GPU.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="rankdpr">Rank.DPR<a class="headerlink" href="#rankdpr" title="Permanent link">&para;</a></h2>
+<p>Dense Passage Retrieval models on GPU:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">}</span>
+<span class="o">...</span> <span class="p">]</span>
+
+<span class="c1"># Ask the model to load and save embeddings at ./dpr.pkl</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">DPR</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;facebook-dpr-ctx_encoder-single-nq-base&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">query_encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;facebook-dpr-question_encoder-single-nq-base&#39;</span><span class="p">,</span> <span class="n">devica</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;dpr.pkl&quot;</span>
+<span class="o">...</span> <span class="p">)</span>
+
+<span class="c1"># Pre compute embeddings using GPU.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="rankzeroshot">rank.ZeroShot<a class="headerlink" href="#rankzeroshot" title="Permanent link">&para;</a></h2>
+<p>To use the <code>zero-shot-classification</code> models with a GPU, the <code>device</code> parameter must be specified. By default the parameter <code>device</code> is set to <code>-1</code> to run on cpu. You needs to set it as a positive integer that match your cuda device id to run it on GPU.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">}</span>
+<span class="o">...</span> <span class="p">]</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">ZeroShot</span><span class="p">(</span>
 <span class="o">...</span>     <span class="n">encoder</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;zero-shot-classification&quot;</span><span class="p">,</span> 
 <span class="o">...</span>         <span class="n">model</span><span class="o">=</span><span class="s2">&quot;typeform/distilbert-base-uncased-mnli&quot;</span><span class="p">,</span> 
 <span class="o">...</span>         <span class="n">device</span><span class="o">=</span><span class="mi">0</span> <span class="c1"># cuda:0</span>
 <span class="o">...</span>     <span class="p">),</span> 
-<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;document&quot;</span><span class="p">,</span>
-<span class="o">...</span>     <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+<span class="o">...</span>     <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span>
 </code></pre></div>
 

@@ -1369,8 +1369,8 @@
 <span class="c1"># Elasticsearch client</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">es</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">()</span>
 
-<span class="c1"># Ask to cherche on article, retrieves the top 30 results, uses and create the index cherche if it does not exist.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Elastic</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">es</span><span class="o">=</span><span class="n">es</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;cherche&quot;</span><span class="p">)</span>
+<span class="c1"># Ask to cherche on title and article, retrieves the top 30 results, uses and create the index cherche if it does not exist.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Elastic</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">es</span><span class="o">=</span><span class="n">es</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;cherche&quot;</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
@@ -1390,12 +1390,11 @@
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="c1"># Add the documents to the index</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 
-<span class="c1"># Retrieve documents</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;science&quot;</span><span class="p">)</span>
-<span class="p">[{</span><span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
   <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
   <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span><span class="p">}]</span>
 </code></pre></div>

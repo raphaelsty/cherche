@@ -1360,12 +1360,11 @@
 
 <h1 id="towns">Towns<a class="headerlink" href="#towns" title="Permanent link">&para;</a></h1>
 <p>Cherche provides a dummy dataset made of sentences from Wikipedia that describes towns such as Toulouse, Paris, Bordeaux and Lyon. This dataset is intended to easily test Cherche, it contains about 200 documents.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span>
-
-<span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
-
-<span class="n">documents</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
-<span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the &#39;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the &#39;</span>
              <span class="s1">&#39;capital and most populous city of France, with an estimated &#39;</span>
              <span class="s1">&#39;population of 2,175,601 residents as of 2018, in an area of more &#39;</span>
              <span class="s1">&#39;than 105 square kilometres (41 square miles).&#39;</span><span class="p">,</span>

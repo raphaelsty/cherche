@@ -1443,8 +1443,8 @@
 <p>Hugging Face summarization model available <a href="https://huggingface.co/models?pipeline_tag=summarization">here</a>.</p>
 </li>
 <li>
-<p><strong>on</strong> (<em>str</em>)</p>
-<p>Field to use to answer to the question.</p>
+<p><strong>on</strong> (<em>Union[str, list]</em>)</p>
+<p>Fields to summarize.</p>
 </li>
 <li>
 <p><strong>min_length</strong> (<em>int</em>) – defaults to <code>5</code></p>
@@ -1459,23 +1459,23 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;summarization&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-6-6&quot;</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-6-6&quot;</span><span class="p">,</span> <span class="n">framework</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">),</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
 <span class="o">...</span> <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">model</span>
 <span class="n">Summarization</span> <span class="n">model</span>
-     <span class="n">on</span><span class="p">:</span> <span class="n">title</span>
+     <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
      <span class="nb">min</span> <span class="n">length</span><span class="p">:</span> <span class="mi">5</span>
      <span class="nb">max</span> <span class="n">length</span><span class="p">:</span> <span class="mi">30</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;ckb/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;CKB is a Github library with PyTorch and Transformers.&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;10-11-2021&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;mkb/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MKB Github Library with PyTorch  dedicated to KB.&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;22-11-2021&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;blp/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BLP is a Github Library with Pytorch and Transformers dedicated to KB.&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;22-11-2020&quot;</span><span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;This town is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
 <span class="o">...</span> <span class="p">]</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">))</span>
-<span class="n">CKB</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">Github</span> <span class="n">library</span> <span class="k">with</span> <span class="n">Pytorch</span> <span class="ow">and</span> <span class="n">Transformers</span> <span class="n">dedicated</span> <span class="n">to</span> <span class="n">KB</span><span class="o">.</span> <span class="n">MKB</span> <span class="n">Github</span> <span class="n">Library</span> <span class="k">with</span> <span class="n">PyTorch</span>  <span class="n">dedicated</span> <span class="n">to</span>
+<span class="n">Eiffel</span> <span class="n">tower</span> <span class="ow">is</span> <span class="n">based</span> <span class="ow">in</span> <span class="n">Paris</span> <span class="n">Montreal</span> <span class="n">Montreal</span> <span class="n">Montreal</span> <span class="ow">is</span> <span class="ow">in</span> <span class="n">Canada</span><span class="o">.</span> <span class="n">Paris</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">capital</span> <span class="n">of</span> <span class="n">the</span> <span class="n">French</span> <span class="n">capital</span> <span class="n">of</span> <span class="n">France</span> <span class="n">Eiff</span>
 </code></pre></div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <details class="- note">

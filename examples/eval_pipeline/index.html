@@ -12,14 +12,14 @@
         <meta name="author" content="Raphael Sourty">
       
       
-        <link rel="canonical" href="https://raphaelsty.github.io/cherche/examples/union_intersection_rankers/">
+        <link rel="canonical" href="https://raphaelsty.github.io/cherche/examples/eval_pipeline/">
       
       <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.4">
     
     
       
-        <title>Union and intersection of rankers - cherche</title>
+        <title>Pipeline evaluation - cherche</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#union-and-intersection-of-rankers" class="md-skip">
+        <a href="#pipeline-evaluation" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Union and intersection of rankers
+              Pipeline evaluation
             
           </span>
         </div>
@@ -723,59 +723,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Union and intersection of rankers
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../union_intersection_rankers/" class="md-nav__link">
         Union and intersection of rankers
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#union" class="md-nav__link">
-    Union
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#intersection" class="md-nav__link">
-    Intersection
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1384,28 +1336,6 @@
   
     
   
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#union" class="md-nav__link">
-    Union
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#intersection" class="md-nav__link">
-    Intersection
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -2084,12 +2014,12 @@ all of MD as it is not optimized for dense, information rich UIs.
     <!-- End of mathjax configuration --><div class="jupyter-wrapper">
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="union-and-intersection-of-rankers">Union and intersection of rankers<a class="anchor-link" href="#union-and-intersection-of-rankers">&#182;</a></h1>
+<h1 id="pipeline-evaluation">Pipeline evaluation<a class="anchor-link" href="#pipeline-evaluation">&#182;</a></h1>
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>This notebook neural search pipeline made from an ensemble of rankers. The union operator is <code>|</code>, the documents retained will be those proposed by at least one of the rankers. The <code>&amp;</code> operator is the intersection, the documents retained will be those proposed by all the rankers.</p>
+<p>This notebook present how to evaluate a neural search pipeline using pairs of query and answers.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -2154,17 +2084,11 @@ from sentence_transformers import SentenceTransformer</div>
 </div>
 
 </div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The first step is to define the corpus on which we will perform the neural search. The towns dataset contains about a hundred documents, all of which have three attributes, the <code>title</code> of the article, the <code>url</code> and the content of the <code>article</code>.</p>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
@@ -2178,11 +2102,9 @@ from sentence_transformers import SentenceTransformer</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
-<span class="n">documents</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div id="cell-3" class="clipboard-copy-txt">documents = data.load_towns()
-documents[:4]</div>
+<div id="cell-3" class="clipboard-copy-txt"></div>
     
         </div>
     </div>
@@ -2190,52 +2112,12 @@ documents[:4]</div>
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).&#39;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#34;Since the 17th century, Paris has been one of Europe&#39;s major centres of finance, diplomacy, commerce, fashion, gastronomy, science, and arts.&#34;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.&#39;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;The Paris Region had a GDP of €709 billion ($808 billion) in 2017.&#39;}]</pre>
 </div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We start by creating a retriever whose mission will be to quickly filter the documents. This retriever will match the query with the documents using the title and content of the article with <code>on</code> parameter.</p>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
@@ -2249,9 +2131,9 @@ documents[:4]</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">SemanlinkRDF</span><span class="p">()</span>
 </pre></div>
-<div id="cell-4" class="clipboard-copy-txt">retriever = retrieve.TfIdf(on=["title", "article"], k = 30)</div>
+<div id="cell-4" class="clipboard-copy-txt">SemanlinkRDF()</div>
     
         </div>
     </div>
@@ -2259,23 +2141,52 @@ documents[:4]</div>
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/var/folders/hs/7cm2nspd7qv45t5_pr9mv1580000gn/T/ipykernel_63348/234278809.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>SemanlinkRDF<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/var/folders/hs/7cm2nspd7qv45t5_pr9mv1580000gn/T/ipykernel_63348/4046707033.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">     28</span> 
+<span class="ansi-green-intense-fg ansi-bold">     29</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 30</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>doc_g <span class="ansi-blue-fg">=</span> load_doc_graph<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     31</span>         self<span class="ansi-blue-fg">.</span>tag_g <span class="ansi-blue-fg">=</span> load_tag_graph<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     32</span>         self<span class="ansi-blue-fg">.</span>_ft_processor <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
+
+<span class="ansi-green-fg">/var/folders/hs/7cm2nspd7qv45t5_pr9mv1580000gn/T/ipykernel_63348/4046707033.py</span> in <span class="ansi-cyan-fg">load_doc_graph</span><span class="ansi-blue-fg">(g)</span>
+<span class="ansi-green-intense-fg ansi-bold">    202</span> 
+<span class="ansi-green-intense-fg ansi-bold">    203</span> <span class="ansi-green-fg">def</span> load_doc_graph<span class="ansi-blue-fg">(</span>g<span class="ansi-blue-fg">:</span> rdflib<span class="ansi-blue-fg">.</span>Graph <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> rdflib<span class="ansi-blue-fg">.</span>Graph<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 204</span><span class="ansi-red-fg">     </span>path <span class="ansi-blue-fg">=</span> pathlib<span class="ansi-blue-fg">.</span>Path<span class="ansi-blue-fg">(</span>__file__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>parent<span class="ansi-blue-fg">.</span>joinpath<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;dump/sldocs.ttl&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    205</span>     <span class="ansi-green-fg">return</span> _load_slfile_<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">,</span> g<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    206</span> 
+
+<span class="ansi-red-fg">NameError</span>: name &#39;__file__&#39; is not defined</pre>
 </div>
 </div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="union">Union<a class="anchor-link" href="#union">&#182;</a></h2>
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We will use a ranker composed of the union of two pre-trained models.</p>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+
+</div>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
@@ -2289,35 +2200,34 @@ documents[:4]</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ranker</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-        <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-    <span class="p">)</span> <span class="o">|</span>
-    <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/multi-qa-mpnet-base-cos-v1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-        <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder_2.pkl&quot;</span>
-    <span class="p">)</span>
-<span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">typing</span>
+
+
+<span class="kn">from</span> <span class="nn">flashtext</span> <span class="kn">import</span> <span class="n">KeywordProcessor</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SemanlinkRDF&quot;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">SemanlinkRDF</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
 </pre></div>
-<div id="cell-5" class="clipboard-copy-txt">ranker = (
-    rank.Encoder(
-        encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-        on = "article",
-        k = 5,
-        path = "encoder.pkl"
-    ) |
-    rank.Encoder(
-        encoder = SentenceTransformer("sentence-transformers/multi-qa-mpnet-base-cos-v1").encode,
-        on = "article",
-        k = 5,
-        path = "encoder_2.pkl"
-    )
-)</div>
+<div id="cell-5" class="clipboard-copy-txt">import pathlib
+import typing as typing
+
+
+from flashtext import KeywordProcessor
+
+
+__all__ = ["SemanlinkRDF"]
+
+
+class SemanlinkRDF:
+    """"""
+
+
+</div>
     
         </div>
     </div>
@@ -2325,12 +2235,557 @@ documents[:4]</div>
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[autoreload of urllib3.packages.six failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 287, in update_class
+    old_obj = getattr(old, key)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/urllib3/packages/six.py&#34;, line 97, in __get__
+    setattr(obj, self.name, result)  # Invokes __set__.
+AttributeError: &#39;NoneType&#39; object has no attribute &#39;cStringIO&#39;
+]
+[autoreload of pandas._config.config failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 317, in update_class
+    update_instances(old, new)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 280, in update_instances
+    ref.__class__ = new
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/_config/config.py&#34;, line 198, in __setattr__
+    raise OptionError(&#34;You can only set the value of existing options&#34;)
+pandas._config.config.OptionError: &#39;You can only set the value of existing options&#39;
+]
+[autoreload of pandas.core.missing failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _pad_1d() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.boolean failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: astype() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.categorical failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: __init__() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.datetimelike failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: map() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.integer failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: astype() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.datetimes failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 340, in &lt;lambda&gt;
+    lambda a, b: update_function(a.__func__, b.__func__)),
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _simple_new() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.floating failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: astype() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.base failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: set_names() requires a code object with 5 free vars, not 0
+]
+[autoreload of pandas.core.arrays.numpy_ failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: __init__() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.period failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _format_native_types() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.string_ failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: __eq__() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.string_arrow failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: astype() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.arrays.timedeltas failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 340, in &lt;lambda&gt;
+    lambda a, b: update_function(a.__func__, b.__func__)),
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _simple_new() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.extension failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 340, in &lt;lambda&gt;
+    lambda a, b: update_function(a.__func__, b.__func__)),
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _simple_new() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.category failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _format_attrs() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.numeric failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: __contains__() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.datetimelike failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: __array_wrap__() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.datetimes failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 340, in &lt;lambda&gt;
+    lambda a, b: update_function(a.__func__, b.__func__)),
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _simple_new() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.multi failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 394, in superreload
+    module = reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/imp.py&#34;, line 314, in reload
+    return importlib.reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/importlib/__init__.py&#34;, line 169, in reload
+    _bootstrap._exec(spec, module)
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 604, in _exec
+  File &#34;&lt;frozen importlib._bootstrap_external&gt;&#34;, line 783, in exec_module
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 219, in _call_with_frames_removed
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/indexes/multi.py&#34;, line 22, in &lt;module&gt;
+    from pandas._libs.hashtable import duplicated_int64
+ImportError: cannot import name &#39;duplicated_int64&#39; from &#39;pandas._libs.hashtable&#39; (/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/_libs/hashtable.cpython-38-darwin.so)
+]
+[autoreload of pandas.core.indexes.timedeltas failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 340, in &lt;lambda&gt;
+    lambda a, b: update_function(a.__func__, b.__func__)),
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _simple_new() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.period failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _format_native_types() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.indexes.range failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _union() requires a code object with 0 free vars, not 1
+]
+[autoreload of pandas.core.internals.blocks failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: reduce() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.reshape.concat failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: concat() requires a code object with 5 free vars, not 0
+]
+[autoreload of pandas.core.window.rolling failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 394, in superreload
+    module = reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/imp.py&#34;, line 314, in reload
+    return importlib.reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/importlib/__init__.py&#34;, line 169, in reload
+    _bootstrap._exec(spec, module)
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 604, in _exec
+  File &#34;&lt;frozen importlib._bootstrap_external&gt;&#34;, line 783, in exec_module
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 219, in _call_with_frames_removed
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/window/rolling.py&#34;, line 54, in &lt;module&gt;
+    from pandas.core.groupby.base import GotItemMixin, ShallowMixin
+ImportError: cannot import name &#39;GotItemMixin&#39; from &#39;pandas.core.groupby.base&#39; (/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/groupby/base.py)
+]
+[autoreload of pandas.core.window.ewm failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 394, in superreload
+    module = reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/imp.py&#34;, line 314, in reload
+    return importlib.reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/importlib/__init__.py&#34;, line 169, in reload
+    _bootstrap._exec(spec, module)
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 604, in _exec
+  File &#34;&lt;frozen importlib._bootstrap_external&gt;&#34;, line 783, in exec_module
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 219, in _call_with_frames_removed
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/window/ewm.py&#34;, line 30, in &lt;module&gt;
+    from pandas.core.window.rolling import BaseWindow, BaseWindowGroupby, dispatch
+ImportError: cannot import name &#39;dispatch&#39; from &#39;pandas.core.window.rolling&#39; (/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/window/rolling.py)
+]
+[autoreload of pandas.core.window.expanding failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 394, in superreload
+    module = reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/imp.py&#34;, line 314, in reload
+    return importlib.reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/importlib/__init__.py&#34;, line 169, in reload
+    _bootstrap._exec(spec, module)
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 604, in _exec
+  File &#34;&lt;frozen importlib._bootstrap_external&gt;&#34;, line 783, in exec_module
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 219, in _call_with_frames_removed
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/window/expanding.py&#34;, line 15, in &lt;module&gt;
+    class Expanding(RollingAndExpandingMixin):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/core/window/expanding.py&#34;, line 141, in Expanding
+    @Appender(_shared_docs[&#34;count&#34;])
+KeyError: &#39;count&#39;
+]
+[autoreload of pandas.core.series failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _check_is_chained_assignment_possible() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.core.frame failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 302, in update_class
+    if update_generic(old_obj, new_obj): continue
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: _check_is_chained_assignment_possible() requires a code object with 1 free vars, not 0
+]
+[autoreload of pandas.io.excel._base failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: read_excel() requires a code object with 5 free vars, not 4
+]
+[autoreload of pandas.io.html failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 410, in superreload
+    update_generic(old_obj, new_obj)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 347, in update_generic
+    update(a, b)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 266, in update_function
+    setattr(old, name, getattr(new, name))
+ValueError: read_html() requires a code object with 5 free vars, not 4
+]
+[autoreload of pandas.io.json._json failed: Traceback (most recent call last):
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 245, in check
+    superreload(m, reload, self.old_objects)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/IPython/extensions/autoreload.py&#34;, line 394, in superreload
+    module = reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/imp.py&#34;, line 314, in reload
+    return importlib.reload(module)
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/importlib/__init__.py&#34;, line 169, in reload
+    _bootstrap._exec(spec, module)
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 604, in _exec
+  File &#34;&lt;frozen importlib._bootstrap_external&gt;&#34;, line 783, in exec_module
+  File &#34;&lt;frozen importlib._bootstrap&gt;&#34;, line 219, in _call_with_frames_removed
+  File &#34;/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/io/json/_json.py&#34;, line 39, in &lt;module&gt;
+    from pandas.io.parsers import validate_integer
+ImportError: cannot import name &#39;validate_integer&#39; from &#39;pandas.io.parsers&#39; (/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/pandas/io/parsers/__init__.py)
+]
+</pre>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
@@ -2344,482 +2799,14 @@ documents[:4]</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-<span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div id="cell-6" class="clipboard-copy-txt">search = retriever + ranker
-search.add(documents)</div>
+<div id="cell-6" class="clipboard-copy-txt"></div>
     
         </div>
     </div>
 
 </div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>TfIdf retriever
- 	 on: title, article
- 	 documents: 105
-Union
------
-Encoder ranker
-	 on: article
-	 k: 5
-	 similarity: cosine
-	 embeddings stored at: encoder.pkl
-Encoder ranker
-	 on: article
-	 k: 5
-	 similarity: cosine
-	 embeddings stored at: encoder_2.pkl
------</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-7">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Paris football&quot;</span><span class="p">)</span>
-</pre></div>
-<div id="cell-7" class="clipboard-copy-txt">search("Paris football")</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;The football club Paris Saint-Germain and the rugby union club Stade Français are based in Paris.&#39;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).&#39;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;Paris hosts the annual French Open Grand Slam tennis tournament on the red clay of Roland Garros.&#39;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;Paris received 12.&#39;},
- {&#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
-  &#39;article&#39;: &#39;The 80,000-seat Stade de France, built for the 1998 FIFA World Cup, is located just north of Paris in the neighbouring commune of Saint-Denis.&#39;}]</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-8">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;speciality Lyon&quot;</span><span class="p">)</span>
-</pre></div>
-<div id="cell-8" class="clipboard-copy-txt">search("speciality Lyon")</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;,
-  &#39;article&#39;: &#39;Lyon or Lyons (UK: , US: , French: [ljɔ̃] (listen); Arpitan: Liyon, pronounced [ʎjɔ̃]) is the third-largest city and second-largest urban area of France.&#39;},
- {&#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;,
-  &#39;article&#39;: &#39;Lyon is the prefecture of the Auvergne-Rhône-Alpes region and seat of the Departmental Council of Rhône (whose jurisdiction, however, no longer extends over the Metropolis of Lyon since 2015).&#39;},
- {&#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;,
-  &#39;article&#39;: &#39;Lyon was historically an important area for the production and weaving of silk.&#39;},
- {&#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;,
-  &#39;article&#39;: &#39;Economically, Lyon is a major centre for banking, as well as for the chemical, pharmaceutical and biotech industries.&#39;},
- {&#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;,
-  &#39;article&#39;: &#39;Lyon became a major economic hub during the Renaissance.&#39;},
- {&#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;,
-  &#39;article&#39;: &#34;The city is recognised for its cuisine and gastronomy, as well as historical and architectural landmarks; as such, the districts of Old Lyon, the Fourvière hill, the Presqu&#39;île and the slopes of the Croix-Rousse are inscribed on the UNESCO World Heritage List.&#34;}]</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="intersection">Intersection<a class="anchor-link" href="#intersection">&#182;</a></h2>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-9">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-</pre></div>
-<div id="cell-9" class="clipboard-copy-txt">retriever = retrieve.TfIdf(on=["title", "article"], k = 30)</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We will build a set of rankers consisting of two different pre-trained models with the intersection operator <code>&amp;</code>. The pipeline will only offer the documents returned by the union of the two retrievers and the intersection of the rankers.</p>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-10">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ranker</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-        <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-    <span class="p">)</span> <span class="o">&amp;</span>
-    <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/multi-qa-mpnet-base-cos-v1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-        <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-        <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder_2.pkl&quot;</span>
-    <span class="p">)</span>
-<span class="p">)</span>
-</pre></div>
-<div id="cell-10" class="clipboard-copy-txt">ranker = (
-    rank.Encoder(
-        encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-        on = "article",
-        k = 5,
-        path = "encoder.pkl"
-    ) &
-    rank.Encoder(
-        encoder = SentenceTransformer("sentence-transformers/multi-qa-mpnet-base-cos-v1").encode,
-        on = "article",
-        k = 5,
-        path = "encoder_2.pkl"
-    )
-)</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-11">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-<span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-</pre></div>
-<div id="cell-11" class="clipboard-copy-txt">search = retriever + ranker
-search.add(documents)</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>TfIdf retriever
- 	 on: title, article
- 	 documents: 105
-Intersection
------
-Encoder ranker
-	 on: article
-	 k: 5
-	 similarity: cosine
-	 embeddings stored at: encoder.pkl
-Encoder ranker
-	 on: article
-	 k: 5
-	 similarity: cosine
-	 embeddings stored at: encoder_2.pkl
------</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-12">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Paris football&quot;</span><span class="p">)</span>
-</pre></div>
-<div id="cell-12" class="clipboard-copy-txt">search("Paris football")</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;article&#39;: &#39;The football club Paris Saint-Germain and the rugby union club Stade Français are based in Paris.&#39;,
-  &#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;},
- {&#39;article&#39;: &#39;Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).&#39;,
-  &#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;},
- {&#39;article&#39;: &#39;Paris hosts the annual French Open Grand Slam tennis tournament on the red clay of Roland Garros.&#39;,
-  &#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;},
- {&#39;article&#39;: &#39;Paris received 12.&#39;,
-  &#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;},
- {&#39;article&#39;: &#39;The 80,000-seat Stade de France, built for the 1998 FIFA World Cup, is located just north of Paris in the neighbouring commune of Saint-Denis.&#39;,
-  &#39;title&#39;: &#39;Paris&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;}]</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-13">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;speciality Lyon&quot;</span><span class="p">)</span>
-</pre></div>
-<div id="cell-13" class="clipboard-copy-txt">search("speciality Lyon")</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;article&#39;: &#39;Lyon is the prefecture of the Auvergne-Rhône-Alpes region and seat of the Departmental Council of Rhône (whose jurisdiction, however, no longer extends over the Metropolis of Lyon since 2015).&#39;,
-  &#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;},
- {&#39;article&#39;: &#39;Lyon was historically an important area for the production and weaving of silk.&#39;,
-  &#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;},
- {&#39;article&#39;: &#39;Economically, Lyon is a major centre for banking, as well as for the chemical, pharmaceutical and biotech industries.&#39;,
-  &#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;},
- {&#39;article&#39;: &#39;Lyon became a major economic hub during the Renaissance.&#39;,
-  &#39;title&#39;: &#39;Lyon&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Lyon&#39;}]</pre>
-</div>
-
-</div>
-
-</div>
-
 </div>
 
 </div>
@@ -2840,7 +2827,7 @@ Encoder ranker
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../retriever_ranker_summary/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Retriever, ranker and Summarization" rel="prev">
+        <a href="../../documents/towns/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Towns" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -2849,20 +2836,20 @@ Encoder ranker
               <span class="md-footer__direction">
                 Previous
               </span>
-              Retriever, ranker and Summarization
+              Towns
             </div>
           </div>
         </a>
       
       
         
-        <a href="../../api/overview/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview" rel="next">
+        <a href="../retriever_ranker/" class="md-footer__link md-footer__link--next" aria-label="Next: Retriever and ranker" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Overview
+              Retriever and ranker
             </div>
           </div>
           <div class="md-footer__button md-icon">

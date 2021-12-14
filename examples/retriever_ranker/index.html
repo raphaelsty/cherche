@@ -2168,7 +2168,7 @@ documents[:4]</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We start by initiating a retriever whose mission will be to quickly filter the documents. This retriever will find documents based on the title and content of the article using <code>Union</code> operator.</p>
+<p>We start by initiating a retriever whose mission will be to quickly filter the documents. This retriever will find documents based on the title and content of the article using the <code>on</code> parameter.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -2189,9 +2189,9 @@ documents[:4]</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">|</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
 </pre></div>
-<div id="cell-4" class="clipboard-copy-txt">retriever = retrieve.TfIdf(on="title", k = 30) | retrieve.TfIdf(on="article", k = 30) </div>
+<div id="cell-4" class="clipboard-copy-txt">retriever = retrieve.TfIdf(on=["title", "article"], k = 30)</div>
     
         </div>
     </div>
@@ -2296,15 +2296,9 @@ search.add(documents)</div>
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Union
------
-TfIdf retriever
- 	 on: title
+<pre>TfIdf retriever
+ 	 on: title, article
  	 documents: 105
-TfIdf retriever
- 	 on: article
- 	 documents: 105
------
 Encoder ranker
 	 on: article
 	 k: 3
@@ -2472,20 +2466,22 @@ Encoder ranker
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
 
-<span class="n">retriever</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">tfidf</span><span class="o">=</span><span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span> <span class="o">|</span>
-    <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">tfidf</span><span class="o">=</span><span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span> 
-<span class="p">)</span> 
+<span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span>
+    <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> 
+    <span class="n">tfidf</span><span class="o">=</span><span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="p">)</span>
 
 <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
 <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </pre></div>
 <div id="cell-9" class="clipboard-copy-txt">from sklearn.feature_extraction.text import TfidfVectorizer
 
-retriever = (
-    retrieve.TfIdf(on="article", k = 20, tfidf=TfidfVectorizer(ngram_range=(4, 10), analyzer="char_wb", max_df=0.3)) |
-    retrieve.TfIdf(on="title", k = 20, tfidf=TfidfVectorizer(ngram_range=(4, 10), analyzer="char_wb", max_df=0.3)) 
-) 
+retriever = retrieve.TfIdf(
+    on=["title", "article"],
+    k=30, 
+    tfidf=TfidfVectorizer(ngram_range=(4, 10), analyzer="char_wb", max_df=0.3)
+)
 
 search = retriever + ranker
 search.add(documents)</div>
@@ -2510,15 +2506,9 @@ search.add(documents)</div>
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Union
------
-TfIdf retriever
- 	 on: article
+<pre>TfIdf retriever
+ 	 on: title, article
  	 documents: 105
-TfIdf retriever
- 	 on: title
- 	 documents: 105
------
 Encoder ranker
 	 on: article
 	 k: 3

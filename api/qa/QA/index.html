@@ -1443,8 +1443,8 @@
 <p>Hugging Face question answering model available <a href="https://huggingface.co/models?pipeline_tag=question-answering">here</a>.</p>
 </li>
 <li>
-<p><strong>on</strong> (<em>str</em>)</p>
-<p>Field to use to answer to the question.</p>
+<p><strong>on</strong> (<em>Union[str, list]</em>)</p>
+<p>Fields to use to answer to the question.</p>
 </li>
 <li>
 <p><strong>k</strong> (<em>int</em>) – defaults to <code>None</code></p>
@@ -1456,37 +1456,38 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">qa</span>
 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;This town is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span> <span class="p">]</span>
+
 <span class="o">&gt;&gt;&gt;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="n">QA</span><span class="p">(</span>
 <span class="o">...</span>     <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;question-answering&quot;</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">),</span>
-<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span>
+<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+<span class="o">...</span>     <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>  <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">model</span>
 <span class="n">Question</span> <span class="n">Answering</span>
      <span class="n">model</span><span class="p">:</span> <span class="n">deepset</span><span class="o">/</span><span class="n">roberta</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">squad2</span>
-     <span class="n">on</span><span class="p">:</span> <span class="n">title</span>
+     <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;ckb/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Github library with PyTorch and Transformers .&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;10-11-2021&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;mkb/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Github Library with PyTorch .&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;22-11-2021&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;blp/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Github Library with Pytorch and Transformers .&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;22-11-2020&quot;</span><span class="p">},</span>
-<span class="o">...</span> <span class="p">]</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;What is used with Transformers?&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
-<span class="p">[{</span><span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Github Library&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;22-11-2020&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
-  <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.2863011956214905</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Where is the Eiffel tower?&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">))</span>
+<span class="p">[{</span><span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower is based in Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">43</span><span class="p">,</span>
+  <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.9743021130561829</span><span class="p">,</span>
+  <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">38</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;This town is the capital of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.0003580129996407777</span><span class="p">,</span>
   <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Github Library with Pytorch and Transformers .&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;blp/github.com&#39;</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;Github library&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;10-11-2021&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
-  <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.2725629210472107</span><span class="p">,</span>
-  <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Github library with PyTorch and Transformers .&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;ckb/github.com&#39;</span><span class="p">}]</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <details class="- note">

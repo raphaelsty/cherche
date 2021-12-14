@@ -2170,7 +2170,7 @@ documents[:4]</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We start by creating a retriever whose mission will be to quickly filter the documents. This retriever will find documents based on the title and content of the article using <code>Union</code> operator.</p>
+<p>We start by creating a retriever whose mission will be to quickly filter the documents. This retriever will find documents based on the title and content of the article using <code>on</code> parameter.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -2191,9 +2191,9 @@ documents[:4]</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">|</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
 </pre></div>
-<div id="cell-4" class="clipboard-copy-txt">retriever = retrieve.TfIdf(on="title", k = 30) | retrieve.TfIdf(on="article", k = 30) </div>
+<div id="cell-4" class="clipboard-copy-txt">retriever = retrieve.TfIdf(on=["title", "article"], k = 30)</div>
     
         </div>
     </div>
@@ -2333,15 +2333,9 @@ search.add(documents)</div>
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Union
------
-TfIdf retriever
- 	 on: title
+<pre>TfIdf retriever
+ 	 on: title, article
  	 documents: 105
-TfIdf retriever
- 	 on: article
- 	 documents: 105
------
 Encoder ranker
 	 on: article
 	 k: 3
@@ -2415,14 +2409,14 @@ Question Answering
   &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
   &#39;article&#39;: &#39;The football club Paris Saint-Germain and the rugby union club Stade Français are based in Paris.&#39;,
   &#39;similarity&#39;: 0.69058955},
- {&#39;start&#39;: 165,
-  &#39;end&#39;: 169,
-  &#39;answer&#39;: &#39;Nice&#39;,
-  &#39;qa_score&#39;: 0.05633137375116348,
-  &#39;title&#39;: &#39;Toulouse&#39;,
-  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Toulouse&#39;,
-  &#39;article&#39;: &#39;It is the fourth-largest commune in France, with 479,553 inhabitants within its municipal boundaries (as of January 2017), after Paris, Marseille and Lyon, ahead of Nice; it has a population of 1,360,829 within its wider metropolitan area (also as of January 2017).&#39;,
-  &#39;similarity&#39;: 0.46468577},
+ {&#39;start&#39;: 16,
+  &#39;end&#39;: 31,
+  &#39;answer&#39;: &#39;Stade de France&#39;,
+  &#39;qa_score&#39;: 0.8121964335441589,
+  &#39;title&#39;: &#39;Paris&#39;,
+  &#39;url&#39;: &#39;https://en.wikipedia.org/wiki/Paris&#39;,
+  &#39;article&#39;: &#39;The 80,000-seat Stade de France, built for the 1998 FIFA World Cup, is located just north of Paris in the neighbouring commune of Saint-Denis.&#39;,
+  &#39;similarity&#39;: 0.44287413},
  {&#39;start&#39;: 29,
   &#39;end&#39;: 35,
   &#39;answer&#39;: &#39;\u200b[paʁi&#39;,
@@ -2531,7 +2525,7 @@ Question Answering
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
@@ -2563,7 +2557,7 @@ Question Answering
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 
 
 
@@ -2612,7 +2606,7 @@ Question Answering
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
@@ -2644,7 +2638,7 @@ Question Answering
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
 
 
 

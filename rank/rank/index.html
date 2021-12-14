@@ -579,22 +579,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#rankerencoder" class="md-nav__link">
-    ranker.Encoder
+  <a href="#k-and-on-parameters" class="md-nav__link">
+    k and on parameters
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#rankerdpr" class="md-nav__link">
-    ranker.DPR
+  <a href="#rankencoder" class="md-nav__link">
+    rank.Encoder
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#rankerzeroshot" class="md-nav__link">
-    ranker.ZeroShot
+  <a href="#rankdpr" class="md-nav__link">
+    rank.DPR
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rankzeroshot" class="md-nav__link">
+    rank.ZeroShot
   </a>
   
 </li>
@@ -1406,22 +1413,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#rankerencoder" class="md-nav__link">
-    ranker.Encoder
+  <a href="#k-and-on-parameters" class="md-nav__link">
+    k and on parameters
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#rankerdpr" class="md-nav__link">
-    ranker.DPR
+  <a href="#rankencoder" class="md-nav__link">
+    rank.Encoder
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#rankerzeroshot" class="md-nav__link">
-    ranker.ZeroShot
+  <a href="#rankdpr" class="md-nav__link">
+    rank.DPR
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rankzeroshot" class="md-nav__link">
+    rank.ZeroShot
   </a>
   
 </li>
@@ -1448,8 +1462,10 @@
 
 <h1 id="rank">Rank<a class="headerlink" href="#rank" title="Permanent link">&para;</a></h1>
 <p>Rankers are models that measure the semantic similarity between a document and a query. The ranker allows to reorder the documents retrieved by the retriever (Tf-Idf, BM25, ...) based on the semantic similarity between the query and the documents retrieved.</p>
-<p>The rankers all have a k-parameter during the initialization which allows to select the number of documents to keep after the ranking. The default value is<code>None</code>, i.e the ranker will not drop any documents.</p>
-<h2 id="rankerencoder">ranker.Encoder<a class="headerlink" href="#rankerencoder" title="Permanent link">&para;</a></h2>
+<h2 id="k-and-on-parameters">k and on parameters<a class="headerlink" href="#k-and-on-parameters" title="Permanent link">&para;</a></h2>
+<p>The rankers all have a <code>k</code>-parameter during the initialization which allows to select the number of documents to keep after the ranking. The default value is<code>None</code>, i.e the ranker will not drop any documents.</p>
+<p>The <code>on</code> parameter allows the ranker to be used on multiple fields. The rankers will concatenate the fields to calculate the embeddings of the documents.</p>
+<h2 id="rankencoder">rank.Encoder<a class="headerlink" href="#rankencoder" title="Permanent link">&para;</a></h2>
 <p>The <code>ranker.Encoder</code> model allows the use of framework that encode queries and documents with a single model. It is compatible with the <a href="https://www.sbert.net/docs/pretrained_models.html">SentenceTransformers</a> models.</p>
 <p>You can use your own model within <code>ranker.Encoder</code>. This model should have an API similar to the Sentence Transformers models. It should have a method which encodes a list of documents <code>list[str]</code> which returns a numpy array with dimensions <code>(number of documents, embedding size)</code>. This same method must be able to encode a query (str) and return an embedding of size <code>(1, embedding dimension)</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
@@ -1475,12 +1491,25 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
 <span class="o">...</span> <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="rankerdpr">ranker.DPR<a class="headerlink" href="#rankerdpr" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.6734946</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.61566335</span><span class="p">}]</span>
+</code></pre></div>
+<h2 id="rankdpr">rank.DPR<a class="headerlink" href="#rankdpr" title="Permanent link">&para;</a></h2>
 <p>The <code>ranker.DPR</code> model allows the use of framework that encode queries and documents with two distinct models. It is compatible with the <a href="https://www.sbert.net/docs/pretrained_models.html">SentenceTransformers</a> DPR models.</p>
 <p>You can use your own models within <code>ranker.DPR</code>. Theses models should have an API similar to the Sentence Transformers models. The document encoder should have a method which encodes a list of documents <code>list[str]</code> which returns a numpy array with dimensions <code>(number of documents, embedding size)</code>. The query encoder must be able to encode a query (str) and return an embedding of size <code>(1, embedding dimension)</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
@@ -1507,15 +1536,28 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">DPR</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;facebook-dpr-ctx_encoder-single-nq-base&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">query_encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;facebook-dpr-question_encoder-single-nq-base&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;dpr.pkl&quot;</span>
 <span class="o">...</span> <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="rankerzeroshot">ranker.ZeroShot<a class="headerlink" href="#rankerzeroshot" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">75.669365</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">74.356224</span><span class="p">}]</span>
+</code></pre></div>
+<h2 id="rankzeroshot">rank.ZeroShot<a class="headerlink" href="#rankzeroshot" title="Permanent link">&para;</a></h2>
 <p>The <code>ranker.ZeroShot</code> model allows to use the <code>zero-shot-classification</code> pipeline of <a href="https://huggingface.co/facebook/bart-large-mnli">Hugging Face</a>. You can find more details on the zero-shot classification task in this very good <a href="https://joeddav.github.io/blog/2020/05/29/ZSL.html">blog post</a>. The <code>ranker.ZeroShot</code> model is slow because there is no pre-computation possible. It is therefore recommended to use this ranker with a GPU.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
@@ -1537,15 +1579,28 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">ZeroShot</span><span class="p">(</span>
 <span class="o">...</span>     <span class="n">encoder</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;zero-shot-classification&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;typeform/distilbert-base-uncased-mnli&quot;</span><span class="p">),</span>
-<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
 <span class="o">...</span>     <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8914178609848022</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.6203346252441406</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="pre-compute-embeddings">Pre-compute embeddings<a class="headerlink" href="#pre-compute-embeddings" title="Permanent link">&para;</a></h2>
 <p>The <code>ranker.Encoder</code> and <code>ranker.DPR</code> models allow the pre-computation of document embeddings to speed up the search. These rankers will then store a mapping between the documents and its embedding.</p>
 <p>When searching, the rankers will check if there are any embeddings pre-computed for a document and will use that embedding rather than recalculating it to significantly speed up the search.</p>
 <p>The method <code>add</code> allows to pre-compute embeddings of the documents:</p>
-<div class="highlight"><pre><span></span><code><span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
 
               

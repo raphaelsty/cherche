@@ -1453,15 +1453,15 @@
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
-<p><strong>on</strong> (<em>str</em>)</p>
-<p>Field to use to match the query to the documents.</p>
+<p><strong>on</strong> (<em>Union[str, list]</em>)</p>
+<p>Fields to use to match the query to the documents.</p>
 </li>
 <li>
 <p><strong>k</strong> (<em>int</em>) – defaults to <code>None</code></p>
 <p>Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.</p>
 </li>
 <li>
-<p><strong>keywords</strong> – defaults to <code>None</code></p>
+<p><strong>keywords</strong> (<em>flashtext.keyword.KeywordProcessor</em>) – defaults to <code>None</code></p>
 <p>Keywords extractor from <a href="https://github.com/vi3k6i5/flashtext">FlashText</a>. If set to None, a default one is created.</p>
 </li>
 </ul>
@@ -1469,25 +1469,25 @@
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="nb">print</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;tag&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;ckb/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;Transformers&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;10-11-2021&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Transformers are heavy.&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;mkb/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Transformers&quot;</span><span class="p">,</span> <span class="s2">&quot;Pytorch&quot;</span><span class="p">],</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;22-11-2021&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Transformers with Pytorch&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;blp/github.com&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="s2">&quot;Github&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;22-11-2020&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Github is a great tool.&quot;</span><span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;This town is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;capital&quot;</span><span class="p">]},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;eiffel&quot;</span><span class="p">,</span> <span class="s2">&quot;tower&quot;</span><span class="p">]},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;canada&quot;</span><span class="p">,</span> <span class="s2">&quot;montreal&quot;</span><span class="p">]},</span>
 <span class="o">...</span> <span class="p">]</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Transformers with Pytorch&quot;</span><span class="p">))</span>
-<span class="p">[{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;10-11-2021&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Transformers are heavy.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tag&#39;</span><span class="p">:</span> <span class="s1">&#39;Transformers&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;ckb/github.com&#39;</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;22-11-2021&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Transformers with Pytorch&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tag&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Transformers&#39;</span><span class="p">,</span> <span class="s1">&#39;Pytorch&#39;</span><span class="p">],</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;mkb/github.com&#39;</span><span class="p">}]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;paris&quot;</span><span class="p">))</span>
+<span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;This town is the capital of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;paris&#39;</span><span class="p">,</span> <span class="s1">&#39;capital&#39;</span><span class="p">],</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower is based in Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;paris&#39;</span><span class="p">,</span> <span class="s1">&#39;eiffel&#39;</span><span class="p">,</span> <span class="s1">&#39;tower&#39;</span><span class="p">],</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower&#39;</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <details class="- note">

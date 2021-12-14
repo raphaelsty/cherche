@@ -1457,8 +1457,8 @@
 <p>Zero shot classifier to use for ranking</p>
 </li>
 <li>
-<p><strong>on</strong> (<em>str</em>)</p>
-<p>Field to use to match the query to the documents.</p>
+<p><strong>on</strong> (<em>Union[str, list]</em>)</p>
+<p>Fields to use to match the query to the documents.</p>
 </li>
 <li>
 <p><strong>k</strong> (<em>int</em>) – defaults to <code>None</code></p>
@@ -1483,25 +1483,25 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">ZeroShot</span><span class="p">(</span>
 <span class="o">...</span>     <span class="n">encoder</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;zero-shot-classification&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;typeform/distilbert-base-uncased-mnli&quot;</span><span class="p">),</span>
-<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+<span class="o">...</span>     <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
 <span class="o">...</span>     <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span>
 <span class="n">Zero</span> <span class="n">Shot</span> <span class="n">Classifier</span>
      <span class="n">model</span><span class="p">:</span> <span class="n">typeform</span><span class="o">/</span><span class="n">distilbert</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">uncased</span><span class="o">-</span><span class="n">mnli</span>
-     <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
+     <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
      <span class="n">k</span><span class="p">:</span> <span class="mi">2</span>
      <span class="n">multi</span> <span class="n">class</span><span class="p">:</span> <span class="kc">True</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">ranker</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">))</span>
 <span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;This town is the capital of France&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.4519128203392029</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.44725707173347473</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower is based in Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.33974456787109375</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.31512799859046936</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower&#39;</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>

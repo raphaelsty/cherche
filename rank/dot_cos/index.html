@@ -1454,14 +1454,18 @@
 <span class="o">...</span> <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-<span class="n">Encoder</span> <span class="n">ranker</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">Encoder</span> <span class="n">ranker</span>
     <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
     <span class="n">k</span><span class="p">:</span> <span class="mi">30</span>
     <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
     <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
+  <span class="err">```</span>
 
+<span class="err">```</span><span class="n">python</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="p">(</span><span class="n">q</span> <span class="o">=</span> <span class="s2">&quot;fashion and gastronomy&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.40531972</span><span class="p">},</span>
@@ -1507,14 +1511,16 @@
 <span class="o">...</span> <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-<span class="n">DPR</span> <span class="n">ranker</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">DPR</span> <span class="n">ranker</span>
     <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
     <span class="n">k</span><span class="p">:</span> <span class="mi">30</span>
     <span class="n">similarity</span><span class="p">:</span> <span class="n">dot</span>
     <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">dpr</span><span class="o">.</span><span class="n">pkl</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="p">(</span><span class="n">q</span> <span class="o">=</span> <span class="s2">&quot;fashion and gastronomy&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="p">(</span><span class="n">q</span> <span class="o">=</span> <span class="s2">&quot;fashion and gastronomy&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">63.076904</span><span class="p">},</span>
