@@ -1,5 +1,7 @@
 __all__ = ["DPR"]
 
+import typing
+
 from ..similarity import dot
 from .base import Ranker
 
@@ -12,7 +14,7 @@ class DPR(Ranker):
     ----------
 
     on
-        Field to use to match the query to the documents.
+        Fields to use to match the query to the documents.
     encoder
         Encoding function dedicated to documents.
     query_encoder
@@ -43,27 +45,27 @@ class DPR(Ranker):
     >>> ranker = rank.DPR(
     ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
     ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-    ...    on = "article",
+    ...    on = ["title", "article"],
     ...    k = 2,
     ...    path = "test_dpr.pkl"
     ... )
 
     >>> ranker.add(documents=documents)
     DPR ranker
-         on: article
+         on: title, article
          k: 2
          similarity: dot
          embeddings stored at: test_dpr.pkl
 
     >>> print(ranker(q="Paris", documents=documents, k=2))
-    [{'article': 'Eiffel tower is based in Paris',
+    [{'article': 'This town is the capital of France',
       'author': 'Wiki',
-      'similarity': 69.8168,
-      'title': 'Eiffel tower'},
-     {'article': 'This town is the capital of France',
+      'similarity': 74.02353,
+      'title': 'Paris'},
+     {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
-      'similarity': 67.30965,
-      'title': 'Paris'}]
+      'similarity': 68.80651,
+      'title': 'Eiffel tower'}]
 
     """
 
@@ -71,7 +73,7 @@ class DPR(Ranker):
         self,
         encoder,
         query_encoder,
-        on: str,
+        on: typing.Union[str, list],
         k: int = None,
         path: str = None,
         similarity=dot,
@@ -94,14 +96,8 @@ class DPR(Ranker):
         if not documents:
             return []
 
-        emb_q = self.query_encoder(q)
-        emb_documents = [
-            self.embeddings[document[self.on]]
-            if document[self.on] in self.embeddings
-            else self.encoder(document[self.on])
-            for document in documents
-        ]
-
+        emb_q = self.query_encoder(q) if q not in self.embeddings else self.embeddings[q]
+        emb_documents = self._emb_documents(documents=documents)
         return self._rank(
             similarities=self.similarity(emb_q=emb_q, emb_documents=emb_documents),
             documents=documents,

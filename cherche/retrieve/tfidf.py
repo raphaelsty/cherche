@@ -1,5 +1,6 @@
 __all__ = ["TfIdf"]
 
+import typing
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
@@ -13,7 +14,7 @@ class TfIdf(Retriever):
     Parameters
     ----------
     on
-        Field to use to match the query to the documents.
+        Fields to use to match the query to the documents.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -26,7 +27,7 @@ class TfIdf(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.TfIdf(on="article", k=2)
+    >>> retriever = retrieve.TfIdf(on=["title", "article"], k=3)
 
     >>> documents = [
     ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -38,14 +39,16 @@ class TfIdf(Retriever):
 
     >>> retriever
     TfIdf retriever
-         on: article
+         on: title, article
          documents: 3
 
     >>> print(retriever(q="paris"))
-    [{'article': 'Eiffel tower is based in Paris',
+    [{'article': 'This town is the capital of France',
+      'author': 'Wiki',
+      'title': 'Paris'},
+     {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'title': 'Eiffel tower'}]
-
 
     References
     ----------
@@ -54,12 +57,14 @@ class TfIdf(Retriever):
 
     """
 
-    def __init__(self, on: str, k: int = None, tfidf: TfidfVectorizer = None) -> None:
+    def __init__(
+        self, on: typing.Union[str, list], k: int = None, tfidf: TfidfVectorizer = None
+    ) -> None:
         super().__init__(on=on, k=k)
         self.tfidf = TfidfVectorizer() if tfidf is None else tfidf
         self.matrix = None
 
-    def add(self, documents: list):
+    def add(self, documents: list) -> "TfIdf":
         """Add documents to the retriever.
 
         Parameters
@@ -69,7 +74,9 @@ class TfIdf(Retriever):
 
         """
         self.documents += documents
-        self.matrix = self.tfidf.fit_transform([doc[self.on] for doc in self.documents])
+        self.matrix = self.tfidf.fit_transform(
+            [" ".join([doc[field] for field in self.on]) for doc in self.documents]
+        )
         return self
 
     def __call__(self, q: str) -> list:

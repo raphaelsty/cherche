@@ -16,22 +16,30 @@ def cherche_rankers(on: str, k: int = None, path: str = None):
 
     yield from [
         rank.DPR(
-            encoder=SentenceTransformer("facebook-dpr-ctx_encoder-single-nq-base").encode,
+            encoder=SentenceTransformer(
+                "facebook-dpr-ctx_encoder-single-nq-base",
+            ).encode,
             query_encoder=SentenceTransformer(
-                "facebook-dpr-question_encoder-single-nq-base"
+                "facebook-dpr-question_encoder-single-nq-base",
             ).encode,
             on=on,
             k=k,
             path=path,
         ),
         rank.Encoder(
-            encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+            encoder=SentenceTransformer(
+                "sentence-transformers/all-mpnet-base-v2",
+            ).encode,
             on="title",
             k=k,
             path=path,
         ),
         rank.ZeroShot(
-            pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
+            pipeline(
+                "zero-shot-classification",
+                model="typeform/distilbert-base-uncased-mnli",
+                cache="cache",
+            ),
             on=on,
             k=k,
         ),

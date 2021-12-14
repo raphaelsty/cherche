@@ -53,12 +53,12 @@ from sentence_transformers import SentenceTransformer
 documents = data.load_towns() 
 
 # Retrieve on field article
-retriever = retrieve.TfIdf(on="article", k=30)
+retriever = retrieve.TfIdf(on=["title", "article"], k=30)
 
 # Rank on field article
 ranker = rank.Encoder(
     encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-    on = "article",
+    on = ["title", "article"],
     k = 3,
     path = "encoder.pkl"
 )
@@ -72,10 +72,10 @@ search.add(documents=documents)
 
 ```python
 TfIdf retriever
-  on: article
+  on: title, article
   documents: 105
 Encoder ranker
-  on: article
+  on: title, article
   k: 3
   similarity: cosine
   embeddings stored at: encoder.pkl
@@ -90,13 +90,13 @@ search("capital of france")
 [{'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
-  'similarity': 0.69809234},
+  'similarity': 0.7400897},
  {'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
-  'similarity': 0.64064014},
- {'title': 'Toulouse',
-  'url': 'https://en.wikipedia.org/wiki/Toulouse',
-  'article': 'It is now the capital of the Occitanie region, the second largest region in Metropolitan France.',
-  'similarity': 0.556991}]
+  'similarity': 0.6600144},
+ {'title': 'Lyon',
+  'url': 'https://en.wikipedia.org/wiki/Lyon',
+  'article': 'Lyon or Lyons (UK: , US: , French: [ljɔ̃] (listen); Arpitan: Liyon, pronounced [ʎjɔ̃]) is the third-largest city and second-largest urban area of France.',
+  'similarity': 0.58004653}]
 ```

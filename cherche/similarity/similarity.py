@@ -1,10 +1,9 @@
 __all__ = ["cosine_distance", "dot_similarity"]
 
 import numpy as np
-from scipy.spatial import distance
 
 
-def cosine(emb_q: np.ndarray, emb_documents: list):
+def cosine(emb_q: np.ndarray, emb_documents: list) -> list:
     """Computes cosine distance between input query embedding and documents embeddings.
     Higher is better.
 
@@ -43,7 +42,7 @@ def cosine(emb_q: np.ndarray, emb_documents: list):
     ]
 
 
-def dot(emb_q: np.ndarray, emb_documents: list):
+def dot(emb_q: np.ndarray, emb_documents: list) -> list:
     """Computes dot product between input query embedding and documents embeddings.
     Higher is better.
 

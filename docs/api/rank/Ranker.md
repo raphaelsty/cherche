@@ -6,9 +6,9 @@ Abstract class for ranking models.
 
 ## Parameters
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field of the documents to use for ranking.
+    Fields of the documents to use for ranking.
 
 - **encoder**
 
@@ -47,7 +47,7 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **documents**    
+    - **documents**     (*list*)    
     
 ???- note "dump_embeddings"
 

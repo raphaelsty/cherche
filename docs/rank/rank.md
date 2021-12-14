@@ -2,9 +2,13 @@
 
 Rankers are models that measure the semantic similarity between a document and a query. The ranker allows to reorder the documents retrieved by the retriever (Tf-Idf, BM25, ...) based on the semantic similarity between the query and the documents retrieved.
 
-The rankers all have a k-parameter during the initialization which allows to select the number of documents to keep after the ranking. The default value is`None`, i.e the ranker will not drop any documents.
+## k and on parameters
 
-## ranker.Encoder
+The rankers all have a `k`-parameter during the initialization which allows to select the number of documents to keep after the ranking. The default value is`None`, i.e the ranker will not drop any documents.
+
+The `on` parameter allows the ranker to be used on multiple fields. The rankers will concatenate the fields to calculate the embeddings of the documents.
+
+## rank.Encoder
 
 The `ranker.Encoder` model allows the use of framework that encode queries and documents with a single model. It is compatible with the [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models.
 
@@ -34,13 +38,28 @@ You can use your own model within `ranker.Encoder`. This model should have an AP
 
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "article",
-...    k = 5,
+...    on = ["title", "article"],
+...    k = 2,
 ...    path = "encoder.pkl"
 ... )
+
+>>> ranker.add(documents)
+
+>>> ranker(q="Paris", documents=documents)
 ```
 
-## ranker.DPR
+```python
+[{'article': 'Paris is the capital and most populous city of France',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.6734946},
+ {'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.61566335}]
+```
+
+## rank.DPR
 
 The `ranker.DPR` model allows the use of framework that encode queries and documents with two distinct models. It is compatible with the [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) DPR models.
 
@@ -71,19 +90,34 @@ You can use your own models within `ranker.DPR`. Theses models should have an AP
 >>> ranker = rank.DPR(
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    on = "article",
-...    k = 5,
+...    on = ["title", "article"],
+...    k = 2,
 ...    path = "dpr.pkl"
 ... )
+
+>>> ranker.add(documents)
+
+>>> ranker(q="Paris", documents=documents)
 ```
 
-## ranker.ZeroShot
+```python
+[{'article': 'Paris is the capital and most populous city of France',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 75.669365},
+ {'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 74.356224}]
+```
+
+## rank.ZeroShot
 
 The `ranker.ZeroShot` model allows to use the `zero-shot-classification` pipeline of [Hugging Face](https://huggingface.co/facebook/bart-large-mnli). You can find more details on the zero-shot classification task in this very good [blog post](https://joeddav.github.io/blog/2020/05/29/ZSL.html). The `ranker.ZeroShot` model is slow because there is no pre-computation possible. It is therefore recommended to use this ranker with a GPU.
 
 ```python
 >>> from cherche import rank
->>> from sentence_transformers import SentenceTransformer
+>>> from transformers import pipeline
 
 >>> documents = [
 ...    {
@@ -105,9 +139,24 @@ The `ranker.ZeroShot` model allows to use the `zero-shot-classification` pipelin
 
 >>> ranker = rank.ZeroShot(
 ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
-...     on = "article",
+...     on = ["title", "article"],
 ...     k = 2,
 ... )
+
+>>> ranker.add(documents)
+
+>>> ranker(q="Paris", documents=documents)
+```
+
+```python
+[{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.8914178609848022},
+ {'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.6203346252441406}]
 ```
 
 ## Pre-compute embeddings
@@ -119,5 +168,5 @@ When searching, the rankers will check if there are any embeddings pre-computed 
 The method `add` allows to pre-compute embeddings of the documents:
 
 ```python
-ranker.add(documents)
+>>> ranker.add(documents)
 ```

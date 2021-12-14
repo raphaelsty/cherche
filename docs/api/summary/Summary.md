@@ -10,9 +10,9 @@ Summarization model. Returns a single summary for an input list of documents.
 
     Hugging Face summarization model available [here](https://huggingface.co/models?pipeline_tag=summarization).
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to answer to the question.
+    Fields to summarize.
 
 - **min_length** (*int*) – defaults to `5`
 
@@ -28,23 +28,23 @@ Summarization model. Returns a single summary for an input list of documents.
 
 >>> model = summary.Summary(
 ...    model = pipeline("summarization", model="sshleifer/distilbart-cnn-6-6", tokenizer="sshleifer/distilbart-cnn-6-6", framework="pt"),
-...    on = "title",
+...    on = ["title", "article"],
 ... )
 
 >>> model
 Summarization model
-     on: title
+     on: title, article
      min length: 5
      max length: 30
 
 >>> documents = [
-...     {"url": "ckb/github.com", "title": "CKB is a Github library with PyTorch and Transformers.", "date": "10-11-2021"},
-...     {"url": "mkb/github.com", "title": "MKB Github Library with PyTorch  dedicated to KB.", "date": "22-11-2021"},
-...     {"url": "blp/github.com", "title": "BLP is a Github Library with Pytorch and Transformers dedicated to KB.", "date": "22-11-2020"},
+...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
 >>> print(model(documents=documents))
-CKB is a Github library with Pytorch and Transformers dedicated to KB. MKB Github Library with PyTorch  dedicated to
+Eiffel tower is based in Paris Montreal Montreal Montreal is in Canada. Paris is the capital of the French capital of France Eiff
 ```
 
 ## Methods

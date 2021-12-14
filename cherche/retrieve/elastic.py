@@ -1,5 +1,7 @@
 __all__ = ["Elastic"]
 
+import typing
+
 from elasticsearch import Elasticsearch, helpers
 
 from .base import Retriever
@@ -11,7 +13,7 @@ class Elastic(Retriever):
     Parameters
     ----------
     on
-        Field to use to match the query to the documents.
+        Fields to use to match the query to the documents.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -32,7 +34,7 @@ class Elastic(Retriever):
 
     >>> if es.ping():
     ...
-    ...     retriever = retrieve.Elastic(on="article", k=2, es=es, index="test")
+    ...     retriever = retrieve.Elastic(on=["title", "article"], k=2, es=es, index="test")
     ...
     ...     documents = [
     ...         {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -50,8 +52,14 @@ class Elastic(Retriever):
 
     """
 
-    def __init__(self, on: str, k: int = None, es=None, index: str = "cherche") -> None:
-        self.on = on
+    def __init__(
+        self,
+        on: typing.Union[str, list],
+        k: int = None,
+        es: Elasticsearch = None,
+        index: str = "cherche",
+    ) -> None:
+        self.on = on if isinstance(on, list) else [on]
         self.k = k
         self.es = Elasticsearch() if es is None else es
         self.index = index
@@ -59,14 +67,14 @@ class Elastic(Retriever):
         if not self.es.indices.exists(index=self.index):
             self.es.indices.create(index=self.index)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(
             self.es.search(index=self.index, body={"query": {"match_all": {}}},)[
                 "hits"
             ]["hits"]
         )
 
-    def add(self, documents: list):
+    def add(self, documents: list) -> "Elastic":
         """ElasticSearch bulk indexing.
 
         Parameters
@@ -86,7 +94,7 @@ class Elastic(Retriever):
         self.es.indices.refresh(index=self.index)
         return self
 
-    def __call__(self, q: str):
+    def __call__(self, q: str) -> list:
         """ElasticSearch query.
 
         Parameters
@@ -96,7 +104,16 @@ class Elastic(Retriever):
             on: Field to match the query.
 
         """
-        query = {"query": {"match": {self.on: q}}}
+        query = {
+            "query": {
+                "multi_match": {
+                    "query": q,
+                    "type": "most_fields",
+                    "fields": self.on,
+                    "operator": "or",
+                }
+            },
+        }
 
         if self.k is not None:
             query["size"] = self.k
@@ -108,7 +125,7 @@ class Elastic(Retriever):
 
         return [document["_source"] for document in documents["hits"]["hits"]]
 
-    def reset(self):
+    def reset(self) -> "Elastic":
         """Delete the selected index from ElasticSearch."""
         if self.es.indices.exists(index=self.index):
             self.es.delete_by_query(index=self.index, body={"query": {"match_all": {}}})

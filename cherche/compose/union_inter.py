@@ -15,7 +15,7 @@ class UnionIntersection(Compose):
         repr += "\n-----"
         return repr
 
-    def __add__(self, other):
+    def __add__(self, other) -> Pipeline:
         """Pipeline operator."""
         if isinstance(other, Pipeline):
             return Pipeline([self] + other.models)
@@ -86,7 +86,7 @@ class Union(UnionIntersection):
     def __init__(self, models: list):
         self.models = models
 
-    def __call__(self, q: str, **kwargs):
+    def __call__(self, q: str, **kwargs) -> list:
         """
         Parameters
         ----------
@@ -106,7 +106,7 @@ class Union(UnionIntersection):
                 documents.append(document)
         return documents
 
-    def __or__(self, model):
+    def __or__(self, model) -> "Union":
         self.models.append(model)
         return self
 
@@ -170,7 +170,7 @@ class Intersection(UnionIntersection):
     def __init__(self, models: list):
         super().__init__(models=models)
 
-    def __call__(self, q: str, **kwargs):
+    def __call__(self, q: str, **kwargs) -> list:
         """
         Parameters
         ----------
@@ -189,6 +189,6 @@ class Intersection(UnionIntersection):
             dict(document) for document, count in counter_docs.items() if count >= len(self.models)
         ]
 
-    def __and__(self, model):
+    def __and__(self, model) -> "Intersection":
         self.models.append(model)
         return self

@@ -41,13 +41,21 @@ Initialization of a `rank.Encoder` model with a model trained using cosine simil
 ... )
 
 >>> ranker.add(documents)
+```
+
+```python
 Encoder ranker
     on: article
     k: 30
     similarity: cosine
     embeddings stored at: encoder.pkl
+  ```
 
+```python
 >>> ranker(q = "fashion and gastronomy", documents=documents)
+```
+
+```python
 [{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
@@ -98,13 +106,21 @@ Initialization of a `rank.DPR` model with a model trained using dot product:
 ... )
 
 >>> ranker.add(documents)
+```
+
+```python
 DPR ranker
     on: article
     k: 30
     similarity: dot
     embeddings stored at: dpr.pkl
+```
 
+```python
 >>> ranker(q = "fashion and gastronomy", documents=documents)
+```
+
+```python
 [{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',

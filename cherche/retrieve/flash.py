@@ -1,8 +1,8 @@
 __all__ = ["Flash"]
 
 import collections
+import typing
 from itertools import chain
-from typing import Union
 
 from flashtext import KeywordProcessor
 
@@ -16,7 +16,7 @@ class Flash(Retriever):
     Parameters
     ----------
     on
-        Field to use to match the query to the documents.
+        Fields to use to match the query to the documents.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -57,12 +57,14 @@ class Flash(Retriever):
 
     """
 
-    def __init__(self, on: str, k: int = None, keywords=None) -> None:
+    def __init__(
+        self, on: typing.Union[str, list], k: int = None, keywords: KeywordProcessor = None
+    ) -> None:
         super().__init__(on=on, k=k)
         self.documents = collections.defaultdict(list)
         self.keywords = KeywordProcessor() if keywords is None else keywords
 
-    def add(self, documents: list):
+    def add(self, documents: list) -> "Flash":
         """Add keywords to the retriever.
 
         Parameters
@@ -72,15 +74,16 @@ class Flash(Retriever):
 
         """
         for document in documents:
-            if isinstance(document[self.on], list):
-                for tag in document[self.on]:
-                    self.documents[tag].append(document)
-            else:
-                self.documents[document[self.on]].append(document)
-            self._add(document=document[self.on])
+            for field in self.on:
+                if isinstance(document[field], list):
+                    for tag in document[field]:
+                        self.documents[tag].append(document)
+                else:
+                    self.documents[document[field]].append(document)
+                self._add(document=document[field])
         return self
 
-    def _add(self, document: Union[list, str]):
+    def _add(self, document: typing.Union[list, str]) -> "Flash":
         """Update keywords using dict, list or string."""
         if isinstance(document, list):
             self.keywords.add_keywords_from_list(document)

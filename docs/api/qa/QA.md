@@ -10,9 +10,9 @@ Question Answering model.
 
     Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to answer to the question.
+    Fields to use to answer to the question.
 
 - **k** (*int*) – defaults to `None`
 
@@ -27,37 +27,38 @@ Question Answering model.
 >>> from transformers import pipeline
 >>> from cherche import qa
 
+>>> documents = [
+...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+... ]
+
 >>> model = qa.QA(
 ...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
-...     on = "title",
+...     on = ["title", "article"],
+...     k = 2,
 ...  )
 
 >>> model
 Question Answering
      model: deepset/roberta-base-squad2
-     on: title
+     on: title, article
 
->>> documents = [
-...     {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers .", "date": "10-11-2021"},
-...     {"url": "mkb/github.com", "title": "Github Library with PyTorch .", "date": "22-11-2021"},
-...     {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers .", "date": "22-11-2020"},
-... ]
-
->>> print(model(q="What is used with Transformers?", documents=documents, k=2))
-[{'answer': 'Github Library',
-  'date': '22-11-2020',
-  'end': 14,
-  'qa_score': 0.2863011956214905,
+>>> print(model(q="Where is the Eiffel tower?", documents=documents))
+[{'answer': 'Paris',
+  'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'end': 43,
+  'qa_score': 0.9743021130561829,
+  'start': 38,
+  'title': 'Eiffel tower'},
+ {'answer': 'Paris',
+  'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'end': 5,
+  'qa_score': 0.0003580129996407777,
   'start': 0,
-  'title': 'Github Library with Pytorch and Transformers .',
-  'url': 'blp/github.com'},
- {'answer': 'Github library',
-  'date': '10-11-2021',
-  'end': 14,
-  'qa_score': 0.2725629210472107,
-  'start': 0,
-  'title': 'Github library with PyTorch and Transformers .',
-  'url': 'ckb/github.com'}]
+  'title': 'Paris'}]
 ```
 
 ## Methods

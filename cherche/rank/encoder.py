@@ -1,5 +1,7 @@
 __all__ = ["Encoder"]
 
+import typing
+
 from ..similarity import cosine
 from .base import Ranker
 
@@ -10,7 +12,7 @@ class Encoder(Ranker):
     Parameters
     ----------
     on
-        Field to use to match the query to the documents.
+        Fields to use to match the query to the documents.
     encoder
         Encoding function dedicated to documents and query.
     k
@@ -38,32 +40,37 @@ class Encoder(Ranker):
 
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-    ...    on = "article",
+    ...    on = ["title", "article"],
     ...    k = 2,
     ...    path = "encoder.pkl"
     ... )
 
     >>> ranker.add(documents=documents)
     Encoder ranker
-         on: article
+         on: title, article
          k: 2
          similarity: cosine
          embeddings stored at: encoder.pkl
 
     >>> print(ranker(q="Paris", documents=documents))
-    [{'article': 'Eiffel tower is based in Paris',
+    [{'article': 'This town is the capital of France',
       'author': 'Wiki',
-      'similarity': 0.49121392,
-      'title': 'Eiffel tower'},
-     {'article': 'This town is the capital of France',
+      'similarity': 0.66051406,
+      'title': 'Paris'},
+     {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
-      'similarity': 0.44376045,
-      'title': 'Paris'}]
+      'similarity': 0.5142565,
+      'title': 'Eiffel tower'}]
 
     """
 
     def __init__(
-        self, encoder, on: str, k: int = None, path: str = None, similarity=cosine
+        self,
+        encoder,
+        on: typing.Union[str, list],
+        k: int = None,
+        path: str = None,
+        similarity=cosine,
     ) -> None:
         super().__init__(on=on, encoder=encoder, k=k, path=path, similarity=similarity)
 
@@ -83,13 +90,7 @@ class Encoder(Ranker):
             return []
 
         emb_q = self.encoder(q) if q not in self.embeddings else self.embeddings[q]
-        emb_documents = [
-            self.embeddings[document[self.on]]
-            if document[self.on] in self.embeddings
-            else self.encoder(document[self.on])
-            for document in documents
-        ]
-
+        emb_documents = self._emb_documents(documents=documents)
         return self._rank(
             similarities=self.similarity(emb_q=emb_q, emb_documents=emb_documents),
             documents=documents,

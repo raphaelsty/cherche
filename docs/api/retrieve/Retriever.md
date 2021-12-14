@@ -6,9 +6,9 @@ Retriever base class.
 
 ## Parameters
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to match the query to the documents.
+    Fields to use to match the query to the documents.
 
 - **k** (*int*)
 

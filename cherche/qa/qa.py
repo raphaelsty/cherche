@@ -1,5 +1,6 @@
 __all__ = ["QA"]
 
+import typing
 from operator import itemgetter
 
 from ..compose import Pipeline
@@ -13,7 +14,7 @@ class QA:
     model
         Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
     on
-        Field to use to answer to the question.
+        Fields to use to answer to the question.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -25,51 +26,50 @@ class QA:
     >>> from transformers import pipeline
     >>> from cherche import qa
 
-    >>> model = qa.QA(
-    ...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
-    ...     on = "article",
-    ...     k = 2,
-    ...  )
-
-    >>> model
-    Question Answering
-         model: deepset/roberta-base-squad2
-         on: article
-
     >>> documents = [
     ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
     ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
     ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
+    >>> model = qa.QA(
+    ...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
+    ...     on = ["title", "article"],
+    ...     k = 2,
+    ...  )
+
+    >>> model
+    Question Answering
+         model: deepset/roberta-base-squad2
+         on: title, article
+
     >>> print(model(q="Where is the Eiffel tower?", documents=documents))
     [{'answer': 'Paris',
       'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
-      'end': 30,
-      'qa_score': 0.9817142486572266,
-      'start': 25,
+      'end': 43,
+      'qa_score': 0.9743021130561829,
+      'start': 38,
       'title': 'Eiffel tower'},
-     {'answer': 'Montreal',
-      'article': 'Montreal is in Canada.',
+     {'answer': 'Paris',
+      'article': 'This town is the capital of France',
       'author': 'Wiki',
-      'end': 8,
-      'qa_score': 3.705586277646944e-05,
+      'end': 5,
+      'qa_score': 0.0003580129996407777,
       'start': 0,
-      'title': 'Montreal'}]
-
+      'title': 'Paris'}]
 
     """
 
-    def __init__(self, model, on: str, k: int = None) -> None:
+    def __init__(self, model, on: typing.Union[str, list], k: int = None) -> None:
         self.model = model
-        self.on = on
+        self.on = on if isinstance(on, list) else [on]
         self.k = k
 
     def __repr__(self) -> str:
         repr = "Question Answering"
         repr += f"\n\t model: {self.model.tokenizer.name_or_path}"
-        repr += f"\n\t on: {self.on}"
+        repr += f"\n\t on: {', '.join(self.on)}"
         return repr
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
@@ -89,7 +89,9 @@ class QA:
         answers = self.model(
             {
                 "question": [q for _ in documents],
-                "context": [document[self.on] for document in documents],
+                "context": [
+                    " ".join([document[field] for field in self.on]) for document in documents
+                ],
             },
         )
 
@@ -109,17 +111,17 @@ class QA:
         answers = sorted(top_answers, key=itemgetter("qa_score"), reverse=True)
         return answers[: self.k] if self.k is not None else answers
 
-    def __add__(self, other):
+    def __add__(self, other) -> Pipeline:
         """Custom operator to make pipeline."""
         if isinstance(other, Pipeline):
             return other + self
         else:
             return Pipeline(models=[other, self])
 
-    def __or__(self):
+    def __or__(self) -> None:
         """Or operator is only available on retrievers and rankers."""
         raise NotImplementedError
 
-    def __and__(self):
+    def __and__(self) -> None:
         """And operator is only available on retrievers and rankers."""
         raise NotImplementedError

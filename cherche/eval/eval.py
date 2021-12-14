@@ -5,7 +5,7 @@ import collections
 from creme import stats
 
 
-def eval(search, query_answers: list):
+def eval(search, query_answers: list) -> dict:
     """Evaluate a pipeline using pairs of query and answers.
 
     Parameters

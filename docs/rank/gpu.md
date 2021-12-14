@@ -13,47 +13,8 @@ The ranker `rank.ZeroShot` is a wrapper for Zero shot classification pipeline fr
 Sentence Transformers as an encoder on GPU:
 
 ```python
->>> documents = [{"document": "Lorem Ipsum."}, {"document": "Ipsum Lorem."}]
-
-# Ask the model to load and save embeddings at ./encoder.pkl
->>> ranker = rank.Encoder(
-...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2", device='cuda').encode,
-...    on = "document",
-...    k = 30,
-...    path = "encoder.pkl"
-... )
-
-# Pre compute embeddings using GPU.
->>> ranker.add(documents=documents)
-```
-
-## Rank.DPR
-
-Dense Passage Retrieval models on GPU:
-
-```python
->>> documents = [{"document": "Lorem Ipsum."}, {"document": "Ipsum Lorem."}]
-
-# Ask the model to load and save embeddings at ./dpr.pkl
->>> ranker = rank.DPR(
-...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda").encode,
-...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base', devica="cuda").encode,
-...    on = "title",
-...    k = 30,
-...    path = "dpr.pkl"
-... )
-
-# Pre compute embeddings using GPU.
->>> ranker.add(documents=documents)
-```
-
-## rank.ZeroShot
-
-To use the `zero-shot-classification` models with a GPU, the `device` parameter must be specified. By default the parameter `device` is set to -1 to run on cpu. You needs to set it as a positive integer that match your cuda device id to run it on GPU.
-
-```python
 >>> from cherche import rank
->>> from sentence_transformers import SentenceTransformer
+>>> from transformers import pipeline
 
 >>> documents = [
 ...    {
@@ -73,13 +34,89 @@ To use the `zero-shot-classification` models with a GPU, the `device` parameter 
 ...    }
 ... ]
 
+# Ask the model to load and save embeddings at ./encoder.pkl
+>>> ranker = rank.Encoder(
+...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2", device='cuda').encode,
+...    on = ["title", "article"],
+...    k = 10,
+...    path = "encoder.pkl"
+... )
+
+# Pre compute embeddings using GPU.
+>>> ranker.add(documents=documents)
+```
+
+## Rank.DPR
+
+Dense Passage Retrieval models on GPU:
+
+```python
+>>> from cherche import rank
+>>> from transformers import pipeline
+
+>>> documents = [
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
+... ]
+
+# Ask the model to load and save embeddings at ./dpr.pkl
+>>> ranker = rank.DPR(
+...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda").encode,
+...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base', devica="cuda").encode,
+...    on = ["title", "article"],
+...    k = 10,
+...    path = "dpr.pkl"
+... )
+
+# Pre compute embeddings using GPU.
+>>> ranker.add(documents=documents)
+```
+
+## rank.ZeroShot
+
+To use the `zero-shot-classification` models with a GPU, the `device` parameter must be specified. By default the parameter `device` is set to `-1` to run on cpu. You needs to set it as a positive integer that match your cuda device id to run it on GPU.
+
+```python
+>>> from cherche import rank
+>>> from transformers import pipeline
+
+>>> documents = [
+...    {
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
+... ]
 
 >>> ranker = rank.ZeroShot(
 ...     encoder = pipeline("zero-shot-classification", 
 ...         model="typeform/distilbert-base-uncased-mnli", 
 ...         device=0 # cuda:0
 ...     ), 
-...     on = "document",
-...     k = 2,
+...     on = ["title", "article"],
+...     k = 10,
 ... )
 ```

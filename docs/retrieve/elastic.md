@@ -16,7 +16,7 @@ Once your Elasticsearch server is up and running, you can connect to it with Sea
 >>> es = Elasticsearch()
 
 # Ask to cherche on article, retrieves the top 30 results, uses and create the index cherche if it does not exist.
->>> retriever = retrieve.Elastic(on="article", k=30, es=es, index="cherche")
+>>> retriever = retrieve.Elastic(on=["title", "article"], k=30, es=es, index="cherche")
 
 >>> documents = [
 ...    {

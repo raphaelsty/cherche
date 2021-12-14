@@ -70,6 +70,49 @@ def test_retriever(retriever, documents: list, k: int):
 
 
 @pytest.mark.parametrize(
+    "retriever, documents, k",
+    [
+        pytest.param(
+            retriever,
+            documents(),
+            k,
+            id=f"Multiple fields retriever: {retriever.__class__.__name__}, k: {k}",
+        )
+        for k in [None, 0, 2, 4]
+        for retriever in cherche_retrievers(on=["article", "title", "author"], k=k)
+    ],
+)
+def test_fields_retriever(retriever, documents: list, k: int):
+    """Test retriever when providing multiples fields."""
+    # Reset retriever
+    retriever.documents = []
+    retriever.add(documents)
+
+    # All documents have Wikipedia as author.
+    answers = retriever(q="Wikipedia")
+    if k is None or k >= len(documents):
+        assert len(answers) == len(documents)
+    else:
+        assert len(answers) == max(k, 0)
+
+    for sample in answers:
+        for key in ["title", "article", "author"]:
+            assert key in sample
+
+    # Unknown token.
+    answers = retriever(q="Unknown")
+    assert len(answers) == 0
+
+    # Two documents contains paris
+    answers = retriever(q="Paris")
+
+    if k is None or k >= 2:
+        assert len(answers) == 2
+    else:
+        assert len(answers) == max(k, 0)
+
+
+@pytest.mark.parametrize(
     "documents, k",
     [
         pytest.param(
@@ -127,6 +170,11 @@ def test_elastic(documents, k):
 
     es = Elasticsearch()
     if es.ping():
-        retriever = retrieve.Elastic(on="article", k=k, es=es, index="test")
+        retriever = retrieve.Elastic(on="article", k=k, es=es, index="test_cherche")
         retriever.reset()
         test_retriever(retriever=retriever, documents=documents, k=k)
+        retriever = retrieve.Elastic(
+            on=["title", "article", "author"], k=k, es=es, index="test_cherche"
+        )
+        retriever.reset()
+        test_fields_retriever(retriever, documents=documents, k=k)

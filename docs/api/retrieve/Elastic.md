@@ -6,15 +6,15 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
 ## Parameters
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to match the query to the documents.
+    Fields to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
     Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
 
-- **es** – defaults to `None`
+- **es** (*elasticsearch.client.Elasticsearch*) – defaults to `None`
 
     ElasticSearch Python client. The default configuration is used if set to None.
 
@@ -35,18 +35,17 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
 >>> if es.ping():
 ...
-...     retriever = retrieve.Elastic(on="title", k=2, es=es, index="test")
+...     retriever = retrieve.Elastic(on=["title", "article"], k=2, es=es, index="test")
 ...
 ...     documents = [
-...         {"url": "ckb/github.com", "title": "Github library with PyTorch and Transformers.", "date": "10-11-2021"},
-...         {"url": "mkb/github.com", "title": "Github Library with PyTorch.", "date": "22-11-2021"},
-...         {"url": "blp/github.com", "title": "Github Library with Pytorch and Transformers.", "date": "22-11-2020"},
+...         {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...         {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...         {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ...     ]
 ...
 ...     retriever = retriever.reset()
 ...     retriever = retriever.add(documents=documents)
-...
-...     candidates = retriever(q="Transformers")
+...     candidates = retriever(q="paris")
 ```
 
 ## Methods

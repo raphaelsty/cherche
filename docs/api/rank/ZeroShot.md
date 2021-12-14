@@ -10,9 +10,9 @@ ZeroShot classifier for ranking.
 
     Zero shot classifier to use for ranking
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to match the query to the documents.
+    Fields to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
@@ -40,25 +40,25 @@ ZeroShot classifier for ranking.
 
 >>> ranker = rank.ZeroShot(
 ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
-...     on = "article",
+...     on = ["title", "article"],
 ...     k = 2,
 ... )
 
 >>> ranker
 Zero Shot Classifier
      model: typeform/distilbert-base-uncased-mnli
-     on: article
+     on: title, article
      k: 2
      multi class: True
 
 >>> print(ranker(q="Paris", documents=documents))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
-  'similarity': 0.4519128203392029,
+  'similarity': 0.44725707173347473,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
-  'similarity': 0.33974456787109375,
+  'similarity': 0.31512799859046936,
   'title': 'Eiffel tower'}]
 ```
 

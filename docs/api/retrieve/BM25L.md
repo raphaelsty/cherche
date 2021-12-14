@@ -6,9 +6,9 @@ BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorian
 
 ## Parameters
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to match the query to the documents.
+    Fields to use to match the query to the documents.
 
 - **tokenizer** – defaults to `None`
 
@@ -18,15 +18,15 @@ BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorian
 
     Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
 
-- **k1** – defaults to `1.5`
+- **k1** (*float*) – defaults to `1.5`
 
     Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
-- **b** – defaults to `0.75`
+- **b** (*float*) – defaults to `0.75`
 
     Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
-- **delta** – defaults to `0.5`
+- **delta** (*float*) – defaults to `0.5`
 
     Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
@@ -38,7 +38,7 @@ BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorian
 >>> from pprint import pprint as print
 >>> from cherche import retrieve
 
->>> retriever = retrieve.BM25L(on="article", k=3, k1=1.5, b=0.75, delta=0.5)
+>>> retriever = retrieve.BM25L(on=["title", "article"], k=3, k1=1.5, b=0.75, delta=0.5)
 
 >>> documents = [
 ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -50,17 +50,20 @@ BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorian
 
 >>> retriever
 BM25L retriever
-    on: article
+    on: title, article
     documents: 3
 
->>> print(retriever(q="France"))
-[{'article': 'This town is the capital of France',
+>>> print(retriever(q="Paris"))
+[{'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'title': 'Eiffel tower'},
+ {'article': 'This town is the capital of France',
   'author': 'Wiki',
   'title': 'Paris'}]
 
 >>> retriever.add(documents=documents)
 BM25L retriever
-    on: article
+    on: title, article
     documents: 6
 ```
 

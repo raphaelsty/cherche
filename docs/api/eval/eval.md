@@ -14,10 +14,6 @@ Evaluate a pipeline using pairs of query and answers.
 
     Pairs of query and answers.
 
-- **on** (*str*)
-
-    Field to use compare retrieved documents and test set.
-
 
 
 ## Examples
@@ -44,7 +40,7 @@ Evaluate a pipeline using pairs of query and answers.
 ...      ]),
 ...     ("Toulouse", [
 ...          {"label": "Toulouse is the capital of Occitanie .", "tags": ["Toulouse", "Occitanie"], "uri": "tag:Occitanie"},
-...          {"label": "It is known as the pink city .", "tags": ["pink", "rose"], "uri": "tag:PinkCity"},
+...          {"label": "It is known as the pink city .", "tags": ["Toulouse", "pink", "rose"], "uri": "tag:PinkCity"},
 ...          {"label": "Toulouse has a famous rugby club .", "tags": ["Toulouse", "rugby"], "uri": "tag:ToulouseRugby"},
 ...      ]),
 ... ]
@@ -62,7 +58,7 @@ Evaluate a pipeline using pairs of query and answers.
 
 >>> search = search.add(documents)
 
->>> eval.eval(search=search, query_answers=query_answers, on="label")
+>>> eval.eval(search=search, query_answers=query_answers)
 {'Precision@1': '100.00%', 'Precision@2': '100.00%', 'Precision@3': '100.00%', 'R-Precision': '100.00%', 'Precision': '100.00%'}
 
 >>> print(search("Paris"))

@@ -10,9 +10,9 @@ SentenceBert Ranker.
 
     Encoding function dedicated to documents and query.
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to match the query to the documents.
+    Fields to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
@@ -22,7 +22,7 @@ SentenceBert Ranker.
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function cosine at 0x7f9e720a9b80>`
+- **similarity** – defaults to `<function cosine at 0x7fdc02892430>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -43,27 +43,27 @@ SentenceBert Ranker.
 
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "article",
+...    on = ["title", "article"],
 ...    k = 2,
 ...    path = "encoder.pkl"
 ... )
 
 >>> ranker.add(documents=documents)
 Encoder ranker
-     on: article
+     on: title, article
      k: 2
      similarity: cosine
      embeddings stored at: encoder.pkl
 
 >>> print(ranker(q="Paris", documents=documents))
-[{'article': 'Eiffel tower is based in Paris',
+[{'article': 'This town is the capital of France',
   'author': 'Wiki',
-  'similarity': 0.49121392,
-  'title': 'Eiffel tower'},
- {'article': 'This town is the capital of France',
+  'similarity': 0.66051406,
+  'title': 'Paris'},
+ {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
-  'similarity': 0.44376045,
-  'title': 'Paris'}]
+  'similarity': 0.5142565,
+  'title': 'Eiffel tower'}]
 ```
 
 ## Methods
@@ -84,7 +84,7 @@ Encoder ranker
 
     **Parameters**
 
-    - **documents**    
+    - **documents**     (*list*)    
     
 ???- note "dump_embeddings"
 

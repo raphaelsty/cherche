@@ -106,7 +106,7 @@ class Pipeline(Compose):
     def __init__(self, models: list) -> None:
         super().__init__(models=models)
 
-    def __call__(self, q: str):
+    def __call__(self, q: str) -> list:
         """Compose pipeline
 
         Parameters

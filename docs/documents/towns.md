@@ -3,11 +3,12 @@
 Cherche provides a dummy dataset made of sentences from Wikipedia that describes towns such as Toulouse, Paris, Bordeaux and Lyon. This dataset is intended to easily test Cherche, it contains about 200 documents.
 
 ```python
-from cherche import data
+>>> from cherche import data
+>>> documents = data.load_towns()
+>>> documents[:3]
+```
 
-documents = data.load_towns()
-
-documents[:3]
+```python
 [{'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the '
              'capital and most populous city of France, with an estimated '
              'population of 2,175,601 residents as of 2018, in an area of more '

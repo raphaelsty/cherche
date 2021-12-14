@@ -34,11 +34,11 @@ Flash will find documents that contain the keyword or keywords specified in the 
 >>> retriever = retrieve.Flash(on="tags")
 
 >>> retriever.add(documents=documents)
-Flash retriever
-    on: tags
-    documents: 4
 
 >>> retriever("fashion")
+```
+
+```python
 [{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',

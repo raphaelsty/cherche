@@ -9,12 +9,13 @@ to build a pipeline.
 
 - `&` Intersection operator to filter the output of multiples retrievers or multiples rankers based on their intersection.
 
-It is not currently possible to perform the intersection or union of a ranker and a retriever. It is necessary to perform union and intersection operations between rankers and retrievers.
+It is possible to perform union and intersection operations between rankers or between retrievers.
 
 ## Pipeline `+`
 
 ```python
 >>> from cherche import rank, retrieve
+>>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
 ...    {
@@ -34,11 +35,11 @@ It is not currently possible to perform the intersection or union of a ranker an
 ...    }
 ... ]
 
->>> retriever = retrieve.TfIdf(on="article", k = 30)
+>>> retriever = retrieve.TfIdf(on=["title", "article"], k = 30)
 
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    on = "article",
+...    on = ["title", "article"],
 ...    k = 3,
 ...    path = "encoder.pkl"
 ... )
@@ -46,28 +47,37 @@ It is not currently possible to perform the intersection or union of a ranker an
 >>> search = retriever + ranker
 
 >>> search.add(documents)
+```
+
+```python
 TfIdf retriever
-    on: article
+    on: title, article
     documents: 3
 Encoder ranker
-    on: article
+    on: title, article
     k: 3
     similarity: cosine
     embeddings stored at: encoder.pkl
+```
 
+```python
 >>> search("fashion")
+```
+
+```python
 [{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.2555525}]
+  'similarity': 0.2640568}]
 ```
 
 ## Union `|`
 
-The union operator `|` is used to improve model recall by bringing together documents retrieved by multiple models and or on different fields.
+The union operator `|` is used to improve model recall by bringing together documents retrieved by multiple models.
 
 ```python
 >>> from cherche import rank, retrieve
+>>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
 ...    {
@@ -87,17 +97,17 @@ The union operator `|` is used to improve model recall by bringing together docu
 ...    }
 ... ]
 
->>> retriever = retrieve.TfIdf(on="title", k = 30) | retrieve.TfIdf(on="article", k = 30)
+>>> retriever = retrieve.TfIdf(on=["title", "article"], k = 30)
 
 >>> ranker = (
 ...    rank.Encoder(
 ...        encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...        on = "article",
+...        on = ["title", "article"],
 ...        k = 3,
 ...        path = "encoder.pkl"
 ...    ) | rank.Encoder(
 ...        encoder = SentenceTransformer("sentence-transformers/multi-qa-mpnet-base-cos-v1").encode,
-...        on = "title",
+...        on = ["title", "article"],
 ...        k = 3,
 ...        path = "encoder.pkl"
 ...    )
@@ -106,34 +116,35 @@ The union operator `|` is used to improve model recall by bringing together docu
 >>> search = retriever + ranker
 
 >>> search.add(documents)
-Union
------
-TfIdf retriever
-    on: title
-    documents: 3
-TfIdf retriever
-    on: article
-    documents: 3
------
-Union
------
-Encoder ranker
-    on: article
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
-Encoder ranker
-    on: title
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
------
+```
 
+```python
+TfIdf retriever
+    on: title, article
+    documents: 3
+Union
+-----
+Encoder ranker
+    on: title, article
+    k: 3
+    similarity: cosine
+    embeddings stored at: encoder.pkl
+Encoder ranker
+    on: title, article
+    k: 3
+    similarity: cosine
+    embeddings stored at: encoder.pkl
+-----
+```
+
+```python
 >>> search("fashion")
+```
+
+```python
 [{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.2555525}]
+  'url': 'https://en.wikipedia.org/wiki/Paris'}]
 ```
 
 ## Intersection `&`
@@ -142,6 +153,7 @@ The intersection operator improves the precision of the model by filtering docum
 
 ```python
 >>> from cherche import rank, retrieve
+>>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
 ...    {
@@ -161,8 +173,7 @@ The intersection operator improves the precision of the model by filtering docum
 ...    }
 ... ]
 
->>> retriever = retrieve.TfIdf(on="title", k = 30) & retrieve.TfIdf(on="article", k = 30)
-
+>>> retriever = retrieve.TfIdf(on=["title", "article"], k = 30)
 
 >>> ranker = (
 ...    rank.Encoder(
@@ -181,29 +192,31 @@ The intersection operator improves the precision of the model by filtering docum
 >>> search = retriever + ranker
 
 >>> search.add(documents)
-Intersection
------
-TfIdf retriever
-    on: title
-    documents: 3
-TfIdf retriever
-    on: article
-    documents: 3
------
-Intersection
------
-Encoder ranker
-    on: article
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
-Encoder ranker
-    on: title
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
------
+```
 
+```python
+TfIdf retriever
+    on: title, article
+    documents: 3
+Intersection
+-----
+Encoder ranker
+    on: article
+    k: 3
+    similarity: cosine
+    embeddings stored at: encoder.pkl
+Encoder ranker
+    on: title
+    k: 3
+    similarity: cosine
+    embeddings stored at: encoder.pkl
+-----
+```
+
+```python
 >>> search("fashion")
+```
+
+```python
 []
 ```

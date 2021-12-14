@@ -14,9 +14,9 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
     Encoding function dedicated to the query.
 
-- **on** (*str*)
+- **on** (*Union[str, list]*)
 
-    Field to use to match the query to the documents.
+    Fields to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
@@ -26,7 +26,7 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function dot at 0x7f9e720b5430>`
+- **similarity** – defaults to `<function dot at 0x7fdc02892ca0>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -48,27 +48,27 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 >>> ranker = rank.DPR(
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    on = "article",
+...    on = ["title", "article"],
 ...    k = 2,
 ...    path = "test_dpr.pkl"
 ... )
 
 >>> ranker.add(documents=documents)
 DPR ranker
-     on: article
+     on: title, article
      k: 2
      similarity: dot
      embeddings stored at: test_dpr.pkl
 
 >>> print(ranker(q="Paris", documents=documents, k=2))
-[{'article': 'Eiffel tower is based in Paris',
+[{'article': 'This town is the capital of France',
   'author': 'Wiki',
-  'similarity': 69.8168,
-  'title': 'Eiffel tower'},
- {'article': 'This town is the capital of France',
+  'similarity': 74.02353,
+  'title': 'Paris'},
+ {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
-  'similarity': 67.30965,
-  'title': 'Paris'}]
+  'similarity': 68.80651,
+  'title': 'Eiffel tower'}]
 ```
 
 ## Methods
@@ -89,7 +89,7 @@ DPR ranker
 
     **Parameters**
 
-    - **documents**    
+    - **documents**     (*list*)    
     
 ???- note "dump_embeddings"
 
