@@ -57,8 +57,12 @@ def eval(search, query_answers: list) -> dict:
 
     >>> search = search.add(documents)
 
-    >>> eval.eval(search=search, query_answers=query_answers)
-    {'Precision@1': '100.00%', 'Precision@2': '100.00%', 'Precision@3': '100.00%', 'R-Precision': '100.00%', 'Precision': '100.00%'}
+    >>> print(eval.eval(search=search, query_answers=query_answers))
+    {'Precision': '100.00%',
+     'Precision@1': '100.00%',
+     'Precision@2': '100.00%',
+     'Precision@3': '100.00%',
+     'R-Precision': '100.00%'}
 
     >>> print(search("Paris"))
     [{'label': 'Paris is the capital of France .',
