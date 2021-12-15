@@ -1,6 +1,6 @@
 import pytest
 
-from .. import retrieve
+from .. import rank, retrieve
 
 
 def cherche_retrievers(on: str, k: int = None):
@@ -165,8 +165,18 @@ def test_flash(documents: list, k: int):
     ],
 )
 def test_elastic(documents, k):
-    """Test Elasticsearch if elastic server is running."""
+    """Test Elasticsearch if elastic server is running. Test elasticsearch as a retriever for a
+    single field and multiple fields. Test if storing"""
     from elasticsearch import Elasticsearch
+    from sentence_transformers import SentenceTransformer
+
+    ranker = rank.Encoder(
+        encoder=SentenceTransformer(
+            "sentence-transformers/all-mpnet-base-v2",
+        ).encode,
+        on=["title", "article", "author"],
+        k=k,
+    )
 
     es = Elasticsearch()
     if es.ping():
@@ -178,3 +188,13 @@ def test_elastic(documents, k):
         )
         retriever.reset()
         test_fields_retriever(retriever, documents=documents, k=k)
+
+        # Store embeddings using Elasticsearch
+        retriever.reset()
+        retriever.add_embeddings(documents=documents, ranker=ranker)
+        pipeline = retriever + ranker
+        answers = pipeline("Paris")
+        if k is None or k >= 2:
+            assert len(answers) == 2
+        else:
+            assert len(answers) == max(k, 0)

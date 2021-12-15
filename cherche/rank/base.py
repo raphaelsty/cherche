@@ -82,7 +82,10 @@ class Ranker(abc.ABC):
         emb_documents = []
         for document in documents:
             document = " ".join([document[field] for field in self.on])
-            if document in self.embeddings:
+            # ElasticSearch can store embeddings
+            if "embedding" in document:
+                embedding = document.pop("embedding")
+            elif document in self.embeddings:
                 embedding = self.embeddings[document]
             else:
                 embedding = self.encoder(document)
@@ -141,3 +144,14 @@ class Ranker(abc.ABC):
         if isinstance(other, Intersection):
             return Intersection([self] + other.models)
         return Intersection([self, other])
+
+    def embs(self, documents: list) -> list:
+        """Computes and returns embeddings of input documents.
+
+        Parameters
+        ----------
+        documents
+            List of documents for whiwh to computes embeddings.
+
+        """
+        return self.encoder([" ".join([doc[field] for field in self.on]) for doc in documents])

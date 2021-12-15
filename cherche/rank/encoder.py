@@ -2,6 +2,8 @@ __all__ = ["Encoder"]
 
 import typing
 
+import numpy as np
+
 from ..similarity import cosine
 from .base import Ranker
 

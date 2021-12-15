@@ -2,8 +2,10 @@ __all__ = ["Elastic"]
 
 import typing
 
+import numpy as np
 from elasticsearch import Elasticsearch, helpers
 
+from ..rank import Ranker
 from .base import Retriever
 
 
@@ -63,16 +65,84 @@ class Elastic(Retriever):
         self.k = k
         self.es = Elasticsearch() if es is None else es
         self.index = index
+        self.count = 0
 
         if not self.es.indices.exists(index=self.index):
             self.es.indices.create(index=self.index)
 
     def __len__(self) -> int:
-        return len(
-            self.es.search(index=self.index, body={"query": {"match_all": {}}},)[
-                "hits"
-            ]["hits"]
-        )
+        return self.count
+
+    def add_embeddings(
+        self, documents: list, ranker: Ranker = None, embeddings: list = None
+    ) -> "Elastic":
+        """Store documents and embeddings inside Elasticsearch using bulk indexing. Embeddings
+        parameter has the priority over ranker. If embeddings are provided, ElasticSearch will
+        index documents with their embeddings. If embeddings are not provided, the Ranker will
+        be called to compute embeddings. This method is useful if you have to deal with large
+        corpora.
+
+        Parameters
+        ----------
+        documents
+            List of documents to upload to Elasticsearch.
+        ranker
+              Elastic can store embeddings of the ranker to limit ram usage. If provided, when
+              elastic retrieves documents, it will retrieve embeddings also. If not provided, it
+              index embeddings.
+        embeddings
+            Elastic can store embeddings of the ranker to limit ram usage. If provided,
+
+
+        Examples
+        --------
+
+        >>> from cherche import retrieve, rank
+        >>> from sentence_transformers import SentenceTransformer
+        >>> from elasticsearch import Elasticsearch
+
+        >>> documents = [
+        ...     {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+        ...     {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+        ...     {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+        ... ]
+
+        >>> es = Elasticsearch()
+
+        >>> if es.ping():
+        ...
+        ...    ranker = rank.Encoder(
+        ...         encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+        ...         on = ["title", "article"],
+        ...         k = 10,
+        ...     )
+        ...
+        ...    retriever = retrieve.Elastic(on=["title", "article"], k=2, index="test")
+        ...    retriever = retriever.reset()
+        ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
+        ...
+        ...    answers = retriever("Paris")
+        ...    assert answers[0]["embedding"].shape == (768,)
+
+        """
+        if embeddings is None:
+            embeddings = ranker.embs(documents=documents)
+
+        documents_embeddings = []
+        for doc, embedding in zip(documents, embeddings):
+            doc["embedding"] = embedding
+            doc = {
+                "_index": self.index,
+                "_source": doc,
+            }
+            documents_embeddings.append(doc)
+
+        helpers.bulk(self.es, documents_embeddings)
+        self.es.indices.refresh(index=self.index)
+
+        # Update counter of documents
+        self.count += len(documents)
+        return self
 
     def add(self, documents: list) -> "Elastic":
         """ElasticSearch bulk indexing.
@@ -90,8 +160,12 @@ class Elastic(Retriever):
             }
             for doc in documents
         ]
+
         helpers.bulk(self.es, documents)
         self.es.indices.refresh(index=self.index)
+
+        # Update counter of documents
+        self.count += len(documents)
         return self
 
     def __call__(self, q: str) -> list:
@@ -123,7 +197,15 @@ class Elastic(Retriever):
             body=query,
         )
 
-        return [document["_source"] for document in documents["hits"]["hits"]]
+        ranked = []
+        for document in documents["hits"]["hits"]:
+            document = document["_source"]
+            # Returns stored embeddings as numpy array.
+            if "embedding" in document:
+                document["embedding"] = np.array(document["embedding"])
+            ranked.append(document)
+
+        return ranked
 
     def reset(self) -> "Elastic":
         """Delete the selected index from ElasticSearch."""
