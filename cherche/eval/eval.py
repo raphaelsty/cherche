@@ -57,18 +57,24 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
 
     >>> search = search.add(documents)
 
-    >>> print(eval.eval(search=search, query_answers=query_answers))
-    {'Precision': '100.00%',
+    >>> print(eval.eval(search=search, query_answers=query_answers, hits_k=range(6)))
+    {'F1@1': '50.00%',
+     'F1@2': '80.00%',
+     'F1@3': '100.00%',
+     'F1@4': '100.00%',
+     'F1@5': '100.00%',
+     'Precision': '100.00%',
      'Precision@1': '100.00%',
      'Precision@2': '100.00%',
      'Precision@3': '100.00%',
      'Precision@4': '100.00%',
      'Precision@5': '100.00%',
-     'Precision@6': '100.00%',
-     'Precision@7': '100.00%',
-     'Precision@8': '100.00%',
-     'Precision@9': '100.00%',
-     'R-Precision': '100.00%'}
+     'R-Precision': '100.00%',
+     'Recall@1': '33.33%',
+     'Recall@2': '66.67%',
+     'Recall@3': '100.00%',
+     'Recall@4': '100.00%',
+     'Recall@5': '100.00%'}
 
     >>> print(search("Paris"))
     [{'label': 'Paris is the capital of France .',
@@ -102,8 +108,14 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
       'tags': ['lights', 'Paris'],
       'uri': 'tag:ParisLights'}]
 
+    References
+    ----------
+    1. (Evaluation Metrics For Information Retrieval)[https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk]
+
     """
     precision = collections.defaultdict(lambda: stats.Mean())
+    recall = collections.defaultdict(lambda: stats.Mean())
+    f1 = collections.defaultdict(lambda: stats.Mean())
     global_precision = stats.Mean()
     r_precision = stats.Mean()
 
@@ -119,6 +131,16 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
             for candidate in candidates[:k]:
                 precision[k].update(1) if candidate in golds else precision[k].update(0)
 
+        # Recall @ k
+        for k in hits_k:
+            if k == 0:
+                continue
+            positives = 0
+            for candidate in candidates[:k]:
+                if candidate in golds:
+                    positives += 1
+            recall[k].update(positives / len(golds)) if positives > 0 else recall[k].update(0)
+
         for k, candidate in enumerate(candidates):
             global_precision.update(1) if candidate in golds else global_precision.update(0)
 
@@ -129,7 +151,19 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
                 relevant += 1
         r_precision.update(relevant / len(golds) if relevant > 0 else 0)
 
+    # F1 @ k
+    for k in hits_k:
+        if k == 0:
+            continue
+        f1[k] = (
+            (2 * precision[k].get() * recall[k].get()) / (precision[k].get() + recall[k].get())
+            if (precision[k].get() + recall[k].get()) > 0
+            else 0
+        )
+
     metrics = {f"Precision@{k}": f"{metric.get():.2%}" for k, metric in precision.items()}
+    metrics.update({f"Recall@{k}": f"{metric.get():.2%}" for k, metric in recall.items()})
+    metrics.update({f"F1@{k}": f"{metric:.2%}" for k, metric in f1.items()})
     metrics.update({"R-Precision": f"{r_precision.get():.2%}"})
     metrics.update({"Precision": f"{global_precision.get():.2%}"})
     return metrics

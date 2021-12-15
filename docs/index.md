@@ -100,3 +100,13 @@ search("capital of france")
   'article': 'Lyon or Lyons (UK: , US: , French: [ljɔ̃] (listen); Arpitan: Liyon, pronounced [ʎjɔ̃]) is the third-largest city and second-largest urban area of France.',
   'similarity': 0.58004653}]
 ```
+
+## Acknowledgement
+
+Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create fancy pipelines simply. Do not hesitate to look at Haystack, Jina and TxtAi which offer very advanced solutions for neural search and are amazing. Haystack offers many tools to easily integrate your corpora into a neural search pipeline. This tool would not have been possible without them.
+
+- [Haystack](https://github.com/deepset-ai/haystack)
+- [Jina](https://github.com/jina-ai/jina)
+- [txtai](https://github.com/neuml/txtai)
+
+The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
