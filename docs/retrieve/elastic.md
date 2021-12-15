@@ -15,7 +15,7 @@ Once your Elasticsearch server is up and running, you can connect to it with Sea
 # Elasticsearch client
 >>> es = Elasticsearch()
 
-# Ask to cherche on article, retrieves the top 30 results, uses and create the index cherche if it does not exist.
+# Ask to cherche on title and article, retrieves the top 30 results, uses and create the index cherche if it does not exist.
 >>> retriever = retrieve.Elastic(on=["title", "article"], k=30, es=es, index="cherche")
 
 >>> documents = [
@@ -36,11 +36,12 @@ Once your Elasticsearch server is up and running, you can connect to it with Sea
 ...    }
 ... ]
 
-# Add the documents to the index
->>> retriever = retriever.add(documents=documents)
+>>> retriever.add(documents=documents)
 
-# Retrieve documents
 >>> retriever(q="science")
+```
+
+```python
 [{"article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
   "title": "Paris",
   "url": "https://en.wikipedia.org/wiki/Paris"}]

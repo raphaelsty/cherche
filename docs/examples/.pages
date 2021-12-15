@@ -3,3 +3,4 @@ nav:
     - retriever_ranker_qa.ipynb
     - retriever_ranker_summary.ipynb
     - union_intersection_rankers.ipynb
+    - eval_pipeline.ipynb

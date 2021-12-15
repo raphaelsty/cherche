@@ -67,10 +67,13 @@ You can also initialise the retriever with a custom [TfidfVectorizer](https://sc
 
 >>> retriever = retrieve.TfIdf(tfidf=tfidf, on=["title", "article"], k=30)
 
->>> retriever = retriever.add(documents=documents)
-
+>>> retriever.add(documents=documents)
 
 >>> retriever("fr")
+```
 
-
+```python
+[{'article': 'Paris is the capital and most populous city of France',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris'}]
 ```

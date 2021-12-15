@@ -1,6 +1,91 @@
 __all__ = ["Pipeline"]
 
+import collections
+
 from .base import Compose
+
+
+class PipelineUnion(Compose):
+    """Pipeline union."""
+
+    def __init__(self, models: list):
+        self.models = models
+
+    def __repr__(self) -> str:
+        repr = "Union Pipeline"
+        repr += "\n-----\n"
+        repr += super().__repr__()
+        repr += "\n-----"
+        return repr
+
+    def __call__(self, q: str, **kwargs) -> list:
+        """
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
+        query = {"q": q, **kwargs}
+        documents = []
+        for model in self.models:
+            for document in model(**query):
+                if "similarity" in document:
+                    document.pop("similarity")
+                # Drop duplicates documents:
+                if document in documents:
+                    continue
+                documents.append(document)
+        return documents
+
+    def __or__(self, model) -> "PipelineUnion":
+        self.models.append(model)
+        return self
+
+
+class PipelineIntersection(Compose):
+    """Pipelines intersection
+
+    Parameters
+    ----------
+    model
+        List of Pipelines of the union.
+
+
+    """
+
+    def __init__(self, models: list):
+        super().__init__(models=models)
+
+    def __repr__(self) -> str:
+        repr = "Union Pipeline"
+        repr += "\n-----\n"
+        repr += super().__repr__()
+        repr += "\n-----"
+        return repr
+
+    def __call__(self, q: str, **kwargs) -> list:
+        """
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
+        query = {"q": q, **kwargs}
+        counter_docs = collections.defaultdict(int)
+        for model in self.models:
+            for document in model(**query):
+                if "similarity" in document:
+                    document.pop("similarity")
+                counter_docs[tuple(sorted(document.items()))] += 1
+        return [
+            dict(document) for document, count in counter_docs.items() if count >= len(self.models)
+        ]
+
+    def __and__(self, model) -> "PipelineIntersection":
+        self.models.append(model)
+        return self
 
 
 class Pipeline(Compose):
@@ -123,3 +208,17 @@ class Pipeline(Compose):
             elif isinstance(answer, str):
                 return answer
         return query["documents"]
+
+    def __or__(self, other) -> PipelineUnion:
+        """Custom operator for union."""
+        if isinstance(other, PipelineUnion):
+            return PipelineUnion(models=[self] + [other.models])
+        else:
+            return PipelineUnion(models=[self, other])
+
+    def __and__(self, other) -> PipelineIntersection:
+        """Custom operator for intersection."""
+        if isinstance(other, PipelineIntersection):
+            return PipelineIntersection(models=[self] + [other.models])
+        else:
+            return PipelineIntersection(models=[self, other])

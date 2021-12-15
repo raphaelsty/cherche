@@ -5,7 +5,7 @@ import collections
 from creme import stats
 
 
-def eval(search, query_answers: list) -> dict:
+def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
     """Evaluate a pipeline using pairs of query and answers.
 
     Parameters
@@ -62,6 +62,12 @@ def eval(search, query_answers: list) -> dict:
      'Precision@1': '100.00%',
      'Precision@2': '100.00%',
      'Precision@3': '100.00%',
+     'Precision@4': '100.00%',
+     'Precision@5': '100.00%',
+     'Precision@6': '100.00%',
+     'Precision@7': '100.00%',
+     'Precision@8': '100.00%',
+     'Precision@9': '100.00%',
      'R-Precision': '100.00%'}
 
     >>> print(search("Paris"))
@@ -101,30 +107,29 @@ def eval(search, query_answers: list) -> dict:
     global_precision = stats.Mean()
     r_precision = stats.Mean()
 
-    for q, answers in query_answers:
-        documents = search(q=q)
+    for q, golds in query_answers:
+        candidates = search(q=q)
 
-        for document in documents:
-            if "similarity" in document:
-                document.pop("similarity")
+        for candidate in candidates:
+            if "similarity" in candidate:
+                candidate.pop("similarity")
 
         # Precision @ k
-        for k, document in enumerate(documents):
-            if document in answers:
-                precision[k].update(1)
-                global_precision.update(1)
-            else:
-                precision[k].update(0)
-                global_precision.update(0)
+        for k in hits_k:
+            for candidate in candidates[:k]:
+                precision[k].update(1) if candidate in golds else precision[k].update(0)
+
+        for k, candidate in enumerate(candidates):
+            global_precision.update(1) if candidate in golds else global_precision.update(0)
 
         # R-Precision
         relevant = 0
-        for document in documents[: len(answers)]:
-            if document in answers:
+        for candidate in candidates[: len(golds)]:
+            if candidate in golds:
                 relevant += 1
-        r_precision.update(relevant / len(answers) if relevant > 0 else 0)
+        r_precision.update(relevant / len(golds) if relevant > 0 else 0)
 
-    metrics = {f"Precision@{k + 1}": f"{metric.get():.2%}" for k, metric in precision.items()}
+    metrics = {f"Precision@{k}": f"{metric.get():.2%}" for k, metric in precision.items()}
     metrics.update({"R-Precision": f"{r_precision.get():.2%}"})
     metrics.update({"Precision": f"{global_precision.get():.2%}"})
     return metrics

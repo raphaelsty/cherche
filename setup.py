@@ -27,7 +27,7 @@ setuptools.setup(
         "tqdm == 4.62.3",
         "transformers == 4.12.0",
     ],
-    package_data={"cherche": ["data/towns.json"]},
+    package_data={"cherche": ["data/towns.json", "data/semanlink/*.json"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

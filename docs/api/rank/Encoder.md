@@ -22,7 +22,7 @@ SentenceBert Ranker.
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function cosine at 0x7fdc02892430>`
+- **similarity** – defaults to `<function cosine at 0x7f8341e0dca0>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
