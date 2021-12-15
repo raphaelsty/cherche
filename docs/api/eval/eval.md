@@ -60,18 +60,24 @@ Evaluate a pipeline using pairs of query and answers.
 
 >>> search = search.add(documents)
 
->>> print(eval.eval(search=search, query_answers=query_answers))
-{'Precision': '100.00%',
+>>> print(eval.eval(search=search, query_answers=query_answers, hits_k=range(6)))
+{'F1@1': '50.00%',
+ 'F1@2': '80.00%',
+ 'F1@3': '100.00%',
+ 'F1@4': '100.00%',
+ 'F1@5': '100.00%',
+ 'Precision': '100.00%',
  'Precision@1': '100.00%',
  'Precision@2': '100.00%',
  'Precision@3': '100.00%',
  'Precision@4': '100.00%',
  'Precision@5': '100.00%',
- 'Precision@6': '100.00%',
- 'Precision@7': '100.00%',
- 'Precision@8': '100.00%',
- 'Precision@9': '100.00%',
- 'R-Precision': '100.00%'}
+ 'R-Precision': '100.00%',
+ 'Recall@1': '33.33%',
+ 'Recall@2': '66.67%',
+ 'Recall@3': '100.00%',
+ 'Recall@4': '100.00%',
+ 'Recall@5': '100.00%'}
 
 >>> print(search("Paris"))
 [{'label': 'Paris is the capital of France .',
@@ -105,4 +111,8 @@ Evaluate a pipeline using pairs of query and answers.
   'tags': ['lights', 'Paris'],
   'uri': 'tag:ParisLights'}]
 ```
+
+## References
+
+1. (Evaluation Metrics For Information Retrieval)[https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk]
 
