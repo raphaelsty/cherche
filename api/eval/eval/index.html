@@ -1012,6 +1012,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1435,6 +1442,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1504,18 +1518,24 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span><span class="o">=</span><span class="n">search</span><span class="p">,</span> <span class="n">query_answers</span><span class="o">=</span><span class="n">query_answers</span><span class="p">))</span>
-<span class="p">{</span><span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span><span class="o">=</span><span class="n">search</span><span class="p">,</span> <span class="n">query_answers</span><span class="o">=</span><span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)))</span>
+<span class="p">{</span><span class="s1">&#39;F1@1&#39;</span><span class="p">:</span> <span class="s1">&#39;50.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;F1@2&#39;</span><span class="p">:</span> <span class="s1">&#39;80.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;F1@3&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;F1@4&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;F1@5&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
  <span class="s1">&#39;Precision@1&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
  <span class="s1">&#39;Precision@2&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
  <span class="s1">&#39;Precision@3&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
  <span class="s1">&#39;Precision@4&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
  <span class="s1">&#39;Precision@5&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
- <span class="s1">&#39;Precision@6&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
- <span class="s1">&#39;Precision@7&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
- <span class="s1">&#39;Precision@8&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
- <span class="s1">&#39;Precision@9&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
- <span class="s1">&#39;R-Precision&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">}</span>
+ <span class="s1">&#39;R-Precision&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Recall@1&#39;</span><span class="p">:</span> <span class="s1">&#39;33.33%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Recall@2&#39;</span><span class="p">:</span> <span class="s1">&#39;66.67%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Recall@3&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Recall@4&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;Recall@5&#39;</span><span class="p">:</span> <span class="s1">&#39;100.00%&#39;</span><span class="p">}</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Paris&quot;</span><span class="p">))</span>
 <span class="p">[{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital of France .&#39;</span><span class="p">,</span>
@@ -1549,6 +1569,10 @@
   <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;lights&#39;</span><span class="p">,</span> <span class="s1">&#39;Paris&#39;</span><span class="p">],</span>
   <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;tag:ParisLights&#39;</span><span class="p">}]</span>
 </code></pre></div>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ol>
+<li>(Evaluation Metrics For Information Retrieval)[https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk]</li>
+</ol>
 
               
             </article>
