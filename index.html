@@ -403,6 +403,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#acknowledgement" class="md-nav__link">
+    Acknowledgement
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1471,6 +1478,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#acknowledgement" class="md-nav__link">
+    Acknowledgement
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1566,6 +1580,14 @@
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Lyon or Lyons (UK: , US: , French: [ljɔ̃] (listen); Arpitan: Liyon, pronounced [ʎjɔ̃]) is the third-largest city and second-largest urban area of France.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.58004653</span><span class="p">}]</span>
 </code></pre></div>
+<h2 id="acknowledgement">Acknowledgement<a class="headerlink" href="#acknowledgement" title="Permanent link">&para;</a></h2>
+<p>Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create fancy pipelines simply. Do not hesitate to look at Haystack, Jina and TxtAi which offer very advanced solutions for neural search and are amazing. Haystack offers many tools to easily integrate your corpora into a neural search pipeline. This tool would not have been possible without them.</p>
+<ul>
+<li><a href="https://github.com/deepset-ai/haystack">Haystack</a></li>
+<li><a href="https://github.com/jina-ai/jina">Jina</a></li>
+<li><a href="https://github.com/neuml/txtai">txtai</a></li>
+</ul>
+<p>The BM25 models available in Cherche are a wrapper of <a href="https://github.com/dorianbrown/rank_bm25">rank_bm25</a>. Elastic retriever is a wrapper of <a href="https://elasticsearch-py.readthedocs.io/en/v7.15.2/">Python Elasticsearch Client</a>. TfIdf retriever is a wrapper of <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">Sklearn</a>. TfidfVectorizer. Flash retriever is a wrapper of <a href="https://github.com/vi3k6i5/flashtext">FlashText</a>. DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of <a href="https://www.sbert.net/docs/pretrained_models.html">SentenceTransformers</a> in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of <a href="https://huggingface.co/models?pipeline_tag=zero-shot-classification&amp;sort=downloads">Hugging Face</a> in a neural search pipeline.</p>
 
               
             </article>
