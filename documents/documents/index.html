@@ -743,6 +743,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/eval_pipeline/" class="md-nav__link">
+        Semanlink automatic tagging, evaluation
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -891,6 +905,20 @@
           data
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/data/arxiv-tags/" class="md-nav__link">
+        arxiv_tags
+      </a>
+    </li>
+  
+
+            
           
             
               
@@ -1361,23 +1389,23 @@
 <h1 id="documents">Documents<a class="headerlink" href="#documents" title="Permanent link">&para;</a></h1>
 <p>When using Cherche, you must define a document as a Python dictionary. A set of documents is a dictionary list. The name of the keys does not matter, you can choose the key of your choice to perform neural search.</p>
 <p>You will need to make sure that the key(s) you use for the search are available in the document set.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;capital and most populous city of France, with an estimated &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;population of 2,175,601 residents as of 2018, in an area of more &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;than 105 square kilometres (41 square miles).&#39;</span><span class="p">,</span>
-<span class="o">...</span>  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-<span class="o">...</span>  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
-<span class="o">...</span> <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s2">&quot;Since the 17th century, Paris has been one of Europe&#39;s major &quot;</span>
-<span class="o">...</span>             <span class="s1">&#39;centres of finance, diplomacy, commerce, fashion, gastronomy, &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;science, and arts.&#39;</span><span class="p">,</span>
-<span class="o">...</span>  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-<span class="o">...</span>  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
-<span class="o">...</span> <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;region and province of Île-de-France, or Paris Region, which has &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;an estimated population of 12,174,880, or about 18 percent of &#39;</span>
-<span class="o">...</span>             <span class="s1">&#39;the population of France as of 2017.&#39;</span><span class="p">,</span>
-<span class="o">...</span>  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-<span class="o">...</span>  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
+<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris (French pronunciation: </span><span class="se">\u200b</span><span class="s1">[paʁi] (listen)) is the &#39;</span>
+             <span class="s1">&#39;capital and most populous city of France, with an estimated &#39;</span>
+             <span class="s1">&#39;population of 2,175,601 residents as of 2018, in an area of more &#39;</span>
+             <span class="s1">&#39;than 105 square kilometres (41 square miles).&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s2">&quot;Since the 17th century, Paris has been one of Europe&#39;s major &quot;</span>
+             <span class="s1">&#39;centres of finance, diplomacy, commerce, fashion, gastronomy, &#39;</span>
+             <span class="s1">&#39;science, and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the &#39;</span>
+             <span class="s1">&#39;region and province of Île-de-France, or Paris Region, which has &#39;</span>
+             <span class="s1">&#39;an estimated population of 12,174,880, or about 18 percent of &#39;</span>
+             <span class="s1">&#39;the population of France as of 2017.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>
 
               
