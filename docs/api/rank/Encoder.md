@@ -22,7 +22,7 @@ SentenceBert Ranker.
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function cosine at 0x7f88a9f39d30>`
+- **similarity** – defaults to `<function cosine at 0x7f7b68a4f430>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -95,6 +95,14 @@ Encoder ranker
     - **embeddings**    
     - **path**     (*str*)    
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
+    
+???- note "embs"
+
+    Computes and returns embeddings of input documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
     
 ???- note "load_embeddings"
 

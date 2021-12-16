@@ -57,6 +57,7 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
     **Parameters**
 
     - **q**     (*str*)    
+    - **query**     (*str*)     – defaults to `None`    
     
 ???- note "add"
 
@@ -65,6 +66,16 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
     **Parameters**
 
     - **documents**     (*list*)    
+    
+???- note "add_embeddings"
+
+    Store documents and embeddings inside Elasticsearch using bulk indexing. Embeddings parameter has the priority over ranker. If embeddings are provided, ElasticSearch will index documents with their embeddings. If embeddings are not provided, the Ranker will be called to compute embeddings. This method is useful if you have to deal with large corpora.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    - **ranker**     (*cherche.rank.base.Ranker*)     – defaults to `None`    
+    - **embeddings**     (*list*)     – defaults to `None`    
     
 ???- note "reset"
 

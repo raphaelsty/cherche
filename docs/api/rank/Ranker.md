@@ -59,6 +59,14 @@ Abstract class for ranking models.
     - **path**     (*str*)    
         Path of the file dedicated to store the embeddings as a pickle file.
     
+???- note "embs"
+
+    Computes and returns embeddings of input documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    
 ???- note "load_embeddings"
 
     Load embeddings from an existing directory.

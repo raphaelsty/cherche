@@ -118,6 +118,7 @@ Question Answering
     **Parameters**
 
     - **q**     (*str*)    
+    - **kwargs**    
     
 ???- note "add"
 
