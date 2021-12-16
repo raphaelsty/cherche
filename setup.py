@@ -22,7 +22,7 @@ setuptools.setup(
         "numpy == 1.19.0",
         "pytest-cov == 3.0.0",
         "rank-bm25 == 0.2.1",
-        "scipy == 1.6.2",
+        "scipy == 1.5.3",
         "sentence-transformers==2.1.0",
         "tqdm == 4.62.3",
         "transformers == 4.12.0",
