@@ -19,7 +19,7 @@ setuptools.setup(
         "creme == 0.6.1",
         "elasticsearch == 7.10.0",
         "flashtext == 2.7",
-        "numpy == 1.21.4",
+        "numpy == 1.19.0",
         "pytest-cov == 3.0.0",
         "rank-bm25 == 0.2.1",
         "scipy == 1.6.2",
