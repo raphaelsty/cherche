@@ -124,8 +124,7 @@ Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net
 
 ## Acknowledgement
 
-Cherche is a minimalist solution and meets a need for modularity. Do not hesitate to look at Haystack,
-Jina and TxtAi which offer very advanced solutions for neural search and are amazing. Haystack offers many tools to easily integrate your corpora into a neural search pipeline. Search is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create fancy pipelines.
+Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create fancy pipelines simply. Do not hesitate to look at Haystack, Jina and TxtAi which offer very advanced solutions for neural search and are amazing. Haystack offers many tools to easily integrate your corpora into a neural search pipeline. This tool would not have been possible without such libraries.
 
 - [Haystack](https://github.com/deepset-ai/haystack)
 - [Jina](https://github.com/jina-ai/jina)
@@ -135,4 +134,4 @@ The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github
 
 ## Dev Team
 
-The Cherche team is composed of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant).
+The Cherche team is made of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant).

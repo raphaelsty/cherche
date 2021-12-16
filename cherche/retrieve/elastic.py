@@ -65,13 +65,12 @@ class Elastic(Retriever):
         self.k = k
         self.es = Elasticsearch() if es is None else es
         self.index = index
-        self.count = 0
 
         if not self.es.indices.exists(index=self.index):
             self.es.indices.create(index=self.index)
 
     def __len__(self) -> int:
-        return self.count
+        return int(self.es.cat.count(self.index, params={"format": "json"})[0]["count"])
 
     def add_embeddings(
         self, documents: list, ranker: Ranker = None, embeddings: list = None
@@ -140,8 +139,6 @@ class Elastic(Retriever):
         helpers.bulk(self.es, documents_embeddings)
         self.es.indices.refresh(index=self.index)
 
-        # Update counter of documents
-        self.count += len(documents)
         return self
 
     def add(self, documents: list) -> "Elastic":
@@ -164,30 +161,29 @@ class Elastic(Retriever):
         helpers.bulk(self.es, documents)
         self.es.indices.refresh(index=self.index)
 
-        # Update counter of documents
-        self.count += len(documents)
         return self
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, query: str = None) -> list:
         """ElasticSearch query.
 
         Parameters
         ----------
 
             q: User query.
-            on: Field to match the query.
+            query: Custom ElasticSearch query.
 
         """
-        query = {
-            "query": {
-                "multi_match": {
-                    "query": q,
-                    "type": "most_fields",
-                    "fields": self.on,
-                    "operator": "or",
-                }
-            },
-        }
+        if query is None:
+            query = {
+                "query": {
+                    "multi_match": {
+                        "query": q,
+                        "type": "most_fields",
+                        "fields": self.on,
+                        "operator": "or",
+                    }
+                },
+            }
 
         if self.k is not None:
             query["size"] = self.k

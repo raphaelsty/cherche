@@ -6,7 +6,14 @@ from .base import Compose
 
 
 class PipelineUnion(Compose):
-    """Pipeline union."""
+    """Pipeline union.
+
+    Parameters
+    ----------
+    models
+        List of models to include into the union.
+
+    """
 
     def __init__(self, models: list):
         self.models = models
@@ -50,7 +57,6 @@ class PipelineIntersection(Compose):
     ----------
     model
         List of Pipelines of the union.
-
 
     """
 
@@ -191,7 +197,7 @@ class Pipeline(Compose):
     def __init__(self, models: list) -> None:
         super().__init__(models=models)
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, **kwargs) -> list:
         """Compose pipeline
 
         Parameters
@@ -200,7 +206,7 @@ class Pipeline(Compose):
             Input query.
 
         """
-        query = {}
+        query = {**kwargs}
         for model in self.models:
             answer = model(q=q, **query)
             if isinstance(answer, list):

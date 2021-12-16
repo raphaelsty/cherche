@@ -81,14 +81,15 @@ class Ranker(abc.ABC):
         """Computes documents embeddings."""
         emb_documents = []
         for document in documents:
-            document = " ".join([document[field] for field in self.on])
             # ElasticSearch can store embeddings
             if "embedding" in document:
                 embedding = document.pop("embedding")
-            elif document in self.embeddings:
-                embedding = self.embeddings[document]
             else:
-                embedding = self.encoder(document)
+                document = " ".join([document[field] for field in self.on])
+                if document in self.embeddings:
+                    embedding = self.embeddings[document]
+                else:
+                    embedding = self.encoder(document)
             emb_documents.append(embedding)
         return emb_documents
 

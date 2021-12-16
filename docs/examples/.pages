@@ -4,3 +4,4 @@ nav:
     - retriever_ranker_summary.ipynb
     - union_intersection_rankers.ipynb
     - eval_pipeline.ipynb
+    - large_corpus.ipynb
