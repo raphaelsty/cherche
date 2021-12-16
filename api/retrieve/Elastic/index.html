@@ -738,7 +738,21 @@
   
     <li class="md-nav__item">
       <a href="../../../examples/eval_pipeline/" class="md-nav__link">
-        Semanlink automatic tagging, evaluation
+        Semanlink automatic tagging and evaluation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/large_corpus/" class="md-nav__link">
+        Handle large corpus
       </a>
     </li>
   
@@ -1525,6 +1539,7 @@
 <p><strong>Parameters</strong></p>
 <ul>
 <li><strong>q</strong>     (<em>str</em>)    </li>
+<li><strong>query</strong>     (<em>str</em>)     – defaults to <code>None</code>    </li>
 </ul>
 </details>
 <details class="- note">
@@ -1533,6 +1548,16 @@
 <p><strong>Parameters</strong></p>
 <ul>
 <li><strong>documents</strong>     (<em>list</em>)    </li>
+</ul>
+</details>
+<details class="- note">
+<summary>add_embeddings</summary>
+<p>Store documents and embeddings inside Elasticsearch using bulk indexing. Embeddings parameter has the priority over ranker. If embeddings are provided, ElasticSearch will index documents with their embeddings. If embeddings are not provided, the Ranker will be called to compute embeddings. This method is useful if you have to deal with large corpora.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>documents</strong>     (<em>list</em>)    </li>
+<li><strong>ranker</strong>     (<em>cherche.rank.base.Ranker</em>)     – defaults to <code>None</code>    </li>
+<li><strong>embeddings</strong>     (<em>list</em>)     – defaults to <code>None</code>    </li>
 </ul>
 </details>
 <details class="- note">

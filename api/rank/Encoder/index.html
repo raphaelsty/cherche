@@ -738,7 +738,21 @@
   
     <li class="md-nav__item">
       <a href="../../../examples/eval_pipeline/" class="md-nav__link">
-        Semanlink automatic tagging, evaluation
+        Semanlink automatic tagging and evaluation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/large_corpus/" class="md-nav__link">
+        Handle large corpus
       </a>
     </li>
   
@@ -1483,7 +1497,7 @@
 <p>Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.</p>
 </li>
 <li>
-<p><strong>similarity</strong> – defaults to <code>&lt;function cosine at 0x7f9b79b21d30&gt;</code></p>
+<p><strong>similarity</strong> – defaults to <code>&lt;function cosine at 0x7fa23889e430&gt;</code></p>
 <p>Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).</p>
 </li>
 </ul>
@@ -1549,6 +1563,14 @@
 <li><strong>embeddings</strong>    </li>
 <li><strong>path</strong>     (<em>str</em>)  <br />
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.</li>
+</ul>
+</details>
+<details class="- note">
+<summary>embs</summary>
+<p>Computes and returns embeddings of input documents.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>documents</strong>     (<em>list</em>)    </li>
 </ul>
 </details>
 <details class="- note">

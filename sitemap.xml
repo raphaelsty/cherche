@@ -2,202 +2,207 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://raphaelsty.github.io/cherche/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/overview/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Intersection/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Pipeline/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Union/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/data/arxiv-tags/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/data/load-towns/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/eval/eval/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/qa/QA/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/DPR/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/Encoder/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/Ranker/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/ZeroShot/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/BM25L/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/BM25Okapi/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Elastic/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Flash/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Retriever/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/TfIdf/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/similarity/cosine/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/similarity/dot/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/summary/Summary/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/documents/documents/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/documents/towns/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/eval_pipeline/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://raphaelsty.github.io/cherche/examples/large_corpus/</loc>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/retriever_ranker/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/retriever_ranker_qa/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/retriever_ranker_summary/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/union_intersection_rankers/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/pipeline/pipeline/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/dot_cos/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/gpu/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/pre_trained/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/rank/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/bm25/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/elastic/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/flash/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/retrieve/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/tfidf/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/scripts/</loc>
-         <lastmod>2021-12-15</lastmod>
+         <lastmod>2021-12-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

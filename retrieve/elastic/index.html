@@ -750,7 +750,21 @@
   
     <li class="md-nav__item">
       <a href="../../examples/eval_pipeline/" class="md-nav__link">
-        Semanlink automatic tagging, evaluation
+        Semanlink automatic tagging and evaluation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/large_corpus/" class="md-nav__link">
+        Handle large corpus
       </a>
     </li>
   
@@ -1395,7 +1409,7 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">elasticsearch</span> <span class="kn">import</span> <span class="n">Elasticsearch</span>
 
 <span class="c1"># Elasticsearch client</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">es</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">es</span> <span class="o">=</span> <span class="n">Elasticsearch</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="s2">&quot;localhost:9200&quot;</span><span class="p">)</span>
 
 <span class="c1"># Ask to cherche on title and article, retrieves the top 30 results, uses and create the index cherche if it does not exist.</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Elastic</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">es</span><span class="o">=</span><span class="n">es</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s2">&quot;cherche&quot;</span><span class="p">)</span>
