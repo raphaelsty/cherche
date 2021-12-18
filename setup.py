@@ -18,10 +18,10 @@ setuptools.setup(
     install_requires=[
         "creme == 0.6.1",
         "elasticsearch == 7.10.0",
+        "faiss-cpu == 1.7.1.post3",
         "flashtext == 2.7",
         "numpy == 1.19.0",
         "rank-bm25 == 0.2.1",
-        "scipy == 1.5.3",
         "sentence-transformers==2.1.0",
         "tqdm == 4.62.3",
         "transformers == 4.12.0",

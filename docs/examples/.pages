@@ -3,5 +3,6 @@ nav:
     - retriever_ranker_qa.ipynb
     - retriever_ranker_summary.ipynb
     - union_intersection_rankers.ipynb
+    - encoder_retriever.ipynb
     - eval_pipeline.ipynb
     - large_corpus.ipynb

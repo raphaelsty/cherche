@@ -1,5 +1,10 @@
 import abc
+import os
+import pickle
 import typing
+
+import faiss
+import numpy as np
 
 from ..compose import Intersection, Pipeline, Union
 
@@ -121,3 +126,44 @@ class _BM25(Retriever):
                 doc = self.tokenizer(doc)
             bm25_documents.append(doc)
         return bm25_documents
+
+
+class BaseEncoder(Retriever):
+    def __init__(self, encoder, on: typing.Union[str, list], k: int, path: str) -> None:
+        super().__init__(on, k)
+        self.encoder = encoder
+        self.path = path
+        self.tree = None
+
+    @staticmethod
+    def build_faiss(tree: faiss.IndexFlatL2, documents_embeddings: list) -> faiss.IndexFlatL2:
+        """Build faiss index.
+
+        Parameters
+        ----------
+        tree
+            faiss index.
+        documents_embeddings
+            Embeddings of the documents.
+
+        """
+        array_embeddings = np.array(documents_embeddings).astype(np.float32)
+        if tree is None:
+            tree = faiss.IndexFlatL2(array_embeddings.shape[1])
+        tree.add(array_embeddings)
+        return tree
+
+    @staticmethod
+    def load_embeddings(path: str) -> dict:
+        """Load embeddings from an existing directory."""
+        if not os.path.isfile(path):
+            return {}
+        with open(path, "rb") as input_embeddings:
+            embeddings = pickle.load(input_embeddings)
+        return embeddings
+
+    @staticmethod
+    def dump_embeddings(embeddings: dict, path: str) -> None:
+        """Dump embeddings to the selected directory."""
+        with open(path, "wb") as ouput_embeddings:
+            pickle.dump(embeddings, ouput_embeddings)

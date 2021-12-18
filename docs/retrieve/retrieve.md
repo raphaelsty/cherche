@@ -11,6 +11,7 @@ Here is the list of available retrievers:
 - `retrieve.BM25Okapi`
 - `retrieve.Elastic`
 - `retrieve.Flash`
+- `retrieve.Encoder`
 
 ## k and on parameters
 

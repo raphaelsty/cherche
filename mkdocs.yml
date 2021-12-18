@@ -32,6 +32,9 @@ extra:
     social:
       - icon: fontawesome/brands/github-alt
         link: https://github.com/raphaelsty/cherche
+    analytics:
+      provider: google
+      property: G-NHQCHCD6L6
 
 # Extensions
 markdown_extensions:

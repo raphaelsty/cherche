@@ -31,6 +31,7 @@
 - [BM25L](../retrieve/BM25L)
 - [BM25Okapi](../retrieve/BM25Okapi)
 - [Elastic](../retrieve/Elastic)
+- [Encoder](../retrieve/Encoder)
 - [Flash](../retrieve/Flash)
 - [Retriever](../retrieve/Retriever)
 - [TfIdf](../retrieve/TfIdf)
