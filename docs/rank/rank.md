@@ -2,6 +2,8 @@
 
 Rankers are models that measure the semantic similarity between a document and a query. The ranker allows to reorder the documents retrieved by the retriever (Tf-Idf, BM25, ...) based on the semantic similarity between the query and the documents retrieved.
 
+The `rank.Encoder` and `rank.DPR` rankers pre-compute the document embeddings once for all with the `add` method. This step can be time consuming if you don't have a GPU. The embeddings are pre-computed so that the model can then rank the retriever documents at lightning speed. The embeddings can be saved in `pickle` format via the `path` parameter when the ranker is initialized. At a new initialization the model will use the pre-computed embeddings if the `path` parameter is provided.
+
 ## k and on parameters
 
 The rankers all have a `k`-parameter during the initialization which allows to select the number of documents to keep after the ranking. The default value is`None`, i.e the ranker will not drop any documents.

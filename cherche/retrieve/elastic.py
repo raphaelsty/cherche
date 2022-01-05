@@ -90,8 +90,7 @@ class Elastic(Retriever):
               elastic retrieves documents, it will retrieve embeddings also. If not provided, it
               index embeddings.
         embeddings
-            Elastic can store embeddings of the ranker to limit ram usage. If provided,
-
+            Elastic can store embeddings of the ranker to limit ram usage.
 
         Examples
         --------

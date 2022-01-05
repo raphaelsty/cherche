@@ -3,7 +3,7 @@
 Search allows you to build a neural search pipeline easily. Search offers three operators
 to build a pipeline.
 
-- `+` Main pipeline operator to put a ranker after a retriever or to put a question answering;, summarization model after a retriever or a ranker.
+- `+` Main pipeline operator to put a ranker after a retriever or to put a question answering model or a summarization model after a retriever or a ranker.
 
 - `|` Union operator to gather the output of multiples retrievers or multiples rankers.
 
@@ -74,6 +74,7 @@ Encoder ranker
 ## Union `|`
 
 The union operator `|` is used to improve model recall by bringing together documents retrieved by multiple models.
+The documents most recommended by the model union will be those proposed by the first model. Then the union will add the documents of the second model, etc. Each time, the union will avoid duplicates (this is not a bug, it is a feature). This strategy allows to prioritize one model / pipeline over another. It may be wise to create a union between two separate pipelines, the first one with the greatest precision and the second one with better recall, like a spare wheel.
 
 ```python
 >>> from cherche import rank, retrieve

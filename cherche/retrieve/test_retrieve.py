@@ -9,6 +9,7 @@ def cherche_retrievers(on: str, k: int = None):
         retrieve.TfIdf(on=on, k=k),
         retrieve.BM25Okapi(on=on, k=k),
         retrieve.BM25L(on=on, k=k),
+        retrieve.Lunr(on=on, k=k),
     ]
 
 
@@ -62,11 +63,13 @@ def test_retriever(retriever, documents: list, k: int):
 
     # All documents contains is
     answers = retriever(q="is")
+    # Lunr consider "is" as a stopword.
+    if not isinstance(retriever, retrieve.Lunr):
 
-    if k is None or k >= len(documents):
-        assert len(answers) == len(documents)
-    else:
-        assert len(answers) == k
+        if k is None or k >= len(documents):
+            assert len(answers) == len(documents)
+        else:
+            assert len(answers) == k
 
 
 @pytest.mark.parametrize(

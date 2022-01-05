@@ -5,7 +5,12 @@ from .. import rank, retrieve
 
 def cherche_retrievers(on: str, k: int = None):
     """List of retrievers available in cherche."""
-    for retriever in [retrieve.TfIdf, retrieve.BM25Okapi, retrieve.BM25L]:
+    for retriever in [
+        retrieve.TfIdf,
+        retrieve.BM25Okapi,
+        retrieve.BM25L,
+        retrieve.Lunr,
+    ]:
         yield retriever(on=on, k=k)
 
 
@@ -102,7 +107,7 @@ def test_retriever_union(search, documents: list, k: int):
             retriever_a & retriever_b & retriever_c,
             documents(),
             k,
-            id=f"Intersection retrievers: {retriever_a.__class__.__name__} & {retriever_b.__class__.__name__}, k: {k}",
+            id=f"Intersection retrievers: {retriever_a.__class__.__name__} & {retriever_b.__class__.__name__}, & {retriever_c.__class__.__name__},  k: {k}",
         )
         for k in [None, 3, 4]
         for retriever_c in cherche_retrievers(on="title", k=k)
@@ -118,7 +123,7 @@ def test_retriever_intersection(search, documents: list, k: int):
 
     search = search.add(documents)
 
-    answers = search(q="Paris is Wikipedia Eiffel Montreal")
+    answers = search(q="Paris tower capital Montreal Canada France Wikipedia")
     if k is not None and k < len(documents):
         assert len(answers) >= (k // 3)
     else:
@@ -132,7 +137,7 @@ def test_retriever_intersection(search, documents: list, k: int):
     answers = search(q="is Wikipedia")
     assert len(answers) == 0
 
-    answers = search(q="Paris capital France  Wikipedia")
+    answers = search(q="Paris capital France Wikipedia")
     if k is None or k >= 1:
         assert len(answers) == 1
     else:

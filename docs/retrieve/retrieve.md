@@ -10,6 +10,7 @@ Here is the list of available retrievers:
 - `retrieve.BM25L`
 - `retrieve.BM25Okapi`
 - `retrieve.Elastic`
+- `retrieve.Lunr`
 - `retrieve.Flash`
 - `retrieve.Encoder`
 
