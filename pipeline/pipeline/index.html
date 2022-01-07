@@ -519,6 +519,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../retrieve/lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../retrieve/encoder/" class="md-nav__link">
         Encoder
       </a>
@@ -1323,6 +1337,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1531,7 +1559,7 @@
 to build a pipeline.</p>
 <ul>
 <li>
-<p><code>+</code> Main pipeline operator to put a ranker after a retriever or to put a question answering;, summarization model after a retriever or a ranker.</p>
+<p><code>+</code> Main pipeline operator to put a ranker after a retriever or to put a question answering model or a summarization model after a retriever or a ranker.</p>
 </li>
 <li>
 <p><code>|</code> Union operator to gather the output of multiples retrievers or multiples rankers.</p>
@@ -1593,7 +1621,8 @@ to build a pipeline.</p>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.2640568</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="union">Union <code>|</code><a class="headerlink" href="#union" title="Permanent link">&para;</a></h2>
-<p>The union operator <code>|</code> is used to improve model recall by bringing together documents retrieved by multiple models.</p>
+<p>The union operator <code>|</code> is used to improve model recall by bringing together documents retrieved by multiple models.
+The documents most recommended by the model union will be those proposed by the first model. Then the union will add the documents of the second model, etc  (this is not a bug, it is a feature). Each time, the union will avoid duplicates. This strategy allows to prioritize one model / pipeline over another. It may be wise to create a union between two separate pipelines, the first one with the greatest precision and the second one with better recall, like a spare wheel.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span><span class="p">,</span> <span class="n">retrieve</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
 

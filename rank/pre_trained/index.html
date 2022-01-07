@@ -519,6 +519,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../retrieve/lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../retrieve/encoder/" class="md-nav__link">
         Encoder
       </a>
@@ -620,6 +634,19 @@
   <a href="#rankencoder" class="md-nav__link">
     rank.Encoder
   </a>
+  
+    <nav class="md-nav" aria-label="rank.Encoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-index-to-documents-encoder" class="md-nav__link">
+    Map index to documents Encoder
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1323,6 +1350,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1496,6 +1537,19 @@
   <a href="#rankencoder" class="md-nav__link">
     rank.Encoder
   </a>
+  
+    <nav class="md-nav" aria-label="rank.Encoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map-index-to-documents-encoder" class="md-nav__link">
+    Map index to documents Encoder
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1725,35 +1779,59 @@
 </tbody>
 </table>
 <p>Here's how to load a Bert Sentence template into the <code>search.Encoder</code> template:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
 <span class="o">...</span> <span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;france&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.44967225</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.3609671</span><span class="p">}]</span>
+</code></pre></div>
+<h3 id="map-index-to-documents-encoder">Map index to documents Encoder<a class="headerlink" href="#map-index-to-documents-encoder" title="Permanent link">&para;</a></h3>
+<p>Optionally, you can map the documents to the identifiers proposed by the pipeline.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">+=</span> <span class="n">documents</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;france&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.44967225</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.3609671</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="rankdpr">rank.DPR<a class="headerlink" href="#rankdpr" title="Permanent link">&para;</a></h2>
 <p>The <a href="https://arxiv.org/abs/2004.04906">Dense Passage Retrieval</a> framework aims to train two distinct models, one that encodes the question and one that encodes the documents.</p>

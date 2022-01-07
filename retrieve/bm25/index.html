@@ -520,8 +520,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#map-keys-to-documents-bm25okapi" class="md-nav__link">
+    Map keys to documents BM25Okapi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#bm25l" class="md-nav__link">
     BM25L
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map-keys-to-documents-bm25l" class="md-nav__link">
+    Map keys to documents BM25L
   </a>
   
 </li>
@@ -557,6 +571,20 @@
     <li class="md-nav__item">
       <a href="../flash/" class="md-nav__link">
         Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lunr/" class="md-nav__link">
+        Lunr
       </a>
     </li>
   
@@ -1316,6 +1344,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1493,8 +1535,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#map-keys-to-documents-bm25okapi" class="md-nav__link">
+    Map keys to documents BM25Okapi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#bm25l" class="md-nav__link">
     BM25L
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#map-keys-to-documents-bm25l" class="md-nav__link">
+    Map keys to documents BM25L
   </a>
   
 </li>
@@ -1514,68 +1570,79 @@
 
 <h1 id="bm25">BM25<a class="headerlink" href="#bm25" title="Permanent link">&para;</a></h1>
 <p>The BM25 models proposed in Cherche are a direct link to the library <a href="https://github.com/dorianbrown/rank_bm25">Rank-BM25: A two line search engine</a>. The Rank-BM25 library implements the alogrithms of the publication <a href="http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf">Improvements to BM25 and Language Models Examined</a>.</p>
-<p>The Search BM25 models index the document corpus in memory with the <code>add</code> method.</p>
 <h2 id="bm25okapi">BM25Okapi<a class="headerlink" href="#bm25okapi" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">BM25Okapi</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">k1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">BM25Okapi</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">k1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;science&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span><span class="p">}]</span>
+<h2 id="map-keys-to-documents-bm25okapi">Map keys to documents BM25Okapi<a class="headerlink" href="#map-keys-to-documents-bm25okapi" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;science&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="bm25l">BM25L<a class="headerlink" href="#bm25l" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">BM25L</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">k1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">BM25L</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">k1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;science&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span><span class="p">}]</span>
+<h2 id="map-keys-to-documents-bm25l">Map keys to documents BM25L<a class="headerlink" href="#map-keys-to-documents-bm25l" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;science&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>
 
               

@@ -474,9 +474,40 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          TfIdf
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         TfIdf
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#map-keys-to-documents" class="md-nav__link">
+    Map keys to documents
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -519,6 +550,20 @@
     <li class="md-nav__item">
       <a href="../flash/" class="md-nav__link">
         Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lunr/" class="md-nav__link">
+        Lunr
       </a>
     </li>
   
@@ -1278,6 +1323,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1441,6 +1500,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#map-keys-to-documents" class="md-nav__link">
+    Map keys to documents
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1453,39 +1527,34 @@
                 
 
 <h1 id="tfidf">TfIdf<a class="headerlink" href="#tfidf" title="Permanent link">&para;</a></h1>
-<p>The TfIdf retriever is based on the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a> of sklearn. It computes the dot product between the query tf-idf vector and the documents tf-idf matrix and retrieve highest match.</p>
+<p>The TfIdf retriever is based on the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a> of sklearn. It computes the dot product between the query tf-idf vector and the documents tf-idf matrix and retrieve highest match. TfIdf retriever stores a sparse matrix and an index that links the rows of the matrix to document identifiers.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;france&quot;</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}]</span>
 </code></pre></div>
 <p>You can also initialise the retriever with a custom <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
@@ -1493,16 +1562,19 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
@@ -1511,13 +1583,16 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">tfidf</span><span class="o">=</span><span class="n">tfidf</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">tfidf</span><span class="o">=</span><span class="n">tfidf</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;fr&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
+<h2 id="map-keys-to-documents">Map keys to documents<a class="headerlink" href="#map-keys-to-documents" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;fr&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
 </code></pre></div>

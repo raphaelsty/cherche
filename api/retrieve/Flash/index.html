@@ -519,6 +519,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../retrieve/lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../retrieve/encoder/" class="md-nav__link">
         Encoder
       </a>
@@ -1332,6 +1346,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1547,6 +1575,10 @@
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
+<p><strong>key</strong> (<em>str</em>)</p>
+<p>Field identifier of each document.</p>
+</li>
+<li>
 <p><strong>on</strong> (<em>Union[str, list]</em>)</p>
 <p>Fields to use to match the query to the documents.</p>
 </li>
@@ -1563,23 +1595,34 @@
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="nb">print</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;This town is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;capital&quot;</span><span class="p">]},</span>
-<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;eiffel&quot;</span><span class="p">,</span> <span class="s2">&quot;tower&quot;</span><span class="p">]},</span>
-<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;canada&quot;</span><span class="p">,</span> <span class="s2">&quot;montreal&quot;</span><span class="p">]},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;This town is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;capital&quot;</span><span class="p">]},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;eiffel&quot;</span><span class="p">,</span> <span class="s2">&quot;tower&quot;</span><span class="p">]},</span>
+<span class="o">...</span>    <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;canada&quot;</span><span class="p">,</span> <span class="s2">&quot;montreal&quot;</span><span class="p">]},</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="n">Flash</span> <span class="n">retriever</span>
+     <span class="n">key</span><span class="p">:</span> <span class="nb">id</span>
+     <span class="n">on</span><span class="p">:</span> <span class="n">tags</span>
+     <span class="n">documents</span><span class="p">:</span> <span class="mi">6</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;paris&quot;</span><span class="p">))</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}]</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">retriever</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;paris&quot;</span><span class="p">))</span>
 <span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;This town is the capital of France&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;paris&#39;</span><span class="p">,</span> <span class="s1">&#39;capital&#39;</span><span class="p">],</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower is based in Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
   <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;paris&#39;</span><span class="p">,</span> <span class="s1">&#39;eiffel&#39;</span><span class="p">,</span> <span class="s1">&#39;tower&#39;</span><span class="p">],</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower&#39;</span><span class="p">}]</span>
 </code></pre></div>
@@ -1594,7 +1637,7 @@
 </details>
 <details class="- note">
 <summary>add</summary>
-<p>Add keywords to the retriever.</p>
+<p>Add keywords to the retriever. Streaming friendly.</p>
 <p><strong>Parameters</strong></p>
 <ul>
 <li><strong>documents</strong>     (<em>list</em>)    </li>
@@ -1634,13 +1677,13 @@
       
       
         
-        <a href="../Retriever/" class="md-footer__link md-footer__link--next" aria-label="Next: Retriever" rel="next">
+        <a href="../Lunr/" class="md-footer__link md-footer__link--next" aria-label="Next: Lunr" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Retriever
+              Lunr
             </div>
           </div>
           <div class="md-footer__button md-icon">

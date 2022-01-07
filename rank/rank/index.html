@@ -519,6 +519,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../retrieve/lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../retrieve/encoder/" class="md-nav__link">
         Encoder
       </a>
@@ -1337,6 +1351,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1556,6 +1584,7 @@
 
 <h1 id="rank">Rank<a class="headerlink" href="#rank" title="Permanent link">&para;</a></h1>
 <p>Rankers are models that measure the semantic similarity between a document and a query. The ranker allows to reorder the documents retrieved by the retriever (Tf-Idf, BM25, ...) based on the semantic similarity between the query and the documents retrieved.</p>
+<p>The <code>rank.Encoder</code> and <code>rank.DPR</code> rankers pre-compute the document embeddings once for all with the <code>add</code> method. This step can be time consuming if you don't have a GPU. The embeddings are pre-computed so that the model can then rank the retriever documents at lightning speed. The embeddings can be saved in <code>pickle</code> format via the <code>path</code> parameter when the ranker is initialized. At a new initialization the model will use the pre-computed embeddings if the <code>path</code> parameter is provided.</p>
 <h2 id="k-and-on-parameters">k and on parameters<a class="headerlink" href="#k-and-on-parameters" title="Permanent link">&para;</a></h2>
 <p>The rankers all have a <code>k</code>-parameter during the initialization which allows to select the number of documents to keep after the ranking. The default value is<code>None</code>, i.e the ranker will not drop any documents.</p>
 <p>The <code>on</code> parameter allows the ranker to be used on multiple fields. The rankers will concatenate the fields to calculate the embeddings of the documents.</p>

@@ -516,10 +516,55 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Flash
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Flash
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#map-keys-to-documents" class="md-nav__link">
+    Map keys to documents
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lunr/" class="md-nav__link">
+        Lunr
+      </a>
     </li>
   
 
@@ -1278,6 +1323,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../api/retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1441,6 +1500,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#map-keys-to-documents" class="md-nav__link">
+    Map keys to documents
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1458,22 +1532,26 @@ retrieve keywords in documents faster than anything else. FlashText is explained
 <a href="https://arxiv.org/pdf/1711.00046.pdf">Replace or Retrieve Keywords In Documents At Scale</a>.</p>
 <p>You can use Flash to find documents from a field that contains a keyword or a list of keywords.
 Flash will find documents that contain the keyword or keywords specified in the query.</p>
+<p>Flash can be updated with new documents using mini-batch via the <code>add</code> method.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;france&quot;</span><span class="p">,</span> <span class="s2">&quot;capital&quot;</span><span class="p">]</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;france&quot;</span><span class="p">,</span> <span class="s2">&quot;capital&quot;</span><span class="p">,</span> <span class="s2">&quot;fashion&quot;</span><span class="p">]</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span><span class="p">,</span>
@@ -1481,13 +1559,18 @@ Flash will find documents that contain the keyword or keywords specified in the 
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;fashion&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}]</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
+<h2 id="map-keys-to-documents">Map keys to documents<a class="headerlink" href="#map-keys-to-documents" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;fashion&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
   <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;paris&#39;</span><span class="p">,</span> <span class="s1">&#39;france&#39;</span><span class="p">,</span> <span class="s1">&#39;capital&#39;</span><span class="p">,</span> <span class="s1">&#39;fashion&#39;</span><span class="p">]}]</span>
@@ -1521,13 +1604,13 @@ Flash will find documents that contain the keyword or keywords specified in the 
       
       
         
-        <a href="../encoder/" class="md-footer__link md-footer__link--next" aria-label="Next: Encoder" rel="next">
+        <a href="../lunr/" class="md-footer__link md-footer__link--next" aria-label="Next: Lunr" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Encoder
+              Lunr
             </div>
           </div>
           <div class="md-footer__button md-icon">

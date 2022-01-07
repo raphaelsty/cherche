@@ -519,6 +519,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../retrieve/lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../retrieve/encoder/" class="md-nav__link">
         Encoder
       </a>
@@ -1325,6 +1339,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../retrieve/Retriever/" class="md-nav__link">
         Retriever
       </a>
@@ -1544,39 +1572,45 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
-<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital of France&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Eiffel tower is based in Paris.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
+<span class="o">...</span>     <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Montreal is in Canada.&quot;</span><span class="p">,</span> <span class="s2">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Wiki&quot;</span><span class="p">},</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
 <p>Retriever, Ranker:
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;pipeline_encoder.pkl&quot;</span>
 <span class="o">...</span> <span class="p">)</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">documents</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
 <span class="n">TfIdf</span> <span class="n">retriever</span>
+     <span class="n">key</span><span class="p">:</span> <span class="nb">id</span>
      <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
      <span class="n">documents</span><span class="p">:</span> <span class="mi">3</span>
 <span class="n">Encoder</span> <span class="n">ranker</span>
+     <span class="n">key</span><span class="p">:</span> <span class="nb">id</span>
      <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
      <span class="n">k</span><span class="p">:</span> <span class="kc">None</span>
      <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
      <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">pipeline_encoder</span><span class="o">.</span><span class="n">pkl</span>
+<span class="n">Mapping</span> <span class="n">to</span> <span class="n">documents</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">search</span><span class="p">(</span><span class="n">q</span> <span class="o">=</span> <span class="s2">&quot;Paris&quot;</span><span class="p">))</span>
 <span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital of France&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.7014109</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower is based in Paris.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.51787204</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower&#39;</span><span class="p">}]</span>
 </code></pre></div></p>
@@ -1588,13 +1622,16 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span>
 <span class="n">TfIdf</span> <span class="n">retriever</span>
+     <span class="n">key</span><span class="p">:</span> <span class="nb">id</span>
      <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
      <span class="n">documents</span><span class="p">:</span> <span class="mi">3</span>
 <span class="n">Encoder</span> <span class="n">ranker</span>
+     <span class="n">key</span><span class="p">:</span> <span class="nb">id</span>
      <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
      <span class="n">k</span><span class="p">:</span> <span class="kc">None</span>
      <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
      <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">pipeline_encoder</span><span class="o">.</span><span class="n">pkl</span>
+<span class="n">Mapping</span> <span class="n">to</span> <span class="n">documents</span>
 <span class="n">Question</span> <span class="n">Answering</span>
      <span class="n">model</span><span class="p">:</span> <span class="n">deepset</span><span class="o">/</span><span class="n">roberta</span><span class="o">-</span><span class="n">base</span><span class="o">-</span><span class="n">squad2</span>
      <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
@@ -1604,6 +1641,7 @@
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Eiffel tower is based in Paris.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
   <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
   <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.9643093347549438</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.65787125</span><span class="p">,</span>
   <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -1612,6 +1650,7 @@
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital of France&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
   <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">4.247476681484841e-05</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.7062913</span><span class="p">,</span>
   <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -1620,6 +1659,7 @@
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Montreal is in Canada.&#39;</span><span class="p">,</span>
   <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Wiki&#39;</span><span class="p">,</span>
   <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+  <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
   <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">1.7172554933608808e-08</span><span class="p">,</span>
   <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.3316515</span><span class="p">,</span>
   <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -1637,6 +1677,9 @@
 </details>
 <details class="- note">
 <summary>add</summary>
+</details>
+<details class="- note">
+<summary>reset</summary>
 </details>
 
               
