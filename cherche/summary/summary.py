@@ -82,7 +82,12 @@ class Summary:
             return []
 
         return self.model(
-            " ".join([" ".join([document[field] for field in self.on]) for document in documents]),
+            " ".join(
+                [
+                    " ".join([document.get(field, "") for field in self.on])
+                    for document in documents
+                ]
+            ),
             min_length=self.min_length,
             max_length=self.max_length,
             return_text=True,

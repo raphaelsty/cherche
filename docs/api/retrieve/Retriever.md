@@ -6,6 +6,10 @@ Retriever base class.
 
 ## Parameters
 
+- **key** (*str*)
+
+    Field identifier of each document.
+
 - **on** (*Union[str, list]*)
 
     Fields to use to match the query to the documents.
@@ -27,10 +31,4 @@ Retriever base class.
 
     - **q**     (*str*)    
     - **kwargs**    
-    
-???- note "add"
-
-    Add documents to the retriever.
-
-    - **documents**     (*list*)    
     

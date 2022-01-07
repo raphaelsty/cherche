@@ -74,7 +74,7 @@ Encoder ranker
 ## Union `|`
 
 The union operator `|` is used to improve model recall by bringing together documents retrieved by multiple models.
-The documents most recommended by the model union will be those proposed by the first model. Then the union will add the documents of the second model, etc. Each time, the union will avoid duplicates (this is not a bug, it is a feature). This strategy allows to prioritize one model / pipeline over another. It may be wise to create a union between two separate pipelines, the first one with the greatest precision and the second one with better recall, like a spare wheel.
+The documents most recommended by the model union will be those proposed by the first model. Then the union will add the documents of the second model, etc  (this is not a bug, it is a feature). Each time, the union will avoid duplicates. This strategy allows to prioritize one model / pipeline over another. It may be wise to create a union between two separate pipelines, the first one with the greatest precision and the second one with better recall, like a spare wheel.
 
 ```python
 >>> from cherche import rank, retrieve

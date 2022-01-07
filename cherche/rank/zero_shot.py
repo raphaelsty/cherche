@@ -6,7 +6,8 @@ from ..compose import Intersection, Pipeline, Union
 
 
 class ZeroShot:
-    """ZeroShot classifier for ranking.
+    """ZeroShot classifier for ranking. Zero shot does not pre-compute embeddings, it needs the
+    fields to rank the input documents.
 
     Parameters
     ----------
@@ -66,10 +67,14 @@ class ZeroShot:
     """
 
     def __init__(
-        self, encoder, on: typing.Union[str, list], k: int = None, multi_class: bool = True
+        self,
+        on: typing.Union[str, list],
+        encoder,
+        k: int = None,
+        multi_class: bool = True,
     ):
-        self.encoder = encoder
         self.on = on if isinstance(on, list) else [on]
+        self.encoder = encoder
         self.k = k
         self.multi_class = multi_class
 
@@ -97,17 +102,18 @@ class ZeroShot:
 
         scores = self.encoder(
             q,
-            [" ".join([document[field] for field in self.on]) for document in documents],
+            [" ".join([document.get(field, "") for field in self.on]) for document in documents],
             multi_label=self.multi_class,
         )
 
         ranked = []
         for label, score in zip(scores["labels"], scores["scores"]):
             for document in documents:
-                content = " ".join([document[field] for field in self.on])
+                content = " ".join([document.get(field, "") for field in self.on])
                 if content == label:
                     ranked.append(document)
                     document.update({"similarity": score})
+                    break
         return ranked[: self.k] if self.k is not None else ranked
 
     def __add__(self, other) -> Pipeline:

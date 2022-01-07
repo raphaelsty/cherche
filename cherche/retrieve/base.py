@@ -16,6 +16,8 @@ class Retriever(abc.ABC):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
     k
@@ -24,14 +26,16 @@ class Retriever(abc.ABC):
 
     """
 
-    def __init__(self, on: typing.Union[str, list], k: int) -> None:
+    def __init__(self, key: str, on: typing.Union[str, list], k: int) -> None:
         super().__init__()
+        self.key = key
         self.on = on if isinstance(on, list) else [on]
         self.k = k
-        self.documents = []
+        self.documents = None
 
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} retriever"
+        repr += f"\n \t key: {self.key}"
         repr += f"\n \t on: {', '.join(self.on)}"
         repr += f"\n \t documents: {self.__len__()}"
         return repr
@@ -40,25 +44,16 @@ class Retriever(abc.ABC):
     def __call__(self, q: str, **kwargs) -> list:
         return []
 
-    @abc.abstractclassmethod
-    def add(self, documents: list) -> "Retriever":
-        """Add documents to the retriever.
-
-        Parameters
-        ----------
-        documents
-            List of documents to add to the retriever.
-
-        """
-        return self
-
     def __len__(self):
-        return len(self.documents)
+        return len(self.documents) if self.documents is not None else 0
 
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""
         if isinstance(other, Pipeline):
             return Pipeline(self, other.models)
+        elif isinstance(other, list):
+            # Documents are part of the pipeline.
+            return Pipeline([self, {document[self.key]: document for document in other}])
         return Pipeline([self, other])
 
     def __or__(self, other) -> Union:
@@ -79,6 +74,8 @@ class _BM25(Retriever):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Field to use to match the query to the documents.
     bm25
@@ -92,10 +89,21 @@ class _BM25(Retriever):
 
     """
 
-    def __init__(self, on: typing.Union[str, list], bm25, tokenizer=None, k: int = None) -> None:
-        super().__init__(on=on, k=k)
+    def __init__(
+        self,
+        key: str,
+        on: typing.Union[str, list],
+        documents: list,
+        bm25,
+        tokenizer=None,
+        k: int = None,
+    ) -> None:
+        super().__init__(key=key, on=on, k=k)
         self.bm25 = bm25
         self.tokenizer = tokenizer
+        self.documents = {
+            index: {self.key: document[self.key]} for index, document in enumerate(documents)
+        }
 
     def __call__(self, q: str) -> list:
         """Retrieve the right document using BM25."""
@@ -115,11 +123,11 @@ class _BM25(Retriever):
         documents = [self.documents[index] for index in indexes]
         return documents[: self.k] if self.k is not None else documents
 
-    def _process_documents(self) -> list:
+    def _process_documents(self, documents: list) -> list:
         """Documents to feed BM25 retriever."""
         bm25_documents = []
-        for doc in self.documents:
-            doc = " ".join([doc[field] for field in self.on])
+        for doc in documents:
+            doc = " ".join([doc.get(field, "") for field in self.on])
             if self.tokenizer is None:
                 doc = doc.split(" ")
             else:
@@ -129,8 +137,8 @@ class _BM25(Retriever):
 
 
 class BaseEncoder(Retriever):
-    def __init__(self, encoder, on: typing.Union[str, list], k: int, path: str) -> None:
-        super().__init__(on, k)
+    def __init__(self, encoder, key: str, on: typing.Union[str, list], k: int, path: str) -> None:
+        super().__init__(key=key, on=on, k=k)
         self.encoder = encoder
         self.path = path
         self.tree = None

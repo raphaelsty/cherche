@@ -31,30 +31,6 @@ Parameters --------- arxiv_title     Include title of the arxiv paper inside the
 >>> documents, query_answers = data.arxiv_tags()
 
 >>> print(list(documents[0].keys()))
-['prefLabel',
- 'describedBy',
- 'type',
- 'broader',
- 'creationTime',
- 'altLabel',
- 'creationDate',
- 'comment',
- 'related',
- 'sameAs',
- 'homepage',
- 'weblog',
- 'linkToMusicBrainz',
- 'publish',
- 'subject',
- 'seeAlso',
- 'wikipage-en',
- 'uri',
- 'broader_prefLabel',
- 'broader_altLabel',
- 'broader_related',
- 'broader_prefLabel_text',
- 'broader_altLabel_text',
- 'prefLabel_text',
- 'altLabel_text']
+['creationTime', 'creationDate', 'comment', 'uri', 'broader_related']
 ```
 

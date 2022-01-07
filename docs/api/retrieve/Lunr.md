@@ -1,6 +1,6 @@
-# TfIdf
+# Lunr
 
-TfIdf retriever based on cosine similarities.
+Lunr is a Python implementation of Lunr.js by Oliver Nightingale. Lunr is a retriever dedicated for small and middle size corpus.
 
 
 
@@ -16,15 +16,11 @@ TfIdf retriever based on cosine similarities.
 
 - **documents** (*list*)
 
-    Documents in TFIdf retriever are static. The retriever must be reseted to index new documents.
+    Documents in Lunr retriever are static. The retriever must be reseted to index new documents.
 
 - **k** (*int*) – defaults to `None`
 
     Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
-
-- **tfidf** (*sklearn.feature_extraction.text.TfidfVectorizer*) – defaults to `None`
-
-    TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
 
 
 
@@ -40,10 +36,10 @@ TfIdf retriever based on cosine similarities.
 ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=3)
+>>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents, k=3)
 
 >>> retriever
-TfIdf retriever
+Lunr retriever
      key: id
      on: title, article
      documents: 3
@@ -76,6 +72,5 @@ TfIdf retriever
     
 ## References
 
-1. [sklearn.feature_extraction.text.TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
-2. [Python: tf-idf-cosine: to find document similarity](https://stackoverflow.com/questions/12118720/python-tf-idf-cosine-to-find-document-similarity)
+1. (Lunr.py)[https://github.com/yeraydiazdiaz/lunr.py]
 

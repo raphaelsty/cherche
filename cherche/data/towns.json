@@ -1,525 +1,630 @@
 [
     {
+        "id": 0,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Paris (French pronunciation: \u200b[pa\u0281i] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles)."
     },
     {
+        "id": 1,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Since the 17th century, Paris has been one of Europe's major centres of finance, diplomacy, commerce, fashion, gastronomy, science, and arts."
     },
     {
+        "id": 2,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The City of Paris is the centre and seat of government of the region and province of \u00cele-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017."
     },
     {
+        "id": 3,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The Paris Region had a GDP of \u20ac709 billion ($808 billion) in 2017."
     },
     {
+        "id": 4,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "According to the Economist Intelligence Unit Worldwide Cost of Living Survey in 2018, Paris was the second most expensive city in the world, after Singapore and ahead of Z\u00fcrich, Hong Kong, Oslo, and Geneva."
     },
     {
+        "id": 5,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Another source ranked Paris as most expensive, on par with Singapore and Hong Kong, in 2018."
     },
     {
+        "id": 6,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Paris is a major railway, highway, and air-transport hub served by two international airports: Paris\u2013Charles de Gaulle (the second-busiest airport in Europe) and Paris\u2013Orly."
     },
     {
+        "id": 7,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Opened in 1900, the city's subway system, the Paris M\u00e9tro, serves 5."
     },
     {
+        "id": 8,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "23 million passengers daily; it is the second-busiest metro system in Europe after the Moscow Metro."
     },
     {
+        "id": 9,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Gare du Nord is the 24th-busiest railway station in the world, but the busiest located outside Japan, with 262 million passengers in 2015."
     },
     {
+        "id": 10,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Paris is especially known for its museums and architectural landmarks: the Louvre remained the most-visited museum in the world with  2,677,504 visitors in 2020, despite the long museum closings caused by the COVID-19 virus."
     },
     {
+        "id": 11,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The Mus\u00e9e d'Orsay, Mus\u00e9e Marmottan Monet and Mus\u00e9e de l'Orangerie are noted for their collections of French Impressionist art."
     },
     {
+        "id": 12,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The Pompidou Centre Mus\u00e9e National d'Art Moderne has the largest collection of modern and contemporary art in Europe."
     },
     {
+        "id": 13,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The Mus\u00e9e Rodin and Mus\u00e9e Picasso exhibit the works of two noted Parisians."
     },
     {
+        "id": 14,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The historical district along the Seine in the city centre has been classified as a UNESCO World Heritage Site since 1991; popular landmarks there include the Cathedral of Notre Dame de Paris on the \u00cele de la Cit\u00e9, now closed for renovation after the 15 April 2019 fire."
     },
     {
+        "id": 15,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Other popular tourist sites include the Gothic royal chapel of Sainte-Chapelle, also on the \u00cele de la Cit\u00e9; the Eiffel Tower, constructed for the Paris Universal Exposition of 1889; the Grand Palais and Petit Palais, built for the Paris Universal Exposition of 1900; the Arc de Triomphe on the Champs-\u00c9lys\u00e9es, and the hill of Montmartre with its artistic history and its Basilica of Sacr\u00e9-Coeur."
     },
     {
+        "id": 16,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Paris received 12."
     },
     {
+        "id": 17,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "6 million visitors in 2020, measured by hotel stays, a drop of 73 percent from 2019, due to the COVID-19 virus."
     },
     {
+        "id": 18,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The number of foreign visitors declined by 80."
     },
     {
+        "id": 19,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Museums re-opened in 2021, with limitations on the number of visitors at a time and a requirement that visitors wear masks."
     },
     {
+        "id": 20,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The football club Paris Saint-Germain and the rugby union club Stade Fran\u00e7ais are based in Paris."
     },
     {
+        "id": 21,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The 80,000-seat Stade de France, built for the 1998 FIFA World Cup, is located just north of Paris in the neighbouring commune of Saint-Denis."
     },
     {
+        "id": 22,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Paris hosts the annual French Open Grand Slam tennis tournament on the red clay of Roland Garros."
     },
     {
+        "id": 23,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The city hosted the Olympic Games in 1900, 1924 and will host the 2024 Summer Olympics."
     },
     {
+        "id": 24,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "The 1938 and 1998 FIFA World Cups, the 2007 Rugby World Cup, as well as the 1960, 1984 and 2016 UEFA European Championships were also held in the city."
     },
     {
+        "id": 25,
         "title": "Paris",
         "url": "https://en.wikipedia.org/wiki/Paris",
         "article": "Every July, the Tour de France bicycle race finishes on the Avenue des Champs-\u00c9lys\u00e9es in Paris."
     },
     {
+        "id": 26,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "Toulouse ( too-LOOZ, French: [tuluz] (listen); Occitan: Tolosa [tu\u02c8luz\u0254]; Latin: Tolosa [t\u0254\u02c8lo\u02d0sa]) is the prefecture of the French department of Haute-Garonne and of the larger region of Occitanie."
     },
     {
+        "id": 27,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "The city is on the banks of the River Garonne, 150 kilometres (93 miles) from the Mediterranean Sea, 230 km (143 mi) from the Atlantic Ocean and 680 km (420 mi) from Paris."
     },
     {
+        "id": 28,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "It is the fourth-largest commune in France, with 479,553 inhabitants within its municipal boundaries (as of January 2017), after Paris, Marseille and Lyon, ahead of Nice; it has a population of 1,360,829 within its wider metropolitan area (also as of January 2017)."
     },
     {
+        "id": 29,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "Toulouse is the centre of the European aerospace industry, with the headquarters of Airbus (formerly EADS), the SPOT satellite system, ATR and the Aerospace Valley."
     },
     {
+        "id": 30,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "It also hosts the European headquarters of Intel and the CNES's Toulouse Space Centre (CST), the largest space centre in Europe."
     },
     {
+        "id": 31,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "Thales Alenia Space, ATR, SAFRAN, Liebherr-Aerospace and Airbus Defence and Space also have a significant presence in Toulouse."
     },
     {
+        "id": 32,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "The University of Toulouse is one of the oldest in Europe (founded in 1229) and, with more than 103,000 students, it is the fourth-largest university campus in France, after the universities of Paris, Lyon and Lille."
     },
     {
+        "id": 33,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "The air route between Toulouse\u2013Blagnac and the Parisian airports is the busiest in France, transporting 3."
     },
     {
+        "id": 34,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "2 million passengers in 2019."
     },
     {
+        "id": 35,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "According to the rankings of L'Express and Challenges, Toulouse is the most dynamic French city."
     },
     {
+        "id": 36,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "Founded by the Romans, the city was the capital of the Visigothic Kingdom in the 5th century and the capital of the province of Languedoc in the Late Middle Ages and early modern period (provinces were abolished during the French Revolution), making it the unofficial capital of the cultural region of Occitania (Southern France)."
     },
     {
+        "id": 37,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "It is now the capital of the Occitanie region, the second largest region in Metropolitan France."
     },
     {
+        "id": 38,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "Toulouse counts three UNESCO World Heritage Sites: the Canal du Midi (designated in 1996 and shared with other cities), and the Basilica of St."
     },
     {
+        "id": 39,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "Sernin, the largest remaining Romanesque building in Europe, designated in 1998 along with the former hospital H\u00f4tel-Dieu Saint-Jacques because of their significance to the Santiago de Compostela pilgrimage route."
     },
     {
+        "id": 40,
         "title": "Toulouse",
         "url": "https://en.wikipedia.org/wiki/Toulouse",
         "article": "The city's unique architecture made of pinkish terracotta bricks has earned Toulouse the nickname La Ville Rose (\"The Pink City\")."
     },
     {
+        "id": 41,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon or Lyons (UK: , US: , French: [lj\u0254\u0303] (listen); Arpitan: Liyon, pronounced [\u028ej\u0254\u0303]) is the third-largest city and second-largest urban area of France."
     },
     {
+        "id": 42,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "It is located at the confluence of the rivers Rh\u00f4ne and Sa\u00f4ne, about 470 km (292 mi) southeast of Paris, 320 km (199 mi) north of Marseille and 56 km (35 mi) northeast of Saint-\u00c9tienne."
     },
     {
+        "id": 43,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "The City of Lyon proper had a population of 516,092 in 2017 within its small municipal territory of 48 km2 (19 sq mi), but together with its suburbs and exurbs the Lyon metropolitan area had a population of 2,323,221 that same year, the second-most populated in France."
     },
     {
+        "id": 44,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon and 58 suburban municipalities have formed since 2015 the Metropolis of Lyon, a directly elected metropolitan authority now in charge of most urban issues, with a population of 1,385,927 in 2017."
     },
     {
+        "id": 45,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon is the prefecture of the Auvergne-Rh\u00f4ne-Alpes region and seat of the Departmental Council of Rh\u00f4ne (whose jurisdiction, however, no longer extends over the Metropolis of Lyon since 2015)."
     },
     {
+        "id": 46,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Former capital of the Gauls at the time of the Roman Empire, Lyon is the seat of an archbishopric whose holder bears the title of Primate of the Gauls."
     },
     {
+        "id": 47,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon became a major economic hub during the Renaissance."
     },
     {
+        "id": 48,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "The city is recognised for its cuisine and gastronomy, as well as historical and architectural landmarks; as such, the districts of Old Lyon, the Fourvi\u00e8re hill, the Presqu'\u00eele and the slopes of the Croix-Rousse are inscribed on the UNESCO World Heritage List."
     },
     {
+        "id": 49,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon was historically an important area for the production and weaving of silk."
     },
     {
+        "id": 50,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon played a significant role in the history of cinema: it is where Auguste and Louis Lumi\u00e8re invented the cinematograph."
     },
     {
+        "id": 51,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "It is also known for its light festival, the F\u00eate des Lumi\u00e8res, which begins every 8 December and lasts for four days, earning Lyon the title of \"Capital of Lights\"."
     },
     {
+        "id": 52,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Economically, Lyon is a major centre for banking, as well as for the chemical, pharmaceutical and biotech industries."
     },
     {
+        "id": 53,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "The city contains a significant software industry with a particular focus on video games; in recent years it has fostered a growing local start-up sector."
     },
     {
+        "id": 54,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "Lyon hosts the international headquarters of Interpol, the International Agency for Research on Cancer, as well as Euronews."
     },
     {
+        "id": 55,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "According to the Globalization and World Rankings Research Institute, Lyon is considered a Beta city, as of 2018."
     },
     {
+        "id": 56,
         "title": "Lyon",
         "url": "https://en.wikipedia.org/wiki/Lyon",
         "article": "It ranked second in France and 40th globally in Mercer's 2019 liveability rankings."
     },
     {
+        "id": 57,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Bordeaux ( bor-DOH, French: [b\u0254\u0281do] (listen); Gascon Occitan: Bord\u00e8u [bu\u027e\u02c8\u00f0\u025bw]) is a port city on the river Garonne in the Gironde department, Southwestern France."
     },
     {
+        "id": 58,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "The municipality (commune) of Bordeaux proper has a population of 257,804 (2019)."
     },
     {
+        "id": 59,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Bordeaux is the centre of Bordeaux M\u00e9tropole that has a population of 796,273 (2019), the sixth-largest in France after Paris, Lyon, Marseille, Toulouse and Lille with its immediate suburbs and closest satellite towns."
     },
     {
+        "id": 60,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "The larger metropolitan area has a population of 1,247,977 (2017)."
     },
     {
+        "id": 61,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "It is the capital of the Nouvelle-Aquitaine region, as well as the prefecture of the Gironde department."
     },
     {
+        "id": 62,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Its inhabitants are called \"Bordelais\" (for men) or \"Bordelaises\" (women)."
     },
     {
+        "id": 63,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "The term \"Bordelais\" may also refer to the city and its surrounding region."
     },
     {
+        "id": 64,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Crossed by the Garonne River and bordering the Atlantic Coast, the metropolis, a perfect example of the Age of Enlightment, has been showcasing since the 18th century its blond and golden facades, its courtyards and monumental squares, as well as its lively streets accompanied by its French-style gardens."
     },
     {
+        "id": 65,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Bordeaux is a world capital of wine, with its castles and vineyards of the Bordeaux region that stand on the hillsides of the Gironde and is home to the world's main wine fair, Vinexpo."
     },
     {
+        "id": 66,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Bordeaux is also one of the centers of gastronomy and business tourism for the organization of international congresses."
     },
     {
+        "id": 67,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "It is a central and strategic hub for the aeronautics, military and space sector, home to international companies such as Dassault Aviation, Ariane Group, Safran and Thal\u00e8s."
     },
     {
+        "id": 68,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "The link with aviation dates back to 1910, the year the first airplane flew over the city."
     },
     {
+        "id": 69,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "A crossroads of knowledge through university research, it is home to one of the only two megajoule lasers in the world, as well as a university population of nearly 100,000 students within the Bordeaux metropolis."
     },
     {
+        "id": 70,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Bordeaux is an international tourist destination for its architectural and cultural heritage with more than 350 historic monuments, making it, after Paris, the city with the most listed or registered monuments in France."
     },
     {
+        "id": 71,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "The \"Pearl of Aquitaine\" has been voted European Destination of the year in a 2015 online poll."
     },
     {
+        "id": 72,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "The metropolis has also received awards and rankings by international organizations such as in 1957, Bordeaux was awarded the Europe Prize for its efforts in transmitting the European ideal."
     },
     {
+        "id": 73,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "In June 2007, the Port of the Moon in historic Bordeux were inscribed on the UNESCO World Heritage List, for its outstanding architecture and urban ensemble and in recognition of Bordeux's international ijmportance over the last 2000 years."
     },
     {
+        "id": 74,
         "title": "Bordeaux",
         "url": "https://en.wikipedia.org/wiki/Bordeaux",
         "article": "Bordeaux is also ranked as a Sufficiency city by the Globalization and World Cities Research Network."
     },
     {
+        "id": 75,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Montreal ( (listen) MUN-tree-AWL; officially Montr\u00e9al, French: [m\u0254\u0303\u0281eal] (listen)) is the second-most populous city in Canada and most populous city in the Canadian province of Quebec."
     },
     {
+        "id": 76,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Founded in 1642 as Ville-Marie, or \"City of Mary\", it is named after Mount Royal, the triple-peaked hill in the heart of the city."
     },
     {
+        "id": 77,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "The city is centred on the Island of Montreal, which obtained its name from the same origin as the city, and a few much smaller peripheral islands, the largest of which is \u00cele Bizard."
     },
     {
+        "id": 78,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "The city is situated 196 km (122 mi) east of the national capital Ottawa, and 258 km (160 mi) southwest of the provincial capital, Quebec City."
     },
     {
+        "id": 79,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "In 2016, the city had a population of 1,704,694, with a population of 1,942,247 in the urban agglomeration, including all of the other municipalities on the Island of Montreal."
     },
     {
+        "id": 80,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "The broader metropolitan area had a population of 4,098,247."
     },
     {
+        "id": 81,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "French is the city's official language and in 2016 was the only home language of 53."
     },
     {
+        "id": 82,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "7% of the population, while 18."
     },
     {
+        "id": 83,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "2% spoke only English and 18."
     },
     {
+        "id": 84,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "7% spoke neither French nor English at home."
     },
     {
+        "id": 85,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "4% spoke a mix of French, English and a foreign language at home."
     },
     {
+        "id": 86,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "In the larger Montreal Census Metropolitan Area, 71."
     },
     {
+        "id": 87,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "2% of the population spoke at least French at home, compared to 19."
     },
     {
+        "id": 88,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "0% who spoke English."
     },
     {
+        "id": 89,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Still in 2016, 87."
     },
     {
+        "id": 90,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "4% of the population of the city of Montreal considered themselves fluent in French while 91."
     },
     {
+        "id": 91,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "4% could speak it in the metropolitan area."
     },
     {
+        "id": 92,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Montreal is one of the most bilingual cities in Quebec and Canada, with 57."
     },
     {
+        "id": 93,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "4% of the population able to speak both English and French."
     },
     {
+        "id": 94,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Montreal is the second-largest primarily French-speaking city in the developed world, after Paris."
     },
     {
+        "id": 95,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Historically the commercial capital of Canada, Montreal was surpassed in population and in economic strength by Toronto in the 1970s."
     },
     {
+        "id": 96,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "It remains an important centre of commerce, aerospace, transport, finance, pharmaceuticals, technology, design, education, art, culture, tourism, food, fashion, video game development, film, and world affairs."
     },
     {
+        "id": 97,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Montreal has the second-highest number of consulates in North America, serves as the location of the headquarters of the International Civil Aviation Organization, and was named a UNESCO City of Design in 2006."
     },
     {
+        "id": 98,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "In 2017, Montreal was ranked the 12th-most liveable city in the world by the Economist Intelligence Unit in its annual Global Liveability Ranking, although it slipped to rank 40 in the 2021 index, primarily due to stress on the healthcare system from the COVID-19 pandemic."
     },
     {
+        "id": 99,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "It is regularly ranked as a top ten city in the world to be a university student in the QS World University Rankings."
     },
     {
+        "id": 100,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "Montreal has hosted multiple international conferences and events, including the 1967 International and Universal Exposition and the 1976 Summer Olympics."
     },
     {
+        "id": 101,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "It is the only Canadian city to have held the Summer Olympics."
     },
     {
+        "id": 102,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "In 2018, Montreal was ranked as a global city."
     },
     {
+        "id": 103,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "The city hosts the Canadian Grand Prix of Formula One since 1978, as well as the Montreal International Jazz Festival, the largest jazz festival in the world, the Just for Laughs festival, the largest comedy festival in the world, and Les Francos de Montr\u00e9al, which is the largest event devoted exclusively to French-language music anywhere in the world."
     },
     {
+        "id": 104,
         "title": "Montreal",
         "url": "https://en.wikipedia.org/wiki/Montreal",
         "article": "It is also home to ice hockey team Montreal Canadiens, the franchise with the most Stanley Cup wins."

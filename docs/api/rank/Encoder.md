@@ -6,13 +6,17 @@ SentenceBert Ranker.
 
 ## Parameters
 
-- **encoder**
-
-    Encoding function dedicated to documents and query.
-
 - **on** (*Union[str, list]*)
 
     Fields to use to match the query to the documents.
+
+- **key** (*str*)
+
+    Field identifier of each document.
+
+- **encoder**
+
+    Encoding function dedicated to documents and query.
 
 - **k** (*int*) – defaults to `None`
 
@@ -22,7 +26,7 @@ SentenceBert Ranker.
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function cosine at 0x7fce6ae1d3a0>`
+- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function cosine at 0x7fdc8a576280>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -36,13 +40,14 @@ SentenceBert Ranker.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
 ...    path = "encoder.pkl"
@@ -50,19 +55,39 @@ SentenceBert Ranker.
 
 >>> ranker.add(documents=documents)
 Encoder ranker
+     key: id
      on: title, article
      k: 2
      similarity: cosine
      embeddings stored at: encoder.pkl
 
+>>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+[{'id': 0, 'similarity': 0.66051394}, {'id': 1, 'similarity': 0.5142564}]
+
 >>> print(ranker(q="Paris", documents=documents))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
-  'similarity': 0.66051406,
+  'id': 0,
+  'similarity': 0.66051394,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
-  'similarity': 0.5142565,
+  'id': 1,
+  'similarity': 0.5142564,
+  'title': 'Eiffel tower'}]
+
+>>> ranker += documents
+
+>>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+[{'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'id': 0,
+  'similarity': 0.66051394,
+  'title': 'Paris'},
+ {'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'id': 1,
+  'similarity': 0.5142564,
   'title': 'Eiffel tower'}]
 ```
 

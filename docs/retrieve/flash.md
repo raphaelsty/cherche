@@ -7,23 +7,28 @@ retrieve keywords in documents faster than anything else. FlashText is explained
 You can use Flash to find documents from a field that contains a keyword or a list of keywords.
 Flash will find documents that contain the keyword or keywords specified in the query.
 
+Flash can be updated with new documents using mini-batch via the `add` method.
+
 ```python
 >>> from cherche import retrieve
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris",
 ...        "tags": ["paris", "france", "capital"]
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris",
 ...        "tags": ["paris", "france", "capital", "fashion"]
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris",
@@ -31,15 +36,21 @@ Flash will find documents that contain the keyword or keywords specified in the 
 ...    }
 ... ]
 
->>> retriever = retrieve.Flash(on="tags")
+>>> retriever = retrieve.Flash(key="id", on="tags")
 
 >>> retriever.add(documents=documents)
 
 >>> retriever("fashion")
+[{'id': 1}]
 ```
 
+## Map keys to documents
+
 ```python
-[{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+>>> retriever += documents
+>>> retriever("fashion")
+[{'id': 1,
+  'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'tags': ['paris', 'france', 'capital', 'fashion']}]

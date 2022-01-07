@@ -111,39 +111,45 @@ class Pipeline(Compose):
     >>> from transformers import pipeline
 
     >>> documents = [
-    ...     {"title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-    ...     {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-    ...     {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
+    ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
+    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> retriever = retrieve.TfIdf(on="article")
+    >>> retriever = retrieve.TfIdf(key="id", on="article", documents=documents)
 
     Retriever, Ranker:
     >>> ranker = rank.Encoder(
-    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    on = "article",
+    ...    key = "id",
+    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    path = "pipeline_encoder.pkl"
     ... )
 
-    >>> search = retriever + ranker
+    >>> search = retriever + ranker + documents
 
     >>> search.add(documents=documents)
     TfIdf retriever
+         key: id
          on: article
          documents: 3
     Encoder ranker
+         key: id
          on: article
          k: None
          similarity: cosine
          embeddings stored at: pipeline_encoder.pkl
+    Mapping to documents
 
     >>> print(search(q = "Paris"))
     [{'article': 'Paris is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'similarity': 0.7014109,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
+      'id': 1,
       'similarity': 0.51787204,
       'title': 'Eiffel tower'}]
 
@@ -155,13 +161,16 @@ class Pipeline(Compose):
 
     >>> search
     TfIdf retriever
+         key: id
          on: article
          documents: 3
     Encoder ranker
+         key: id
          on: article
          k: None
          similarity: cosine
          embeddings stored at: pipeline_encoder.pkl
+    Mapping to documents
     Question Answering
          model: deepset/roberta-base-squad2
          on: article
@@ -171,6 +180,7 @@ class Pipeline(Compose):
       'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'end': 12,
+      'id': 1,
       'qa_score': 0.9643093347549438,
       'similarity': 0.65787125,
       'start': 0,
@@ -179,6 +189,7 @@ class Pipeline(Compose):
       'article': 'Paris is the capital of France',
       'author': 'Wiki',
       'end': 30,
+      'id': 0,
       'qa_score': 4.247476681484841e-05,
       'similarity': 0.7062913,
       'start': 0,
@@ -187,6 +198,7 @@ class Pipeline(Compose):
       'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'end': 22,
+      'id': 2,
       'qa_score': 1.7172554933608808e-08,
       'similarity': 0.3316515,
       'start': 0,
@@ -207,12 +219,31 @@ class Pipeline(Compose):
 
         """
         query = {**kwargs}
-        for model in self.models:
-            answer = model(q=q, **query)
+
+        for id_model, model in enumerate(self.models):
+
+            # mapping documents
+            if isinstance(model, dict):
+                key = self.models[id_model - 1].key
+                answer = [
+                    {**model[doc[key]], "similarity": doc["similarity"]}
+                    if "similarity" in doc
+                    else model[doc[key]]
+                    for doc in answer
+                ]
+
+            # retriever, ranker, qa, summarization
+            else:
+                answer = model(q=q, **query)
+
+            # retriever, ranker, qa,
             if isinstance(answer, list):
                 query.update({"documents": answer})
+
+            # summarization
             elif isinstance(answer, str):
                 return answer
+
         return query["documents"]
 
     def __or__(self, other) -> PipelineUnion:

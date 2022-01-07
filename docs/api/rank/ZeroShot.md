@@ -1,18 +1,18 @@
 # ZeroShot
 
-ZeroShot classifier for ranking.
+ZeroShot classifier for ranking. Zero shot does not pre-compute embeddings, it needs the fields to rank the input documents.
 
 
 
 ## Parameters
 
-- **encoder**
-
-    Zero shot classifier to use for ranking
-
 - **on** (*Union[str, list]*)
 
     Fields to use to match the query to the documents.
+
+- **encoder**
+
+    Zero shot classifier to use for ranking
 
 - **k** (*int*) – defaults to `None`
 

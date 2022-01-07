@@ -13,8 +13,13 @@ class TfIdf(Retriever):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
+    documents
+        Documents in TFIdf retriever are static. The retriever must be reseted to index new
+        documents.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -27,27 +32,33 @@ class TfIdf(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.TfIdf(on=["title", "article"], k=3)
-
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> retriever = retriever.add(documents=documents)
+    >>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=3)
 
     >>> retriever
     TfIdf retriever
+         key: id
          on: title, article
          documents: 3
 
     >>> print(retriever(q="paris"))
+    [{'id': 0}, {'id': 1}]
+
+    >>> retriever += documents
+
+    >>> print(retriever(q="paris"))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
+      'id': 1,
       'title': 'Eiffel tower'}]
 
     References
@@ -58,26 +69,23 @@ class TfIdf(Retriever):
     """
 
     def __init__(
-        self, on: typing.Union[str, list], k: int = None, tfidf: TfidfVectorizer = None
+        self,
+        key: str,
+        on: typing.Union[str, list],
+        documents: list,
+        k: int = None,
+        tfidf: TfidfVectorizer = None,
     ) -> None:
-        super().__init__(on=on, k=k)
+        super().__init__(key=key, on=on, k=k)
         self.tfidf = TfidfVectorizer() if tfidf is None else tfidf
-        self.matrix = None
 
-    def add(self, documents: list) -> "TfIdf":
-        """Add documents to the retriever.
+        self.documents = {
+            index: {self.key: document[self.key]} for index, document in enumerate(documents)
+        }
 
-        Parameters
-        ----------
-        documents
-            List of documents to add to the retriever.
-
-        """
-        self.documents += documents
         self.matrix = self.tfidf.fit_transform(
-            [" ".join([doc[field] for field in self.on]) for doc in self.documents]
+            [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
         )
-        return self
 
     def __call__(self, q: str) -> list:
         """Retrieve the right document."""

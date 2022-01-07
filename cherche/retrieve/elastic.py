@@ -36,15 +36,14 @@ class Elastic(Retriever):
 
     >>> if es.ping():
     ...
-    ...     retriever = retrieve.Elastic(on=["title", "article"], k=2, es=es, index="test")
+    ...     retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, es=es, index="test")
     ...
     ...     documents = [
-    ...         {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...         {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...         {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...         {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...         {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...         {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ...     ]
     ...
-    ...     retriever = retriever.reset()
     ...     retriever = retriever.add(documents=documents)
     ...     candidates = retriever(q="paris")
 
@@ -56,11 +55,13 @@ class Elastic(Retriever):
 
     def __init__(
         self,
+        key: str,
         on: typing.Union[str, list],
         k: int = None,
         es: Elasticsearch = None,
         index: str = "cherche",
     ) -> None:
+        self.key = key
         self.on = on if isinstance(on, list) else [on]
         self.k = k
         self.es = Elasticsearch() if es is None else es
@@ -100,9 +101,9 @@ class Elastic(Retriever):
         >>> from elasticsearch import Elasticsearch
 
         >>> documents = [
-        ...     {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-        ...     {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-        ...     {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+        ...     {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+        ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+        ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
         ... ]
 
         >>> es = Elasticsearch()
@@ -110,12 +111,13 @@ class Elastic(Retriever):
         >>> if es.ping():
         ...
         ...    ranker = rank.Encoder(
+        ...         key = "id",
         ...         encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
         ...         on = ["title", "article"],
         ...         k = 10,
         ...     )
         ...
-        ...    retriever = retrieve.Elastic(on=["title", "article"], k=2, index="test")
+        ...    retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, index="test")
         ...    retriever = retriever.reset()
         ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
         ...
@@ -126,15 +128,14 @@ class Elastic(Retriever):
         if embeddings is None:
             embeddings = ranker.embs(documents=documents)
 
-        documents_embeddings = []
-        for doc, embedding in zip(documents, embeddings):
-            doc["embedding"] = embedding
-            doc = {
+        documents_embeddings = [
+            {
+                "_id": doc[self.key],
                 "_index": self.index,
-                "_source": doc,
+                "_source": {**doc, "embedding": embedding},
             }
-            documents_embeddings.append(doc)
-
+            for doc, embedding in zip(documents, embeddings)
+        ]
         helpers.bulk(self.es, documents_embeddings)
         self.es.indices.refresh(index=self.index)
 
@@ -151,6 +152,7 @@ class Elastic(Retriever):
         """
         documents = [
             {
+                "_id": doc[self.key],
                 "_index": self.index,
                 "_source": doc,
             }

@@ -14,8 +14,13 @@ class Lunr(Retriever):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
+    documents
+        Documents in Lunr retriever are static. The retriever must be reseted to index new
+        documents.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -26,27 +31,33 @@ class Lunr(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.Lunr(on=["title", "article"], k=3)
-
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> retriever = retriever.add(documents=documents)
+    >>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents, k=3)
 
     >>> retriever
     Lunr retriever
+         key: id
          on: title, article
          documents: 3
 
     >>> print(retriever(q="paris"))
+    [{'id': 0}, {'id': 1}]
+
+    >>> retriever += documents
+
+    >>> print(retriever(q="paris"))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
+      'id': 1,
       'title': 'Eiffel tower'}]
 
     References
@@ -55,22 +66,18 @@ class Lunr(Retriever):
 
     """
 
-    def __init__(self, on: typing.Union[str, list], k: int = None) -> None:
-        super().__init__(on=on, k=k)
-        self.idx = None
+    def __init__(
+        self, key: str, on: typing.Union[str, list], documents: list, k: int = None
+    ) -> None:
+        super().__init__(key=key, on=on, k=k)
 
-    def add(self, documents: list) -> "Lunr":
-        self.documents += documents
-        self.documents = [{**document, "ref": idx} for idx, document in enumerate(self.documents)]
-        self.idx = lunr(ref="ref", fields=tuple(self.on), documents=self.documents)
-        return self
+        self.documents = {
+            str(document[self.key]): {self.key: document[self.key]} for document in documents
+        }
+
+        self.idx = lunr(ref=self.key, fields=tuple(self.on), documents=documents)
 
     def __call__(self, q: str) -> list:
         """Retrieve the right document."""
-        documents = []
-        for match in self.idx.search(q):
-            document = copy.copy(self.documents[int(match["ref"])])
-            document.pop("ref")
-            documents.append(document)
-
+        documents = [self.documents[match["ref"]] for match in self.idx.search(q)]
         return documents[: self.k] if self.k is not None else documents

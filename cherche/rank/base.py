@@ -13,6 +13,8 @@ class Ranker(abc.ABC):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields of the documents to use for ranking.
     encoder
@@ -27,17 +29,20 @@ class Ranker(abc.ABC):
     """
 
     def __init__(
-        self, on: typing.Union[str, list], encoder, k: int, path: str, similarity
+        self, key: str, on: typing.Union[str, list], encoder, k: int, path: str, similarity
     ) -> None:
+        self.key = key
         self.on = on if isinstance(on, list) else [on]
         self.encoder = encoder
         self.k = k
         self.path = path
         self.similarity = similarity
         self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
+        self.q_embeddings = {}
 
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} ranker"
+        repr += f"\n\t key: {self.key}"
         repr += f"\n\t on: {', '.join(self.on)}"
         repr += f"\n\t k: {self.k}"
         repr += f"\n\t similarity: {self.similarity.__name__}"
@@ -62,15 +67,18 @@ class Ranker(abc.ABC):
 
         """
         documents_rankers = []
+        keys = []
         for document in documents:
-            if isinstance(document, dict):
-                document = " ".join([document[field] for field in self.on])
-            if document not in self.embeddings:
-                documents_rankers.append(document)
+            if isinstance(document, str):
+                self.q_embeddings[document] = self.encoder(document)
+
+            elif document[self.key] not in self.embeddings:
+                keys.append(document[self.key])
+                documents_rankers.append(" ".join([document.get(field, "") for field in self.on]))
 
         if documents_rankers:
-            for document, embedding in zip(documents_rankers, self.encoder(documents_rankers)):
-                self.embeddings[document] = embedding
+            for key, embedding in zip(keys, self.encoder(documents_rankers)):
+                self.embeddings[key] = embedding
 
             if self.path is not None:
                 self.dump_embeddings(embeddings=self.embeddings, path=self.path)
@@ -85,11 +93,12 @@ class Ranker(abc.ABC):
             if "embedding" in document:
                 embedding = document.pop("embedding")
             else:
-                document = " ".join([document[field] for field in self.on])
-                if document in self.embeddings:
-                    embedding = self.embeddings[document]
+                if document[self.key] in self.embeddings:
+                    embedding = self.embeddings[document[self.key]]
                 else:
-                    embedding = self.encoder(document)
+                    embedding = self.encoder(
+                        " ".join([document.get(field, "") for field in self.on])
+                    )
             emb_documents.append(embedding)
         return emb_documents
 
@@ -131,8 +140,10 @@ class Ranker(abc.ABC):
         """Pipeline operator."""
         if isinstance(other, Pipeline):
             return other + self
-        else:
-            return Pipeline(models=[other, self])
+        elif isinstance(other, list):
+            # Documents are part of the pipeline.
+            return Pipeline([self, {document[self.key]: document for document in other}])
+        return Pipeline(models=[other, self])
 
     def __or__(self, other) -> Union:
         """Union operator."""
@@ -155,4 +166,6 @@ class Ranker(abc.ABC):
             List of documents for whiwh to computes embeddings.
 
         """
-        return self.encoder([" ".join([doc[field] for field in self.on]) for doc in documents])
+        return self.encoder(
+            [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
+        )

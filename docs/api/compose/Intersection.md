@@ -17,43 +17,57 @@ Intersection gathers retrieved documents from multiples retrievers and ranked do
 >>> from cherche import retrieve
 
 >>> documents = [
-...     {"title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-...     {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-...     {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
+...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
+...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
->>> search = retrieve.TfIdf(on="title") & retrieve.TfIdf(on="article") & retrieve.TfIdf(on="author")
+>>> search = (
+...    retrieve.TfIdf(key="id", on="title", documents=documents) &
+...    retrieve.TfIdf(key="id", on="article", documents=documents) &
+...    retrieve.Flash(key="id", on="author")
+... ) + documents
 
 >>> search.add(documents)
 Intersection
 -----
 TfIdf retriever
+     key: id
      on: title
      documents: 3
 TfIdf retriever
+     key: id
      on: article
      documents: 3
-TfIdf retriever
+Flash retriever
+     key: id
      on: author
-     documents: 3
+     documents: 1
 -----
+Mapping to documents
 
 >>> print(search(q = "Wiki Paris"))
 [{'article': 'Paris is the capital of France',
-  'author': 'Wiki',
-  'title': 'Paris'}]
+    'author': 'Wiki',
+    'id': 0,
+    'title': 'Paris'}]
 
 >>> print(search(q = "Paris"))
 []
 
 >>> print(search(q = "Wiki Paris Montreal Eiffel"))
 [{'article': 'Paris is the capital of France',
-  'author': 'Wiki',
-  'title': 'Paris'},
- {'article': 'Montreal is in Canada.', 'author': 'Wiki', 'title': 'Montreal'},
- {'article': 'Eiffel tower is based in Paris.',
-  'author': 'Wiki',
-  'title': 'Eiffel tower'}]
+      'author': 'Wiki',
+      'id': 0,
+      'title': 'Paris'},
+     {'article': 'Montreal is in Canada.',
+      'author': 'Wiki',
+      'id': 2,
+      'title': 'Montreal'},
+     {'article': 'Eiffel tower is based in Paris.',
+      'author': 'Wiki',
+      'id': 1,
+      'title': 'Eiffel tower'}]
 ```
 
 ## Methods
@@ -68,4 +82,6 @@ TfIdf retriever
     - **kwargs**    
     
 ???- note "add"
+
+???- note "reset"
 

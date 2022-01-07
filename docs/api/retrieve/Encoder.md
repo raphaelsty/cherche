@@ -8,6 +8,10 @@ Encoder as a retriever using Faiss Index.
 
 - **encoder**
 
+- **key** (*str*)
+
+    Field identifier of each document.
+
 - **on** (*Union[str, list]*)
 
     Field to use to retrieve documents.
@@ -28,13 +32,14 @@ Encoder as a retriever using Faiss Index.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
 >>> retriever = retrieve.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
 ...    path = "retriever_encoder.pkl"
@@ -42,31 +47,46 @@ Encoder as a retriever using Faiss Index.
 
 >>> retriever.add(documents)
 Encoder retriever
+     key: id
      on: title, article
      documents: 3
 
 >>> print(retriever("Paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'similarity': 1.472814254853544,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'similarity': 1.0293491728070765,
-  'title': 'Eiffel tower'}]
+[{'id': 0, 'similarity': 1.472814254853544},
+ {'id': 1, 'similarity': 1.0293491728070765}]
+
+>>> documents = [
+...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+... ]
 
 >>> retriever.add(documents)
 Encoder retriever
+     key: id
      on: title, article
      documents: 6
+
+>>> documents = [
+...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+... ]
+
+>>> retriever += documents
 
 >>> print(retriever("Paris"))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
+  'id': 3,
   'similarity': 1.472814254853544,
   'title': 'Paris'},
  {'article': 'This town is the capital of France',
   'author': 'Wiki',
+  'id': 0,
   'similarity': 1.472814254853544,
   'title': 'Paris'}]
 ```
@@ -83,7 +103,7 @@ Encoder retriever
     
 ???- note "add"
 
-    Add documents to the faiss index and export embeddings if the path is provided.
+    Add documents to the faiss index and export embeddings if the path is provided. Streaming friendly.
 
     **Parameters**
 

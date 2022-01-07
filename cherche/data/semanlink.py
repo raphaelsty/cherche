@@ -44,31 +44,7 @@ def arxiv_tags(
     >>> documents, query_answers = data.arxiv_tags()
 
     >>> print(list(documents[0].keys()))
-    ['prefLabel',
-     'describedBy',
-     'type',
-     'broader',
-     'creationTime',
-     'altLabel',
-     'creationDate',
-     'comment',
-     'related',
-     'sameAs',
-     'homepage',
-     'weblog',
-     'linkToMusicBrainz',
-     'publish',
-     'subject',
-     'seeAlso',
-     'wikipage-en',
-     'uri',
-     'broader_prefLabel',
-     'broader_altLabel',
-     'broader_related',
-     'broader_prefLabel_text',
-     'broader_altLabel_text',
-     'prefLabel_text',
-     'altLabel_text']
+    ['creationTime', 'creationDate', 'comment', 'uri', 'broader_related']
 
     """
     with open(pathlib.Path(__file__).parent.joinpath("semanlink/arxiv.json"), "r") as input_file:
@@ -93,14 +69,14 @@ def arxiv_tags(
                 query = f"{query} {doc[field]}"
 
         for tag in doc["tag"]:
-            answers.append(tags[tag])
+            answers.append(tags[tag]["uri"])
             counter[tag] += 1
         query_answers.append((query, answers))
 
     # Filter arxiv tags
     documents = []
     for tag in counter:
-        documents.append(tags[tag])
+        documents.append({key: value for key, value in tags[tag].items() if len(value) > 1})
 
     for tag in documents:
         for field, include in [
@@ -109,7 +85,7 @@ def arxiv_tags(
             ("prefLabel", prefLabel_text),
             ("altLabel", altLabel_text),
         ]:
-            if include:
+            if include and len(tag.get(field, "")) > 1:
                 tag[f"{field}_text"] = " ".join(tag[field])
 
     return documents, query_answers

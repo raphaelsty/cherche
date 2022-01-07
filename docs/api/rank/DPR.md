@@ -6,6 +6,14 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
 ## Parameters
 
+- **key** (*str*)
+
+    Field identifier of each document.
+
+- **on** (*Union[str, list]*)
+
+    Fields to use to match the query to the documents.
+
 - **encoder**
 
     Encoding function dedicated to documents.
@@ -13,10 +21,6 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 - **query_encoder**
 
     Encoding function dedicated to the query.
-
-- **on** (*Union[str, list]*)
-
-    Fields to use to match the query to the documents.
 
 - **k** (*int*) – defaults to `None`
 
@@ -26,7 +30,7 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function dot at 0x7fce6ae1dc10>`
+- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function dot at 0x7fdc8a5b8820>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -40,33 +44,54 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
 >>> ranker = rank.DPR(
+...    key = "id",
+...    on = ["title", "article"],
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    on = ["title", "article"],
 ...    k = 2,
 ...    path = "test_dpr.pkl"
 ... )
 
 >>> ranker.add(documents=documents)
 DPR ranker
+     key: id
      on: title, article
      k: 2
      similarity: dot
      embeddings stored at: test_dpr.pkl
 
->>> print(ranker(q="Paris", documents=documents, k=2))
+>>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+[{'id': 0, 'similarity': 74.02355}, {'id': 1, 'similarity': 68.80651}]
+
+>>> print(ranker(q="Paris", documents=documents))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
-  'similarity': 74.02353,
+  'id': 0,
+  'similarity': 74.02355,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
+  'id': 1,
+  'similarity': 68.80651,
+  'title': 'Eiffel tower'}]
+
+>>> ranker += documents
+
+>>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+[{'article': 'This town is the capital of France',
+  'author': 'Wiki',
+  'id': 0,
+  'similarity': 74.02355,
+  'title': 'Paris'},
+ {'article': 'Eiffel tower is based in Paris',
+  'author': 'Wiki',
+  'id': 1,
   'similarity': 68.80651,
   'title': 'Eiffel tower'}]
 ```

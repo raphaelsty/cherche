@@ -6,6 +6,10 @@ Abstract class for ranking models.
 
 ## Parameters
 
+- **key** (*str*)
+
+    Field identifier of each document.
+
 - **on** (*Union[str, list]*)
 
     Fields of the documents to use for ranking.

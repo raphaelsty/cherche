@@ -6,6 +6,10 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
 
 ## Parameters
 
+- **key** (*str*)
+
+    Field identifier of each document.
+
 - **on** (*Union[str, list]*)
 
     Fields to use to match the query to the documents.
@@ -26,23 +30,34 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
 >>> from pprint import pprint as print
 >>> from cherche import retrieve
 
->>> retriever = retrieve.Flash(on="tags", k=2)
-
 >>> documents = [
-...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
-...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
+...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
+...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
+...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
 ... ]
 
->>> retriever = retriever.add(documents=documents)
+>>> retriever = retrieve.Flash(key="id", on="tags", k=2)
+
+>>> retriever.add(documents=documents)
+Flash retriever
+     key: id
+     on: tags
+     documents: 6
+
+>>> print(retriever(q="paris"))
+[{'id': 0}, {'id': 1}]
+
+>>> retriever += documents
 
 >>> print(retriever(q="paris"))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
+  'id': 0,
   'tags': ['paris', 'capital'],
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
+  'id': 1,
   'tags': ['paris', 'eiffel', 'tower'],
   'title': 'Eiffel tower'}]
 ```
@@ -59,7 +74,7 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
     
 ???- note "add"
 
-    Add keywords to the retriever.
+    Add keywords to the retriever. Streaming friendly.
 
     **Parameters**
 

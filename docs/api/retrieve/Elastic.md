@@ -6,6 +6,8 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
 ## Parameters
 
+- **key** (*str*)
+
 - **on** (*Union[str, list]*)
 
     Fields to use to match the query to the documents.
@@ -35,15 +37,14 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
 >>> if es.ping():
 ...
-...     retriever = retrieve.Elastic(on=["title", "article"], k=2, es=es, index="test")
+...     retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, es=es, index="test")
 ...
 ...     documents = [
-...         {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...         {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...         {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...         {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+...         {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+...         {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ...     ]
 ...
-...     retriever = retriever.reset()
 ...     retriever = retriever.add(documents=documents)
 ...     candidates = retriever(q="paris")
 ```

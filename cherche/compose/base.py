@@ -8,6 +8,7 @@ class Compose(abc.ABC):
 
     def __init__(self, models: list) -> None:
         self.models = models
+        self.key = self.models[0].key if hasattr(self.models[0], "key") else None
 
     @abc.abstractmethod
     def __call__(self, q: str, **kwargs) -> list:
@@ -19,11 +20,27 @@ class Compose(abc.ABC):
                 model = model.add(documents=documents)
         return self
 
+    def reset(self) -> "Compose":
+        for model in self.models:
+            if hasattr(model, "reset") and callable(model.reset):
+                model = model.reset()
+        return self
+
     def __repr__(self) -> str:
-        repr = "\n".join([model.__repr__() for model in self.models])
+        repr = "\n".join(
+            [
+                model.__repr__() if not isinstance(model, dict) else "Mapping to documents"
+                for model in self.models
+            ]
+        )
         return repr
 
     def __add__(self, other) -> "Compose":
         """Pipeline operator."""
-        self.models.append(other)
+        if isinstance(other, list):
+            # Documents are part of the pipeline.
+            self.models.append({document[self.key]: document for document in other})
+        else:
+            self.key = self.other.key if hasattr(other, "key") else None
+            self.models.append(other)
         return self

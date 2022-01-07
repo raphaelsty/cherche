@@ -33,6 +33,7 @@
 - [Elastic](../retrieve/Elastic)
 - [Encoder](../retrieve/Encoder)
 - [Flash](../retrieve/Flash)
+- [Lunr](../retrieve/Lunr)
 - [Retriever](../retrieve/Retriever)
 - [TfIdf](../retrieve/TfIdf)
 

@@ -15,6 +15,8 @@ class Flash(Retriever):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
     k
@@ -30,23 +32,34 @@ class Flash(Retriever):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.Flash(on="tags", k=2)
-
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
     ... ]
 
-    >>> retriever = retriever.add(documents=documents)
+    >>> retriever = retrieve.Flash(key="id", on="tags", k=2)
+
+    >>> retriever.add(documents=documents)
+    Flash retriever
+         key: id
+         on: tags
+         documents: 6
+
+    >>> print(retriever(q="paris"))
+    [{'id': 0}, {'id': 1}]
+
+    >>> retriever += documents
 
     >>> print(retriever(q="paris"))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'tags': ['paris', 'capital'],
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
+      'id': 1,
       'tags': ['paris', 'eiffel', 'tower'],
       'title': 'Eiffel tower'}]
 
@@ -58,14 +71,18 @@ class Flash(Retriever):
     """
 
     def __init__(
-        self, on: typing.Union[str, list], k: int = None, keywords: KeywordProcessor = None
+        self,
+        key: str,
+        on: typing.Union[str, list],
+        k: int = None,
+        keywords: KeywordProcessor = None,
     ) -> None:
-        super().__init__(on=on, k=k)
+        super().__init__(key=key, on=on, k=k)
         self.documents = collections.defaultdict(list)
         self.keywords = KeywordProcessor() if keywords is None else keywords
 
     def add(self, documents: list) -> "Flash":
-        """Add keywords to the retriever.
+        """Add keywords to the retriever. Streaming friendly.
 
         Parameters
         ----------
@@ -77,9 +94,9 @@ class Flash(Retriever):
             for field in self.on:
                 if isinstance(document[field], list):
                     for tag in document[field]:
-                        self.documents[tag].append(document)
+                        self.documents[tag].append({self.key: document[self.key]})
                 else:
-                    self.documents[document[field]].append(document)
+                    self.documents[document[field]].append({self.key: document[self.key]})
                 self._add(document=document[field])
         return self
 

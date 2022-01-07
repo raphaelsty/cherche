@@ -1,32 +1,37 @@
 import pytest
+from cherche.rank.zero_shot import ZeroShot
 
 from .. import rank
 
 
-def cherche_rankers(on: str, k: int = None, path: str = None):
+def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
     """List of rankers available in cherche."""
     from sentence_transformers import SentenceTransformer
     from transformers import pipeline
 
     yield from [
         rank.DPR(
+            key=key,
+            on=on,
             encoder=SentenceTransformer("facebook-dpr-ctx_encoder-single-nq-base").encode,
             query_encoder=SentenceTransformer(
                 "facebook-dpr-question_encoder-single-nq-base"
             ).encode,
-            on=on,
             k=k,
             path=path,
         ),
         rank.Encoder(
+            key=key,
+            on=on,
             encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-            on="title",
             k=k,
             path=path,
         ),
         rank.ZeroShot(
-            pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
             on=on,
+            encoder=pipeline(
+                "zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"
+            ),
             k=k,
         ),
     ]
@@ -45,23 +50,31 @@ def documents():
 
 
 @pytest.mark.parametrize(
-    "ranker, documents, k",
+    "ranker, documents, key, k",
     [
         pytest.param(
             ranker,
             documents(),
+            "title",
             k,
             id=f"Ranker: {ranker.__class__.__name__}, k: {k}",
         )
         for k in [None, 0, 2, 4]
-        for ranker in cherche_rankers(on="article", k=k)
+        for ranker in cherche_rankers(key="title", on="article", k=k)
     ],
 )
-def test_ranker(ranker, documents: list, k: int):
+def test_ranker(ranker, documents: list, key: str, k: int):
     """Test ranker. Test if the number of ranked documents is coherent.
     Check for empty retrieved documents should returns an empty list.
     """
     ranker.add(documents)
+
+    # Zero shot needs all the fields
+    if not isinstance(ranker, ZeroShot):
+        ranker += documents
+        # Convert inputs document to a list of id [{"id": 0}, {"id": 1}, {"id": 2}]
+        documents = [{key: document[key]} for document in documents]
+
     answers = ranker(q="Eiffel tower France", documents=documents)
 
     if k is not None:

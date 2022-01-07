@@ -46,35 +46,63 @@ This list of models is not exhaustive, there are a wide range of models availabl
 Here's how to load a Bert Sentence template into the `search.Encoder` template:
 
 ```python
->>> from cherche import rank
+>>> from cherche import retrieve, rank
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    }
 ... ]
 
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+
 >>> ranker = rank.Encoder(
-...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
+...    key = "id",
 ...    on = "article",
-...    k = 5,
+...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
+...    k = 2,
 ...    path = "encoder.pkl"
 ... )
 
->>> ranker.add(documents)
+>>> search = retriever + ranker 
+>>> search.add(documents)
+>>> search(q="france")
+[{'id': 0, 'similarity': 0.44967225}, {'id': 2, 'similarity': 0.3609671}]
+```
+
+### Map index to documents Encoder
+
+Optionally, you can map the documents to the identifiers proposed by the pipeline.
+
+```python
+>>> search += documents
+>>> search(q="france")
+[{'id': 0,
+  'article': 'Paris is the capital and most populous city of France',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.44967225},
+ {'id': 2,
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
+  'title': 'Paris',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.3609671}]
 ```
 
 ## rank.DPR

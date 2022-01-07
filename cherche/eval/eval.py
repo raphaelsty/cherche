@@ -2,7 +2,7 @@ __all__ = ["eval"]
 
 import collections
 
-from creme import stats
+from river import stats
 
 
 def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
@@ -33,29 +33,47 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
 
     >>> query_answers = [
     ...     ("Paris", [
-    ...          {"label": "Paris is the capital of France .", "tags": "Paris", "uri": "tag:FranceCapital"},
-    ...          {"label": "It is known as the city of lights .", "tags": ["lights", "Paris"], "uri": "tag:ParisLights"},
-    ...          {"label": "The Eiffel Tower can be found in Paris .", "tags": ["Eiffel", "Paris"], "uri": "tag:EiffelTower"},
+    ...          {"uri": "tag:FranceCapital"},
+    ...          {"uri": "tag:ParisLights"},
+    ...          {"uri": "tag:EiffelTower"},
     ...      ]),
     ...     ("Toulouse", [
-    ...          {"label": "Toulouse is the capital of Occitanie .", "tags": ["Toulouse", "Occitanie"], "uri": "tag:Occitanie"},
-    ...          {"label": "It is known as the pink city .", "tags": ["Toulouse", "pink", "rose"], "uri": "tag:PinkCity"},
-    ...          {"label": "Toulouse has a famous rugby club .", "tags": ["Toulouse", "rugby"], "uri": "tag:ToulouseRugby"},
+    ...          {"uri": "tag:Occitanie"},
+    ...          {"uri": "tag:PinkCity"},
+    ...          {"uri": "tag:ToulouseRugby"},
     ...      ]),
     ... ]
 
-    >>> retriever = retrieve.Flash(on="tags") | retrieve.TfIdf(on="label")
+    >>> retriever = retrieve.Flash(key="uri", on="tags") | retrieve.TfIdf(key="uri", on="label", documents=documents)
 
     >>> ranker = rank.Encoder(
-    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    ...    key="uri",
     ...    on = "label",
+    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    k = 4,
     ...    path = "encoder.pkl"
     ... )
 
     >>> search = retriever + ranker
 
-    >>> search = search.add(documents)
+    >>> search.add(documents)
+    Union
+    -----
+    Flash retriever
+         key: uri
+         on: tags
+         documents: 8
+    TfIdf retriever
+         key: uri
+         on: label
+         documents: 6
+    -----
+    Encoder ranker
+         key: uri
+         on: label
+         k: 4
+         similarity: cosine
+         embeddings stored at: encoder.pkl
 
     >>> print(eval.eval(search=search, query_answers=query_answers, hits_k=range(6)))
     {'F1@1': '50.00%',
@@ -75,6 +93,8 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
      'Recall@3': '100.00%',
      'Recall@4': '100.00%',
      'Recall@5': '100.00%'}
+
+    >>> search += documents
 
     >>> print(search("Paris"))
     [{'label': 'Paris is the capital of France .',

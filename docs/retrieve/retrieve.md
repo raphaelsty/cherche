@@ -1,6 +1,6 @@
 # Retrieve
 
-Retrievers are models that can filter all documents from a query very quickly. They speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers that are slower will then be able to pull up the most relevant documents based on semantic similarity.
+Retrievers are models that can filter all documents from a query very quickly. They speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers that are slower will then be able to pull up the most relevant documents based on semantic similarity. The retrievers `retrieve.Elastic` and `retrieve.encoder` are the only retrievers in Search that are compatible with large corpora. The other retrievers are adapted to small or medium size corpora.
 
 ## Retrievers
 
@@ -20,68 +20,79 @@ The main parameter of retrievers is `on`. This is the field(s) on which the retr
 
 The retrievers all have a `k`-parameter during the initialization which allows to select the number of documents to retrieve. The default value is `None`, i.e the retrievers will retrieves all documents that match the query. If you choose a value for k, retriever will only retrieves k top documents that are more likely to match the query.
 
-Retrievers index and store the set of documents with the `add` method.
+## Add documents per batch to a retriever
+
+|      Retriever     |   Batch   |
+|:------------------:|:---------:|
+|  retrieve.Elastic  |     ✅     |
+|   retrieve.Flash   |     ✅     |
+|  retrieve.Encoder  |     ✅     |
+|   retrieve.TfIdf   |     ❌     |
+|   retrieve.BM25L   |     ❌     |
+| retrieve.BM25Okapi |     ❌     |
+|    retrieve.Lunr   |     ❌     |
+
+Retrievers store document `keys` to retrieve them later. Some retrievers can index documents keys in mini-batch like `retrieve.Elastic, retrieve.Flash and retrieve.Encoder`. These retrievers have the `add` method to add documents by batch. The other retrievers do not allow to add documents by batch. The set of documents must be declared at the initialization of the retriever via the `document` parameter.
 
 ```python
 >>> from cherche import retrieve
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    }
 ... ]
 
->>> retriever = retrieve.TfIdf(on="article", k=30)
-
->>> retriever.add(documents=documents)
+>>> retriever = retrieve.TfIdf(key="id", on="article", k=30, documents=documents)
 
 >>> retriever("Paris")
+[{'id': 0}, {'id': 1}, {'id': 2}]
 ```
 
+## Matching indexes to documents
+
+It is possible to directly retrieve the content of the documents using the `+` operator between
+retriever and documents. This is useful if you want to see the results of your searches directly.
+
 ```python
-[{'article': 'Paris is the capital and most populous city of France',
+>>> retriever += documents
+>>> retriever("Paris")
+[{'id': 0,
+  'article': 'Paris is the capital and most populous city of France',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
+ {'id': 1,
+  'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
+ {'id': 2,
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris'}]
 ```
 
 ## Search on multiples fields
 
-It is possible to search on more than one field of the document to find more documents.
+Also we can search on more than one single field to retrieve more documents.
 
 ```python
->>> retriever = retrieve.TfIdf(on=["title", "article"], k=30)
-
->>> retriever.add(documents=documents)
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
 
 >>> retriever("Paris")
-```
-
-```python
-[{'article': 'Paris is the capital and most populous city of France',
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'}]
+[{'id': 0}, {'id': 1}, {'id': 2}]
 ```

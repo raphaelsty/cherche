@@ -3,6 +3,7 @@ __all__ = ["Encoder"]
 import typing
 
 import numpy as np
+from cherche import similarity
 
 from ..similarity import cosine
 from .base import Ranker
@@ -13,6 +14,8 @@ class Encoder(Ranker):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
     encoder
@@ -35,13 +38,14 @@ class Encoder(Ranker):
     >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    ...    key = "id",
     ...    on = ["title", "article"],
     ...    k = 2,
     ...    path = "encoder.pkl"
@@ -49,32 +53,53 @@ class Encoder(Ranker):
 
     >>> ranker.add(documents=documents)
     Encoder ranker
+         key: id
          on: title, article
          k: 2
          similarity: cosine
          embeddings stored at: encoder.pkl
 
+    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+    [{'id': 0, 'similarity': 0.66051394}, {'id': 1, 'similarity': 0.5142564}]
+
     >>> print(ranker(q="Paris", documents=documents))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
-      'similarity': 0.66051406,
+      'id': 0,
+      'similarity': 0.66051394,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
-      'similarity': 0.5142565,
+      'id': 1,
+      'similarity': 0.5142564,
+      'title': 'Eiffel tower'}]
+
+    >>> ranker += documents
+
+    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+    [{'article': 'This town is the capital of France',
+      'author': 'Wiki',
+      'id': 0,
+      'similarity': 0.66051394,
+      'title': 'Paris'},
+     {'article': 'Eiffel tower is based in Paris',
+      'author': 'Wiki',
+      'id': 1,
+      'similarity': 0.5142564,
       'title': 'Eiffel tower'}]
 
     """
 
     def __init__(
         self,
-        encoder,
         on: typing.Union[str, list],
+        key: str,
+        encoder,
         k: int = None,
         path: str = None,
-        similarity=cosine,
+        similarity: similarity = cosine,
     ) -> None:
-        super().__init__(on=on, encoder=encoder, k=k, path=path, similarity=similarity)
+        super().__init__(key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity)
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
         """Encode inputs query and ranks documents based on the similarity between the query and
@@ -91,7 +116,7 @@ class Encoder(Ranker):
         if not documents:
             return []
 
-        emb_q = self.encoder(q) if q not in self.embeddings else self.embeddings[q]
+        emb_q = self.encoder(q) if q not in self.q_embeddings else self.q_embeddings[q]
         emb_documents = self._emb_documents(documents=documents)
         return self._rank(
             similarities=self.similarity(emb_q=emb_q, emb_documents=emb_documents),

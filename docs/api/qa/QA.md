@@ -6,13 +6,13 @@ Question Answering model.
 
 ## Parameters
 
-- **model**
-
-    Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
-
 - **on** (*Union[str, list]*)
 
     Fields to use to answer to the question.
+
+- **model**
+
+    Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
 
 - **k** (*int*) – defaults to `None`
 

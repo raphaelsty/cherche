@@ -13,8 +13,13 @@ class BM25Okapi(_BM25):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
+    documents
+        Documents in BM25Okapi retriever are static. The retriever must be reseted to index new
+        documents.
     tokenizer
         Tokenizer to use, the default one split on spaces. This tokenizer should have a
         `tokenizer.__call__` method that returns the list of tokenized tokens.
@@ -34,33 +39,35 @@ class BM25Okapi(_BM25):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.BM25Okapi(on=["title", "article"], k=3, k1=1.5, b=0.75, epsilon=0.25)
-
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> retriever = retriever.add(documents=documents)
+    >>> retriever = retrieve.BM25Okapi(key="id", on=["title", "article"], documents=documents, k=3, k1=1.5, b=0.75, epsilon=0.25)
 
     >>> retriever
     BM25Okapi retriever
+         key: id
          on: title, article
          documents: 3
 
     >>> print(retriever(q="Paris"))
+    [{'id': 1}, {'id': 0}]
+
+    >>> retriever += documents
+
+    >>> print(retriever(q="Paris"))
     [{'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
+      'id': 1,
       'title': 'Eiffel tower'},
      {'article': 'This town is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'title': 'Paris'}]
 
-    >>> retriever.add(documents=documents)
-    BM25Okapi retriever
-        on: title, article
-        documents: 6
 
     References
     ----------
@@ -71,31 +78,25 @@ class BM25Okapi(_BM25):
 
     def __init__(
         self,
+        key: str,
         on: typing.Union[str, list],
+        documents: list,
         tokenizer=None,
         k: int = None,
         k1: float = 1.5,
         b: float = 0.75,
         epsilon: float = 0.25,
     ) -> None:
-        super().__init__(on=on, bm25=rank_bm25okapi, tokenizer=tokenizer, k=k)
-        self.k1 = k1
-        self.b = b
-        self.epsilon = epsilon
+        super().__init__(
+            key=key, on=on, documents=documents, bm25=rank_bm25okapi, tokenizer=tokenizer, k=k
+        )
 
-    def add(self, documents: list) -> "BM25Okapi":
-        """Add documents to the retriever.
-
-        Parameters
-        ----------
-        documents
-            List of documents to add to the retriever.
-
-        """
-        self.documents += documents
-        bm25_documents = self._process_documents()
-        self.model = self.bm25(bm25_documents, k1=self.k1, b=self.b, epsilon=self.epsilon)
-        return self
+        self.model = self.bm25(
+            self._process_documents(documents=documents),
+            k1=k1,
+            b=b,
+            epsilon=epsilon,
+        )
 
 
 class BM25L(_BM25):
@@ -103,11 +104,16 @@ class BM25L(_BM25):
 
     Parameters
     ----------
+    key
+        Field identifier of each document.
     on
         Fields to use to match the query to the documents.
     tokenizer
         Tokenizer to use, the default one split on spaces. This tokenizer should have a
         `tokenizer.__call__` method that returns the list of tokenized tokens.
+    documents
+        Documents in BM25L retriever are static. The retriever must be reseted to index new
+        documents.
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -124,33 +130,34 @@ class BM25L(_BM25):
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
-    >>> retriever = retrieve.BM25L(on=["title", "article"], k=3, k1=1.5, b=0.75, delta=0.5)
-
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> retriever = retriever.add(documents=documents)
+    >>> retriever = retrieve.BM25L(key="id", on=["title", "article"], documents=documents, k=3, k1=1.5, b=0.75, delta=0.5)
 
     >>> retriever
     BM25L retriever
+        key: id
         on: title, article
         documents: 3
 
     >>> print(retriever(q="Paris"))
+    [{'id': 1}, {'id': 0}]
+
+    >>> retriever = retriever + documents
+
+    >>> print(retriever(q="Paris"))
     [{'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
+      'id': 1,
       'title': 'Eiffel tower'},
      {'article': 'This town is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'title': 'Paris'}]
-
-    >>> retriever.add(documents=documents)
-    BM25L retriever
-        on: title, article
-        documents: 6
 
     References
     ----------
@@ -161,29 +168,19 @@ class BM25L(_BM25):
 
     def __init__(
         self,
+        key: str,
         on: typing.Union[str, list],
+        documents: list,
         tokenizer=None,
         k: int = None,
         k1: float = 1.5,
         b: float = 0.75,
         delta: float = 0.5,
     ) -> None:
-        super().__init__(on=on, bm25=rank_bm25l, tokenizer=tokenizer, k=k)
-        self.k1 = k1
-        self.b = b
-        self.delta = delta
-        self.model = None
+        super().__init__(
+            key=key, on=on, documents=documents, bm25=rank_bm25l, tokenizer=tokenizer, k=k
+        )
 
-    def add(self, documents: list) -> "BM25L":
-        """Add documents to the retriever.
-
-        Parameters
-        ----------
-        documents
-            List of documents to add to the retriever.
-
-        """
-        self.documents += documents
-        bm25_documents = self._process_documents()
-        self.model = self.bm25(bm25_documents, k1=self.k1, b=self.b, delta=self.delta)
-        return self
+        self.model = self.bm25(
+            self._process_documents(documents=documents), k1=k1, b=b, delta=delta
+        )

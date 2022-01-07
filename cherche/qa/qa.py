@@ -11,10 +11,10 @@ class QA:
 
     Parameters
     ----------
-    model
-        Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
     on
         Fields to use to answer to the question.
+    model
+        Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
     k
         Number of documents to retrieve. Default is None, i.e all documents that match the query
         will be retrieved.
@@ -61,9 +61,9 @@ class QA:
 
     """
 
-    def __init__(self, model, on: typing.Union[str, list], k: int = None) -> None:
-        self.model = model
+    def __init__(self, on: typing.Union[str, list], model, k: int = None) -> None:
         self.on = on if isinstance(on, list) else [on]
+        self.model = model
         self.k = k
 
     def __repr__(self) -> str:
@@ -90,7 +90,8 @@ class QA:
             {
                 "question": [q for _ in documents],
                 "context": [
-                    " ".join([document[field] for field in self.on]) for document in documents
+                    " ".join([document.get(field, "") for field in self.on])
+                    for document in documents
                 ],
             },
         )

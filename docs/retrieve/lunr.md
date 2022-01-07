@@ -9,34 +9,42 @@ retriever such as Elasticsearch when it's not needed. Lunr stores an inverted in
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    }
 ... ]
 
->>> retriever = retrieve.Lunr(on=["title", "article"], k=30)
-
->>> retriever.add(documents=documents)
+>>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents, k=30)
 
 >>> retriever("france")
+[{'id': 0}, {'id': 2}]
 ```
 
+## Map keys to documents
+
 ```python
-[{'article': 'Paris is the capital and most populous city of France',
+>>> retriever += documents
+>>> retriever("france")
+[{'id': 0,
+  'article': 'Paris is the capital and most populous city of France',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
+ {'id': 2,
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris'}]
 ```

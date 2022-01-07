@@ -3,40 +3,44 @@ import pytest
 from .. import rank, retrieve
 
 
-def cherche_retrievers(on: str, k: int = None):
+def cherche_retrievers(key: str, on: str, k: int = None):
     """List of retrievers available in cherche."""
     yield from [
-        retrieve.TfIdf(on=on, k=k),
-        retrieve.BM25Okapi(on=on, k=k),
-        retrieve.BM25L(on=on, k=k),
-        retrieve.Lunr(on=on, k=k),
+        retrieve.TfIdf(key=key, on=on, documents=documents(), k=k),
+        retrieve.BM25Okapi(key=key, on=on, documents=documents(), k=k),
+        retrieve.BM25L(key=key, on=on, documents=documents(), k=k),
+        retrieve.Lunr(key=key, on=on, documents=documents(), k=k),
     ]
 
 
-def cherche_rankers(on: str, k: int = None, path: str = None):
+def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
     """List of rankers available in cherche."""
     from sentence_transformers import SentenceTransformer
     from transformers import pipeline
 
     yield from [
         rank.DPR(
+            key=key,
+            on=on,
             encoder=SentenceTransformer("facebook-dpr-ctx_encoder-single-nq-base").encode,
             query_encoder=SentenceTransformer(
                 "facebook-dpr-question_encoder-single-nq-base"
             ).encode,
-            on=on,
             k=k,
             path=path,
         ),
         rank.Encoder(
-            encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+            key=key,
             on="title",
+            encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
             k=k,
             path=path,
         ),
         rank.ZeroShot(
-            pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
             on=on,
+            encoder=pipeline(
+                "zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"
+            ),
             k=k,
         ),
     ]
@@ -78,14 +82,16 @@ def tags():
     "search, documents, k",
     [
         pytest.param(
-            retriever + ranker,
+            retriever + ranker + documents()
+            if not isinstance(ranker, rank.ZeroShot)
+            else retriever + documents() + ranker,
             documents(),
             k,
             id=f"retriever: {retriever.__class__.__name__}, ranker: {ranker.__class__.__name__}, k: {k}",
         )
         for k in [None, 0, 2, 4]
-        for ranker in cherche_rankers(on="title", k=k, path=None)
-        for retriever in cherche_retrievers(on="title", k=k)
+        for ranker in cherche_rankers(key="url", on="title", k=k, path=None)
+        for retriever in cherche_retrievers(key="url", on="title", k=k)
     ],
 )
 def test_retriever_ranker(search, documents: list, k: int):
@@ -95,7 +101,7 @@ def test_retriever_ranker(search, documents: list, k: int):
     """
     search = search.add(documents)
 
-    answers = search(q="Github library with PyTorch and Transformers.")
+    answers = search(q="Github library with PyTorch and Transformers")
     for index in range(len(documents) if k is None else k):
         if index in [0, 1]:
             assert answers[index]["title"] == "Github library with Pytorch and Transformers."
@@ -117,13 +123,15 @@ def test_retriever_ranker(search, documents: list, k: int):
     "search, documents, k",
     [
         pytest.param(
-            retrieve.Flash(on="tags", k=k) + ranker,
+            retrieve.Flash(key="uri", on="tags", k=k) + ranker + tags()
+            if not isinstance(ranker, rank.ZeroShot)
+            else retrieve.Flash(key="uri", on="tags", k=k) + tags() + ranker,
             tags(),
             k,
-            id=f"retriever: Flash, {ranker.__class__.__name__}, k: {k}",
+            id=f"retriever: Flash, ranker: {ranker.__class__.__name__}, k: {k}",
         )
         for k in [None, 0, 2, 4]
-        for ranker in cherche_rankers(on="title", k=k, path=None)
+        for ranker in cherche_rankers(key="uri", on="title", k=k, path=None)
     ],
 )
 def test_flash_ranker(search, documents: list, k: int):
