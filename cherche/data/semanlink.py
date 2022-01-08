@@ -14,7 +14,7 @@ def arxiv_tags(
     prefLabel_text: bool = True,
     altLabel_text: bool = True,
 ) -> tuple:
-    """Semanlink tags arxiv dataset. The objective of this dataset is to evaluate a neural
+    """Semanlink tags arXiv documents. The objective of this dataset is to evaluate a neural
     search pipeline for automatic tagging of arxiv documents. This function returns the set of tags
     and the pairs arxiv documents and tags.
 

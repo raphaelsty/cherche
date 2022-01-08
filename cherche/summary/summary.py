@@ -29,7 +29,12 @@ class Summary:
     >>> from cherche import summary
 
     >>> model = summary.Summary(
-    ...    model = pipeline("summarization", model="sshleifer/distilbart-cnn-6-6", tokenizer="sshleifer/distilbart-cnn-6-6", framework="pt"),
+    ...    model = pipeline(
+    ...         "summarization",
+    ...         model="sshleifer/distilbart-cnn-6-6",
+    ...         tokenizer="sshleifer/distilbart-cnn-6-6",
+    ...         framework="pt"
+    ...    ),
     ...    on = ["title", "article"],
     ... )
 

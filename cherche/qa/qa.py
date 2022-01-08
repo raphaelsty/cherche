@@ -16,7 +16,7 @@ class QA:
     model
         Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
 
     Examples
@@ -80,7 +80,7 @@ class QA:
         q
             Input question.
         documents
-            List of documents in which the model will retrieve the answer.
+            List of documents within which the model will retrieve the answer.
 
         """
         if not documents:

@@ -1,6 +1,6 @@
 # Towns
 
-Cherche provides a dummy dataset made of sentences from Wikipedia that describes towns such as Toulouse, Paris, Bordeaux and Lyon. This dataset is intended to easily test Cherche, it contains about 200 documents.
+Cherche provides a dummy dataset made of sentences from Wikipedia that describes towns such as Toulouse, Paris, Bordeaux and Lyon. This dataset is intended to easily test Cherche. It contains ~200 documents.
 
 ```python
 >>> from cherche import data

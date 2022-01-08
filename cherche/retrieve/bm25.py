@@ -18,13 +18,13 @@ class BM25Okapi(_BM25):
     on
         Fields to use to match the query to the documents.
     documents
-        Documents in BM25Okapi retriever are static. The retriever must be reseted to index new
+        Documents in BM25Okapi retriever are static. The retriever must be reset to index new
         documents.
     tokenizer
         Tokenizer to use, the default one split on spaces. This tokenizer should have a
         `tokenizer.__call__` method that returns the list of tokenized tokens.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
     k1
         Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
@@ -115,7 +115,7 @@ class BM25L(_BM25):
         Documents in BM25L retriever are static. The retriever must be reseted to index new
         documents.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
     k1
         Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
