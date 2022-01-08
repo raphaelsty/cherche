@@ -36,15 +36,18 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
     ...          {"uri": "tag:FranceCapital"},
     ...          {"uri": "tag:ParisLights"},
     ...          {"uri": "tag:EiffelTower"},
-    ...      ]),
+    ...     ]),
     ...     ("Toulouse", [
     ...          {"uri": "tag:Occitanie"},
     ...          {"uri": "tag:PinkCity"},
     ...          {"uri": "tag:ToulouseRugby"},
-    ...      ]),
+    ...     ]),
     ... ]
 
-    >>> retriever = retrieve.Flash(key="uri", on="tags") | retrieve.TfIdf(key="uri", on="label", documents=documents)
+    >>> retriever = (
+    ...     retrieve.Flash(key="uri", on="tags") |
+    ...     retrieve.TfIdf(key="uri", on="label", documents=documents)
+    ... )
 
     >>> ranker = rank.Encoder(
     ...    key="uri",
