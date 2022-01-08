@@ -58,7 +58,7 @@ documents[:3]
  {'id': 2,
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France.
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France.'
   }]
 ```
 
