@@ -14,7 +14,7 @@
 </div>
 <br>
 
-Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is meant to be used with small to medium sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines. Cherche might fit your needs.
+Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is meant to be used with small to medium sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
 
 ![Alt text](docs/img/explain.png)
 
@@ -152,6 +152,6 @@ Do not hesitate to look at Haystack, Jina, or TxtAi which offer very advanced so
 - [Jina](https://github.com/jina-ai/jina)
 - [txtai](https://github.com/neuml/txtai)
 
-## Dev team 💾
+## Dev Team 💾
 
 The Cherche dev team is made up of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant) 🥳

@@ -14,7 +14,7 @@
 </div>
 <br>
 
-Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is dedicated to corpus of small to middle size. Cherche's main strength is its ability to build diverse and complete pipelines. Cherche might fit your needs.
+Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is meant to be used with small to medium sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
 
 ![Alt text](img/doc.png)
 
