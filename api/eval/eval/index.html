@@ -1747,15 +1747,18 @@
 <span class="o">...</span>          <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;tag:FranceCapital&quot;</span><span class="p">},</span>
 <span class="o">...</span>          <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;tag:ParisLights&quot;</span><span class="p">},</span>
 <span class="o">...</span>          <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;tag:EiffelTower&quot;</span><span class="p">},</span>
-<span class="o">...</span>      <span class="p">]),</span>
+<span class="o">...</span>     <span class="p">]),</span>
 <span class="o">...</span>     <span class="p">(</span><span class="s2">&quot;Toulouse&quot;</span><span class="p">,</span> <span class="p">[</span>
 <span class="o">...</span>          <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;tag:Occitanie&quot;</span><span class="p">},</span>
 <span class="o">...</span>          <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;tag:PinkCity&quot;</span><span class="p">},</span>
 <span class="o">...</span>          <span class="p">{</span><span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;tag:ToulouseRugby&quot;</span><span class="p">},</span>
-<span class="o">...</span>      <span class="p">]),</span>
+<span class="o">...</span>     <span class="p">]),</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="p">(</span>
+<span class="o">...</span>     <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">...</span>     <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">key</span><span class="o">=</span><span class="s2">&quot;uri&quot;</span><span class="p">,</span>
@@ -1841,7 +1844,7 @@
 </code></pre></div>
 <h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
 <ol>
-<li>(Evaluation Metrics For Information Retrieval)[https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk]</li>
+<li><a href="https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk">Evaluation Metrics For Information Retrieval</a></li>
 </ol>
 
               

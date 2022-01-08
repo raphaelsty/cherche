@@ -1730,14 +1730,14 @@
 </li>
 <li>
 <p><strong>k</strong> (<em>int</em>) – defaults to <code>None</code></p>
-<p>Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.</p>
+<p>Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.</p>
 </li>
 <li>
 <p><strong>path</strong> (<em>str</em>) – defaults to <code>None</code></p>
 <p>Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.</p>
 </li>
 <li>
-<p><strong>similarity</strong> (<em><module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'></em>) – defaults to <code>&lt;function cosine at 0x7f80c97253a0&gt;</code></p>
+<p><strong>similarity</strong> (<em><module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'></em>) – defaults to <code>&lt;function cosine at 0x7fdd5a84e3a0&gt;</code></p>
 <p>Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).</p>
 </li>
 </ul>
@@ -1800,7 +1800,7 @@
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <details class="- note">
 <summary><strong>call</strong></summary>
-<p>Encode inputs query and ranks documents based on the similarity between the query and the selected field of the documents.</p>
+<p>Encode input query and ranks documents based on the similarity between the query and the selected field of the documents.</p>
 <p><strong>Parameters</strong></p>
 <ul>
 <li><strong>q</strong>     (<em>str</em>)    </li>

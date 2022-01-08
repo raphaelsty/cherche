@@ -2533,14 +2533,14 @@ else:
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Elastic</span><span class="p">(</span>
     <span class="n">es</span> <span class="o">=</span> <span class="n">es</span><span class="p">,</span>
-    <span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;document&quot;</span><span class="p">,</span>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
     <span class="n">index</span> <span class="o">=</span> <span class="s2">&quot;large_corpus&quot;</span>
 <span class="p">)</span>
 
 <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-    <span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;document&quot;</span><span class="p">,</span>
     <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
@@ -2548,14 +2548,14 @@ else:
 </pre></div>
 <div id="cell-3" class="clipboard-copy-txt">retriever = retrieve.Elastic(
     es = es,
-    key="id",
+    key = "id",
     on = "document",
     k = 100,
     index = "large_corpus"
 )
 
 ranker = rank.Encoder(
-    key="id",
+    key = "id",
     on = "document",
     encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2", device="cuda").encode,
     k = 10,
@@ -2648,7 +2648,7 @@ retriever.add_embeddings(documents=documents, ranker=ranker)</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Et voila.</p>
+<p>Et voilà.</p>
 
 </div>
 </div>

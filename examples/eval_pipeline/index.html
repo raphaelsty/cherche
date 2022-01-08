@@ -2307,7 +2307,7 @@ all of MD as it is not optimized for dense, information rich UIs.
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>This notebook present how to evaluate a neural search pipeline using pairs of query and answers. We will try to automatically tag arxiv papers that were manually automated by François-Paul Servant as part of <a href="http://www.semanlink.net/sl/home?lang=fr">Semanlink</a> Knowledge Graph.</p>
+<p>This notebook present how to evaluate a neural search pipeline using pairs of query and answers. We will try to automatically tag arXiv papers that were manually automated by François-Paul Servant as part of the <a href="http://www.semanlink.net/sl/home?lang=fr">Semanlink</a> Knowledge Graph.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -2408,7 +2408,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The <code>documents</code> contain a list of tags, each tag is represented as a dict and contains a set of attributes. We will try to automate the tagging of arxiv documents with a neural search pipeline that will retrieve tags based on their attributes using the title, abstract and comments of the arxiv articles as a query.</p>
+<p>The <code>documents</code> contain a list of tags. Each tag is represented as a dict and contains a set of attributes. We will try to automate the tagging of arXiv documents with a neural search pipeline that will retrieve tags based on their attributes using the title, abstract and comments of the arXiv articles as a query.</p>
 
 </div>
 </div>
@@ -3022,7 +3022,7 @@ ranker = rank.Encoder(
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The cell below is important if you want to pre-compute the queries once. Pre-calculation of 314 queries to speed up evaluation. It took 24 seconds on cpu.</p>
+<p>The cell below is important if you want to pre-compute the queries once. 314 queries are pre-calculated to speed up evaluation. It takes roughly CPU 24 seconds.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -3724,7 +3724,7 @@ Encoder ranker
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Here are our tags for bert's article with best of both worlds</p>
+<p>Here are our tags for BERT's article with best of both worlds</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
