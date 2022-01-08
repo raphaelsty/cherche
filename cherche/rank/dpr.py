@@ -9,8 +9,8 @@ from .base import Ranker
 
 
 class DPR(Ranker):
-    """DPR is dedicated to rank documents using distinct models to encode the query and the
-    documents contents.
+    """DPR ranks documents using distinct models to encode the query and
+    document contents.
 
     Parameters
     ----------
