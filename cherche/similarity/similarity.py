@@ -5,7 +5,8 @@ import numpy as np
 
 def cosine(emb_q: np.ndarray, emb_documents: list) -> list:
     """Computes cosine distance between input query embedding and documents embeddings.
-    Higher is better.
+    
+    Bigger is better.
 
     Parameters
     ----------
@@ -44,7 +45,8 @@ def cosine(emb_q: np.ndarray, emb_documents: list) -> list:
 
 def dot(emb_q: np.ndarray, emb_documents: list) -> list:
     """Computes dot product between input query embedding and documents embeddings.
-    Higher is better.
+    
+    Bigger is better.
 
     Parameters
     ----------
