@@ -271,6 +271,38 @@
   
   
     <li class="md-tabs__item">
+      <a href="../../qa/qa/" class="md-tabs__link">
+        QA
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../summary/summary/" class="md-tabs__link">
+        Summary
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../../examples/retriever_ranker/" class="md-tabs__link">
         Examples
       </a>
@@ -595,8 +627,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/pre_trained/" class="md-nav__link">
-        Pre-trained models
+      <a href="../../rank/encoder/" class="md-nav__link">
+        rank.Encoder
       </a>
     </li>
   
@@ -609,8 +641,22 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/gpu/" class="md-nav__link">
-        Gpu
+      <a href="../../rank/dpr/" class="md-nav__link">
+        rank.DPR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rank/zero_shot/" class="md-nav__link">
+        rank.ZeroShot
       </a>
     </li>
   
@@ -625,6 +671,20 @@
     <li class="md-nav__item">
       <a href="../../rank/dot_cos/" class="md-nav__link">
         Similarity
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rank/gpu/" class="md-nav__link">
+        Gpu
       </a>
     </li>
   
@@ -727,6 +787,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#lets-create-a-fancy-pipeline" class="md-nav__link">
+    Let's create a fancy pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Let's create a fancy pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fancy-pipeline-with-a-question-answering-model" class="md-nav__link">
+    Fancy pipeline with a question answering model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fancy-pipeline-with-a-summarization-model" class="md-nav__link">
+    Fancy pipeline with a summarization model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -759,12 +846,108 @@
       
       
         <label class="md-nav__link" for="__nav_6">
+          QA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="QA" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          QA
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qa/qa/" class="md-nav__link">
+        Question Answering
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Summary
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Summary" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Summary
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../summary/summary/" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
           Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Examples" data-md-level="1">
-        <label class="md-nav__title" for="__nav_6">
+        <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
           Examples
         </label>
@@ -791,7 +974,7 @@
   
     <li class="md-nav__item">
       <a href="../../examples/retriever_ranker_qa/" class="md-nav__link">
-        Retriever, ranker and question answering
+        Retriever, ranker, question answering
       </a>
     </li>
   
@@ -885,18 +1068,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7">
+        <label class="md-nav__link" for="__nav_9">
           API reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="API reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
+        <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
           API reference
         </label>
@@ -925,18 +1108,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_2" type="checkbox" id="__nav_9_2" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_2">
+        <label class="md-nav__link" for="__nav_9_2">
           compose
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="compose" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_2">
+        <label class="md-nav__title" for="__nav_9_2">
           <span class="md-nav__icon md-icon"></span>
           compose
         </label>
@@ -1000,18 +1183,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_3" type="checkbox" id="__nav_9_3" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_3">
+        <label class="md-nav__link" for="__nav_9_3">
           data
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="data" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_3">
+        <label class="md-nav__title" for="__nav_9_3">
           <span class="md-nav__icon md-icon"></span>
           data
         </label>
@@ -1061,18 +1244,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_4" type="checkbox" id="__nav_9_4" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_4">
+        <label class="md-nav__link" for="__nav_9_4">
           eval
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="eval" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_4">
+        <label class="md-nav__title" for="__nav_9_4">
           <span class="md-nav__icon md-icon"></span>
           eval
         </label>
@@ -1108,18 +1291,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_5" type="checkbox" id="__nav_9_5" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_5">
+        <label class="md-nav__link" for="__nav_9_5">
           qa
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="qa" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_5">
+        <label class="md-nav__title" for="__nav_9_5">
           <span class="md-nav__icon md-icon"></span>
           qa
         </label>
@@ -1155,18 +1338,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_6" type="checkbox" id="__nav_9_6" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_6">
+        <label class="md-nav__link" for="__nav_9_6">
           rank
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="rank" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_6">
+        <label class="md-nav__title" for="__nav_9_6">
           <span class="md-nav__icon md-icon"></span>
           rank
         </label>
@@ -1244,18 +1427,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_7" type="checkbox" id="__nav_7_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_7" type="checkbox" id="__nav_9_7" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_7">
+        <label class="md-nav__link" for="__nav_9_7">
           retrieve
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="retrieve" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_7">
+        <label class="md-nav__title" for="__nav_9_7">
           <span class="md-nav__icon md-icon"></span>
           retrieve
         </label>
@@ -1389,18 +1572,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_8" type="checkbox" id="__nav_7_8" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_8" type="checkbox" id="__nav_9_8" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_8">
+        <label class="md-nav__link" for="__nav_9_8">
           similarity
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="similarity" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_8">
+        <label class="md-nav__title" for="__nav_9_8">
           <span class="md-nav__icon md-icon"></span>
           similarity
         </label>
@@ -1450,18 +1633,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_9" type="checkbox" id="__nav_7_9" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9_9" type="checkbox" id="__nav_9_9" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7_9">
+        <label class="md-nav__link" for="__nav_9_9">
           summary
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="summary" data-md-level="2">
-        <label class="md-nav__title" for="__nav_7_9">
+        <label class="md-nav__title" for="__nav_9_9">
           <span class="md-nav__icon md-icon"></span>
           summary
         </label>
@@ -1541,6 +1724,33 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#lets-create-a-fancy-pipeline" class="md-nav__link">
+    Let's create a fancy pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Let's create a fancy pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fancy-pipeline-with-a-question-answering-model" class="md-nav__link">
+    Fancy pipeline with a question answering model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fancy-pipeline-with-a-summarization-model" class="md-nav__link">
+    Fancy pipeline with a summarization model
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1555,201 +1765,191 @@
                 
 
 <h1 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h1>
-<p>Search allows you to build a neural search pipeline easily. Search offers three operators
-to build a pipeline.</p>
-<ul>
-<li>
-<p><code>+</code> Main pipeline operator to put a ranker after a retriever or to put a question answering model or a summarization model after a retriever or a ranker.</p>
-</li>
-<li>
-<p><code>|</code> Union operator to gather the output of multiples retrievers or multiples rankers.</p>
-</li>
-<li>
-<p><code>&amp;</code> Intersection operator to filter the output of multiples retrievers or multiples rankers based on their intersection.</p>
-</li>
-</ul>
-<p>It is possible to perform union and intersection operations between rankers or between retrievers.</p>
+<p>Search replaces the operators <code>+</code> (pipeline), <code>|</code> (union) and <code>|</code> (intersection) to build pipelines efficiently.</p>
 <h2 id="pipeline_1">Pipeline <code>+</code><a class="headerlink" href="#pipeline_1" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span><span class="p">,</span> <span class="n">retrieve</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">},</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">},</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">}</span>
-<span class="o">...</span> <span class="p">]</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-
+<p><code>+</code> is the main operator dedicated to pipelines. The first model in a pipeline should always be a
+retriever.</p>
+<p>Pipeline made of a retriever and a ranker:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">TfIdf</span> <span class="n">retriever</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
-    <span class="n">documents</span><span class="p">:</span> <span class="mi">3</span>
-<span class="n">Encoder</span> <span class="n">ranker</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
-    <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
-    <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
-    <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
+<p>Pipeline allows to map document indexes to their content (not needed with Elasticsearch):</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">documents</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;fashion&quot;</span><span class="p">)</span>
+<p>Pipeline for question answering (mapping ids to documents is mandatory for question answering
+unless you are using Elasticsearch):</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search_qa</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">documents</span> <span class="o">+</span> <span class="n">question_answering</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.2640568</span><span class="p">}]</span>
+<p>Pipeline for summarization (mapping ids to documents is mandatory for summarization unless you are 
+using Elasticsearch):</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search_summarize</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">documents</span> <span class="o">+</span> <span class="n">summarize</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Under the hood the <code>+</code> operator calls <code>compose.Pipeline</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">compose</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">compose</span><span class="o">.</span><span class="n">Pipeline</span><span class="p">([</span><span class="n">retriever</span><span class="p">,</span> <span class="n">ranker</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+<span class="c1"># is the same as</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="union">Union <code>|</code><a class="headerlink" href="#union" title="Permanent link">&para;</a></h2>
-<p>The union operator <code>|</code> is used to improve model recall by bringing together documents retrieved by multiple models.
-The documents most recommended by the model union will be those proposed by the first model. Then the union will add the documents of the second model, etc  (this is not a bug, it is a feature). Each time, the union will avoid duplicates. This strategy allows to prioritize one model / pipeline over another. It may be wise to create a union between two separate pipelines, the first one with the greatest precision and the second one with better recall, like a spare wheel.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span><span class="p">,</span> <span class="n">retrieve</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">},</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">},</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">}</span>
-<span class="o">...</span> <span class="p">]</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="p">(</span>
-<span class="o">...</span>    <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
-<span class="o">...</span>        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span>    <span class="p">)</span> <span class="o">|</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/multi-qa-mpnet-base-cos-v1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
-<span class="o">...</span>        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span>    <span class="p">)</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-
+<p>The union operator <code>|</code> is used to improve neural search recall by gathering documents retrieved by
+multiple models. The union will avoid duplicate documents and keep the first one. The first
+documents out of the union will be from the first model, the next ones will be from the second
+model and so on. This is not a bug, it is a feature 😅.  This strategy allows you to prioritize one
+model or pipeline over another. It may make sense to create a union between two separate pipelines,
+with the first one having the highest precision and the second one having better recall, like a
+spare tire.</p>
+<p>Union of two retrievers</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever_a</span> <span class="o">|</span> <span class="n">retriver_b</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">TfIdf</span> <span class="n">retriever</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
-    <span class="n">documents</span><span class="p">:</span> <span class="mi">3</span>
-<span class="n">Union</span>
-<span class="o">-----</span>
-<span class="n">Encoder</span> <span class="n">ranker</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
-    <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
-    <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
-    <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
-<span class="n">Encoder</span> <span class="n">ranker</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
-    <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
-    <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
-    <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
-<span class="o">-----</span>
+<p>Union of two retrievers folowed by a ranker</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">|</span> <span class="n">retriver_b</span><span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;fashion&quot;</span><span class="p">)</span>
+<p>Union of two rankers</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="p">(</span><span class="n">ranker_a</span> <span class="o">|</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[{</span><span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
+<p>Union of two pipelines</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Union of three pipelines</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span> <span class="o">|</span> <span class="n">retriever_c</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="intersection">Intersection <code>&amp;</code><a class="headerlink" href="#intersection" title="Permanent link">&para;</a></h2>
-<p>The intersection operator improves the precision of the model by filtering documents on the intersection of retrievers and or rankers. With the intersect operator the number of documents returned by the models will be inferior to the union.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">rank</span><span class="p">,</span> <span class="n">retrieve</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">},</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">},</span>
-<span class="o">...</span>    <span class="p">{</span>
-<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
-<span class="o">...</span>    <span class="p">}</span>
-<span class="o">...</span> <span class="p">]</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="p">(</span>
-<span class="o">...</span>    <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span>    <span class="p">)</span> <span class="o">&amp;</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>        <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/multi-qa-mpnet-base-cos-v1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span>    <span class="p">)</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-
+<p>The intersection operator improves the precision of the model by filtering documents on the
+intersection of proposed candidates of retrievers and / or rankers.</p>
+<p>Intersection of two retrievers</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever_a</span> <span class="o">&amp;</span> <span class="n">retriver_b</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">TfIdf</span> <span class="n">retriever</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="n">article</span>
-    <span class="n">documents</span><span class="p">:</span> <span class="mi">3</span>
-<span class="n">Intersection</span>
-<span class="o">-----</span>
-<span class="n">Encoder</span> <span class="n">ranker</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">article</span>
-    <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
-    <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
-    <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
-<span class="n">Encoder</span> <span class="n">ranker</span>
-    <span class="n">on</span><span class="p">:</span> <span class="n">title</span>
-    <span class="n">k</span><span class="p">:</span> <span class="mi">3</span>
-    <span class="n">similarity</span><span class="p">:</span> <span class="n">cosine</span>
-    <span class="n">embeddings</span> <span class="n">stored</span> <span class="n">at</span><span class="p">:</span> <span class="n">encoder</span><span class="o">.</span><span class="n">pkl</span>
-<span class="o">-----</span>
+<p>Intersection of two retrievers folowed by a ranker</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">&amp;</span> <span class="n">retriver_b</span><span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;fashion&quot;</span><span class="p">)</span>
+<p>Intersection of two rankers</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="p">(</span><span class="n">ranker_a</span> <span class="o">&amp;</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">[]</span>
+<p>Intersection of two pipelines</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Intersection of three pipelines</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">retriever_c</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="lets-create-a-fancy-pipeline">Let's create a fancy pipeline<a class="headerlink" href="#lets-create-a-fancy-pipeline" title="Permanent link">&para;</a></h2>
+<p>Let's create a pipeline from the union of two distinct pipelines. The first part of the union is
+dedicated to precision and the second is dedicated to recall. We can use the Semanlink dataset to
+feed our neural search pipeline.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>And here is the code:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arxiv_tags</span><span class="p">(</span><span class="n">arxiv_title</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arxiv_summary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span>
+<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;semanlink.pkl&quot;</span>
+<span class="o">...</span> <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">precision</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">],</span> 
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+<span class="o">...</span> <span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">recall</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span> 
+<span class="o">...</span>    <span class="n">documents</span> <span class="o">=</span> <span class="n">documents</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char&quot;</span><span class="p">),</span> 
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+<span class="o">...</span> <span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">precision</span> <span class="o">|</span> <span class="n">recall</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;Knowledge Base Embedding By Cooperative Knowledge Distillation&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/knowledge_graph_embeddings&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/text_kg_and_embeddings&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/text_aware_kg_embedding&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/bert_kb&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/knowledge_graph_augmented_language_models&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/knowledge_graph&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/kg_and_nlp&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/knowledge_augmented_language_models&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/word_embedding&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/generative_adversarial_network&#39;</span><span class="p">}]</span>
+</code></pre></div>
+<h3 id="fancy-pipeline-with-a-question-answering-model">Fancy pipeline with a question answering model<a class="headerlink" href="#fancy-pipeline-with-a-question-answering-model" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">qa</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">question_answering</span> <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="n">QA</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;question-answering&quot;</span><span class="p">,</span> 
+<span class="o">...</span>         <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">,</span> 
+<span class="o">...</span>         <span class="n">tokenizer</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span>
+<span class="o">...</span>    <span class="p">),</span>
+<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">],</span>
+<span class="o">...</span> <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search_qa</span> <span class="o">=</span> <span class="n">search</span> <span class="o">+</span> <span class="n">documents</span> <span class="o">+</span> <span class="n">question_answering</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search_qa</span><span class="p">(</span><span class="s2">&quot;What are CNN ?&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">155</span><span class="p">,</span>
+  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">218</span><span class="p">,</span>
+  <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;CNN use convolutions over the input layer to compute the output&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">0.14450952410697937</span><span class="p">,</span>
+  <span class="s1">&#39;altLabel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;CNN&#39;</span><span class="p">,</span> <span class="s1">&#39;Convnet&#39;</span><span class="p">,</span> <span class="s1">&#39;Convolutional neural networks&#39;</span><span class="p">,</span> <span class="s1">&#39;Convnets&#39;</span><span class="p">],</span>
+  <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;Feed-forward artificial neural network where the individual neurons are tiled in such a way that they respond to overlapping regions in the visual field. CNN use convolutions over the input layer to compute the output. Widely used models for image and video recognition.</span><span class="se">\r\n\r\n</span><span class="s1">Main assumption: Data are compositional, they are formed of patterns that are:</span><span class="se">\r\n\r\n</span><span class="s1">- Local</span><span class="se">\r\n</span><span class="s1">- Stationary</span><span class="se">\r\n</span><span class="s1">- Multi-scale (hierarchical)</span><span class="se">\r\n\r\n</span><span class="s1">ConvNets leverage the compositionality structure: They extract compositional features and feed them to classifier, recommender, etc (end-to-end).&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/convolutional_neural_network&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;broader_altLabel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Artificial neural network&#39;</span><span class="p">,</span> <span class="s1">&#39;ANN&#39;</span><span class="p">,</span> <span class="s1">&#39;NN&#39;</span><span class="p">],</span>
+  <span class="s1">&#39;broader_altLabel_text&#39;</span><span class="p">:</span> <span class="s1">&#39;Artificial neural network ANN NN&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;altLabel_text&#39;</span><span class="p">:</span> <span class="s1">&#39;CNN Convnet Convolutional neural networks Convnets&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;end&#39;</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span>
+  <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="s1">&#39;fast and space-efficient way of vectorizing categorical features&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;qa_score&#39;</span><span class="p">:</span> <span class="mf">9.786998271010816e-05</span><span class="p">,</span>
+  <span class="s1">&#39;altLabel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Hashing trick&#39;</span><span class="p">,</span> <span class="s1">&#39;Feature hashing&#39;</span><span class="p">],</span>
+  <span class="s1">&#39;comment&#39;</span><span class="p">:</span> <span class="s1">&#39;fast and space-efficient way of vectorizing categorical features. Applies a hash function to the features to determine their column index</span><span class="se">\r\n\r\n\r\n\r\n\r\n\r\n</span><span class="s1">&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.semanlink.net/tag/feature_hashing&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;altLabel_text&#39;</span><span class="p">:</span> <span class="s1">&#39;Hashing trick Feature hashing&#39;</span><span class="p">}]</span>
+</code></pre></div>
+<h3 id="fancy-pipeline-with-a-summarization-model">Fancy pipeline with a summarization model<a class="headerlink" href="#fancy-pipeline-with-a-summarization-model" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">summary</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">summarizer</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span>
+<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;summarization&quot;</span><span class="p">,</span> 
+<span class="o">...</span>         <span class="n">model</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-12-6&quot;</span><span class="p">,</span> 
+<span class="o">...</span>         <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-12-6&quot;</span><span class="p">,</span> 
+<span class="o">...</span>         <span class="n">framework</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span>
+<span class="o">...</span>    <span class="p">),</span>
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">],</span>
+<span class="o">...</span> <span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search_summarize</span> <span class="o">=</span> <span class="n">search</span> <span class="o">+</span> <span class="n">documents</span> <span class="o">+</span> <span class="n">summarizer</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search_summarize</span><span class="p">(</span><span class="s2">&quot;What are CNN ?&quot;</span><span class="p">)</span>
+<span class="s1">&#39;CNN use convolutions over the input layer to compute the output. Widely used models for image and video recognition. Feed-forward artificial&#39;</span>
 </code></pre></div>
 
               
@@ -1764,7 +1964,7 @@ The documents most recommended by the model union will be those proposed by the 
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../rank/dot_cos/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Similarity" rel="prev">
+        <a href="../../rank/gpu/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Gpu" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1773,20 +1973,20 @@ The documents most recommended by the model union will be those proposed by the 
               <span class="md-footer__direction">
                 Previous
               </span>
-              Similarity
+              Gpu
             </div>
           </div>
         </a>
       
       
         
-        <a href="../../examples/retriever_ranker/" class="md-footer__link md-footer__link--next" aria-label="Next: Retriever and ranker" rel="next">
+        <a href="../../qa/qa/" class="md-footer__link md-footer__link--next" aria-label="Next: Question Answering" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Retriever and ranker
+              Question Answering
             </div>
           </div>
           <div class="md-footer__button md-icon">
