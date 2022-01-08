@@ -24,6 +24,12 @@ Cherche (search in French) allows you to create a neural search pipeline using r
 pip install cherche
 ```
 
+To install the development version:
+
+```sh
+pip install git+https://github.com/raphaelsty/cherche
+```
+
 ## [Documentation](https://raphaelsty.github.io/cherche/) 📜
 
 Documentation is available [here](https://raphaelsty.github.io/cherche/). It provides details
