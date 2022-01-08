@@ -24,10 +24,6 @@ Cherche (search in French) allows you to create a neural search pipeline using r
 pip install cherche
 ```
 
-```sh
-pip install git+https://github.com/raphaelsty/cherche
-```
-
 ## [Documentation](https://raphaelsty.github.io/cherche/) 📜
 
 Documentation is available [here](https://raphaelsty.github.io/cherche/). It provides details
@@ -131,6 +127,10 @@ Cherche provides different retrievers that filter input documents based on a que
 
 Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models, [Hugging Face sentence similarity](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, [Hugging Face zero shot classification](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models and of course with your own models.
 
+## Summarization and question answering
+
+Cherche provides modules dedicated to summarization and questions answering. These modules are compatible with Hugging Face's pre-trained models and can be fully integrated into neural search pipelines.
+
 ## Acknowledgement 👏
 
 The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Lunr retriever is a wrapper of [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
@@ -148,4 +148,3 @@ Do not hesitate to look at Haystack, Jina or TxtAi which offer very advanced sol
 ## Dev Team 💾
 
 The Cherche dev team is made of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant). 🥳
-

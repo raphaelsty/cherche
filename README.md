@@ -24,10 +24,6 @@ Cherche (search in French) allows you to create a neural search pipeline using r
 pip install cherche
 ```
 
-```sh
-pip install git+https://github.com/raphaelsty/cherche
-```
-
 ## [Documentation](https://raphaelsty.github.io/cherche/) 📜
 
 Documentation is available [here](https://raphaelsty.github.io/cherche/). It provides details
@@ -130,6 +126,10 @@ Cherche provides different retrievers that filter input documents based on a que
 ## Rank 🤗
 
 Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models, [Hugging Face sentence similarity](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, [Hugging Face zero shot classification](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models and of course with your own models.
+
+## Summarization and question answering
+
+Cherche provides modules dedicated to summarization and questions answering. These modules are compatible with Hugging Face's pre-trained models and can be fully integrated into neural search pipelines.
 
 ## Acknowledgement 👏
 
