@@ -128,6 +128,7 @@ Cherche provides different retrievers that filter input documents based on a que
 - retrieve.BM25Okapi
 - retrieve.BM25L
 - retrieve.Flash
+- retrieve.Encoder
 
 ## Rank 🤗
 
