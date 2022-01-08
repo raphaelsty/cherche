@@ -1,7 +1,8 @@
 title: Rank
 nav:
     - rank.md
-    - pre_trained.md
-    - gpu.md
+    - encoder.md
+    - dpr.md
+    - zero_shot.md
     - dot_cos.md
-
+    - gpu.md

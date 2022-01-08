@@ -34,13 +34,3 @@ class Compose(abc.ABC):
             ]
         )
         return repr
-
-    def __add__(self, other) -> "Compose":
-        """Pipeline operator."""
-        if isinstance(other, list):
-            # Documents are part of the pipeline.
-            self.models.append({document[self.key]: document for document in other})
-        else:
-            self.key = self.other.key if hasattr(other, "key") else None
-            self.models.append(other)
-        return self

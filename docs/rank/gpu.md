@@ -1,71 +1,82 @@
 # Gpu
 
-## Rank.Encoder and Rank.DPR
+GPU are mandatory to pre-compute embeddings using `rank.Encoder` and `rank.DPR` if you have a lot
+of documents unless you are patient. After having pre-computed documents, the GPU will not be
+needed anymore.
 
-Similarity-based models from [Sentence Transformers](https://www.sbert.net/docs/pretrained_models.html) and [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification) can be run on a GPU. Under the hood, `rank.Encoder` and `rank.DPR` pre-computes document embeddings with the `rank.Encoder.add` and `rank.DPR.add` methods. The GPU significantly speeds up the pre-computation phase of embeddings. The embeddings are then saved using [pickle](https://docs.python.org/3/library/pickle.html) format by specifying the `path` parameter.
+GPU is always needed using `rank.ZeroShot` to obtain decent results since it cannot pre-compute
+embeddings.
 
-During the inference phase i.e. search, the rankers check if there is a pre-computed embedding for the query and the documents. In principle, the GPU will only be used to encode the user's query, which is fast. It could be useful to use the GPU to save a precious milliseconds and possibly to quickly encode documents for which we would not have asked the ranker to precompute embeddings.
-
-The ranker `rank.ZeroShot` is a wrapper for Zero shot classification pipeline from [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification). These models cannot pre-compute embeddings, so it is essential to use a GPU with this ranker to get satisfactory performance.
+If you are using the GPU to pre-compute the embeddings, remember to save your embeddings by setting
+the `path` parameter of the `rank.Encoder` and `rank.DPR` rankers. To use the pre-computed embeddings
+in another session, you will just have to initialize a new `ranker` with the same parameter `path`
+and finally add the documents with the `add` method to automatically retrieve embeddings.
 
 ## Rank.Encoder
 
-Sentence Transformers as an encoder on GPU:
-
 ```python
->>> from cherche import rank
+>>> from cherche import retrieve, rank
 >>> from transformers import pipeline
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    }
 ... ]
 
-# Ask the model to load and save embeddings at ./encoder.pkl
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+
+# Ask the model to load and save embeddings at "all-mpnet-base-v2.pkl" to use the ranker on CPU.
 >>> ranker = rank.Encoder(
-...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2", device='cuda').encode,
+...    key = "id",
 ...    on = ["title", "article"],
+...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2", device='cuda').encode,
 ...    k = 10,
-...    path = "encoder.pkl"
+...    path = "all-mpnet-base-v2.pkl"
 ... )
 
-# Pre compute embeddings using GPU.
->>> ranker.add(documents=documents)
+>>> search = retriever + ranker
+
+# Pre-compute embeddings using GPU.
+>>> search.add(documents=documents)
 ```
 
 ## Rank.DPR
 
-Dense Passage Retrieval models on GPU:
-
 ```python
->>> from cherche import rank
+>>> from cherche import retrieve, rank
 >>> from transformers import pipeline
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
@@ -74,15 +85,20 @@ Dense Passage Retrieval models on GPU:
 
 # Ask the model to load and save embeddings at ./dpr.pkl
 >>> ranker = rank.DPR(
+...    key = "id",
+...    on = ["title", "article"],
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda").encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base', devica="cuda").encode,
-...    on = ["title", "article"],
 ...    k = 10,
 ...    path = "dpr.pkl"
 ... )
 
-# Pre compute embeddings using GPU.
->>> ranker.add(documents=documents)
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+
+>>> search = retriever + ranker
+
+# Pre-compute embeddings using GPU.
+>>> search.add(documents=documents)
 ```
 
 ## rank.ZeroShot
@@ -90,21 +106,24 @@ Dense Passage Retrieval models on GPU:
 To use the `zero-shot-classification` models with a GPU, the `device` parameter must be specified. By default the parameter `device` is set to `-1` to run on cpu. You needs to set it as a positive integer that match your cuda device id to run it on GPU.
 
 ```python
->>> from cherche import rank
+>>> from cherche import retrieve, rank
 >>> from transformers import pipeline
 
 >>> documents = [
 ...    {
+...        "id": 0,
 ...        "article": "Paris is the capital and most populous city of France",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 1,
 ...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
 ...    },
 ...    {
+...        "id": 2,
 ...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
 ...        "title": "Paris",
 ...        "url": "https://en.wikipedia.org/wiki/Paris"
@@ -112,11 +131,19 @@ To use the `zero-shot-classification` models with a GPU, the `device` parameter 
 ... ]
 
 >>> ranker = rank.ZeroShot(
+...     on = ["title", "article"],
 ...     encoder = pipeline("zero-shot-classification", 
 ...         model="typeform/distilbert-base-uncased-mnli", 
-...         device=0 # cuda:0
+...         device=0 # cuda:0, device=1 for cuda:1.
 ...     ), 
-...     on = ["title", "article"],
 ...     k = 10,
 ... )
+
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+
+# ZeroShot needs documents
+>>> search = retriever + documents + ranker
+
+# Pre-compute embeddings using GPU.
+>>> search.add(documents=documents)
 ```

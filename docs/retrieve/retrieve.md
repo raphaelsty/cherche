@@ -1,10 +1,14 @@
 # Retrieve
 
-Retrievers are models that can filter all documents from a query very quickly. They speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers that are slower will then be able to pull up the most relevant documents based on semantic similarity. The retrievers `retrieve.Elastic` and `retrieve.encoder` are the only retrievers in Search that are compatible with large corpora. The other retrievers are adapted to small or medium size corpora.
+Retrievers speed up the neural search pipeline by filtering out the majority of documents that are
+not relevant. Rankers (slower) will then be able to pull up the most relevant documents based on semantic
+similarity. The retrievers `retrieve.Elastic` and `retrieve.encoder` are the only retrievers in
+Cherche that are compatible with large corpora. The other retrievers are adapted to small or
+medium size corpora.
 
 ## Retrievers
 
-Here is the list of available retrievers:
+Here is the list of available retrievers using Cherche:
 
 - `retrieve.TfIdf`
 - `retrieve.BM25L`
@@ -16,11 +20,41 @@ Here is the list of available retrievers:
 
 ## k and on parameters
 
-The main parameter of retrievers is `on`. This is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the order provided. All the fields defined in `on` must be present in every documents.
+The main parameter of retrievers is `on`. This is the field(s) on which the retriever will perform
+the search. If multiple fields are specified, the retriever will concatenate all fields in the
+order provided. All the fields defined in `on` must be present in every documents.
 
-The retrievers all have a `k`-parameter during the initialization which allows to select the number of documents to retrieve. The default value is `None`, i.e the retrievers will retrieves all documents that match the query. If you choose a value for k, retriever will only retrieves k top documents that are more likely to match the query.
+The retrievers all have a `k`-parameter which allows to select the number of documents to retrieve.
+The default value is `None`, i.e the retrievers will retrieves all documents that match the query.
+If you choose a value for k, retriever will only retrieves k top documents that are more likely to 
+match the query.
+
+```python
+>>> from cherche import retrieve
+
+>>> documents = [
+...    {
+...        "id": 0,
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...    },
+...    {
+...        "id": 1,
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...    },
+... ]
+
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], k=30, documents=documents)
+```
 
 ## Add documents per batch to a retriever
+
+Retrievers store document `keys` to retrieve them later. Some retrievers can index documents keys
+in mini-batch like `retrieve.Elastic, retrieve.Flash and retrieve.Encoder`. These retrievers have
+the `add` method to add documents by batch. The other retrievers do not allow to add documents by
+batch. The set of documents must be declared at the initialization of the retriever via the
+`document` parameter.
 
 |      Retriever     |   Batch   |
 |:------------------:|:---------:|
@@ -32,7 +66,7 @@ The retrievers all have a `k`-parameter during the initialization which allows t
 | retrieve.BM25Okapi |     ❌     |
 |    retrieve.Lunr   |     ❌     |
 
-Retrievers store document `keys` to retrieve them later. Some retrievers can index documents keys in mini-batch like `retrieve.Elastic, retrieve.Flash and retrieve.Encoder`. These retrievers have the `add` method to add documents by batch. The other retrievers do not allow to add documents by batch. The set of documents must be declared at the initialization of the retriever via the `document` parameter.
+## Quick start
 
 ```python
 >>> from cherche import retrieve

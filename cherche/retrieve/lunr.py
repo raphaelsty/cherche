@@ -62,7 +62,9 @@ class Lunr(Retriever):
 
     References
     ----------
-    1. (Lunr.py)[https://github.com/yeraydiazdiaz/lunr.py]
+    1. [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py)
+    2. [Lunr.js](https://lunrjs.com)
+    2. [Solr](https://solr.apache.org)
 
     """
 
@@ -75,9 +77,18 @@ class Lunr(Retriever):
             str(document[self.key]): {self.key: document[self.key]} for document in documents
         }
 
-        self.idx = lunr(ref=self.key, fields=tuple(self.on), documents=documents)
+        self.idx = lunr(
+            ref=self.key,
+            fields=tuple(self.on),
+            # Lunr does not handle missing fields.
+            documents=[
+                {field: doc.get(field, "") for field in [self.key] + self.on} for doc in documents
+            ],
+        )
 
     def __call__(self, q: str) -> list:
         """Retrieve the right document."""
+        # We do not handle all Lunr possibilites right now.
+        q = q.replace(":", "").replace("-", "")
         documents = [self.documents[match["ref"]] for match in self.idx.search(q)]
         return documents[: self.k] if self.k is not None else documents

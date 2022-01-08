@@ -1,223 +1,252 @@
 # Pipeline
 
-Search allows you to build a neural search pipeline easily. Search offers three operators
-to build a pipeline.
-
-- `+` Main pipeline operator to put a ranker after a retriever or to put a question answering model or a summarization model after a retriever or a ranker.
-
-- `|` Union operator to gather the output of multiples retrievers or multiples rankers.
-
-- `&` Intersection operator to filter the output of multiples retrievers or multiples rankers based on their intersection.
-
-It is possible to perform union and intersection operations between rankers or between retrievers.
+Search replaces the operators `+` (pipeline), `|` (union) and `|` (intersection) to build pipelines efficiently.
 
 ## Pipeline `+`
 
+`+` is the main operator dedicated to pipelines. The first model in a pipeline should always be a
+retriever.
+
+Pipeline made of a retriever and a ranker:
+
 ```python
->>> from cherche import rank, retrieve
->>> from sentence_transformers import SentenceTransformer
-
->>> documents = [
-...    {
-...        "article": "Paris is the capital and most populous city of France",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    },
-...    {
-...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    },
-...    {
-...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    }
-... ]
-
->>> retriever = retrieve.TfIdf(on=["title", "article"], k = 30)
-
->>> ranker = rank.Encoder(
-...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    on = ["title", "article"],
-...    k = 3,
-...    path = "encoder.pkl"
-... )
-
 >>> search = retriever + ranker
-
 >>> search.add(documents)
 ```
 
-```python
-TfIdf retriever
-    on: title, article
-    documents: 3
-Encoder ranker
-    on: title, article
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
-```
+Pipeline allows to map document indexes to their content (not needed with Elasticsearch):
 
 ```python
->>> search("fashion")
+>>> search = retriever + ranker + documents
+>>> search.add(documents)
 ```
 
+Pipeline for question answering (mapping ids to documents is mandatory for question answering
+unless you are using Elasticsearch):
+
 ```python
-[{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.2640568}]
+>>> search_qa = retriever + ranker + documents + question_answering
+>>> search.add(documents)
+```
+
+Pipeline for summarization (mapping ids to documents is mandatory for summarization unless you are 
+using Elasticsearch):
+
+```python
+>>> search_summarize = retriever + ranker + documents + summarize
+>>> search.add(documents)
+```
+
+Under the hood the `+` operator calls `compose.Pipeline`.
+
+```python
+>>> from cherche import compose
+
+>>> search = compose.Pipeline([retriever, ranker])
+>>> search.add(documents)
+# is the same as
+>>> search = retriever + ranker
+>>> search.add(documents)
 ```
 
 ## Union `|`
 
-The union operator `|` is used to improve model recall by bringing together documents retrieved by multiple models.
-The documents most recommended by the model union will be those proposed by the first model. Then the union will add the documents of the second model, etc  (this is not a bug, it is a feature). Each time, the union will avoid duplicates. This strategy allows to prioritize one model / pipeline over another. It may be wise to create a union between two separate pipelines, the first one with the greatest precision and the second one with better recall, like a spare wheel.
+The union operator `|` is used to improve neural search recall by gathering documents retrieved by
+multiple models. The union will avoid duplicate documents and keep the first one. The first
+documents out of the union will be from the first model, the next ones will be from the second
+model and so on. This is not a bug, it is a feature 😅.  This strategy allows you to prioritize one
+model or pipeline over another. It may make sense to create a union between two separate pipelines,
+with the first one having the highest precision and the second one having better recall, like a
+spare tire.
+
+Union of two retrievers
 
 ```python
->>> from cherche import rank, retrieve
->>> from sentence_transformers import SentenceTransformer
-
->>> documents = [
-...    {
-...        "article": "Paris is the capital and most populous city of France",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    },
-...    {
-...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    },
-...    {
-...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    }
-... ]
-
->>> retriever = retrieve.TfIdf(on=["title", "article"], k = 30)
-
->>> ranker = (
-...    rank.Encoder(
-...        encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...        on = ["title", "article"],
-...        k = 3,
-...        path = "encoder.pkl"
-...    ) | rank.Encoder(
-...        encoder = SentenceTransformer("sentence-transformers/multi-qa-mpnet-base-cos-v1").encode,
-...        on = ["title", "article"],
-...        k = 3,
-...        path = "encoder.pkl"
-...    )
-... )
-
->>> search = retriever + ranker
-
+>>> search = retriever_a | retriver_b
 >>> search.add(documents)
 ```
 
-```python
-TfIdf retriever
-    on: title, article
-    documents: 3
-Union
------
-Encoder ranker
-    on: title, article
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
-Encoder ranker
-    on: title, article
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
------
-```
+Union of two retrievers folowed by a ranker
 
 ```python
->>> search("fashion")
+>>> search = (retriever_a | retriver_b) + ranker
+>>> search.add(documents)
 ```
 
+Union of two rankers
+
 ```python
-[{'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'}]
+>>> search = retriever + (ranker_a | ranker_b)
+>>> search.add(documents)
+```
+
+Union of two pipelines
+
+```python
+>>> search = (retriever_a + ranker_a) | (retriever_b + ranker_b)
+>>> search.add(documents)
+```
+
+Union of three pipelines
+
+```python
+>>> search = (retriever_a + ranker_a) | (retriever_b + ranker_b) | retriever_c
+>>> search.add(documents)
 ```
 
 ## Intersection `&`
 
-The intersection operator improves the precision of the model by filtering documents on the intersection of retrievers and or rankers. With the intersect operator the number of documents returned by the models will be inferior to the union.
+The intersection operator improves the precision of the model by filtering documents on the
+intersection of proposed candidates of retrievers and / or rankers.
+
+Intersection of two retrievers
 
 ```python
->>> from cherche import rank, retrieve
->>> from sentence_transformers import SentenceTransformer
-
->>> documents = [
-...    {
-...        "article": "Paris is the capital and most populous city of France",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    },
-...    {
-...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    },
-...    {
-...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
-...        "title": "Paris",
-...        "url": "https://en.wikipedia.org/wiki/Paris"
-...    }
-... ]
-
->>> retriever = retrieve.TfIdf(on=["title", "article"], k = 30)
-
->>> ranker = (
-...    rank.Encoder(
-...        encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...        on = "article",
-...        k = 3,
-...        path = "encoder.pkl"
-...    ) & rank.Encoder(
-...        encoder = SentenceTransformer("sentence-transformers/multi-qa-mpnet-base-cos-v1").encode,
-...        on = "title",
-...        k = 3,
-...        path = "encoder.pkl"
-...    )
-... )
-
->>> search = retriever + ranker
-
+>>> search = retriever_a & retriver_b
 >>> search.add(documents)
 ```
 
-```python
-TfIdf retriever
-    on: title, article
-    documents: 3
-Intersection
------
-Encoder ranker
-    on: article
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
-Encoder ranker
-    on: title
-    k: 3
-    similarity: cosine
-    embeddings stored at: encoder.pkl
------
-```
+Intersection of two retrievers folowed by a ranker
 
 ```python
->>> search("fashion")
+>>> search = (retriever_a & retriver_b) + ranker
+>>> search.add(documents)
 ```
 
+Intersection of two rankers
+
 ```python
-[]
+>>> search = retriever + (ranker_a & ranker_b)
+>>> search.add(documents)
+```
+
+Intersection of two pipelines
+
+```python
+>>> search = (retriever_a + ranker_a) & (retriever_b + ranker_b)
+>>> search.add(documents)
+```
+
+Intersection of three pipelines
+
+```python
+>>> search = (retriever_a + ranker_a) & (retriever_b + ranker_b) & retriever_c
+>>> search.add(documents)
+```
+
+## Let's create a fancy pipeline
+
+Let's create a pipeline from the union of two distinct pipelines. The first part of the union is
+dedicated to precision and the second is dedicated to recall. We can use the Semanlink dataset to
+feed our neural search pipeline.
+
+```python
+>>> search = (retriever_a + ranker_a) | (retriever_b + ranker_b)
+>>> search.add(documents)
+```
+
+And here is the code:
+
+```python
+>>> from cherche import retrieve, rank, data
+>>> from sentence_transformers import SentenceTransformer
+>>> from sklearn.feature_extraction.text import TfidfVectorizer
+
+>>> documents, _ = data.arxiv_tags(arxiv_title=True, arxiv_summary=False, comment=False)
+
+>>> ranker = rank.Encoder(
+...    key = "uri",
+...    on = ["prefLabel_text", "altLabel_text"],
+...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+...    k = 10,
+...    path = "semanlink.pkl"
+... )
+
+>>> precision = retrieve.Flash(
+...    key = "uri",
+...    on = ["prefLabel", "altLabel"], 
+...    k = 30,
+... ) + ranker
+
+>>> recall = retrieve.TfIdf(
+...    key = "uri",
+...    on = ["prefLabel_text", "altLabel_text"], 
+...    documents = documents,
+...    tfidf = TfidfVectorizer(lowercase=True, min_df=1, max_df=0.9, ngram_range=(3, 7), analyzer="char"), 
+...    k = 10,
+... ) + ranker
+
+>>> search = precision | recall
+>>> search.add(documents)
+
+>>> search("Knowledge Base Embedding By Cooperative Knowledge Distillation")
+[{'uri': 'http://www.semanlink.net/tag/knowledge_graph_embeddings'},
+ {'uri': 'http://www.semanlink.net/tag/text_kg_and_embeddings'},
+ {'uri': 'http://www.semanlink.net/tag/text_aware_kg_embedding'},
+ {'uri': 'http://www.semanlink.net/tag/bert_kb'},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_graph_augmented_language_models'},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_graph'},
+ {'uri': 'http://www.semanlink.net/tag/kg_and_nlp'},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_augmented_language_models'},
+ {'uri': 'http://www.semanlink.net/tag/word_embedding'},
+ {'uri': 'http://www.semanlink.net/tag/generative_adversarial_network'}]
+```
+
+### Fancy pipeline with a question answering model
+
+```python
+>>> from cherche import qa
+>>> from transformers import pipeline
+
+>>> question_answering = qa.QA(
+...    model = pipeline("question-answering", 
+...         model = "deepset/roberta-base-squad2", 
+...         tokenizer = "deepset/roberta-base-squad2"
+...    ),
+...    k = 2,
+...    on = ["title", "comment"],
+... )
+
+>>> search_qa = search + documents + question_answering
+
+>>> search_qa("What are CNN ?")
+[{'start': 155,
+  'end': 218,
+  'answer': 'CNN use convolutions over the input layer to compute the output',
+  'qa_score': 0.14450952410697937,
+  'altLabel': ['CNN', 'Convnet', 'Convolutional neural networks', 'Convnets'],
+  'comment': 'Feed-forward artificial neural network where the individual neurons are tiled in such a way that they respond to overlapping regions in the visual field. CNN use convolutions over the input layer to compute the output. Widely used models for image and video recognition.\r\n\r\nMain assumption: Data are compositional, they are formed of patterns that are:\r\n\r\n- Local\r\n- Stationary\r\n- Multi-scale (hierarchical)\r\n\r\nConvNets leverage the compositionality structure: They extract compositional features and feed them to classifier, recommender, etc (end-to-end).',
+  'uri': 'http://www.semanlink.net/tag/convolutional_neural_network',
+  'broader_altLabel': ['Artificial neural network', 'ANN', 'NN'],
+  'broader_altLabel_text': 'Artificial neural network ANN NN',
+  'altLabel_text': 'CNN Convnet Convolutional neural networks Convnets'},
+ {'start': 1,
+  'end': 65,
+  'answer': 'fast and space-efficient way of vectorizing categorical features',
+  'qa_score': 9.786998271010816e-05,
+  'altLabel': ['Hashing trick', 'Feature hashing'],
+  'comment': 'fast and space-efficient way of vectorizing categorical features. Applies a hash function to the features to determine their column index\r\n\r\n\r\n\r\n\r\n\r\n',
+  'uri': 'http://www.semanlink.net/tag/feature_hashing',
+  'altLabel_text': 'Hashing trick Feature hashing'}]
+```
+
+### Fancy pipeline with a summarization model
+
+```python
+>>> from cherche import summary
+>>> from transformers import pipeline
+
+>>> summarizer = summary.Summary(
+...    model = pipeline("summarization", 
+...         model="sshleifer/distilbart-cnn-12-6", 
+...         tokenizer="sshleifer/distilbart-cnn-12-6", 
+...         framework="pt"
+...    ),
+...    on = ["title", "comment"],
+... )
+
+>>> search_summarize = search + documents + summarizer
+
+>>> search_summarize("What are CNN ?")
+'CNN use convolutions over the input layer to compute the output. Widely used models for image and video recognition. Feed-forward artificial'
 ```

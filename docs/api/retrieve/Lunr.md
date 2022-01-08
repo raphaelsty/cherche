@@ -72,5 +72,7 @@ Lunr retriever
     
 ## References
 
-1. (Lunr.py)[https://github.com/yeraydiazdiaz/lunr.py]
+1. [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py)
+2. [Lunr.js](https://lunrjs.com)
+2. [Solr](https://solr.apache.org)
 

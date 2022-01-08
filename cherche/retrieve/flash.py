@@ -92,6 +92,8 @@ class Flash(Retriever):
         """
         for document in documents:
             for field in self.on:
+                if field not in document:
+                    continue
                 if isinstance(document[field], list):
                     for tag in document[field]:
                         self.documents[tag].append({self.key: document[self.key]})

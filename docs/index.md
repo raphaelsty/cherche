@@ -1,14 +1,37 @@
-# Cherche
+<div align="center">
+  <h1>Cherche</h1>
+  <p>Neural search</p>
+</div>
+<br>
 
-Cherche (search in French) allows you to create a simple neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is dedicated to corpus of small to middle size.
+<div align="center">
+  <!-- Documentation -->
+  <a href="https://raphaelsty.github.io/cherche/"><img src="https://img.shields.io/website?label=docs&style=flat-square&url=https%3A%2F%2Fraphaelsty.github.io/cherche/%2F" alt="documentation"></a>
+  <!-- License -->
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="license">
+  </a>
+</div>
+<br>
+
+Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is dedicated to corpus of small to middle size. Cherche's main strength is its ability to build diverse and complete pipelines. Cherche might fit your needs.
 
 ![Alt text](img/doc.png)
 
 ## Installation 🤖
 
 ```sh
+pip install cherche
+```
+
+```sh
 pip install git+https://github.com/raphaelsty/cherche
 ```
+
+## [Documentation](https://raphaelsty.github.io/cherche/) 📜
+
+Documentation is available [here](https://raphaelsty.github.io/cherche/). It provides details
+about retrievers, rankers, pipelines, question answering, summarization and examples.
 
 ## QuickStart 💨
 
@@ -22,23 +45,19 @@ from cherche import data
 documents = data.load_towns()
 
 documents[:3]
-[{'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the '
-             'capital and most populous city of France, with an estimated '
-             'population of 2,175,601 residents as of 2018, in an area of more '
-             'than 105 square kilometres (41 square miles).',
+[{'id': 0,
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': "Since the 17th century, Paris has been one of Europe's major "
-             'centres of finance, diplomacy, commerce, fashion, gastronomy, '
-             'science, and arts.',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'Paris is the capital and most populous city of France.'},
+ {'id': 1,
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'},
- {'article': 'The City of Paris is the centre and seat of government of the '
-             'region and province of Île-de-France, or Paris Region, which has '
-             'an estimated population of 12,174,880, or about 18 percent of '
-             'the population of France as of 2017.',
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': "Since the 17th century, Paris has been one of Europe's major centres of science, and arts."},
+ {'id': 2,
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'}]
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France.
+  }]
 ```
 
 ### Retriever ranker 🔍
@@ -52,61 +71,81 @@ from sentence_transformers import SentenceTransformer
 # List of dicts
 documents = data.load_towns() 
 
-# Retrieve on field article
-retriever = retrieve.TfIdf(on=["title", "article"], k=30)
+# Retrieve on fields title and article
+retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
 
-# Rank on field article
+# Rank on fields title and article
 ranker = rank.Encoder(
-    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    key = "id",
     on = ["title", "article"],
+    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     k = 3,
     path = "encoder.pkl"
 )
 
-# Neural search pipeline
+# Pipeline creation
 search = retriever + ranker
 
-# Create index for documents
 search.add(documents=documents)
+
+search("Bordeaux")
+[{'id': 57, 'similarity': 0.69513476},
+ {'id': 63, 'similarity': 0.6214991},
+ {'id': 65, 'similarity': 0.61809057}]
 ```
+
+Map the index to documents
 
 ```python
-TfIdf retriever
-  on: title, article
-  documents: 105
-Encoder ranker
-  on: title, article
-  k: 3
-  similarity: cosine
-  embeddings stored at: encoder.pkl
+search += documents 
+search("Bordeaux")
+[{'id': 57,
+  'title': 'Bordeaux',
+  'url': 'https://en.wikipedia.org/wiki/Bordeaux',
+  'article': 'Bordeaux ( bor-DOH, French: [bɔʁdo] (listen); Gascon Occitan: Bordèu [buɾˈðɛw]) is a port city on the river Garonne in the Gironde department, Southwestern France.',
+  'similarity': 0.69513476},
+ {'id': 63,
+  'title': 'Bordeaux',
+  'url': 'https://en.wikipedia.org/wiki/Bordeaux',
+  'article': 'The term "Bordelais" may also refer to the city and its surrounding region.',
+  'similarity': 0.6214991},
+ {'id': 65,
+  'title': 'Bordeaux',
+  'url': 'https://en.wikipedia.org/wiki/Bordeaux',
+  'article': "Bordeaux is a world capital of wine, with its castles and vineyards of the Bordeaux region that stand on the hillsides of the Gironde and is home to the world's main wine fair, Vinexpo.",
+  'similarity': 0.61809057}]
 ```
 
-```python
-# Relevant documents
-search("capital of france")
-```
+## Retrieve 👻
 
-```python
-[{'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
-  'similarity': 0.7400897},
- {'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France, or Paris Region, which has an estimated population of 12,174,880, or about 18 percent of the population of France as of 2017.',
-  'similarity': 0.6600144},
- {'title': 'Lyon',
-  'url': 'https://en.wikipedia.org/wiki/Lyon',
-  'article': 'Lyon or Lyons (UK: , US: , French: [ljɔ̃] (listen); Arpitan: Liyon, pronounced [ʎjɔ̃]) is the third-largest city and second-largest urban area of France.',
-  'similarity': 0.58004653}]
-```
+Cherche provides different retrievers that filter input documents based on a query.
 
-## Acknowledgement
+- retrieve.Elastic
+- retrieve.TfIdf
+- retrieve.Lunr
+- retrieve.BM25Okapi
+- retrieve.BM25L
+- retrieve.Flash
 
-Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create fancy pipelines simply. Do not hesitate to look at Haystack, Jina and TxtAi which offer very advanced solutions for neural search and are amazing. Haystack offers many tools to easily integrate your corpora into a neural search pipeline. This tool would not have been possible without them.
+## Rank 🤗
+
+Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models, [Hugging Face sentence similarity](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, [Hugging Face zero shot classification](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models and of course with your own models.
+
+## Acknowledgement 👏
+
+The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Lunr retriever is a wrapper of [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
+
+## See also 👀
+
+Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create pipelines. Also Cherche is well suited for middle sized corpus.
+
+Do not hesitate to look at Haystack, Jina or TxtAi which offer very advanced solutions for neural search and are great.
 
 - [Haystack](https://github.com/deepset-ai/haystack)
 - [Jina](https://github.com/jina-ai/jina)
 - [txtai](https://github.com/neuml/txtai)
 
-The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
+## Dev Team 💾
+
+The Cherche dev team is made of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant). 🥳
+

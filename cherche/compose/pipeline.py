@@ -16,7 +16,7 @@ class PipelineUnion(Compose):
     """
 
     def __init__(self, models: list):
-        self.models = models
+        super().__init__(models=models)
 
     def __repr__(self) -> str:
         repr = "Union Pipeline"
@@ -46,8 +46,14 @@ class PipelineUnion(Compose):
         return documents
 
     def __or__(self, model) -> "PipelineUnion":
-        self.models.append(model)
-        return self
+        return PipelineUnion(models=self.models + [model])
+
+    def __add__(self, other) -> "PipelineUnion":
+        """Pipeline operator."""
+        if isinstance(other, list):
+            # Documents are part of the pipeline.
+            return Pipeline(models=[self, {document[self.key]: document for document in other}])
+        return Pipeline(models=[self, other])
 
 
 class PipelineIntersection(Compose):
@@ -71,7 +77,8 @@ class PipelineIntersection(Compose):
         return repr
 
     def __call__(self, q: str, **kwargs) -> list:
-        """
+        """Retrieve documents.
+
         Parameters
         ----------
         q
@@ -90,8 +97,16 @@ class PipelineIntersection(Compose):
         ]
 
     def __and__(self, model) -> "PipelineIntersection":
-        self.models.append(model)
-        return self
+        return PipelineIntersection(models=self.models + [model])
+
+    def __add__(self, other) -> "PipelineIntersection":
+        """Pipeline intersection operator."""
+        if isinstance(other, list):
+            # Documents are part of the pipeline.
+            return PipelineIntersection(
+                models=self.models + [{document[self.key]: document for document in other}]
+            )
+        return PipelineIntersection(models=self.models + [other])
 
 
 class Pipeline(Compose):
@@ -248,14 +263,17 @@ class Pipeline(Compose):
 
     def __or__(self, other) -> PipelineUnion:
         """Custom operator for union."""
-        if isinstance(other, PipelineUnion):
-            return PipelineUnion(models=[self] + [other.models])
-        else:
-            return PipelineUnion(models=[self, other])
+        return PipelineUnion(models=[self, other])
 
     def __and__(self, other) -> PipelineIntersection:
         """Custom operator for intersection."""
-        if isinstance(other, PipelineIntersection):
-            return PipelineIntersection(models=[self] + [other.models])
-        else:
-            return PipelineIntersection(models=[self, other])
+        return PipelineIntersection(models=[self, other])
+
+    def __add__(self, other) -> "Pipeline":
+        """Pipeline operator."""
+        if isinstance(other, list):
+            # Documents are part of the pipeline.
+            return Pipeline(
+                models=self.models + [{document[self.key]: document for document in other}]
+            )
+        return Pipeline(models=self.models + [other])

@@ -21,8 +21,6 @@ class UnionIntersection(Compose):
             return Pipeline(
                 [self] + [{document[self.models[0].key]: document for document in other}]
             )
-        elif isinstance(other, Pipeline):
-            return Pipeline([self] + other.models)
         return Pipeline([self, other])
 
 
@@ -126,10 +124,9 @@ class Union(UnionIntersection):
                 documents.append(document)
         return documents
 
-    def __or__(self, model) -> "Union":
+    def __or__(self, other) -> "Union":
         """Union operator"""
-        self.models.append(model)
-        return self
+        return Union(models=self.models + [other])
 
 
 class Intersection(UnionIntersection):
@@ -224,6 +221,5 @@ class Intersection(UnionIntersection):
             dict(document) for document, count in counter_docs.items() if count >= len(self.models)
         ]
 
-    def __and__(self, model) -> "Intersection":
-        self.models.append(model)
-        return self
+    def __and__(self, other) -> "Intersection":
+        return Intersection(models=self.models + [other])

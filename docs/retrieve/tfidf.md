@@ -59,9 +59,11 @@ You can also initialise the retriever with a custom [TfidfVectorizer](https://sc
 ...    }
 ... ]
 
->>> tfidf = TfidfVectorizer(lowercase=True, min_df=0.1, max_df=0.9, ngram_range=(3, 10), analyzer="char_wb")
+>>> tfidf = TfidfVectorizer(
+...  lowercase=True, min_df=0.1, max_df=0.9, ngram_range=(3, 10), analyzer="char_wb")
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, tfidf=tfidf, k=30)
+>>> retriever = retrieve.TfIdf(
+...  key="id", on=["title", "article"], documents=documents, tfidf=tfidf, k=30)
 
 >>> retriever("fr")
 [{'id': 0}]

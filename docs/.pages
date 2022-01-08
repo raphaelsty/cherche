@@ -4,5 +4,7 @@ nav:
     - retrieve
     - rank
     - pipeline
+    - qa
+    - summary
     - examples
     - api
