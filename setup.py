@@ -8,12 +8,15 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="cherche",
     version=f"{__version__}",
+    license="MIT",
     author="Raphael Sourty",
     author_email="raphael.sourty@gmail.com",
-    description="Neural Search for Python lover.",
+    description="Neural Search",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/raphaelsty/cherche",
+    download_url="https://github.com/user/cherche/archive/v_01.tar.gz",
+    keywords=["neural", "search", "question", "answering", "summarization"],
     packages=setuptools.find_packages(),
     install_requires=[
         "elasticsearch == 7.10.0",
