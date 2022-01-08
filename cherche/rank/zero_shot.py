@@ -16,8 +16,8 @@ class ZeroShot:
     encoder
         Zero shot classifier to use for ranking
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
-        will be retrieved.
+        Number of documents to reorder. The default value is None, i.e. all documents will be
+        reordered and returned.
     multi_class
         If more than one candidate label can be correct, pass multi_class=True to calculate each
         class independently.

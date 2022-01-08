@@ -39,15 +39,18 @@ Evaluate a pipeline using pairs of query and answers.
 ...          {"uri": "tag:FranceCapital"},
 ...          {"uri": "tag:ParisLights"},
 ...          {"uri": "tag:EiffelTower"},
-...      ]),
+...     ]),
 ...     ("Toulouse", [
 ...          {"uri": "tag:Occitanie"},
 ...          {"uri": "tag:PinkCity"},
 ...          {"uri": "tag:ToulouseRugby"},
-...      ]),
+...     ]),
 ... ]
 
->>> retriever = retrieve.Flash(key="uri", on="tags") | retrieve.TfIdf(key="uri", on="label", documents=documents)
+>>> retriever = (
+...     retrieve.Flash(key="uri", on="tags") |
+...     retrieve.TfIdf(key="uri", on="label", documents=documents)
+... )
 
 >>> ranker = rank.Encoder(
 ...    key="uri",
@@ -134,5 +137,5 @@ Encoder ranker
 
 ## References
 
-1. (Evaluation Metrics For Information Retrieval)[https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk]
+1. [Evaluation Metrics For Information Retrieval](https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk)
 

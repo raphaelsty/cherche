@@ -133,7 +133,7 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
 
     References
     ----------
-    1. (Evaluation Metrics For Information Retrieval)[https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk]
+    1. [Evaluation Metrics For Information Retrieval](https://amitness.com/2020/08/information-retrieval-evaluation/#1-precisionk)
 
     """
     precision = collections.defaultdict(lambda: stats.Mean())

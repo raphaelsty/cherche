@@ -18,7 +18,7 @@ Encoder as a retriever using Faiss Index.
 
 - **k** (*int*)
 
-    Number of documents to retrieve.
+    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
 - **path** (*str*) – defaults to `None`
 

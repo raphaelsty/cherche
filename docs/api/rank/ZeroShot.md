@@ -16,7 +16,7 @@ ZeroShot classifier for ranking. Zero shot does not pre-compute embeddings, it n
 
 - **k** (*int*) – defaults to `None`
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
 - **multi_class** (*bool*) – defaults to `True`
 

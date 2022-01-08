@@ -22,7 +22,7 @@ class Lunr(Retriever):
         Documents in Lunr retriever are static. The retriever must be reseted to index new
         documents.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
 
     Examples

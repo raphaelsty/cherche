@@ -21,7 +21,7 @@ class TfIdf(Retriever):
         Documents in TFIdf retriever are static. The retriever must be reseted to index new
         documents.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
     tfidf
         TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.

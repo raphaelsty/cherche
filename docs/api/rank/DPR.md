@@ -1,6 +1,6 @@
 # DPR
 
-DPR is dedicated to rank documents using distinct models to encode the query and the documents contents.
+DPR ranks documents using distinct models to encode the query and document contents.
 
 
 
@@ -24,13 +24,13 @@ DPR is dedicated to rank documents using distinct models to encode the query and
 
 - **k** (*int*) – defaults to `None`
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
 - **path** (*str*) – defaults to `None`
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function dot at 0x7f9c81f42940>`
+- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function dot at 0x7fdd5a8bb940>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 

@@ -20,7 +20,7 @@ class Flash(Retriever):
     on
         Fields to use to match the query to the documents.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
     keywords
         Keywords extractor from [FlashText](https://github.com/vi3k6i5/flashtext). If set to None,

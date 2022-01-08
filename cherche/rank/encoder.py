@@ -21,8 +21,8 @@ class Encoder(Ranker):
     encoder
         Encoding function dedicated to documents and query.
     k
-        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
-        will be retrieved.
+        Number of documents to reorder. The default value is None, i.e. all documents will be
+        reordered and returned.
     path
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it
         already exists to load the embeddings and will update it when documents are added.

@@ -14,7 +14,7 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
 - **k** (*int*) – defaults to `None`
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Number of documents to retrieve. Default is `None`, i.e all documents that match the query  will be retrieved.
 
 - **es** (*elasticsearch.client.Elasticsearch*) – defaults to `None`
 

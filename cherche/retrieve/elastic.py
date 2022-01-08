@@ -17,8 +17,8 @@ class Elastic(Retriever):
     on
         Fields to use to match the query to the documents.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
-        will be retrieved.
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
+         will be retrieved.
     es
         ElasticSearch Python client. The default configuration is used if set to None.
     index

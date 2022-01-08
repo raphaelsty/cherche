@@ -71,9 +71,13 @@ Mapping to documents
 Retriever, Ranker, Question Answering:
 ```python
 >>> search += qa.QA(
-...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
+...     model = pipeline(
+...         "question-answering",
+...         model = "deepset/roberta-base-squad2",
+...         tokenizer = "deepset/roberta-base-squad2"
+...     ),
 ...     on = "article",
-...  )
+... )
 
 >>> search
 TfIdf retriever

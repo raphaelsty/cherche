@@ -16,7 +16,7 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
 
 - **k** (*int*) – defaults to `None`
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
 - **keywords** (*flashtext.keyword.KeywordProcessor*) – defaults to `None`
 

@@ -1,8 +1,8 @@
 # dot
 
-Computes dot product between input query embedding and documents embeddings. Higher is better.
+Computes dot product between input query embedding and documents embeddings.
 
-
+Bigger is better.
 
 ## Parameters
 

@@ -17,7 +17,8 @@ class Encoder(BaseEncoder):
     on
         Field to use to retrieve documents.
     k
-        Number of documents to retrieve.
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
+        will be retrieved.
 
     Examples
     --------

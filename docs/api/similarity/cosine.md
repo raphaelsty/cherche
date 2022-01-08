@@ -1,8 +1,8 @@
 # cosine
 
-Computes cosine distance between input query embedding and documents embeddings. Higher is better.
+Computes cosine distance between input query embedding and documents embeddings.
 
-
+Bigger is better.
 
 ## Parameters
 

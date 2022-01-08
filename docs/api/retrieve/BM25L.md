@@ -24,7 +24,7 @@ BM25L model from [Rank-BM25: A two line search engine](https://github.com/dorian
 
 - **k** (*int*) – defaults to `None`
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
 - **k1** (*float*) – defaults to `1.5`
 

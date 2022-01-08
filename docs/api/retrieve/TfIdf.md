@@ -20,7 +20,7 @@ TfIdf retriever based on cosine similarities.
 
 - **k** (*int*) – defaults to `None`
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
 - **tfidf** (*sklearn.feature_extraction.text.TfidfVectorizer*) – defaults to `None`
 
