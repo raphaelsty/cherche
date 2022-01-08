@@ -21,7 +21,7 @@ class Encoder(Ranker):
     encoder
         Encoding function dedicated to documents and query.
     k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
         will be retrieved.
     path
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it
@@ -102,7 +102,7 @@ class Encoder(Ranker):
         super().__init__(key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity)
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
-        """Encode inputs query and ranks documents based on the similarity between the query and
+        """Encode input query and ranks documents based on the similarity between the query and
         the selected field of the documents.
 
         Parameters
