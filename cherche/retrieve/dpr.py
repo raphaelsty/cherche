@@ -7,8 +7,8 @@ import numpy as np
 from .base import BaseEncoder
 
 
-class Encoder(BaseEncoder):
-    """Encoder as a retriever using Faiss Index.
+class DPR(BaseEncoder):
+    """DPR as a retriever using Faiss Index.
 
     Parameters
     ----------
@@ -33,23 +33,24 @@ class Encoder(BaseEncoder):
     ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> retriever = retrieve.Encoder(
-    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    >>> retriever = retrieve.DPR(
+    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
+    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
     ...    key = "id",
     ...    on = ["title", "article"],
     ...    k = 2,
-    ...    path = "retriever_encoder.pkl"
+    ...    path = "retriever_dpr.pkl"
     ... )
 
     >>> retriever.add(documents)
-    Encoder retriever
+    DPR retriever
          key: id
          on: title, article
          documents: 3
 
     >>> print(retriever("Paris"))
-    [{'id': 0, 'similarity': 1.472814254853544},
-     {'id': 1, 'similarity': 1.0293491728070765}]
+    [{'id': 0, 'similarity': 0.011120470176519816},
+     {'id': 2, 'similarity': 0.010158280600646162}]
 
     >>> documents = [
     ...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -58,7 +59,7 @@ class Encoder(BaseEncoder):
     ... ]
 
     >>> retriever.add(documents)
-    Encoder retriever
+    DPR retriever
          key: id
          on: title, article
          documents: 6
@@ -78,12 +79,12 @@ class Encoder(BaseEncoder):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 3,
-      'similarity': 1.472814254853544,
+      'similarity': 0.011120470176519816,
       'title': 'Paris'},
      {'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.472814254853544,
+      'similarity': 0.011120470176519816,
       'title': 'Paris'}]
 
     References
@@ -93,14 +94,22 @@ class Encoder(BaseEncoder):
     """
 
     def __init__(
-        self, encoder, key: str, on: typing.Union[str, list], k: int, path: str = None
+        self,
+        encoder,
+        query_encoder,
+        key: str,
+        on: typing.Union[str, list],
+        k: int,
+        path: str = None,
     ) -> None:
-        super().__init__(encoder=encoder, key=key, on=on, k=k, path=path)
+        super().__init__(
+            encoder=encoder, key=key, on=on, k=k, path=path, query_encoder=query_encoder
+        )
 
     def __call__(self, q: str) -> list:
         distances, indexes = self.tree.search(
             np.array(
-                [self.encoder(q) if q not in self.q_embeddings else self.q_embeddings[q]]
+                [self.query_encoder(q) if q not in self.q_embeddings else self.q_embeddings[q]]
             ).astype(np.float32),
             self.k if self.k is not None else len(self.documents),
         )

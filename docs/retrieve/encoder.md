@@ -2,8 +2,6 @@
 
 The `retriever.Encoder` model allows the use of framework that encode queries and documents with a single model. It is compatible with the [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models. The encoder pre-computes document embeddings and uses [Faiss](https://github.com/facebookresearch/faiss) to quickly find the documents most similar to the query embedding.
 
-You can use your own model within `retrieve.Encoder`. This model should have an API similar to the Sentence Transformers models. It should have a method which encodes a list of documents `list[str]` which returns a numpy array with dimensions `(number of documents, embedding size)`. This same method must be able to encode a query (str) and return an embedding of size `(1, embedding dimension)`.
-
 Documents indexed by `retrieve.Encoder` can be updated in mini-batch with the `add` method.
 This method takes time because the encoder will pre-compute the document embeddings and store them
 in the `pickle` file associated with the `path` parameter. You can speed up the process with a GPU.
@@ -70,4 +68,43 @@ retriever.
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
   'similarity': 0.8160134832855334}]
+```
+
+## Custom Encoder
+
+You can use your model templates within `retrieve.Encoder`. It should encode a list of documents `list[str]` and return a numpy array with dimensions `(number of documents, embedding size)`. This model should also encode a query (str) and return an embedding of size `(embedding dimension, )`. For example, you could use word embeddings to encode documents and queries. 
+
+Here is an example of how to integrate a custom encoder:
+
+```python
+import numpy as np
+from cherche import retrieve
+from sentence_transformers import SentenceTransformer
+
+class CustomEncoder:
+
+    def __init__(self):
+      """Custom Encoder retriever."""
+      self.encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
+
+    def encode(self, documents):
+      """Documents encoder."""
+      return self.encoder.encode(documents)
+
+model = CustomEncoder()
+
+# Your model should pass these tests, i.e Sentence Bert API.
+assert model.encode(["Paris", "France", "Bordeaux"]).shape[0] == 3 
+assert isinstance(model.encode(["Paris", "France", "Bordeaux"]), np.ndarray)
+
+assert len(model.encode("Paris").shape) == 1
+assert isinstance(model.encode("Paris"), np.ndarray)
+
+retriever = retrieve.Encoder(
+    encoder = model.encode,
+    key = "id",
+    on = ["title", "article"],
+    k = 2,
+    path = "custom_encoder.pkl"
+)
 ```

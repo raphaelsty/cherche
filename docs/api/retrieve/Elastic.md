@@ -25,6 +25,10 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
     Elasticsearch index to use to index documents. Elastic will create the index if it does not exist.
 
 
+## Attributes
+
+- **type**
+
 
 ## Examples
 

@@ -67,6 +67,10 @@ class Summary:
         self.min_length = min_length
         self.max_length = max_length
 
+    @property
+    def type(self):
+        return "summary"
+
     def __repr__(self) -> str:
         repr = "Summarization model"
         repr += f"\n\t on: {', '.join(self.on)}"

@@ -31,6 +31,10 @@ Abstract class for ranking models.
     Similarity measure to use i.e similarity.cosine or similarity.dot.
 
 
+## Attributes
+
+- **type**
+
 
 
 ## Methods

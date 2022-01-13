@@ -40,6 +40,10 @@ class Ranker(abc.ABC):
         self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
         self.q_embeddings = {}
 
+    @property
+    def type(self):
+        return "rank"
+
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} ranker"
         repr += f"\n\t key: {self.key}"

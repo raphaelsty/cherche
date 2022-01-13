@@ -8,7 +8,10 @@ class Compose(abc.ABC):
 
     def __init__(self, models: list) -> None:
         self.models = models
-        self.key = self.models[0].key if hasattr(self.models[0], "key") else None
+        for model in self.models:
+            if hasattr(model, "key"):
+                self.key = model.key
+                break
 
     @abc.abstractmethod
     def __call__(self, q: str, **kwargs) -> list:

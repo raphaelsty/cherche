@@ -40,6 +40,10 @@ class Retriever(abc.ABC):
         repr += f"\n \t documents: {self.__len__()}"
         return repr
 
+    @property
+    def type(self):
+        return "retrieve"
+
     @abc.abstractclassmethod
     def __call__(self, q: str, **kwargs) -> list:
         return []
@@ -137,11 +141,16 @@ class _BM25(Retriever):
 
 
 class BaseEncoder(Retriever):
-    def __init__(self, encoder, key: str, on: typing.Union[str, list], k: int, path: str) -> None:
+    def __init__(
+        self, encoder, key: str, on: typing.Union[str, list], k: int, path: str, query_encoder=None
+    ) -> None:
         super().__init__(key=key, on=on, k=k)
         self.encoder = encoder
         self.path = path
         self.tree = None
+        self.documents = {}
+        self.q_embeddings = {}
+        self.query_encoder = query_encoder
 
     @staticmethod
     def build_faiss(tree: faiss.IndexFlatL2, documents_embeddings: list) -> faiss.IndexFlatL2:
@@ -175,3 +184,57 @@ class BaseEncoder(Retriever):
         """Dump embeddings to the selected directory."""
         with open(path, "wb") as ouput_embeddings:
             pickle.dump(embeddings, ouput_embeddings)
+
+    def add(self, documents: list) -> "BaseEncoder":
+        """Add documents to the faiss index and export embeddings if the path is provided.
+        Streaming friendly.
+
+        Parameters
+        ----------
+        documents
+            List of documents as json or list of string to pre-compute queries embeddings.
+
+        """
+        n = len(self.documents)
+        self.documents.update(
+            {index + n: {self.key: document[self.key]} for index, document in enumerate(documents)}
+        )
+
+        embeddings = self.load_embeddings(path=self.path)
+
+        # Pre-compute query embeddings
+        if isinstance(documents[0], str):
+
+            query_encoder = self.query_encoder if self.query_encoder is not None else self.encoder
+
+            for query, embedding in zip(
+                documents,
+                query_encoder(
+                    [
+                        document
+                        for document in documents
+                        if isinstance(document, str) and document not in self.embeddings
+                    ]
+                ),
+            ):
+                embeddings[query] = embedding
+                self.q_embeddings[query] = embedding
+
+        # Pre-compute documents embeddings and index them using Faiss
+        keys, new_documents = [], []
+        for document in documents:
+            if document[self.key] not in embeddings:
+                keys.append(str(document[self.key]))
+                new_documents.append(" ".join([document.get(field, "") for field in self.on]))
+
+        for key, embedding in zip(keys, self.encoder(new_documents)):
+            embeddings[key] = embedding
+
+        if self.path is not None:
+            self.dump_embeddings(embeddings=embeddings, path=self.path)
+
+        self.tree = self.build_faiss(
+            tree=self.tree,
+            documents_embeddings=[embeddings[str(document[self.key])] for document in documents],
+        )
+        return self

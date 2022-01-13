@@ -6,5 +6,6 @@ nav:
     - pipeline
     - qa
     - summary
+    - translate
     - examples
     - api

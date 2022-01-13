@@ -17,6 +17,7 @@ Here is the list of available retrievers using Cherche:
 - `retrieve.Lunr`
 - `retrieve.Flash`
 - `retrieve.Encoder`
+- `retrieve.DPR`
 
 ## k and on parameters
 

@@ -93,4 +93,54 @@ You can train your own DPR using the tool of your choice and use it with Cherche
 Your own DPR should have an API similar to the DPR model of Sentence Transformers models. It should
 be a function which encodes a list of strings to return a numpy array with dimensions
 `(number of documents, embedding size)`. This same function must be able to encode a single string
-to return an embedding of size `(1, embedding dimension)`.
+to return an embedding of size `(embedding dimension, )`.
+
+Here is an example of how to integrate a custom DPR model:
+
+```python
+import numpy as np
+
+from cherche import retrieve
+from sentence_transformers import SentenceTransformer
+
+class CustomDPR:
+
+    def __init__(self):
+      """Custom DPR retriever."""
+      # Document encoder
+      self.encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base')
+      # Query encoder
+      self.query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base')
+
+    def documents(self, documents):
+      """Documents encoder."""
+      return self.encoder.encode(documents)
+
+    def query(self, query):
+      """Query encoder."""
+      return self.query_encoder.encode(query)
+
+model = CustomDPR()
+
+# Your model should pass these tests, i.e Sentence Bert API.
+assert model.documents(["Paris", "France", "Bordeaux"]).shape[0] == 3 
+assert isinstance(model.documents(["Paris", "France", "Bordeaux"]), np.ndarray)
+
+assert len(model.documents("Paris").shape) == 1
+assert isinstance(model.documents("Paris"), np.ndarray)
+
+assert model.query(["Paris", "France", "Bordeaux"]).shape[0] == 3
+assert isinstance(model.query(["Paris", "France", "Bordeaux"]), np.ndarray)
+
+assert len(model.documents("Paris").shape) == 1
+assert isinstance(model.query("Paris"), np.ndarray)
+
+retriever = rank.DPR(
+    encoder = model.documents,
+    query_encoder = model.query,
+    key = "id",
+    on = ["title", "article"],
+    k = 2,
+    path = "custom_dpr.pkl"
+)
+```

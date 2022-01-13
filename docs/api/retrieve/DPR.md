@@ -1,12 +1,14 @@
-# Encoder
+# DPR
 
-Encoder as a retriever using Faiss Index.
+DPR as a retriever using Faiss Index.
 
 
 
 ## Parameters
 
 - **encoder**
+
+- **query_encoder**
 
 - **key** (*str*)
 
@@ -41,23 +43,24 @@ Encoder as a retriever using Faiss Index.
 ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
 ... ]
 
->>> retriever = retrieve.Encoder(
-...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+>>> retriever = retrieve.DPR(
+...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
+...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
-...    path = "retriever_encoder.pkl"
+...    path = "retriever_dpr.pkl"
 ... )
 
 >>> retriever.add(documents)
-Encoder retriever
+DPR retriever
      key: id
      on: title, article
      documents: 3
 
 >>> print(retriever("Paris"))
-[{'id': 0, 'similarity': 1.472814254853544},
- {'id': 1, 'similarity': 1.0293491728070765}]
+[{'id': 0, 'similarity': 0.011120470176519816},
+ {'id': 2, 'similarity': 0.010158280600646162}]
 
 >>> documents = [
 ...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -66,7 +69,7 @@ Encoder retriever
 ... ]
 
 >>> retriever.add(documents)
-Encoder retriever
+DPR retriever
      key: id
      on: title, article
      documents: 6
@@ -86,12 +89,12 @@ Encoder retriever
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 3,
-  'similarity': 1.472814254853544,
+  'similarity': 0.011120470176519816,
   'title': 'Paris'},
  {'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 1.472814254853544,
+  'similarity': 0.011120470176519816,
   'title': 'Paris'}]
 ```
 

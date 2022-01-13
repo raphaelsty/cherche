@@ -119,4 +119,39 @@ You can train your own encoder using the tool of your choice and use it with Che
 bases and could be used for specific use case. Your own encodeur should have an API similar to the
 Sentence Transformers models. It should be a function which encodes a list of strings
 to return a numpy array with dimensions `(number of documents, embedding size)`. This same function
-must be able to encode a single string to return an embedding of size `(1, embedding dimension)`.
+must be able to encode a single string to return an embedding of size `(embedding dimension, )`.
+
+Here is an example of how to integrate a custom encoder as a ranker:
+
+```python
+import numpy as np
+from cherche import rank
+from sentence_transformers import SentenceTransformer
+
+class CustomEncoder:
+
+    def __init__(self):
+      """Custom Encoder retriever."""
+      self.encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
+
+    def encode(self, documents):
+      """Documents encoder."""
+      return self.encoder.encode(documents)
+
+model = CustomEncoder()
+
+# Your model should pass these tests, i.e Sentence Bert API.
+assert model.encode(["Paris", "France", "Bordeaux"]).shape[0] == 3 
+assert isinstance(model.encode(["Paris", "France", "Bordeaux"]), np.ndarray)
+
+assert len(model.encode("Paris").shape) == 1
+assert isinstance(model.encode("Paris"), np.ndarray)
+
+retriever = rank.Encoder(
+    encoder = model.encode,
+    key = "id",
+    on = ["title", "article"],
+    k = 2,
+    path = "custom_encoder.pkl"
+)
+```

@@ -39,6 +39,10 @@ BM25Okapi model from [Rank-BM25: A two line search engine](https://github.com/do
     Smoothing parameter defined in [Improvements to BM25 and Language Models Examined[http://www.cs.otago.ac.nz/homepages/andrew/papers/2014-2.pdf].
 
 
+## Attributes
+
+- **type**
+
 
 ## Examples
 

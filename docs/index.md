@@ -7,10 +7,10 @@
 <div align="center">
   <!-- Documentation -->
   <a href="https://raphaelsty.github.io/cherche/"><img src="https://img.shields.io/website?label=docs&style=flat-square&url=https%3A%2F%2Fraphaelsty.github.io/cherche/%2F" alt="documentation"></a>
+  <!-- Demo -->
+  <a href="https://huggingface.co/spaces/raphaelsty/games"><img src="https://img.shields.io/badge/-Demo-9cf" alt="Demo"></a>  
   <!-- License -->
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="license">
-  </a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="license"></a>
 </div>
 <br>
 
@@ -138,9 +138,13 @@ Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net
 
 Cherche provides modules dedicated to summarization and questions answering. These modules are compatible with Hugging Face's pre-trained models and can be fully integrated into neural search pipelines.
 
-## Hugging Face spaces
+## Translation
 
-You can find a running demo of Cherche [here](https://huggingface.co/spaces/raphaelsty/games).
+Hugging Face's translation models can be fully integrated into the neural search pipeline to translate queries, documents or answers.
+
+## Hugging Face Space
+
+A running demo [here](https://huggingface.co/spaces/raphaelsty/games).
 
 ## Acknowledgement 👏
 

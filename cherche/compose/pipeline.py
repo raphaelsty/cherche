@@ -238,16 +238,17 @@ class Pipeline(Compose):
 
         """
         query = {**kwargs}
+        summary = False
 
-        for id_model, model in enumerate(self.models):
+        for model in self.models:
 
             # mapping documents
             if isinstance(model, dict):
-                key = self.models[id_model - 1].key
+
                 answer = [
-                    {**model[doc[key]], "similarity": doc["similarity"]}
+                    {**model[doc[self.key]], "similarity": doc["similarity"]}
                     if "similarity" in doc
-                    else model[doc[key]]
+                    else model[doc[self.key]]
                     for doc in answer
                 ]
 
@@ -259,11 +260,15 @@ class Pipeline(Compose):
             if isinstance(answer, list):
                 query.update({"documents": answer})
 
-            # summarization
+            # Query translation and summarization
             elif isinstance(answer, str):
-                return answer
+                q = answer
 
-        return query["documents"]
+                # Translation of the summary may happend.
+                if model.type == "summary":
+                    summary = True
+
+        return query["documents"] if not summary else q
 
     def __or__(self, other) -> PipelineUnion:
         """Custom operator for union."""

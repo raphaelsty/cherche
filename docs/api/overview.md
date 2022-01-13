@@ -30,6 +30,7 @@
 
 - [BM25L](../retrieve/BM25L)
 - [BM25Okapi](../retrieve/BM25Okapi)
+- [DPR](../retrieve/DPR)
 - [Elastic](../retrieve/Elastic)
 - [Encoder](../retrieve/Encoder)
 - [Flash](../retrieve/Flash)
@@ -45,4 +46,9 @@
 ## summary
 
 - [Summary](../summary/Summary)
+
+## translate
+
+- [Translate](../translate/Translate)
+- [TranslateQuery](../translate/TranslateQuery)
 

@@ -19,6 +19,10 @@ Summarization model. Returns a single summary for an input list of documents.
 - **max_length** (*int*) – defaults to `30`
 
 
+## Attributes
+
+- **type**
+
 
 ## Examples
 

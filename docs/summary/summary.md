@@ -21,7 +21,7 @@ search = pipeline + documents + summarization
 ## Quick Start
 
 ```python
->>> from cherche import data, rank, retrieve, qa
+>>> from cherche import data, rank, retrieve, summary
 >>> from sentence_transformers import SentenceTransformer
 >>> from transformers import pipeline
 
@@ -37,43 +37,19 @@ search = pipeline + documents + summarization
 ...    path = "encoder.pkl"
 ... )
 
->>> question_answering = qa.QA(
-...    model = pipeline("question-answering", 
-...         model = "deepset/roberta-base-squad2", 
-...         tokenizer = "deepset/roberta-base-squad2"
+>>> summarization = summary.Summary(
+...    model = pipeline(
+...         "summarization",
+...         model="sshleifer/distilbart-cnn-6-6",
+...         tokenizer="sshleifer/distilbart-cnn-6-6",
+...         framework="pt"
 ...    ),
-...    on = "article",
+...    on = ["title", "article"],
 ... )
 
->>> search = retriever + ranker + documents + question_answering
+>>> search = retriever + ranker + documents + summarization
 >>> search.add(documents)
-# Paris Saint-Germain is the answer.
->>> search("What is the name of the football club of Paris?")
-[{'start': 18,
-  'end': 37,
-  'answer': 'Paris Saint-Germain',
-  'qa_score': 0.9848363399505615,
-  'id': 20,
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'The football club Paris Saint-Germain and the rugby union club Stade Français are based in Paris.',
-  'similarity': 0.7104821},
- {'start': 15,
-  'end': 17,
-  'answer': '12',
-  'qa_score': 0.015906214714050293,
-  'id': 16,
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'Paris received 12.',
-  'similarity': 0.46774143},
- {'start': 29,
-  'end': 35,
-  'answer': '\u200b[paʁi',
-  'qa_score': 2.7218469767831266e-05,
-  'id': 0,
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'Paris (French pronunciation: \u200b[paʁi] (listen)) is the capital and most populous city of France, with an estimated population of 2,175,601 residents as of 2018, in an area of more than 105 square kilometres (41 square miles).',
-  'similarity': 0.52439684}]
+
+>>> search("Bordeaux wine")
+"Bordeaux has been voted European Destination of the year in a 2015 online poll. The region is home to the world's main wine"
 ```

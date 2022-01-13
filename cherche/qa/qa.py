@@ -66,6 +66,10 @@ class QA:
         self.model = model
         self.k = k
 
+    @property
+    def type(self):
+        return "qa"
+
     def __repr__(self) -> str:
         repr = "Question Answering"
         repr += f"\n\t model: {self.model.tokenizer.name_or_path}"

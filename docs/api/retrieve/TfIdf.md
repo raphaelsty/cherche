@@ -27,6 +27,10 @@ TfIdf retriever based on cosine similarities.
     TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
 
 
+## Attributes
+
+- **type**
+
 
 ## Examples
 

@@ -23,6 +23,10 @@ Lunr is a Python implementation of Lunr.js by Oliver Nightingale. Lunr is a retr
     Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
 
+## Attributes
+
+- **type**
+
 
 ## Examples
 

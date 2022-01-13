@@ -23,6 +23,10 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
     Keywords extractor from [FlashText](https://github.com/vi3k6i5/flashtext). If set to None, a default one is created.
 
 
+## Attributes
+
+- **type**
+
 
 ## Examples
 
