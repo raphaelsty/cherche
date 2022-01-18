@@ -22,7 +22,7 @@ setuptools.setup(
         "elasticsearch >= 7.10.0",
         "faiss-cpu >= 1.7.1.post3",
         "flashtext >= 2.7",
-        "numpy >= 1.20.0",
+        "numpy >= 1.19.0",
         "rank-bm25 == 0.2.1",
         "river >= 0.9.0",
         "sentence-transformers >= 2.1.0",
