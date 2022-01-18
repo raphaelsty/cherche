@@ -21,7 +21,7 @@ Cherche (search in French) allows you to create a neural search pipeline using r
 ## Installation 🤖
 
 ```sh
-pip install cherche
+pip install cherche --upgrade 
 ```
 
 To install the development version:
