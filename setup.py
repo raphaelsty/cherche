@@ -24,7 +24,7 @@ setuptools.setup(
         "flashtext >= 2.7",
         "numpy >= 1.19.0",
         "rank-bm25 == 0.2.1",
-        "river >= 0.9.0",
+        "river >= 0.8.0",
         "sentence-transformers >= 2.1.0",
         "tqdm >= 4.62.3",
         "transformers >= 4.12.0",
