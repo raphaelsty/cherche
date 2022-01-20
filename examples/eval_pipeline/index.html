@@ -2567,7 +2567,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Here is the list of attributes each tag has:</p>
+<p>This is what a pair of responses to a query looks like. For each query, there is a list of relevant document identifiers.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -2588,87 +2588,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-</pre></div>
-<div id="cell-4" class="clipboard-copy-txt">print(documents[3])</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>{&#39;broader&#39;: [&#39;http://www.semanlink.net/tag/statistical_classification&#39;,
-             &#39;http://www.semanlink.net/tag/embeddings&#39;],
- &#39;broader_altLabel&#39;: [&#39;embedding&#39;],
- &#39;broader_altLabel_text&#39;: &#39;embedding&#39;,
- &#39;broader_prefLabel&#39;: [&#39;Classification&#39;, &#39;Embeddings&#39;],
- &#39;broader_prefLabel_text&#39;: &#39;Classification Embeddings&#39;,
- &#39;broader_related&#39;: [&#39;http://www.semanlink.net/tag/nlp_techniques&#39;,
-                     &#39;http://www.semanlink.net/tag/similarity_queries&#39;],
- &#39;comment&#39;: &#39;How to embed (describe) classes (in classification)? See related &#39;
-            &#39;work section of this &#39;
-            &#39;[paper](doc:2020/02/joint_embedding_of_words_and_la)\r\n&#39;
-            &#39;\r\n&#39;
-            &#39;&gt; [FastText](tag:fasttext) generates both word\r\n&#39;
-            &#39;embeddings and label embeddings. It seeks to predict one of the &#39;
-            &#39;document’s labels (instead of the central\r\n&#39;
-            &#39;word) ([src](doc:2020/10/1911_11506_word_class_embeddi))&#39;,
- &#39;creationDate&#39;: &#39;2020-02-18&#39;,
- &#39;creationTime&#39;: &#39;2020-02-18T15:00:36Z&#39;,
- &#39;prefLabel&#39;: [&#39;Label Embedding&#39;],
- &#39;prefLabel_text&#39;: &#39;Label Embedding&#39;,
- &#39;related&#39;: [&#39;http://www.semanlink.net/tag/fasttext&#39;],
- &#39;type&#39;: [&#39;http://www.semanlink.net/2001/00/semanlink-schema#Tag&#39;],
- &#39;uri&#39;: &#39;http://www.semanlink.net/tag/label_embedding&#39;}
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>This is what a pair of responses to a query looks like. For each query, there is a list of relevant document identifiers.</p>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-5">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">query_answers</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
-<div id="cell-5" class="clipboard-copy-txt">print(query_answers[:2])</div>
+<div id="cell-4" class="clipboard-copy-txt">print(query_answers[:2])</div>
     
         </div>
     </div>
@@ -2709,15 +2631,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 </div>
 
 </div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Here is the list of attributes each tag has:</p>
+
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-6">
+            <clipboard-copy for="cell-5">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2729,7 +2657,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
-<div id="cell-6" class="clipboard-copy-txt">documents[0]</div>
+<div id="cell-5" class="clipboard-copy-txt">documents[0]</div>
     
         </div>
     </div>
@@ -2745,7 +2673,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 
 
 
@@ -2782,11 +2710,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-7">
+            <clipboard-copy for="cell-6">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2804,7 +2732,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
     <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
-<div id="cell-7" class="clipboard-copy-txt">retriever = retrieve.TfIdf(
+<div id="cell-6" class="clipboard-copy-txt">retriever = retrieve.TfIdf(
     key = "uri",
     on = ["prefLabel_text", "altLabel_text"], 
     documents = documents,
@@ -2823,72 +2751,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-8">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;A Survey on Recent Approaches for Natural Language Processing in &#39;&#39;Low-Resource Scenarios&quot;</span><span class="p">)</span>
-</pre></div>
-<div id="cell-8" class="clipboard-copy-txt">retriever("A Survey on Recent Approaches for Natural Language Processing in ''Low-Resource Scenarios")</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlp&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/low_resource_languages&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlp_low_resource_scenarios&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlu&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/natural_language_generation&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/survey&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/language_model&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/multilingual_language_models&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/knowledge_resources&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/pre_trained_language_models&#39;}]</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-9">
+            <clipboard-copy for="cell-7">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2900,7 +2767,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span><span class="p">,</span> <span class="n">query_answers</span><span class="o">=</span><span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
-<div id="cell-9" class="clipboard-copy-txt">eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div>
+<div id="cell-7" class="clipboard-copy-txt">eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div>
     
         </div>
     </div>
@@ -2916,7 +2783,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 
 
 
@@ -2948,6 +2815,67 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 </div>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+        
+        
+        <div class="zeroclipboard-container">
+            <clipboard-copy for="cell-8">
+            <div>
+                <span class="notice" hidden>Copied!</span>
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
+                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
+                </svg>
+                </div>
+            </clipboard-copy>
+        </div>
+        <div class="CodeMirror cm-s-jupyter">
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction&quot;</span><span class="p">)</span>
+</pre></div>
+<div id="cell-8" class="clipboard-copy-txt">retriever("ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction")</div>
+    
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_augmented_lm&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/dense_passage_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/neural_models_for_information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_based_nlp&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/ranking_information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/active_learning&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/embeddings_in_ir&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/entity_discovery_and_linking&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/information_extraction&#39;}]</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -2958,11 +2886,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-10">
+            <clipboard-copy for="cell-9">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -2981,7 +2909,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer</div>
 
 <span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span><span class="p">,</span> <span class="n">query_answers</span><span class="o">=</span><span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
-<div id="cell-10" class="clipboard-copy-txt">retriever = retrieve.Lunr(
+<div id="cell-9" class="clipboard-copy-txt">retriever = retrieve.Lunr(
     key = "uri",
     on = ["prefLabel_text", "altLabel_text"], 
     documents = documents,
@@ -3004,7 +2932,7 @@ eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 
 
 
@@ -3052,11 +2980,11 @@ eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-11">
+            <clipboard-copy for="cell-10">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3066,9 +2994,9 @@ eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&quot;</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction&quot;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-11" class="clipboard-copy-txt">retriever("BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding")</div>
+<div id="cell-10" class="clipboard-copy-txt">retriever("ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction")</div>
     
         </div>
     </div>
@@ -3084,22 +3012,20 @@ eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_is_all_you_need&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/bert_kb&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/bert&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlp_pretraining&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/pre_trained_language_models&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/language_model&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/sbert&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlu&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/deep_nlp&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/deep_learning&#39;}]</pre>
+<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/dense_passage_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/ranking_information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/embeddings_in_ir&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_augmented_lm&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_based_nlp&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/entity_discovery_and_linking&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/neural_models_for_information_retrieval&#39;}]</pre>
 </div>
 
 </div>
@@ -3119,11 +3045,11 @@ eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-12">
+            <clipboard-copy for="cell-11">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3149,7 +3075,7 @@ eval.eval(search = retriever, query_answers=query_answers, hits_k=range(6))</div
     <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;all-mpnet-base-v2.pkl&quot;</span>
 <span class="p">)</span>
 </pre></div>
-<div id="cell-12" class="clipboard-copy-txt">retriever = retrieve.TfIdf(
+<div id="cell-11" class="clipboard-copy-txt">retriever = retrieve.TfIdf(
     key = "uri",
     on = ["prefLabel_text", "altLabel_text"], 
     documents = documents,
@@ -3182,6 +3108,63 @@ ranker = rank.Encoder(
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+        
+        
+        <div class="zeroclipboard-container">
+            <clipboard-copy for="cell-12">
+            <div>
+                <span class="notice" hidden>Copied!</span>
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
+                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
+                </svg>
+                </div>
+            </clipboard-copy>
+        </div>
+        <div class="CodeMirror cm-s-jupyter">
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">query_answers</span><span class="p">])</span>
+</pre></div>
+<div id="cell-12" class="clipboard-copy-txt">ranker.add([q for q, _ in query_answers])</div>
+    
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>Encoder ranker
+	 key: uri
+	 on: prefLabel_text, altLabel_text
+	 k: 10
+	 similarity: cosine
+	 embeddings stored at: all-mpnet-base-v2.pkl</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
@@ -3196,9 +3179,11 @@ ranker = rank.Encoder(
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ranker</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">query_answers</span><span class="p">])</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
+<span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </pre></div>
-<div id="cell-13" class="clipboard-copy-txt">ranker.add([q for q, _ in query_answers])</div>
+<div id="cell-13" class="clipboard-copy-txt">search = retriever + ranker
+search.add(documents)</div>
     
         </div>
     </div>
@@ -3220,7 +3205,11 @@ ranker = rank.Encoder(
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Encoder ranker
+<pre>TfIdf retriever
+ 	 key: uri
+ 	 on: prefLabel_text, altLabel_text
+ 	 documents: 433
+Encoder ranker
 	 key: uri
 	 on: prefLabel_text, altLabel_text
 	 k: 10
@@ -3253,11 +3242,9 @@ ranker = rank.Encoder(
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
-<span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="p">,</span> <span class="n">query_answers</span> <span class="o">=</span> <span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
-<div id="cell-14" class="clipboard-copy-txt">search = retriever + ranker
-search.add(documents)</div>
+<div id="cell-14" class="clipboard-copy-txt">eval.eval(search = search, query_answers = query_answers, hits_k=range(6))</div>
     
         </div>
     </div>
@@ -3274,67 +3261,6 @@ search.add(documents)</div>
 
     
     <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>TfIdf retriever
- 	 key: uri
- 	 on: prefLabel_text, altLabel_text
- 	 documents: 433
-Encoder ranker
-	 key: uri
-	 on: prefLabel_text, altLabel_text
-	 k: 10
-	 similarity: cosine
-	 embeddings stored at: all-mpnet-base-v2.pkl</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-        
-        
-        <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-15">
-            <div>
-                <span class="notice" hidden>Copied!</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
-                    <path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path>
-                </svg>
-                </div>
-            </clipboard-copy>
-        </div>
-        <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="p">,</span> <span class="n">query_answers</span> <span class="o">=</span> <span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
-</pre></div>
-<div id="cell-15" class="clipboard-copy-txt">eval.eval(search = search, query_answers = query_answers, hits_k=range(6))</div>
-    
-        </div>
-    </div>
-
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 
 
 
@@ -3382,11 +3308,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-16">
+            <clipboard-copy for="cell-15">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3396,9 +3322,9 @@ Encoder ranker
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&quot;</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction&quot;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-16" class="clipboard-copy-txt">search("BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding")</div>
+<div id="cell-15" class="clipboard-copy-txt">search("ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction")</div>
     
         </div>
     </div>
@@ -3414,30 +3340,32 @@ Encoder ranker
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/pre_trained_language_models&#39;,
-  &#39;similarity&#39;: 0.55655885},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_is_all_you_need&#39;,
-  &#39;similarity&#39;: 0.482919},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlp_pretraining&#39;,
-  &#39;similarity&#39;: 0.4552031},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlu&#39;, &#39;similarity&#39;: 0.44904175},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_knowledge_graphs&#39;,
-  &#39;similarity&#39;: 0.4466622},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/sbert&#39;, &#39;similarity&#39;: 0.4407485},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/grounded_language_learning&#39;,
-  &#39;similarity&#39;: 0.36060995},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/language_models_as_knowledge_bases&#39;,
-  &#39;similarity&#39;: 0.3591173},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/language_models_knowledge&#39;,
-  &#39;similarity&#39;: 0.3567461},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_in_graphs&#39;,
-  &#39;similarity&#39;: 0.3431863}]</pre>
+<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_augmented_lm&#39;,
+  &#39;similarity&#39;: 0.5449115},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/neural_models_for_information_retrieval&#39;,
+  &#39;similarity&#39;: 0.42808777},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/embeddings_in_ir&#39;,
+  &#39;similarity&#39;: 0.42719522},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/dense_passage_retrieval&#39;,
+  &#39;similarity&#39;: 0.42641854},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/information_retrieval&#39;,
+  &#39;similarity&#39;: 0.40513232},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/entity_discovery_and_linking&#39;,
+  &#39;similarity&#39;: 0.352889},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/ranking_information_retrieval&#39;,
+  &#39;similarity&#39;: 0.346283},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_based_nlp&#39;,
+  &#39;similarity&#39;: 0.32937074},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/active_learning&#39;,
+  &#39;similarity&#39;: 0.28093448},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/cognitive_search&#39;,
+  &#39;similarity&#39;: 0.25938064}]</pre>
 </div>
 
 </div>
@@ -3457,11 +3385,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-17">
+            <clipboard-copy for="cell-16">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3477,29 +3405,13 @@ Encoder ranker
     <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
-    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span>
-    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;all-mpnet-base-v2.pkl&quot;</span>
-<span class="p">)</span>
-
 <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span>
 <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </pre></div>
-<div id="cell-17" class="clipboard-copy-txt">retriever = retrieve.Flash(
+<div id="cell-16" class="clipboard-copy-txt">retriever = retrieve.Flash(
     key = "uri",
     on = ["prefLabel", "altLabel"], 
     k = 30,
-)
-
-ranker = rank.Encoder(
-    key = "uri",
-    on = ["prefLabel_text", "altLabel_text"],
-    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-    k = 10,
-    path = "all-mpnet-base-v2.pkl"
 )
 
 search = retriever + ranker
@@ -3519,7 +3431,7 @@ search.add(documents)</div>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
 
 
 
@@ -3554,11 +3466,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-18">
+            <clipboard-copy for="cell-17">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3570,7 +3482,7 @@ Encoder ranker
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="p">,</span> <span class="n">query_answers</span> <span class="o">=</span> <span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
-<div id="cell-18" class="clipboard-copy-txt">eval.eval(search = search, query_answers = query_answers, hits_k=range(6))</div>
+<div id="cell-17" class="clipboard-copy-txt">eval.eval(search = search, query_answers = query_answers, hits_k=range(6))</div>
     
         </div>
     </div>
@@ -3586,7 +3498,7 @@ Encoder ranker
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
 
 
 
@@ -3622,11 +3534,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-19">
+            <clipboard-copy for="cell-18">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3636,9 +3548,9 @@ Encoder ranker
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&quot;</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction&quot;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-19" class="clipboard-copy-txt">search("BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding")</div>
+<div id="cell-18" class="clipboard-copy-txt">search("ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction")</div>
     
         </div>
     </div>
@@ -3654,15 +3566,13 @@ Encoder ranker
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[19]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_is_all_you_need&#39;,
-  &#39;similarity&#39;: 0.482919},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/bert&#39;, &#39;similarity&#39;: 0.31874728}]</pre>
+<pre>[]</pre>
 </div>
 
 </div>
@@ -3682,11 +3592,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-20">
+            <clipboard-copy for="cell-19">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3696,15 +3606,7 @@ Encoder ranker
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
-    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span>
-    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;all-mpnet-base-v2.pkl&quot;</span>
-<span class="p">)</span>
-
-<span class="n">precision</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">precision</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span>
     <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
     <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">],</span> 
     <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
@@ -3722,15 +3624,7 @@ Encoder ranker
 
 <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </pre></div>
-<div id="cell-20" class="clipboard-copy-txt">ranker = rank.Encoder(
-    key = "uri",
-    on = ["prefLabel_text", "altLabel_text"],
-    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-    k = 10,
-    path = "all-mpnet-base-v2.pkl"
-)
-
-precision = retrieve.Flash(
+<div id="cell-19" class="clipboard-copy-txt">precision = retrieve.Flash(
     key = "uri",
     on = ["prefLabel", "altLabel"], 
     k = 30,
@@ -3762,7 +3656,7 @@ search.add(documents)</div>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[19]:</div>
 
 
 
@@ -3804,11 +3698,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-21">
+            <clipboard-copy for="cell-20">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3820,7 +3714,7 @@ Encoder ranker
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">eval</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="p">,</span> <span class="n">query_answers</span> <span class="o">=</span> <span class="n">query_answers</span><span class="p">,</span> <span class="n">hits_k</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
 </pre></div>
-<div id="cell-21" class="clipboard-copy-txt">eval.eval(search = search, query_answers = query_answers, hits_k=range(6))</div>
+<div id="cell-20" class="clipboard-copy-txt">eval.eval(search = search, query_answers = query_answers, hits_k=range(6))</div>
     
         </div>
     </div>
@@ -3836,7 +3730,7 @@ Encoder ranker
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 
 
 
@@ -3884,11 +3778,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-22">
+            <clipboard-copy for="cell-21">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3898,9 +3792,9 @@ Encoder ranker
             </clipboard-copy>
         </div>
         <div class="CodeMirror cm-s-jupyter">
-            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&quot;</span><span class="p">)</span>
+            <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction&quot;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-22" class="clipboard-copy-txt">search("BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding")</div>
+<div id="cell-21" class="clipboard-copy-txt">search("ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction")</div>
     
         </div>
     </div>
@@ -3916,23 +3810,22 @@ Encoder ranker
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_is_all_you_need&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/bert&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/pre_trained_language_models&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlp_pretraining&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/nlu&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_knowledge_graphs&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/sbert&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/grounded_language_learning&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/language_models_as_knowledge_bases&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/language_models_knowledge&#39;},
- {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/attention_in_graphs&#39;}]</pre>
+<pre>[{&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_augmented_lm&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/neural_models_for_information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/embeddings_in_ir&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/dense_passage_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/entity_discovery_and_linking&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/ranking_information_retrieval&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/retrieval_based_nlp&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/active_learning&#39;},
+ {&#39;uri&#39;: &#39;http://www.semanlink.net/tag/cognitive_search&#39;}]</pre>
 </div>
 
 </div>
@@ -3952,11 +3845,11 @@ Encoder ranker
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
         
         
         <div class="zeroclipboard-container">
-            <clipboard-copy for="cell-23">
+            <clipboard-copy for="cell-22">
             <div>
                 <span class="notice" hidden>Copied!</span>
                 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 16 16" version="1.1"  data-view-component="true" class="clipboard-copy-icon">
@@ -3968,7 +3861,7 @@ Encoder ranker
         <div class="CodeMirror cm-s-jupyter">
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Knowledge Base Embedding By Cooperative Knowledge Distillation&quot;</span><span class="p">)</span>
 </pre></div>
-<div id="cell-23" class="clipboard-copy-txt">search("Knowledge Base Embedding By Cooperative Knowledge Distillation")</div>
+<div id="cell-22" class="clipboard-copy-txt">search("Knowledge Base Embedding By Cooperative Knowledge Distillation")</div>
     
         </div>
     </div>
@@ -3984,7 +3877,7 @@ Encoder ranker
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
 
 
 
