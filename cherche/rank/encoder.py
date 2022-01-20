@@ -116,7 +116,7 @@ class Encoder(Ranker):
         if not documents:
             return []
 
-        emb_q = self.encoder(q) if q not in self.q_embeddings else self.q_embeddings[q]
+        emb_q = self.encoder(q) if q not in self.embeddings else self.embeddings[q]
         emb_documents = self._emb_documents(documents=documents)
         return self._rank(
             similarities=self.similarity(emb_q=emb_q, emb_documents=emb_documents),

@@ -108,6 +108,8 @@ class _BM25(Retriever):
         self.documents = {
             index: {self.key: document[self.key]} for index, document in enumerate(documents)
         }
+        # Avoid adding documents to inversed index.
+        self.ids = {}
 
     def __call__(self, q: str) -> list:
         """Retrieve the right document using BM25."""
@@ -151,6 +153,7 @@ class BaseEncoder(Retriever):
         self.documents = {}
         self.q_embeddings = {}
         self.query_encoder = query_encoder
+        self.ids = {}
 
     @staticmethod
     def build_faiss(tree: faiss.IndexFlatL2, documents_embeddings: list) -> faiss.IndexFlatL2:
@@ -165,9 +168,11 @@ class BaseEncoder(Retriever):
 
         """
         array_embeddings = np.array(documents_embeddings).astype(np.float32)
-        if tree is None:
+        if tree is None and documents_embeddings:
             tree = faiss.IndexFlatL2(array_embeddings.shape[1])
-        tree.add(array_embeddings)
+        # Check that documents embeddings is not empty
+        if documents_embeddings:
+            tree.add(array_embeddings)
         return tree
 
     @staticmethod
@@ -195,11 +200,6 @@ class BaseEncoder(Retriever):
             List of documents as json or list of string to pre-compute queries embeddings.
 
         """
-        n = len(self.documents)
-        self.documents.update(
-            {index + n: {self.key: document[self.key]} for index, document in enumerate(documents)}
-        )
-
         embeddings = self.load_embeddings(path=self.path)
 
         # Pre-compute query embeddings
@@ -213,18 +213,33 @@ class BaseEncoder(Retriever):
                     [
                         document
                         for document in documents
-                        if isinstance(document, str) and document not in self.embeddings
+                        if isinstance(document, str) and document not in self.q_embeddings
                     ]
                 ),
             ):
                 embeddings[query] = embedding
                 self.q_embeddings[query] = embedding
 
+                if self.path is not None:
+                    self.dump_embeddings(embeddings=embeddings, path=self.path)
+                    return self
+
+        # Pre-compute documents embeddings
+        # Create index between faiss and documents ids.
+        n = len(self.documents)
+        self.documents.update(
+            {
+                index + n: {self.key: document[self.key]}
+                for index, document in enumerate(documents)
+                if document[self.key] not in self.ids
+            }
+        )
+
         # Pre-compute documents embeddings and index them using Faiss
         keys, new_documents = [], []
         for document in documents:
-            if document[self.key] not in embeddings:
-                keys.append(str(document[self.key]))
+            if document[self.key] not in embeddings and str(document[self.key]) not in embeddings:
+                keys.append(document[self.key])
                 new_documents.append(" ".join([document.get(field, "") for field in self.on]))
 
         for key, embedding in zip(keys, self.encoder(new_documents)):
@@ -235,6 +250,13 @@ class BaseEncoder(Retriever):
 
         self.tree = self.build_faiss(
             tree=self.tree,
-            documents_embeddings=[embeddings[str(document[self.key])] for document in documents],
+            documents_embeddings=[
+                embeddings[document[self.key]]
+                for document in documents
+                if document[self.key] not in self.ids
+            ],
         )
+
+        # Avoid duplicate documents.
+        self.ids.update({document[self.key]: True for document in documents})
         return self

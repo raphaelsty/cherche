@@ -38,7 +38,6 @@ class Ranker(abc.ABC):
         self.path = path
         self.similarity = similarity
         self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
-        self.q_embeddings = {}
 
     @property
     def type(self):
@@ -74,7 +73,7 @@ class Ranker(abc.ABC):
         keys = []
         for document in documents:
             if isinstance(document, str):
-                self.q_embeddings[document] = self.encoder(document)
+                self.embeddings[document] = self.encoder(document)
 
             elif document[self.key] not in self.embeddings:
                 keys.append(document[self.key])
