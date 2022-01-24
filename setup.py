@@ -30,7 +30,7 @@ setuptools.setup(
         "transformers >= 4.12.0",
         "lunr >= 0.6.1",
     ],
-    package_data={"cherche": ["data/towns.json", "data/semanlink/*.json"]},
+    package_data={"cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
