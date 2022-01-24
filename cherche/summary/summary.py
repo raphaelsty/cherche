@@ -107,7 +107,7 @@ class Summary:
     def __add__(self, other) -> Pipeline:
         """Custom operator to make pipeline."""
         if isinstance(other, Pipeline):
-            return other + self
+            return Pipeline(models=other.models + [self])
         else:
             return Pipeline(models=[other, self])
 

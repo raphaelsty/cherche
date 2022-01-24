@@ -31,7 +31,7 @@ retriever such as Elasticsearch when it's not needed. Lunr stores an inverted in
 >>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents, k=30)
 
 >>> retriever("france")
-[{'id': 0}, {'id': 2}]
+[{'id': 0, 'similarity': 0.605}, {'id': 2, 'similarity': 0.47}]
 ```
 
 ## Map keys to documents
@@ -42,9 +42,11 @@ retriever such as Elasticsearch when it's not needed. Lunr stores an inverted in
 [{'id': 0,
   'article': 'Paris is the capital and most populous city of France',
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'},
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.605},
  {'id': 2,
   'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'}]
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.47}]
 ```

@@ -49,7 +49,7 @@ Lunr retriever
      documents: 3
 
 >>> print(retriever(q="paris"))
-[{'id': 0}, {'id': 1}]
+[{'id': 0, 'similarity': 0.524}, {'id': 1, 'similarity': 0.414}]
 
 >>> retriever += documents
 
@@ -57,10 +57,12 @@ Lunr retriever
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
+  'similarity': 0.524,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
+  'similarity': 0.414,
   'title': 'Eiffel tower'}]
 ```
 

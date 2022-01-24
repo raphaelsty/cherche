@@ -47,6 +47,18 @@ class Elastic(Retriever):
     ...     retriever = retriever.add(documents=documents)
     ...     candidates = retriever(q="paris")
 
+    >>> print(candidates)
+    [{'article': 'This town is the capital of France',
+      'author': 'Wiki',
+      'id': 0,
+      'similarity': 1.2017119,
+      'title': 'Paris'},
+     {'article': 'Eiffel tower is based in Paris',
+      'author': 'Wiki',
+      'id': 1,
+      'similarity': 1.0534589,
+      'title': 'Eiffel tower'}]
+
     References
     ----------
     1. [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.1/)
@@ -115,11 +127,11 @@ class Elastic(Retriever):
         ...         encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
         ...         on = ["title", "article"],
         ...         k = 10,
-        ...     )
+        ...    )
         ...
         ...    retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, index="test")
         ...    retriever = retriever.reset()
-        ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
+        ...    #retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
         ...
         ...    answers = retriever("Paris")
         ...    assert answers[0]["embedding"].shape == (768,)
@@ -196,7 +208,7 @@ class Elastic(Retriever):
 
         ranked = []
         for document in documents["hits"]["hits"]:
-            document = document["_source"]
+            document = {**document["_source"], "similarity": document["_score"]}
             # Returns stored embeddings as numpy array.
             if "embedding" in document:
                 document["embedding"] = np.array(document["embedding"])

@@ -47,7 +47,7 @@ class TfIdf(Retriever):
          documents: 3
 
     >>> print(retriever(q="paris"))
-    [{'id': 0}, {'id': 1}]
+    [{'id': 0, 'similarity': 0.28896}, {'id': 1, 'similarity': 0.23464}]
 
     >>> retriever += documents
 
@@ -55,10 +55,12 @@ class TfIdf(Retriever):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 0.28896,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 0.23464,
       'title': 'Eiffel tower'}]
 
     References
@@ -91,6 +93,8 @@ class TfIdf(Retriever):
         """Retrieve the right document."""
         similarities = linear_kernel(self.tfidf.transform([q]), self.matrix).flatten()
         documents = [
-            self.documents[index] for index in (-similarities).argsort() if similarities[index] > 0
+            {**self.documents[index], "similarity": round(similarities[index], 5)}
+            for index in (-similarities).argsort()
+            if similarities[index] > 0
         ]
         return documents[: self.k] if self.k is not None else documents

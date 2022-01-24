@@ -60,7 +60,8 @@ documents, allows to index the embeddings of a dedicated ranker.
 [{'id': 1,
   'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'}]
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.94782937}]
 ```
 
 Warning, you can empty the index using:
@@ -123,12 +124,13 @@ Using `retrieve.Elastic`, we can customize the query to fit our needs.
 [{'id': 1,
   'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris'}]
+  'url': 'https://en.wikipedia.org/wiki/Paris',
+  'similarity': 0.9949781}]
 ```
 
 ## Upload documents and embeddings on Elasticsearch
 
-When working with millions of documents, we need to store the documents and embeddings on
+When working with a lot of documents, we need to store the documents and embeddings on
 disk rather than in RAM. To do this, we can declare an Elastic retriever and index documents
 and embeddings in Elasticsearch.
 

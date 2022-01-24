@@ -15,6 +15,10 @@
 
 - [eval](../eval/eval)
 
+## generate
+
+- [RAG](../generate/RAG)
+
 ## qa
 
 - [QA](../qa/QA)

@@ -2,10 +2,11 @@ __all__ = [
     "compose",
     "data",
     "eval",
-    "similarity",
+    "generate",
     "qa",
     "rank",
     "retrieve",
+    "similarity",
     "summary",
     "translate",
 ]

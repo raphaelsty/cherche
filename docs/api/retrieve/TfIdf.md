@@ -53,7 +53,7 @@ TfIdf retriever
      documents: 3
 
 >>> print(retriever(q="paris"))
-[{'id': 0}, {'id': 1}]
+[{'id': 0, 'similarity': 0.28896}, {'id': 1, 'similarity': 0.23464}]
 
 >>> retriever += documents
 
@@ -61,10 +61,12 @@ TfIdf retriever
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
+  'similarity': 0.28896,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
+  'similarity': 0.23464,
   'title': 'Eiffel tower'}]
 ```
 
