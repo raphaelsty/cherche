@@ -1,10 +1,10 @@
 import abc
 import collections
 import re
+import typing
 
 from ..compose import Intersection, Pipeline, Union
 
-from typing import Union as tUnion, List, Dict
 
 __all__ = ["Query"]
 
@@ -27,8 +27,8 @@ class Query(abc.ABC):
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""
         if isinstance(other, Pipeline):
-            return other + self
-        return Pipeline(models=[other, self])
+            return self + other
+        return Pipeline(models=[self, other])
 
     def __or__(self, other) -> Union:
         """Union operator."""
@@ -51,13 +51,13 @@ class _SpellingCorrector(Query):
 
     def __init__(
         self,
-        on: List[str],
+        on: typing.List[str],
     ) -> None:
         super().__init__()
         self.occurrences = collections.Counter()
         self.on = on
 
-    def add(self, documents: tUnion[List[Dict], str]):
+    def add(self, documents: typing.Union[typing.List[typing.Dict], str]):
         if isinstance(documents, str):
             self._update_from_str(documents)
         elif isinstance(documents, list) and len(documents) > 0:
@@ -83,7 +83,7 @@ class _SpellingCorrector(Query):
         words = words.split(" ")
         self._update_from_list(words=words)
 
-    def _update_from_list(self, words: List[str]):
+    def _update_from_list(self, words: typing.List[str]):
         """Update dictionary from all words presents in a list of strings."""
         self.occurrences.update(words)
 
