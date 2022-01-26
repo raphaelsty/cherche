@@ -4,6 +4,7 @@ __all__ = [
     "eval",
     "similarity",
     "qa",
+    "query",
     "rank",
     "retrieve",
     "summary",

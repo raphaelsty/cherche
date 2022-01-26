@@ -1,6 +1,8 @@
 import functools
 import pathlib
 import string
+import warnings
+from typing import List
 
 from .base import _SpellingCorrector
 
@@ -10,18 +12,27 @@ __all__ = ["Norvig"]
 class Norvig(_SpellingCorrector):
     """Spelling corrector written by Peter Norvig: [How to Write a Spelling Corrector](https://norvig.com/spell-correct.html)
 
+    Parameters
+    ----------
+    on
+        Fields to use for fitting the spelling corrector on.
+    big
+        Use the big.txt provided by the Norvig spelling corrector. Contains
+        english books from the Gutenberg project.
+
     Examples
     --------
 
-    >>> from cherche import Norvig
+    >>> from cherche import query, data
 
-    >>> corrector = spelling_corrector.Norvig()
-
+    >>> documents = data.load_towns()
+    >>> corrector = query.Norvig(on=["title", "article"])
+    >>> corrector.add(documents)
     >>> corrector
     Norvig query
 
-    >>> print(corrector(q="korrectud, speling and inconvient about word of arrainged and inconvient peotryy"))
-    corrected, spelling and inconvenient about word of arranged and inconvenient poetry
+    >>> corrector(q="tha citi af Parisa is in Fronce")
+    'the city of Paris is in France'
 
     References
     ----------
@@ -31,14 +42,22 @@ class Norvig(_SpellingCorrector):
 
     def __init__(
         self,
+        on: List[str],
+        big: bool = False,
     ) -> None:
-        super().__init__(path_dictionary=pathlib.Path(__file__).parent.joinpath("norvig.txt"))
+        super().__init__(on=on)
+
+        if big:
+            path_big = pathlib.Path(__file__).parent.parent.joinpath("data/norvig.txt")
+            self._update_from_file(path_file=path_big)
 
     def __call__(self, q: str, **kwargs) -> str:
         """Correct spelling errors in a given query."""
+        if len(self.occurrences) == 0:
+            warnings.warn("Spelling corrector has not be initialized, dictionary is empty")
+            return q
         return " ".join(map(self.correct, q.split(" ")))
 
-    @functools.lru_cache()
     def correct(self, word):
         """Most probable spelling correction for word."""
         return max(self._candidates(word), key=lambda w: self._probability(w))
