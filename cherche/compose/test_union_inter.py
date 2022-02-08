@@ -47,6 +47,7 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
                 model="typeform/distilbert-base-uncased-mnli",
                 cache="cache",
             ),
+            key=key,
             on=on,
             k=k,
         ),

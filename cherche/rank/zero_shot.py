@@ -31,20 +31,22 @@ class ZeroShot:
     >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
+    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
+    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
     >>> ranker = rank.ZeroShot(
-    ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
+    ...     key = "id",
     ...     on = ["title", "article"],
+    ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
     ...     k = 2,
     ... )
 
     >>> ranker
     Zero Shot Classifier
          model: typeform/distilbert-base-uncased-mnli
+         key: id
          on: title, article
          k: 2
          multi class: True
@@ -68,11 +70,13 @@ class ZeroShot:
 
     def __init__(
         self,
+        key: str,
         on: typing.Union[str, list],
         encoder,
         k: int = None,
         multi_class: bool = True,
     ):
+        self.key = key
         self.on = on if isinstance(on, list) else [on]
         self.encoder = encoder
         self.k = k
@@ -81,6 +85,7 @@ class ZeroShot:
     def __repr__(self) -> str:
         repr = "Zero Shot Classifier"
         repr += f"\n\t model: {self.encoder.tokenizer.name_or_path}"
+        repr += f"\n\t key: {self.key}"
         repr += f"\n\t on: {', '.join(self.on)}"
         repr += f"\n\t k: {self.k}"
         repr += f"\n\t multi class: {self.multi_class}"

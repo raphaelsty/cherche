@@ -38,6 +38,7 @@
 - [Elastic](../retrieve/Elastic)
 - [Encoder](../retrieve/Encoder)
 - [Flash](../retrieve/Flash)
+- [Fuzz](../retrieve/Fuzz)
 - [Lunr](../retrieve/Lunr)
 - [Retriever](../retrieve/Retriever)
 - [TfIdf](../retrieve/TfIdf)

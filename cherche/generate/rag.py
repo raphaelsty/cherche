@@ -21,8 +21,8 @@ class RAG(Generation):
         Hugging Face RAG model available [here](https://huggingface.co/docs/transformers/model_doc/rag).
     tokenizer
         Hugging Face tokenizer for RAG.
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
-        will be retrieved.
+    k
+        Number of answers to generate.
     num_beams
         Number of beams for beam search. 1 means no beam search.
     min_length

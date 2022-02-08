@@ -12,13 +12,15 @@ This model is dedicated to the generator of the paper Retrieval-Augmented Genera
 
 - **tokenizer**
 
-    Hugging Face tokenizer for RAG. Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+    Hugging Face tokenizer for RAG.
 
 - **model**
 
     Hugging Face RAG model available [here](https://huggingface.co/docs/transformers/model_doc/rag).
 
 - **k** (*int*) – defaults to `None`
+
+    Number of answers to generate.
 
 - **num_beams** (*int*) – defaults to `10`
 

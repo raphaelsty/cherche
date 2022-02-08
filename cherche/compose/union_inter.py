@@ -73,16 +73,19 @@ class Union(UnionIntersection):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 1.0,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 0.4505,
       'title': 'Eiffel tower'}]
 
     >>> print(search(q = "Montreal"))
     [{'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
+      'similarity': 1.0,
       'title': 'Montreal'}]
 
     >>> print(search(q = "Wiki"))
@@ -103,6 +106,10 @@ class Union(UnionIntersection):
 
     def __init__(self, models: list):
         super().__init__(models=models)
+        for model in self.models:
+            if hasattr(model, "key"):
+                self.key = model.key
+                break
 
     def __call__(self, q: str, **kwargs) -> list:
         """
@@ -113,16 +120,34 @@ class Union(UnionIntersection):
 
         """
         query = {"q": q, **kwargs}
-        documents = []
+        union = []
+        similarities = {}
+
         for model in self.models:
+
             for document in model(**query):
+
+                # Remove similarities to avoid duplicates
                 if "similarity" in document:
-                    document.pop("similarity")
+                    similarity = document.pop("similarity")
+
+                    if document[self.key] not in similarities:
+                        similarities[document[self.key]] = similarity
+
                 # Drop duplicates documents:
-                if document in documents:
+                if document in union:
                     continue
-                documents.append(document)
-        return documents
+                union.append(document)
+
+        ranked = []
+        for document in union:
+            similarity = similarities.get(document.get(self.key, None), None)
+            if similarity is not None:
+                ranked.append({**document, **{"similarity": similarity}})
+            else:
+                ranked.append(document)
+
+        return ranked
 
     def __or__(self, other) -> "Union":
         """Union operator"""
@@ -176,31 +201,39 @@ class Intersection(UnionIntersection):
 
     >>> print(search(q = "Wiki Paris"))
     [{'article': 'Paris is the capital of France',
-        'author': 'Wiki',
-        'id': 0,
-        'title': 'Paris'}]
+      'author': 'Wiki',
+      'id': 0,
+      'similarity': 1.0,
+      'title': 'Paris'}]
 
     >>> print(search(q = "Paris"))
     []
 
     >>> print(search(q = "Wiki Paris Montreal Eiffel"))
     [{'article': 'Paris is the capital of France',
-          'author': 'Wiki',
-          'id': 0,
-          'title': 'Paris'},
-         {'article': 'Montreal is in Canada.',
-          'author': 'Wiki',
-          'id': 2,
-          'title': 'Montreal'},
-         {'article': 'Eiffel tower is based in Paris.',
-          'author': 'Wiki',
-          'id': 1,
-          'title': 'Eiffel tower'}]
+      'author': 'Wiki',
+      'id': 0,
+      'similarity': 0.57735,
+      'title': 'Paris'},
+     {'article': 'Montreal is in Canada.',
+      'author': 'Wiki',
+      'id': 2,
+      'similarity': 0.57735,
+      'title': 'Montreal'},
+     {'article': 'Eiffel tower is based in Paris.',
+      'author': 'Wiki',
+      'id': 1,
+      'similarity': 0.40825,
+      'title': 'Eiffel tower'}]
 
     """
 
     def __init__(self, models: list):
         super().__init__(models=models)
+        for model in self.models:
+            if hasattr(model, "key"):
+                self.key = model.key
+                break
 
     def __call__(self, q: str, **kwargs) -> list:
         """
@@ -211,15 +244,35 @@ class Intersection(UnionIntersection):
 
         """
         query = {"q": q, **kwargs}
+        similarities = {}
         counter_docs = collections.defaultdict(int)
+
         for model in self.models:
+
             for document in model(**query):
+
+                # Remove similarities to avoid duplicates
                 if "similarity" in document:
-                    document.pop("similarity")
+                    similarity = document.pop("similarity")
+
+                    if document[self.key] not in similarities:
+                        similarities[document[self.key]] = similarity
+
                 counter_docs[tuple(sorted(document.items()))] += 1
-        return [
+
+        intersection = [
             dict(document) for document, count in counter_docs.items() if count >= len(self.models)
         ]
+
+        # Add similarity that we previously removed.
+        ranked = []
+        for document in intersection:
+            similarity = similarities.get(document.get(self.key, None), None)
+            if similarity is not None:
+                ranked.append({**document, **{"similarity": similarity}})
+            else:
+                ranked.append(document)
+        return ranked
 
     def __and__(self, other) -> "Intersection":
         return Intersection(models=self.models + [other])

@@ -43,6 +43,7 @@ def test_retriever(retriever, documents: list, k: int):
     Check for unknown tokens in the corpus, should returns an empty list.
     """
     retriever = retriever + documents
+    retriever.add(documents)
 
     # A single document contains town.
     answers = retriever(q="town")
