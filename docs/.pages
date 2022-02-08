@@ -10,3 +10,4 @@ nav:
     - translate
     - examples
     - api
+    - serialize

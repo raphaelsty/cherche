@@ -54,10 +54,12 @@ class ZeroShot:
     >>> print(ranker(q="Paris", documents=documents))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
+      'id': 0,
       'similarity': 0.44725707173347473,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
+      'id': 1,
       'similarity': 0.31512799859046936,
       'title': 'Eiffel tower'}]
 

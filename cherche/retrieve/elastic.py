@@ -131,7 +131,7 @@ class Elastic(Retriever):
         ...
         ...    retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, index="test")
         ...    retriever = retriever.reset()
-        ...    #retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
+        ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
         ...
         ...    answers = retriever("Paris")
         ...    assert answers[0]["embedding"].shape == (768,)
