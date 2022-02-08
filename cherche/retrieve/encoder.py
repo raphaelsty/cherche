@@ -48,8 +48,7 @@ class Encoder(BaseEncoder):
          documents: 3
 
     >>> print(retriever("Paris"))
-    [{'id': 0, 'similarity': 1.472814254853544},
-     {'id': 1, 'similarity': 1.0293491728070765}]
+    [{'id': 0, 'similarity': 1.47281}, {'id': 1, 'similarity': 1.02935}]
 
     >>> documents = [
     ...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -78,12 +77,12 @@ class Encoder(BaseEncoder):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 3,
-      'similarity': 1.472814254853544,
+      'similarity': 1.47281,
       'title': 'Paris'},
      {'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.472814254853544,
+      'similarity': 1.47281,
       'title': 'Paris'}]
 
     References
@@ -107,6 +106,6 @@ class Encoder(BaseEncoder):
         ranked = []
         for index, distance in zip(indexes[0], distances[0]):
             document = self.documents[index]
-            document["similarity"] = 1 / distance
+            document["similarity"] = round(1 / distance, 5) if distance > 0 else 0.0
             ranked.append(document)
         return ranked

@@ -59,8 +59,7 @@ DPR retriever
      documents: 3
 
 >>> print(retriever("Paris"))
-[{'id': 0, 'similarity': 0.011120470176519816},
- {'id': 2, 'similarity': 0.010158280600646162}]
+[{'id': 0, 'similarity': 0.0111}, {'id': 2, 'similarity': 0.0102}]
 
 >>> documents = [
 ...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -89,12 +88,12 @@ DPR retriever
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 3,
-  'similarity': 0.011120470176519816,
+  'similarity': 0.0111,
   'title': 'Paris'},
  {'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 0.011120470176519816,
+  'similarity': 0.0111,
   'title': 'Paris'}]
 ```
 

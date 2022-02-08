@@ -28,6 +28,7 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
             path=path,
         ),
         rank.ZeroShot(
+            key=key,
             on=on,
             encoder=pipeline(
                 "zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"

@@ -48,26 +48,30 @@ Mapping to documents
 
 >>> print(search(q = "Wiki Paris"))
 [{'article': 'Paris is the capital of France',
-    'author': 'Wiki',
-    'id': 0,
-    'title': 'Paris'}]
+  'author': 'Wiki',
+  'id': 0,
+  'similarity': 1.0,
+  'title': 'Paris'}]
 
 >>> print(search(q = "Paris"))
 []
 
 >>> print(search(q = "Wiki Paris Montreal Eiffel"))
 [{'article': 'Paris is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'title': 'Paris'},
-     {'article': 'Montreal is in Canada.',
-      'author': 'Wiki',
-      'id': 2,
-      'title': 'Montreal'},
-     {'article': 'Eiffel tower is based in Paris.',
-      'author': 'Wiki',
-      'id': 1,
-      'title': 'Eiffel tower'}]
+  'author': 'Wiki',
+  'id': 0,
+  'similarity': 0.57735,
+  'title': 'Paris'},
+ {'article': 'Montreal is in Canada.',
+  'author': 'Wiki',
+  'id': 2,
+  'similarity': 0.57735,
+  'title': 'Montreal'},
+ {'article': 'Eiffel tower is based in Paris.',
+  'author': 'Wiki',
+  'id': 1,
+  'similarity': 0.40825,
+  'title': 'Eiffel tower'}]
 ```
 
 ## Methods

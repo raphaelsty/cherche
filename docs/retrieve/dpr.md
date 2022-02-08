@@ -50,8 +50,7 @@ retriever.
 >>> retriever = retriever.add(documents=documents)
 
 >>> retriever("france")
-[{'id': 1, 'similarity': 0.011129793042673575},
- {'id': 0, 'similarity': 0.01112689432124476}]
+[{'id': 1, 'similarity': 0.01113}, {'id': 0, 'similarity': 0.01113}]
 ```
 
 ## Map keys to documents
@@ -63,12 +62,12 @@ retriever.
   'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.011129793042673575},
+  'similarity': 0.01113},
  {'id': 0,
   'article': 'Paris is the capital and most populous city of France',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.01112689432124476}]
+  'similarity': 0.01113}]
 ```
 
 ## Custom DPR

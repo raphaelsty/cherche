@@ -5,7 +5,9 @@ nav:
     - rank
     - pipeline
     - qa
+    - generate
     - summary
     - translate
     - examples
     - api
+    - serialize

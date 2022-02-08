@@ -56,8 +56,7 @@ Encoder retriever
      documents: 3
 
 >>> print(retriever("Paris"))
-[{'id': 0, 'similarity': 1.472814254853544},
- {'id': 1, 'similarity': 1.0293491728070765}]
+[{'id': 0, 'similarity': 1.47281}, {'id': 1, 'similarity': 1.02935}]
 
 >>> documents = [
 ...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -86,12 +85,12 @@ Encoder retriever
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 3,
-  'similarity': 1.472814254853544,
+  'similarity': 1.47281,
   'title': 'Paris'},
  {'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 1.472814254853544,
+  'similarity': 1.47281,
   'title': 'Paris'}]
 ```
 

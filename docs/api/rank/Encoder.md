@@ -26,7 +26,7 @@ SentenceBert Ranker.
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function cosine at 0x7fc600cc73a0>`
+- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function cosine at 0x7f798227b280>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 

@@ -126,7 +126,10 @@ class _BM25(Retriever):
             return []
 
         scores, indexes = zip(*sorted(zip(scores, indexes), reverse=True))
-        documents = [self.documents[index] for index in indexes]
+        documents = [
+            {**self.documents[index], "similarity": round(score, 5)}
+            for index, score in zip(indexes, scores)
+        ]
         return documents[: self.k] if self.k is not None else documents
 
     def _process_documents(self, documents: list) -> list:

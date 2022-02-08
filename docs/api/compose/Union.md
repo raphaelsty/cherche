@@ -50,16 +50,19 @@ Mapping to documents
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
+  'similarity': 1.0,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris.',
   'author': 'Wiki',
   'id': 1,
+  'similarity': 0.4505,
   'title': 'Eiffel tower'}]
 
 >>> print(search(q = "Montreal"))
 [{'article': 'Montreal is in Canada.',
   'author': 'Wiki',
   'id': 2,
+  'similarity': 1.0,
   'title': 'Montreal'}]
 
 >>> print(search(q = "Wiki"))

@@ -46,7 +46,7 @@ class Lunr(Retriever):
          documents: 3
 
     >>> print(retriever(q="paris"))
-    [{'id': 0}, {'id': 1}]
+    [{'id': 0, 'similarity': 0.524}, {'id': 1, 'similarity': 0.414}]
 
     >>> retriever += documents
 
@@ -54,10 +54,12 @@ class Lunr(Retriever):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 0.524,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 0.414,
       'title': 'Eiffel tower'}]
 
     References
@@ -90,5 +92,8 @@ class Lunr(Retriever):
         """Retrieve the right document."""
         # We do not handle all Lunr possibilites right now.
         q = q.replace(":", "").replace("-", "")
-        documents = [self.documents[match["ref"]] for match in self.idx.search(q)]
+        documents = [
+            {**self.documents[match["ref"]], "similarity": match["score"]}
+            for match in self.idx.search(q)
+        ]
         return documents[: self.k] if self.k is not None else documents

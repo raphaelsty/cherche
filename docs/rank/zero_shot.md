@@ -56,6 +56,7 @@ identifiers and documents and finally a Zero shot classifier that keeps 5 first-
 >>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
 
 >>> ranker = rank.ZeroShot(
+...     key = "id",
 ...     on = "article",
 ...     encoder = pipeline("zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"),
 ...     k = 5,

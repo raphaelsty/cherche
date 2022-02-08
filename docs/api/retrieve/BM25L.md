@@ -65,7 +65,7 @@ BM25L retriever
     documents: 3
 
 >>> print(retriever(q="Paris"))
-[{'id': 1}, {'id': 0}]
+[{'id': 1, 'similarity': 0.5679}, {'id': 0, 'similarity': 0.5679}]
 
 >>> retriever = retriever + documents
 
@@ -73,10 +73,12 @@ BM25L retriever
 [{'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
+  'similarity': 0.5679,
   'title': 'Eiffel tower'},
  {'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
+  'similarity': 0.5679,
   'title': 'Paris'}]
 ```
 

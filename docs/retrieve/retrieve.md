@@ -18,6 +18,7 @@ Here is the list of available retrievers using Cherche:
 - `retrieve.Flash`
 - `retrieve.Encoder`
 - `retrieve.DPR`
+- `retrieve.Fuzz`
 
 ## k and on parameters
 
@@ -27,7 +28,7 @@ order provided. All the fields defined in `on` must be present in every document
 
 The retrievers all have a `k`-parameter which allows to select the number of documents to retrieve.
 The default value is `None`, i.e the retrievers will retrieves all documents that match the query.
-If you choose a value for k, retriever will only retrieves k top documents that are more likely to 
+If you choose a value for k, retriever will only retrieves k top documents that are more likely to
 match the query.
 
 ```python
@@ -57,15 +58,16 @@ the `add` method to add documents by batch. The other retrievers do not allow to
 batch. The set of documents must be declared at the initialization of the retriever via the
 `document` parameter.
 
-|      Retriever     |   Batch   |
-|:------------------:|:---------:|
-|  retrieve.Elastic  |     ✅     |
-|   retrieve.Flash   |     ✅     |
-|  retrieve.Encoder  |     ✅     |
-|   retrieve.TfIdf   |     ❌     |
-|   retrieve.BM25L   |     ❌     |
-| retrieve.BM25Okapi |     ❌     |
-|    retrieve.Lunr   |     ❌     |
+|      Retriever     |   Batch   |  Storage  | Corpus size |
+|:------------------:|:---------:|:---------:|:-----------:|
+|  retrieve.Elastic  |     ✅     | disk     | Large       |
+|   retrieve.Flash   |     ✅     | memory   | Medium      |  
+|  retrieve.Encoder  |     ✅     | memory   | Medium      |
+|    retrieve.Fuzz   |     ✅     | memory   | Medium      |
+|   retrieve.TfIdf   |     ❌     | memory   | Medium      |
+|   retrieve.BM25L   |     ❌     | memory   | Medium      |
+| retrieve.BM25Okapi |     ❌     | memory   | Medium      |
+|    retrieve.Lunr   |     ❌     | memory   | Medium      |
 
 ## Quick start
 
