@@ -5,12 +5,14 @@ import typing
 
 from ..compose import Intersection, Pipeline, Union
 
-
 __all__ = ["Query"]
 
 
 class Query(abc.ABC):
     """Abstract class for models working on a query."""
+
+    def __init__(self, on: typing.Union[str, list]):
+        self.on = on if isinstance(on, list) else [on]
 
     @property
     def type(self):
@@ -28,7 +30,7 @@ class Query(abc.ABC):
         """Pipeline operator."""
         if isinstance(other, Pipeline):
             return self + other
-        return Pipeline(models=[self, other])
+        return Pipeline(models=[self] + other.models)
 
     def __or__(self, other) -> Union:
         """Union operator."""
@@ -51,27 +53,35 @@ class _SpellingCorrector(Query):
 
     def __init__(
         self,
-        on: typing.List[str],
+        on: typing.Union[str, list],
     ) -> None:
-        super().__init__()
+        super().__init__(on=on)
         self.occurrences = collections.Counter()
-        self.on = on
 
-    def add(self, documents: typing.Union[typing.List[typing.Dict], str]):
+    def add(
+        self, documents: typing.Union[typing.List[typing.Dict], str]
+    ) -> "_SpellingCorrector":
         if isinstance(documents, str):
             self._update_from_str(documents)
         elif isinstance(documents, list) and len(documents) > 0:
             if isinstance(documents[0], dict):
                 text = " ".join(
-                    [" ".join([document.get(field, "") for field in self.on]) for document in documents]
+                    [
+                        " ".join([document.get(field, "") for field in self.on])
+                        for document in documents
+                    ]
                 )
                 self._update_from_str(text)
         else:
-            raise ValueError(f"Unsupported document format for updating spelling dictionary : {type(documents)}")
+            raise ValueError(
+                f"Unsupported document format for updating spelling dictionary : {type(documents)}"
+            )
+        return self
 
-    def reset(self):
+    def reset(self) -> "_SpellingCorrector":
         """Wipe dictionary."""
         self.occurrences = collections.Counter()
+        return self
 
     @abc.abstractmethod
     def __call__(self, q: str, **kwargs) -> str:
@@ -90,5 +100,5 @@ class _SpellingCorrector(Query):
     def _update_from_file(self, path_file: str):
         """Update dictionary from all words fetched from a raw text file."""
         with open(path_file, "r") as fp:
-            words = re.findall(r'\w+', fp.read().lower())
+            words = re.findall(r"\w+", fp.read().lower())
             self._update_from_list(words=words)

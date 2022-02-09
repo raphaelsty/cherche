@@ -1,5 +1,6 @@
 import pathlib
 import string
+import typing
 import warnings
 from typing import List
 
@@ -33,6 +34,14 @@ class Norvig(_SpellingCorrector):
     >>> corrector(q="tha citi af Parisa is in Fronce")
     'the city of Paris is in France'
 
+    >>> corrector = query.Norvig(big=True, on=["title", "article"])
+    >>> corrector.add(documents)
+    >>> corrector(q="tha citi af Parisa is in Fronce")
+    'the city of Paris is in France'
+
+    >>> corrector(q="what is the name of the foottball clup of Parisa?")
+    'what is the name of the football club of Paris'
+
     References
     ----------
     1. [How to Write a Spelling Corrector](https://norvig.com/spell-correct.html)
@@ -41,7 +50,7 @@ class Norvig(_SpellingCorrector):
 
     def __init__(
         self,
-        on: List[str],
+        on: typing.Union[str, list],
         big: bool = False,
     ) -> None:
         super().__init__(on=on)
@@ -53,28 +62,35 @@ class Norvig(_SpellingCorrector):
     def __call__(self, q: str, **kwargs) -> str:
         """Correct spelling errors in a given query."""
         if len(self.occurrences) == 0:
-            warnings.warn("Spelling corrector has not be initialized, dictionary is empty")
+            warnings.warn(
+                "Spelling corrector has not be initialized, dictionary is empty"
+            )
             return q
         return " ".join(map(self.correct, q.split(" ")))
 
-    def correct(self, word):
+    def correct(self, word: str) -> float:
         """Most probable spelling correction for word."""
         return max(self._candidates(word), key=lambda w: self._probability(w))
 
-    def _probability(self, word):
+    def _probability(self, word: str) -> float:
         """Probability of `word`."""
         return self.occurrences[word] / sum(self.occurrences.values())
 
-    def _candidates(self, word):
+    def _candidates(self, word: str) -> set:
         """Generate possible spelling corrections for word."""
-        return self._known([word]) or self._known(self._edits1(word)) or self._known(self._edits2(word)) or [word]
+        return (
+            self._known([word])
+            or self._known(self._edits1(word))
+            or self._known(self._edits2(word))
+            or [word]
+        )
 
-    def _known(self, words):
+    def _known(self, words: str) -> set:
         """The subset of `words` that appear in the dictionary."""
         return set(w for w in words if w in self.occurrences)
 
-    def _edits1(self, word):
-        """ All edits that are one edit away from `word`. """
+    def _edits1(self, word: str) -> set:
+        """All edits that are one edit away from `word`."""
         letters = string.ascii_lowercase
         splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
         deletes = [L + R[1:] for L, R in splits if R]
@@ -83,10 +99,6 @@ class Norvig(_SpellingCorrector):
         inserts = [L + c + R for L, R in splits for c in letters]
         return set(deletes + transposes + replaces + inserts)
 
-    def _edits2(self, word):
-        """ All edits that are two edits away from `word`. s"""
+    def _edits2(self, word: str) -> set:
+        """All edits that are two edits away from `word`. s"""
         return (e2 for e1 in self._edits1(word) for e2 in self._edits1(e1))
-
-
-if __name__ == '__main__':
-    pass
