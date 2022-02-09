@@ -46,8 +46,8 @@ class PRF(Query):
          nb docs: 8
          nb terms per doc: 1
 
-    >>> prf(q="europe")
-    'europe centres metro space art paris bordeaux significance university'
+    >>> prf(q="Europe")
+    'Europe centres metro space art paris bordeaux significance university'
 
 
     References
@@ -92,11 +92,8 @@ class PRF(Query):
             warnings.warn("PRF has not be initialized, no document has been found.")
             return q
 
-        # Quick query cleanup
-        q = q.lower()
-
         # Extract top terms from the documents wrt. a given query
-        top_terms = self._retrieve_top_terms(q=q)
+        top_terms = self._retrieve_top_terms(q=q.lower())
 
         # Augment the query
         q += " " + " ".join([term for term in top_terms if term not in q.split(" ")])
