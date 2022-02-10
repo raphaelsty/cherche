@@ -1,16 +1,17 @@
+import collections
 import pathlib
+import re
 import string
 import typing
-import warnings
-from typing import List
 
-from .base import _SpellingCorrector
+from .base import Query
 
 __all__ = ["Norvig"]
 
 
-class Norvig(_SpellingCorrector):
-    """Spelling corrector written by Peter Norvig: [How to Write a Spelling Corrector](https://norvig.com/spell-correct.html)
+class Norvig(Query):
+    """Spelling corrector written by Peter Norvig:
+    [How to Write a Spelling Corrector](https://norvig.com/spell-correct.html)
 
     Parameters
     ----------
@@ -26,21 +27,24 @@ class Norvig(_SpellingCorrector):
     >>> from cherche import query, data
 
     >>> documents = data.load_towns()
-    >>> corrector = query.Norvig(on=["title", "article"])
+
+    >>> corrector = query.Norvig(on = ["title", "article"])
+
     >>> corrector.add(documents)
-    >>> corrector
-    Norvig query
+    Query Norvig
+         Vocabulary: 1008
 
     >>> corrector(q="tha citi af Parisa is in Fronce")
     'the city of Paris is in France'
 
     >>> corrector = query.Norvig(big=True, on=["title", "article"])
+
     >>> corrector.add(documents)
+    Query Norvig
+         Vocabulary: 32790
+
     >>> corrector(q="tha citi af Parisa is in Fronce")
     'the city of Paris is in France'
-
-    >>> corrector(q="what is the name of the foottball clup of Parisa?")
-    'what is the name of the football club of Paris'
 
     References
     ----------
@@ -50,21 +54,25 @@ class Norvig(_SpellingCorrector):
 
     def __init__(
         self,
-        on: typing.Union[str, list],
+        on: typing.Union[str, typing.List],
         big: bool = False,
     ) -> None:
         super().__init__(on=on)
+
+        self.occurrences = collections.Counter()
 
         if big:
             path_big = pathlib.Path(__file__).parent.parent.joinpath("data/norvig.txt")
             self._update_from_file(path_file=path_big)
 
+    def __repr__(self) -> str:
+        repr = super().__repr__()
+        repr += f"\n\t Vocabulary: {len(self.occurrences)}"
+        return repr
+
     def __call__(self, q: str, **kwargs) -> str:
         """Correct spelling errors in a given query."""
         if len(self.occurrences) == 0:
-            warnings.warn(
-                "Spelling corrector has not be initialized, dictionary is empty"
-            )
             return q
         return " ".join(map(self.correct, q.split(" ")))
 
@@ -102,3 +110,30 @@ class Norvig(_SpellingCorrector):
     def _edits2(self, word: str) -> set:
         """All edits that are two edits away from `word`. s"""
         return (e2 for e1 in self._edits1(word) for e2 in self._edits1(e1))
+
+    def add(self, documents: typing.Union[typing.List[typing.Dict], str]) -> "Norvig":
+        """Fit Nervig spelling corrector."""
+        documents = (
+            documents
+            if isinstance(documents, str)
+            else " ".join(
+                [
+                    " ".join([document.get(field, "") for field in self.on])
+                    for document in documents
+                ]
+            )
+        )
+
+        self.occurrences.update(documents.split(" "))
+        return self
+
+    def _update_from_file(self, path_file: str) -> "Norvig":
+        """Update dictionary from all words fetched from a raw text file."""
+        with open(path_file, "r") as fp:
+            self.occurrences.update(re.findall(r"\w+", fp.read().lower()))
+        return self
+
+    def reset(self) -> "Norvig":
+        """Wipe dictionary."""
+        self.occurrences = collections.Counter()
+        return self

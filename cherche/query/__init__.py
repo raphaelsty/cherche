@@ -1,5 +1,5 @@
 from .base import Query
-from .spelling_corrector import Norvig
-from .pseudo_relevance_feedback import PRF
+from .norvig import Norvig
+from .prf import PRF
 
 __all__ = ["Query", "Norvig", "PRF"]

@@ -1,11 +1,9 @@
 import typing
-import warnings
-
-import sklearn
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 import numpy as np
+import sklearn
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 from .base import Query
 
@@ -35,20 +33,21 @@ class PRF(Query):
 
     Examples
     --------
+
     >>> from cherche import query, data
 
     >>> documents = data.load_towns()
-    >>> prf = query.PRF(on=["title", "article"], nb_docs=8, nb_terms_per_doc=1)
-    >>> prf.add(documents)
+
+    >>> prf = query.PRF(on=["title", "article"], nb_docs=8, nb_terms_per_doc=1, documents=documents)
+
     >>> prf
-    Pseudo Relevance Feedback model
-         on: title, article
-         nb docs: 8
-         nb terms per doc: 1
+    Query PRF
+         On: title, article
+         Documents: 8
+         Terms: 1
 
     >>> prf(q="Europe")
     'Europe centres metro space art paris bordeaux significance university'
-
 
     References
     ----------
@@ -60,88 +59,59 @@ class PRF(Query):
     def __init__(
         self,
         on: typing.Union[str, list],
-        tf: sklearn.feature_extraction.text.CountVectorizer = None,
+        documents: list,
+        tf: sklearn.feature_extraction.text.CountVectorizer = TfidfVectorizer,
         nb_docs: int = 5,
         nb_terms_per_doc: int = 3,
     ) -> None:
         super().__init__(on=on)
         self.nb_docs = nb_docs
         self.nb_terms_per_doc = nb_terms_per_doc
-        self.documents: typing.List[str] = list()
-        self.vocabulary: typing.Set[str] = set()
+        self.func = tf
 
-        if tf is None:
-            self.tf = TfidfVectorizer
-        else:
-            self.tf = tf
+        documents = [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
 
-    @property
-    def type(self):
-        return "prf"
+        tokens = set()
+        for doc in documents:
+            tokens.update(doc.lower().split(" "))
+
+        self.tf = self.func(vocabulary=tokens)
+        self.matrix = self.tf.fit_transform(documents)
+        self.vocabulary = self.tf.get_feature_names_out()
 
     def __repr__(self) -> str:
-        repr = "Pseudo Relevance Feedback model"
-        repr += f"\n\t on: {', '.join(self.on)}"
-        repr += f"\n\t nb docs: {self.nb_docs}"
-        repr += f"\n\t nb terms per doc: {self.nb_terms_per_doc}"
+        repr = super().__repr__()
+        repr += f"\n\t On: {', '.join(self.on)}"
+        repr += f"\n\t Documents: {self.nb_docs}"
+        repr += f"\n\t Terms: {self.nb_terms_per_doc}"
         return repr
 
     def __call__(self, q: str, **kwargs) -> str:
         """Augment a given query with new terms."""
-        if len(self.documents) == 0:
-            warnings.warn("PRF has not be initialized, no document has been found.")
-            return q
-
         # Extract top terms from the documents wrt. a given query
         top_terms = self._retrieve_top_terms(q=q.lower())
 
         # Augment the query
         q += " " + " ".join([term for term in top_terms if term not in q.split(" ")])
-
         return q
-
-    def add(self, documents: typing.Union[typing.List[typing.Dict], str]) -> "PRF":
-        if isinstance(documents, str):
-            self._update_vocabulary(documents)
-            self._update_documents(documents)
-        elif isinstance(documents, list) and len(documents) > 0:
-            if isinstance(documents[0], dict):
-                documents = [
-                    " ".join([document.get(field, "") for field in self.on])
-                    for document in documents
-                ]
-                for document in documents:
-                    self._update_vocabulary(document)
-                    self._update_documents(document)
-        else:
-            raise ValueError(
-                f"Unsupported document format for updating PRF internal parameters : {type(documents)}"
-            )
-        return self
 
     def _retrieve_top_terms(self, q: str) -> typing.List[str]:
         """Retrieve new terms to augment a given query. Disregard dupes terms."""
-        tf = self.tf(vocabulary=self.vocabulary)
-        documents = tf.fit_transform(self.documents)
-        query = tf.transform([q])
-        vocabulary = tf.get_feature_names_out()
-
+        query = self.tf.transform([q])
         # First, retrieve top documents wrt. a given query
-        idx_documents = self._retrieve_documents(documents=documents, query=query)
+        idx_documents = self._retrieve_documents(matrix=self.matrix, query=query)
 
         # Then, extract a given number of terms from each document
         terms = []
         for idx_document in idx_documents:
-            document = documents[idx_document].toarray().squeeze()
-            terms.extend(self._retrieve_terms(document=document, vocabulary=vocabulary))
+            document = self.matrix[idx_document].toarray().squeeze()
+            terms.extend(self._retrieve_terms(document=document, vocabulary=self.vocabulary))
         return terms
 
-    def _retrieve_documents(
-        self, documents: np.ndarray, query: np.ndarray
-    ) -> np.ndarray:
+    def _retrieve_documents(self, matrix: np.ndarray, query: np.ndarray) -> np.ndarray:
         """Retrieve pertinents documents given a user query."""
         # Compute ranking score
-        results = cosine_similarity(documents, query).squeeze()
+        results = cosine_similarity(matrix, query).squeeze()
 
         # Fetching top-documents then sorting by score
         ind = np.argpartition(results, -self.nb_docs)[-self.nb_docs :]
@@ -149,18 +119,8 @@ class PRF(Query):
 
         return ind
 
-    def _retrieve_terms(
-        self, document: np.ndarray, vocabulary: np.ndarray
-    ) -> typing.List[str]:
+    def _retrieve_terms(self, document: np.ndarray, vocabulary: np.ndarray) -> typing.List[str]:
         """Extract top-terms in a given document."""
-        ind = np.argpartition(document, -self.nb_terms_per_doc)[
-            -self.nb_terms_per_doc :
-        ]
+        ind = np.argpartition(document, -self.nb_terms_per_doc)[-self.nb_terms_per_doc :]
         ind = ind[np.argsort((-document)[ind])]
         return vocabulary[ind].tolist()
-
-    def _update_vocabulary(self, document: str) -> None:
-        self.vocabulary.update(document.lower().split(" "))
-
-    def _update_documents(self, document: str) -> None:
-        self.documents.append(document.lower())
