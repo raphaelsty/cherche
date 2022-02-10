@@ -60,7 +60,7 @@ class PRF(Query):
         self,
         on: typing.Union[str, list],
         documents: list,
-        tf: sklearn.feature_extraction.text.CountVectorizer = TfidfVectorizer,
+        tf: sklearn.feature_extraction.text.CountVectorizer = TfidfVectorizer(),
         nb_docs: int = 5,
         nb_terms_per_doc: int = 3,
     ) -> None:
@@ -71,11 +71,7 @@ class PRF(Query):
 
         documents = [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
 
-        tokens = set()
-        for doc in documents:
-            tokens.update(doc.lower().split(" "))
-
-        self.tf = self.func(vocabulary=tokens)
+        self.tf = tf
         self.matrix = self.tf.fit_transform(documents)
         self.vocabulary = self.tf.get_feature_names_out()
 
