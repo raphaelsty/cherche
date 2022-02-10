@@ -164,4 +164,4 @@ Do not hesitate to look at Haystack, Jina, or TxtAi which offer very advanced so
 
 ## Dev Team 💾
 
-The Cherche dev team is made up of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant) 🥳
+The Cherche dev team is made up of [Raphaël Sourty](https://github.com/raphaelsty), [François-Paul Servant](https://github.com/fpservant), [Nicolas Bizzozzero](https://github.com/NicolasBizzozzero) 🥳
