@@ -2292,10 +2292,10 @@ in the <code>pickle</code> file associated with the <code>path</code> parameter.
 <span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;retriever_dpr.pkl&quot;</span>
 <span class="o">...</span> <span class="p">)</span>
 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
 <span class="c1"># 0 is the id of the GPU.</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">faiss</span><span class="o">.</span><span class="n">index_cpu_to_gpu</span><span class="p">(</span><span class="n">faiss</span><span class="o">.</span><span class="n">StandardGpuResources</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">retriever</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;paris&quot;</span><span class="p">)</span>
 <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.9025790931437582</span><span class="p">},</span>
