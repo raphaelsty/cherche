@@ -144,6 +144,10 @@ Cherche provides modules dedicated to summarization and question answering. Thes
 
 Hugging Face's translation models can be fully integrated into the neural search pipeline to translate queries, documents, or answers.
 
+## Deploy
+
+We provide a minimalist API to deploy our neural search pipeline with FastAPI and Docker; information is available in the [documentation](https://raphaelsty.github.io/cherche/).
+
 ## Hugging Face Space
 
 A running demo is available on [Hugging Face](https://huggingface.co/spaces/raphaelsty/games).
