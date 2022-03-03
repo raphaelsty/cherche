@@ -1,25 +1,17 @@
 # Elastic
 
 The Elastic module is a wrapper for the [Elasticsearch](https://elasticsearch-py.readthedocs.io/en/v8.0.0a1/)
-Python client. This module allows you to use your own Elasticsearch server to integrate it into a
-neural search pipeline.
+Python client. This module allows us to use our Elasticsearch server to integrate it into a neural search pipeline.
 
-To use Elasticsearch as a retriever you will need to install Elasticsearch and start the server,
-information is available [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html).
+To use Elasticsearch as a retriever, we need to install Elasticsearch and start the server. Pieces of information are available [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html).
 
-You can find all the information associated with the `es` parameter which establishes the
-connection to your Elasticsearch session on the [official documentation](https://elasticsearch-py.readthedocs.io/en/v8.0.0a1/api.html#module-elasticsearch).
+We can find all the information associated with the `es` parameter, which establishes the connection to your Elasticsearch session on the [official documentation](https://elasticsearch-py.readthedocs.io/en/v8.0.0a1/api.html#module-elasticsearch).
 
-Once your Elasticsearch server is up and running, you can connect to it with Search to index
-documents and for queries.
+Once our Elasticsearch server is up and running, we can connect with Cherche to add documents to the index.
 
-The `retrieve.Elastic` retriever is the right solution if you want to implement a neural search
-pipeline on a large corpus. The retriever allows the documents and pre-computed embeddings of the
-ranker to be indexed on Elasticsearch to avoid to overload the RAM.
+The `retrieve.Elastic` retriever is the right solution to implement a neural search pipeline on a large corpus. The retriever allows the documents and pre-computed embeddings of the ranker to be indexed on Elasticsearch to avoid overloading the RAM.
 
-`retrieve.Elastic` has two methods to index new documents. These two methods are compatible with a
-mini-batch indexing. The first `add` and the second `add_embeddings`  which in addition to indexing
-documents, allows to index the embeddings of a dedicated ranker.
+`retrieve.Elastic` has two methods to index new documents. These two methods are compatible with mini-batch indexing. The first `add` and the second `add_embeddings` methods are dedicated to indexing documents and eventually embeddings of a dedicated ranker.
 
 ## Elastic retriever
 
@@ -130,12 +122,9 @@ Using `retrieve.Elastic`, we can customize the query to fit our needs.
 
 ## Upload documents and embeddings on Elasticsearch
 
-When working with a lot of documents, we need to store the documents and embeddings on
-disk rather than in RAM. To do this, we can declare an Elastic retriever and index documents
-and embeddings in Elasticsearch.
+When working with many documents, we need to store the documents and embeddings on disk rather than in RAM. To do this, we can declare an Elastic retriever and index documents and embeddings in Elasticsearch.
 
-It is mandatory to have a GPU to calculate embeddings in order to search in millions of documents,
-unless you are patient.
+It is mandatory to have a GPU to calculate embeddings to index millions of documents.
 
 ```python
 >>> from cherche import retrieve, rank

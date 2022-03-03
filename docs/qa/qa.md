@@ -1,32 +1,21 @@
 # Question Answering
 
-The `qa.QA` module allows to integrate an extractive question answering model to the neural search
-pipeline. The `qa.Qa` module is compatible with the question answering models of
-[Hugging Face](https://huggingface.co/models?pipeline_tag=question-answering). The `qa.QA` model
-extracts the most likely spans to answer the user's question from a list of documents. The neural
-search pipeline allows to filter the whole corpus to reduce the search of spans to a small number
-of documents and significantly accelerates the search for top answers.
-
-Even when filtering the corpus, Question answering models are relatively slow using CPU and require
-a GPU to get decent response times.
+The `qa.QA` module integrates an extractive question answering model to the neural search pipeline. The `qa.Qa` module is compatible with [Hugging Face](https://huggingface.co/models?pipeline_tag=question-answering). The `qa.QA` model extracts the most likely spans to answer the user's question from a list of documents. The neural search pipeline filters the whole corpus to reduce the search of spans to a small number of documents and significantly accelerates the search for top answers. However, even when filtering the corpus, Question answering models are relatively slow using CPU and require a GPU to get decent response times.
 
 ## On, k
 
-The `on` parameter allows to select the field(s) on which the question answering model will extract
-the answer. If several fields are selected via the `on` parameter, they will be concatenated.
+The `on` parameter allows selecting the field(s) on which the question-answering model will extract the answer. When selecting multiple fields via the `on` parameter, we will concatenate them.
 
-The parameter `k` allows to retrieve only top `k` answers.
+The parameter `k` allows retrieving top `k` answers.
 
 ## qa_score, answer
 
-`qa.QA` model returns candidates documents, the `qa_score` and the `answer` fields. The `answer` field
-contains the span that is likely to be the answer to the question. The `qa_score` is the score associated
-with this span (higher is better). Answers are ordered by `qa_score`, higher first.
+`qa.QA` model returns the candidate's documents, the `qa_score` and the `answer` fields. The `answer` field contains the span that is likely to answer the question. The `qa_score` (higher is better) is associated
+with the span. The question-answering model orders answer by score.
 
 ## Documents
 
-It is mandatory that the pipeline provide the documents and not only the identifiers to the
-question answering model such as (except for Elasticsearch which retrieve documents by default):
+The pipeline must provide the documents and not only the identifiers to the question answering model such as (except for Elasticsearch, which retrieve documents by default):
 
 ```python
 search = pipeline + documents + question_answering

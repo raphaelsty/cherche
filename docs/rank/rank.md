@@ -1,20 +1,10 @@
 # Rank
 
-Rankers are models that measure the semantic similarity between a document and a query. The ranker
-allows to reorder the documents retrieved by the retriever based on the semantic similarity between
-the query and the documents retrieved. Rankers are compatible with all the retrievers.
+Rankers are models that measure the semantic similarity between a document and a query. Rankers filter out documents based on the semantic similarity between the query and the documents. Rankers are compatible with all the retrievers.
 
 ## key, on and k parameters
 
-The `key` parameter is mandatory for `ranker.Encoder` and `ranker.DPR` but not needed for
-`ranker.ZeroShot`. The `key` parameter is the unique identifier of the documents in the corpus.
-
-The `on` parameter allows the ranker to be used on multiple fields. Rankers will concatenate selected
-fields to calculate the embeddings of the documents.
-
-Rankers all have a `k`-parameter during the initialization which allows to select the number of
-documents to keep after the ranking. When the `k` parameter is set to the default value, i.e. `None`,
-the ranker will not drop any documents, it will only reorder them.
+The `key` parameter is mandatory for `ranker.Encoder` and `ranker.DPR` but not needed for `ranker.ZeroShot`. The `key` parameter is the unique identifier of the documents in the corpus. We can use ranker on multiple fields with the `on` parameter. Rankers will concatenate selected fields to calculate the embeddings of the documents. The k parameter of ranker allows selecting the number of documents to keep after the ranking. By default, rankers will reorder documents without dropping any.
 
 |      Ranker     | Precomputing |                                                          GPU                                                          |
 |:---------------:|:------------:|:---------------------------------------------------------------------------------------------------------------------:|
@@ -22,10 +12,7 @@ the ranker will not drop any documents, it will only reorder them.
 |    ranker.DPR   |       ✅      | Highly recommended when precomputing <br>embeddings if the corpus is large. <br>Not needed anymore after precomputing |
 | ranker.ZeroShot |       ❌      |                     Highly recommended since <br>ranker.ZeroShot cannot precompute <br>embeddings                     |
 
-The `rank.Encoder` and `rank.DPR` rankers pre-compute the document embeddings once for all with the `add` method.
-This step can be time consuming if you don't have a GPU. The embeddings are pre-computed so that the model can then rank the retriever documents at lightning speed.
-The embeddings can be saved in `pickle` format via the `path` parameter when the ranker is initialized.
-At a new initialization the model will use the pre-computed embeddings if the `path` parameter is provided.
+The `rank.Encoder` and `rank.DPR` rankers pre-compute the document embeddings once for all with the `add` method. This step can be time-consuming if we do not have a GPU. The embeddings are pre-computed so that the model can then rank the retriever documents at lightning speed.
 
 ## Quick start
 
@@ -72,15 +59,11 @@ At a new initialization the model will use the pre-computed embeddings if the `p
 
 ## Save ranker embeddings
 
-The `rank.Encoder` and `rank.DPR` have a `path` parameter at initialization. If you specify this
-parameter, the ranker will export the embeddings it has calculated into a `pickle` file.
-The pre-computed embeddings are a dictionary with the document id as key and the document embedding
-as value. You can reload the pre-computed embeddings in a new session by keeping the pickle file and
-specifying the `path` parameter with the address of the pickle file. You will still have to call
-the `add` method and index all the documents but this step will be quick because you have already
-pre-calculated the embddings.
+At initialization, the `rank.Encoder` and `rank.DPR` have a `path` parameter. The ranker will export the embeddings calculated into a Pickle file if we specify this parameter. The pre-computed embeddings are a dictionary with the document id as key and the document embedding
+as value. We can reload the pre-computed embeddings in a new session by keeping the pickle file and specifying the `path` parameter with the address of the pickle file. We will have to call the `add` method and index all the documents, but this step will be quick because we have already
+pre-calculated the embeddings.
 
-Otherwise to save a ranker it is also possible to serialize it directly with `pickle`.
+Otherwise, it is also possible to serialize it directly with Pickle to save a ranker.
 
 ```python
 >>> import pickle

@@ -1,8 +1,6 @@
 # Lunr
 
-`retrieve.Lunr` is a wrapper of [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). It is a
-powerful and practical solution for searching inside a corpus of documents without having to use a
-retriever such as Elasticsearch when it's not needed. Lunr stores an inverted index in memory.
+`retrieve.Lunr` is a wrapper of [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). It is a powerful and practical solution for searching inside a corpus of documents without using a retriever such as Elasticsearch when it is not needed. Lunr stores an inverted index in memory.
 
 ```python
 >>> from cherche import retrieve

@@ -1,10 +1,7 @@
 # Retrieve
 
-Retrievers speed up the neural search pipeline by filtering out the majority of documents that are
-not relevant. Rankers (slower) will then be able to pull up the most relevant documents based on semantic
-similarity. The retrievers `retrieve.Elastic` and `retrieve.encoder` are the only retrievers in
-Cherche that are compatible with large corpora. The other retrievers are adapted to small or
-medium size corpora.
+Retrievers speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers (slower) will then pull up the most relevant documents based on semantic
+similarity. The retrievers `retrieve.Elastic` and `retrieve.Encoder` are the only retrievers in Cherche that are compatible with large corpora. The other retrievers are adapted to small or medium-sized corpora since we will store documents in memory.
 
 ## Retrievers
 
@@ -22,14 +19,12 @@ Here is the list of available retrievers using Cherche:
 
 ## k and on parameters
 
-The main parameter of retrievers is `on`. This is the field(s) on which the retriever will perform
-the search. If multiple fields are specified, the retriever will concatenate all fields in the
-order provided. All the fields defined in `on` must be present in every documents.
+The main parameter of retrievers is `on`; it is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the
+order provided.
 
-The retrievers all have a `k`-parameter which allows to select the number of documents to retrieve.
-The default value is `None`, i.e the retrievers will retrieves all documents that match the query.
-If you choose a value for k, retriever will only retrieves k top documents that are more likely to
-match the query.
+The retrievers all have a `k`-parameter which allows selecting the number of documents to retrieve.
+The default value is `None`, i.e., the retrievers will retrieve all documents matching the query.
+If we choose a value for k, the retriever will only retrieve k top documents that are more likely to match the query.
 
 ```python
 >>> from cherche import retrieve
@@ -52,11 +47,7 @@ match the query.
 
 ## Add documents per batch to a retriever
 
-Retrievers store document `keys` to retrieve them later. Some retrievers can index documents keys
-in mini-batch like `retrieve.Elastic, retrieve.Flash and retrieve.Encoder`. These retrievers have
-the `add` method to add documents by batch. The other retrievers do not allow to add documents by
-batch. The set of documents must be declared at the initialization of the retriever via the
-`document` parameter.
+Retrievers store document `keys` to retrieve them later. Some retrievers can index documents keys in mini-batch like `retrieve.Elastic`, `retrieve.Flash` and `retrieve.Encoder`. These retrievers have the `add` method to add documents by batch. The other retrievers do not allow to add documents by batch. Instead, we declare the set of documents when initializing the retriever via the `document` parameter.
 
 |      Retriever     |   Batch   |  Storage  | Corpus size |
 |:------------------:|:---------:|:---------:|:-----------:|
@@ -103,8 +94,7 @@ batch. The set of documents must be declared at the initialization of the retrie
 
 ## Matching indexes to documents
 
-It is possible to directly retrieve the content of the documents using the `+` operator between
-retriever and documents. This is useful if you want to see the results of your searches directly.
+It is possible to directly retrieve the content of the documents using the `+` operator between retriever and documents. Documents mapping is helpful if we want to check the retrieved document's content or to accomplish question answering or summarization.
 
 ```python
 >>> retriever += documents
@@ -125,7 +115,7 @@ retriever and documents. This is useful if you want to see the results of your s
 
 ## Search on multiples fields
 
-Also we can search on more than one single field to retrieve more documents.
+Also, we can search with multiple fields to retrieve more documents.
 
 ```python
 >>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)

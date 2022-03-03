@@ -1,18 +1,14 @@
 # Summary
 
-The `summary.Summary` module allows to integrate a summarization model at the end of the neural
-search pipeline. This is a very handy tool to get a summary of a subset of documents that match a query.
-
-Summarization models are slow using CPU and require a GPU to get decent response times.
+The `summary.Summary` module integrates a summarization model at the end of the neural search pipeline. It is a handy tool to summarize a subset of documents that match a query. However, summarization models are slow using CPU and require a GPU to get decent response times.
 
 ## On
 
-The `on` parameter allows to select the field(s) used to generate a summary.
+The `on` parameter allows the selection of the field(s) used to generate a summary.
 
 ## Documents
 
-It is mandatory that the pipeline provide the documents and not only the identifiers to the
-summarization model such as (except for Elasticsearch which retrieve documents by default):
+The pipeline must provide the documents and not only the identifiers to the summarization model (except for Elasticsearch, which retrieve documents by default).
 
 ```python
 search = pipeline + documents + summarization

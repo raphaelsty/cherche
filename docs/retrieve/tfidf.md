@@ -1,6 +1,6 @@
 # TfIdf
 
-The TfIdf retriever is based on the [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html) of sklearn. It computes the dot product between the query tf-idf vector and the documents tf-idf matrix and retrieve highest match. TfIdf retriever stores a sparse matrix and an index that links the rows of the matrix to document identifiers.
+Our TF-IDF retriever relies on the [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html) of Sklearn. It computes the dot product between the query TF-IDF vector and the documents TF-IDF matrix and retrieves the highest match. TfIdf retriever stores a sparse matrix and an index that links the rows of the matrix to document identifiers.
 
 ```python
 >>> from cherche import retrieve
@@ -32,7 +32,7 @@ The TfIdf retriever is based on the [TfidfVectorizer](https://scikit-learn.org/s
 [{'id': 0}, {'id': 2}]
 ```
 
-You can also initialise the retriever with a custom [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html).
+We can also initialize the retriever with a custom [TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html).
 
 ```python
 >>> from cherche import retrieve

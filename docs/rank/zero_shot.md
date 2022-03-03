@@ -1,18 +1,13 @@
 # rank.ZeroShot
 
-Pre-trained models for the zero shot classification task are available from
-[Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification). There are more
-than fifty models for different languages. You can find some details
-[here](https://discuss.huggingface.co/t/new-pipeline-for-zero-shot-text-classification/681).
+Pre-trained models for the zero-shot classification task are available on
+[Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification). There are more than fifty models for different languages. We can find some details [here](https://discuss.huggingface.co/t/new-pipeline-for-zero-shot-text-classification/681).
 
-The `ranker.ZeroShot` model is slow because there is no pre-computation possible. It is therefore
-recommended to use this ranker with a GPU. `ranker.ZeroShot` has not any `add` method since it do
-not pre-compute embeddings.
+The `ranker.ZeroShot` model is slow because no pre-computation is possible. Therefore, we strongly recommend using this ranker with a GPU. `ranker.ZeroShot` has no `add` method since it does not pre-compute embeddings.
 
 ## Documents
 
-The zero shot model needs the content of the documents to re-rank the retriever's output candidates.
-You can provide the documents to the `ranker.ZeroShot` using a pipeline:
+The zero-shot model needs the content of the documents to re-rank the retriever's output candidates. We can provide the documents to the `ranker.ZeroShot` using a pipeline:
 
 ```python
 # Addind documents is mandatory when rank.ZeroShot is paired with retrieve.TfIdf, retrieve.Lunr, 
@@ -20,13 +15,11 @@ You can provide the documents to the `ranker.ZeroShot` using a pipeline:
 >>> search = retriever + documents + ranker
 ```
 
-Elasticsearch returns the content of the documents by default and not just the identifiers, so
-there is no need to add the documents to the pipeline with Elasticsearch.
+Elasticsearch returns the content of the documents by default and not just the identifiers, so there is no need to add the documents to the pipeline with Elasticsearch.
 
 ## Quick start
 
-A pipeline consisting of a TfIdf with 30 first documents retrieved, followed by a mapping between
-identifiers and documents and finally a Zero shot classifier that keeps 5 first-order documents.
+Here, we create a pipeline made of a TfIdf with 30 first documents retrieved, followed by a mapping between identifiers and documents, and finally a zero-shot classifier that keeps five first-order documents.
 
 ```python
 >>> from cherche import retrieve, rank

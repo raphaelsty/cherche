@@ -126,8 +126,9 @@ class Fuzz(Retriever):
             List of documents to add to the index.
 
         """
-        len_index = len(self.documents)
-        for idx, doc in enumerate(documents):
+        for doc in documents:
+
+            idx = len(self.documents)
 
             content = " ".join([doc.get(field, "") for field in self.on])
             if self.default_process:
@@ -135,11 +136,11 @@ class Fuzz(Retriever):
 
             if doc[self.key] not in self.index:
                 # Add new documents
-                self.documents[idx + len_index] = {
+                self.documents[idx] = {
                     self.key: doc[self.key],
                     "fuzzer": content,
                 }
-                self.index[doc[self.key]] = idx + len_index
+                self.index[doc[self.key]] = idx
             else:
                 # Update existing document
                 self.documents[self.index[doc[self.key]]] = {
@@ -159,7 +160,7 @@ class Fuzz(Retriever):
 
         """
         return [
-            {self.key: self.documents[idx][self.key], "similarity": similarity}
+            {self.key: self.documents[idx][self.key], "similarity": float(similarity)}
             for _, similarity, idx in process.extract(
                 q,
                 [doc["fuzzer"] for doc in self.documents.values()],

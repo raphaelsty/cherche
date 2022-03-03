@@ -1,17 +1,11 @@
 # DPR
 
-The `retriever.DPR` model allows the use of framework that encode queries and documents with two distinct models. It is compatible with the [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) DPR models. The encoder pre-computes document embeddings and uses [Faiss](https://github.com/facebookresearch/faiss) to quickly find the documents most similar to the query embedding.
+The `retriever.DPR` model uses DPR-based models that encode queries and documents with two distinct models. It is compatible with the [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) DPR models. The encoder pre-computes document embeddings and uses [Faiss](https://github.com/facebookresearch/faiss) to quickly find the documents most similar to the query embedding.
 
-Documents indexed by `retrieve.DPR` can be updated in mini-batch with the `add` method.
-This method takes time because the document encoder will pre-compute the document embeddings and store them
-in the `pickle` file associated with the `path` parameter. You can speed up the process with a GPU.
-When indexing documents, the encoder loads the `pickle` file that contains the embeddings in memory
-and updates it with the embeddings of the new documents. It is simply a dictionary with the document
-identifier as key the embedding as value.
+Documents indexed by `retrieve.DPR` can be updated using batch with the `add` method. This method takes time because the document encoder will pre-compute the document embeddings and store them
+in the `pickle` file associated with the `path` parameter. We can speed up the process with a GPU. When indexing documents, the encoder loads the `pickle` file that contains the embeddings in memory and updates it with the embeddings of the new documents.
 
-If you want to deploy this retriever, you should move the pickle file that contains pre-computed
-embeddings and all the documents to the target machine or simply use pickle to serialize the
-retriever.
+If we want to deploy this retriever, we should rely on Pickle to serialize the retriever.
 
 ```python
 >>> from cherche import retrieve
@@ -51,6 +45,65 @@ retriever.
 
 >>> retriever("france")
 [{'id': 1, 'similarity': 0.01113}, {'id': 0, 'similarity': 0.01113}]
+```
+
+## Retriever DPR on GPU
+
+To speed up the search for the most relevant documents, we can:
+
+- Use the GPU to speed up the DPR model.
+- Use the GPU to speed up faiss to retrieve documents.
+
+To use faiss GPU, we need first to install faiss-gpu; we have to update the attribute `tree` of the retriever with the `faiss.index_cpu_to_gpu` method. After that, Faiss GPU significantly speeds up the search.
+
+```sh
+pip install faiss-gpu
+```
+
+```python
+>>> import faiss
+
+>>> from cherche import retrieve
+>>> from sentence_transformers import SentenceTransformer
+
+>>> documents = [
+...    {
+...        "id": 0,
+...        "article": "Paris is the capital and most populous city of France",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "id": 1,
+...        "article": "Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    },
+...    {
+...        "id": 2,
+...        "article": "The City of Paris is the centre and seat of government of the region and province of Île-de-France .",
+...        "title": "Paris",
+...        "url": "https://en.wikipedia.org/wiki/Paris"
+...    }
+... ]
+
+>>> retriever = retrieve.DPR(
+...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda").encode,
+...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base', device="cuda").encode,
+...    key = "id",
+...    on = ["title", "article"],
+...    k = 2,
+...    path = "retriever_dpr.pkl"
+... )
+
+# 0 is the id of the GPU.
+>>> retriever.tree = faiss.index_cpu_to_gpu(faiss.StandardGpuResources(), 0, retriever.tree)
+
+>>> retriever.add(documents)
+
+>>> retriever("paris")
+[{'id': 0, 'similarity': 0.9025790931437582},
+ {'id': 2, 'similarity': 0.8160134832855334}]
 ```
 
 ## Map keys to documents

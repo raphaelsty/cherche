@@ -1,8 +1,8 @@
 # Documents
 
-When using Cherche, you must define a document as a Python dictionary. A set of documents is simply a list of dictionaries. The name of the fields of the documents does not matter. You can choose the field(s) of your choice to perform neural search. It is mandatory to have a unique identifier for each document. The name of this identifier is up to you. In the example below, the identifier is the `id` field.
+When using Cherche, we must define a document as a Python dictionary. A set of documents is simply a list of dictionaries. The name of the fields of the documents does not matter. We can choose the field(s) of your choice to perform neural search. However, it is mandatory to have a unique identifier for each document. Also, the name of this identifier does not matter. In the example below, the identifier is the `id` field.
 
-It can happen that not all documents have the same fields. You don't need to standardize or fill all the fields except for the identifier, i.e `id` in the example below.
+It can happen that not all documents have the same fields. Therefore, we do not need to standardize or fill all the fields (except the identifier).
 
 ```python
 [

@@ -18,7 +18,7 @@
 
     Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
-- **fuzzer** – defaults to `<cyfunction partial_ratio at 0x7f7982ac3d40>`
+- **fuzzer** – defaults to `<cyfunction partial_ratio at 0x7fa1d328c450>`
 
     [RapidFuzz scorer](https://maxbachmann.github.io/RapidFuzz/Usage/fuzz.html): fuzz.ratio, fuzz.partial_ratio, fuzz.token_set_ratio, fuzz.partial_token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_sort_ratio, fuzz.token_ratio, fuzz.partial_token_ratio, fuzz.WRatio, fuzz.QRatio, string_metric.levenshtein, string_metric.normalized_levenshtein
 

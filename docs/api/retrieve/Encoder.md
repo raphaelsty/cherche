@@ -46,7 +46,6 @@ Encoder as a retriever using Faiss Index.
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
-...    path = "retriever_encoder.pkl"
 ... )
 
 >>> retriever.add(documents)

@@ -49,7 +49,6 @@ DPR as a retriever using Faiss Index.
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
-...    path = "retriever_dpr.pkl"
 ... )
 
 >>> retriever.add(documents)

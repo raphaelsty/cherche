@@ -208,7 +208,7 @@ class Elastic(Retriever):
 
         ranked = []
         for document in documents["hits"]["hits"]:
-            document = {**document["_source"], "similarity": document["_score"]}
+            document = {**document["_source"], "similarity": float(document["_score"])}
             # Returns stored embeddings as numpy array.
             if "embedding" in document:
                 document["embedding"] = np.array(document["embedding"])

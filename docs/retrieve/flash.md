@@ -1,13 +1,12 @@
 # Flash
 
-Flash is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). This awesome algorithm can
-retrieve keywords in documents faster than anything else. FlashText is explained in the article
-[Replace or Retrieve Keywords In Documents At Scale](https://arxiv.org/pdf/1711.00046.pdf).
+Flash is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). This great algorithm can
+retrieve keywords in documents faster than anything else. We can find more information about Flash in [Replace or Retrieve Keywords In Documents At Scale](https://arxiv.org/pdf/1711.00046.pdf).
 
-You can use Flash to find documents from a field that contains a keyword or a list of keywords.
+We can use Flash to find documents from a field that contains a keyword or a list of keywords.
 Flash will find documents that contain the keyword or keywords specified in the query.
 
-Flash can be updated with new documents using mini-batch via the `add` method.
+We can update the Flash retriever with new documents using mini-batch via the `add` method.
 
 ```python
 >>> from cherche import retrieve

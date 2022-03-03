@@ -127,7 +127,7 @@ class _BM25(Retriever):
 
         scores, indexes = zip(*sorted(zip(scores, indexes), reverse=True))
         documents = [
-            {**self.documents[index], "similarity": round(score, 5)}
+            {**self.documents[index], "similarity": float(score)}
             for index, score in zip(indexes, scores)
         ]
         return documents[: self.k] if self.k is not None else documents
@@ -181,6 +181,8 @@ class BaseEncoder(Retriever):
     @staticmethod
     def load_embeddings(path: str) -> dict:
         """Load embeddings from an existing directory."""
+        if path is None:
+            return {}
         if not os.path.isfile(path):
             return {}
         with open(path, "rb") as input_embeddings:
@@ -190,8 +192,9 @@ class BaseEncoder(Retriever):
     @staticmethod
     def dump_embeddings(embeddings: dict, path: str) -> None:
         """Dump embeddings to the selected directory."""
-        with open(path, "wb") as ouput_embeddings:
-            pickle.dump(embeddings, ouput_embeddings)
+        if path is not None:
+            with open(path, "wb") as ouput_embeddings:
+                pickle.dump(embeddings, ouput_embeddings)
 
     def add(self, documents: list) -> "BaseEncoder":
         """Add documents to the faiss index and export embeddings if the path is provided.

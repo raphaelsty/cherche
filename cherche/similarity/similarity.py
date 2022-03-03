@@ -1,11 +1,11 @@
-__all__ = ["cosine_distance", "dot_similarity"]
+__all__ = ["cosine", "dot"]
 
 import numpy as np
 
 
 def cosine(emb_q: np.ndarray, emb_documents: list) -> list:
     """Computes cosine distance between input query embedding and documents embeddings.
-    
+
     Bigger is better.
 
     Parameters
@@ -38,14 +38,14 @@ def cosine(emb_q: np.ndarray, emb_documents: list) -> list:
             np.linalg.norm(emb_q) * np.linalg.norm(emb_document)
         )
     return [
-        (index, distance)
+        (index, float(distance))
         for index, distance in sorted(distances.items(), key=lambda item: item[1], reverse=True)
     ]
 
 
 def dot(emb_q: np.ndarray, emb_documents: list) -> list:
     """Computes dot product between input query embedding and documents embeddings.
-    
+
     Bigger is better.
 
     Parameters
@@ -76,6 +76,6 @@ def dot(emb_q: np.ndarray, emb_documents: list) -> list:
     for index, emb_document in enumerate(emb_documents):
         distances[index] = emb_q @ emb_document
     return [
-        (index, distance)
+        (index, float(distance))
         for index, distance in sorted(distances.items(), key=lambda item: item[1], reverse=True)
     ]

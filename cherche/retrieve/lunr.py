@@ -1,6 +1,5 @@
 __all__ = ["Lunr"]
 
-import copy
 import typing
 
 from lunr import lunr
@@ -93,7 +92,7 @@ class Lunr(Retriever):
         # We do not handle all Lunr possibilites right now.
         q = q.replace(":", "").replace("-", "")
         documents = [
-            {**self.documents[match["ref"]], "similarity": match["score"]}
+            {**self.documents[match["ref"]], "similarity": float(match["score"])}
             for match in self.idx.search(q)
         ]
         return documents[: self.k] if self.k is not None else documents

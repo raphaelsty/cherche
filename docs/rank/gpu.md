@@ -1,16 +1,8 @@
 # Gpu
 
-GPU are mandatory to pre-compute embeddings using `rank.Encoder` and `rank.DPR` if you have a lot
-of documents unless you are patient. After having pre-computed documents, the GPU will not be
-needed anymore.
+GPU is proper to pre-compute embeddings using `rank.Encoder` and `rank.DPR` if we have many documents. After having pre-computed documents, may GPU will not be needed anymore.
 
-GPU is always needed using `rank.ZeroShot` to obtain decent results since it cannot pre-compute
-embeddings.
-
-If you are using the GPU to pre-compute the embeddings, remember to save your embeddings by setting
-the `path` parameter of the `rank.Encoder` and `rank.DPR` rankers. To use the pre-computed embeddings
-in another session, you will just have to initialize a new `ranker` with the same parameter `path`
-and finally add the documents with the `add` method to automatically retrieve embeddings.
+We strongly recommend using a GPU with`rank.ZeroShot` to obtain decent results since it cannot pre-compute embeddings.
 
 ## Rank.Encoder
 
@@ -103,7 +95,7 @@ and finally add the documents with the `add` method to automatically retrieve em
 
 ## rank.ZeroShot
 
-To use the `zero-shot-classification` models with a GPU, the `device` parameter must be specified. By default the parameter `device` is set to `-1` to run on cpu. You needs to set it as a positive integer that match your cuda device id to run it on GPU.
+We must set the `device` parameter to use GPU's `zero-shot-classification` models. The parameter `device` is set to -1 to run on the CPU by default. To run it on GPU, we need to set it as a positive integer that matches our Cuda device id.
 
 ```python
 >>> from cherche import retrieve, rank

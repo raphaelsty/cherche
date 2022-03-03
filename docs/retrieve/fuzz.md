@@ -1,13 +1,8 @@
 # Fuzz
 
-`retrieve.Fuzz` is a wrapper of [RapidFuzz](https://github.com/maxbachmann/RapidFuzz). It is a
-blazzing fast library dedicated to fuzzy string matching. This retriever is very fast but the
-documents are stored in memory. Documents can be indexed in an online fashion way with this
-retriever using `add` method.
+`retrieve.Fuzz` is a wrapper of [RapidFuzz](https://github.com/maxbachmann/RapidFuzz). It is a blazing fast library dedicated to fuzzy string matching. This retriever is very fast, but we do store documents in memory. So documents can be indexed online with this retriever using the `add` method.
 
-[RapidFuzz](https://github.com/maxbachmann/RapidFuzz) provides more scoring functions for the fuzzy
-string matching task. You can select the most suitable method for your dataset with the `fuzzer`
-parameter of `retrieve.Fuzz`. The default scoring function is `fuzz.partial_ratio`.
+[RapidFuzz](https://github.com/maxbachmann/RapidFuzz) provides more scoring functions for the fuzzy string matching task. We can select the most suitable method for our dataset with the `fuzzer` parameter. The default scoring function is `fuzz.partial_ratio`.
 
 ```python
 >>> from cherche import retrieve

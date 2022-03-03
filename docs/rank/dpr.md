@@ -6,13 +6,7 @@ encodes the documents.
 
 ## Pre-compute
 
-The `rank.DPR` can pre-compute the set of document embeddings to speed up search in the
-production environment. To store the embeddings of the ranker, it is necessary to to specify the
-`path` parameter. The document embeddings will then be stored in pickle format and at the specified address
-as a dictionary with the document identifier as key and the document embedding as value. `rank.Encoder`
-will load the embeddings from the `path` file when calling the `add` function. If the embedding is not already
-already calculated for a document, it will calculate it once for all. A GPU will significantly
-improves the time to pre-compute embeddings otherwise this step is slow.
+The `rank.DPR` can pre-compute the set of document embeddings to speed up search in the production environment. To store the embeddings of the ranker, it is necessary to specify the `path` parameter. `rank.Encoder` will load the embeddings from the `path` file when calling the `add` function. A GPU will significantly reduce pre-computing time dedicated to document embeddings.
 
 ## Quick Start
 
@@ -60,9 +54,6 @@ improves the time to pre-compute embeddings otherwise this step is slow.
 
 ## Pre-trained DPR
 
-From a personal point of view, I have found that results of the DPR model are regularly less
-relevant than Sentence Transformer results.
-
 |               Question Encoder               |             Document encoder            |
 |:--------------------------------------------:|:---------------------------------------:|
 |  facebook-dpr-question_encoder-multiset-base |  facebook-dpr-ctx_encoder-multiset-base |
@@ -70,7 +61,7 @@ relevant than Sentence Transformer results.
 
 ## Map index to documents
 
-Optionally, you can map the documents to the ids retrieved by the pipeline.
+We can map the documents to the ids retrieved by the pipeline.
 
 ```python
 >>> search += documents
@@ -89,11 +80,7 @@ Optionally, you can map the documents to the ids retrieved by the pipeline.
 
 ## Custom DPR
 
-You can train your own DPR using the tool of your choice and use it with Cherche.
-Your own DPR should have an API similar to the DPR model of Sentence Transformers models. It should
-be a function which encodes a list of strings to return a numpy array with dimensions
-`(number of documents, embedding size)`. This same function must be able to encode a single string
-to return an embedding of size `(embedding dimension, )`.
+We can train our DPR using the tool of our choice and use it with Cherche. Our DPR should have an API similar to the DPR model of Sentence Transformers models. It should be a function that encodes a list of strings to return a NumPy array with dimensions `(number of documents, embedding size)`. This same function must encode a single string to return an embedding of size `(embedding dimension, )`.
 
 Here is an example of how to integrate a custom DPR model:
 

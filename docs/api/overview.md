@@ -23,6 +23,12 @@
 
 - [QA](../qa/QA)
 
+## query
+
+- [Norvig](../query/Norvig)
+- [PRF](../query/PRF)
+- [Query](../query/Query)
+
 ## rank
 
 - [DPR](../rank/DPR)

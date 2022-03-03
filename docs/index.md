@@ -14,7 +14,7 @@
 </div>
 <br>
 
-Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is meant to be used with small to medium sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
+Cherche allows creating a neural search pipeline using retrievers and pre-trained language models as rankers. We dedicated Cherche to small to medium-sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
 
 ![Alt text](img/doc.png)
 
@@ -29,11 +29,6 @@ To install the development version:
 ```sh
 pip install git+https://github.com/raphaelsty/cherche
 ```
-
-## [Documentation](https://raphaelsty.github.io/cherche/) 📜
-
-Documentation is available [here](https://raphaelsty.github.io/cherche/). It provides details
-about retrievers, rankers, pipelines, question answering, summarization and examples.
 
 ## QuickStart 💨
 
@@ -117,50 +112,3 @@ search("Bordeaux")
   'article': "Bordeaux is a world capital of wine, with its castles and vineyards of the Bordeaux region that stand on the hillsides of the Gironde and is home to the world's main wine fair, Vinexpo.",
   'similarity': 0.61809057}]
 ```
-
-## Retrieve 👻
-
-Cherche provides different retrievers that filter input documents based on a query.
-
-- retrieve.Elastic
-- retrieve.TfIdf
-- retrieve.Lunr
-- retrieve.BM25Okapi
-- retrieve.BM25L
-- retrieve.Flash
-- retrieve.Encoder
-- retrieve.Fuzz
-
-## Rank 🤗
-
-Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models, [Hugging Face sentence similarity](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, [Hugging Face zero shot classification](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models and of course with your own models.
-
-## Summarization and question answering
-
-Cherche provides modules dedicated to summarization and questions answering. These modules are compatible with Hugging Face's pre-trained models and can be fully integrated into neural search pipelines.
-
-## Translation
-
-Hugging Face's translation models can be fully integrated into the neural search pipeline to translate queries, documents or answers.
-
-## Hugging Face Space
-
-A running demo [here](https://huggingface.co/spaces/raphaelsty/games).
-
-## Acknowledgement 👏
-
-The BM25 models available in Cherche are a wrapper of [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper of [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper of [Sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). TfidfVectorizer. Lunr retriever is a wrapper of [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). Flash retriever is a wrapper of [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
-
-## See also 👀
-
-Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create pipelines. Also Cherche is well suited for middle sized corpus.
-
-Do not hesitate to look at Haystack, Jina or TxtAi which offer very advanced solutions for neural search and are great.
-
-- [Haystack](https://github.com/deepset-ai/haystack)
-- [Jina](https://github.com/jina-ai/jina)
-- [txtai](https://github.com/neuml/txtai)
-
-## Dev Team 💾
-
-The Cherche dev team is made of [Raphaël Sourty](https://github.com/raphaelsty) and [François-Paul Servant](https://github.com/fpservant). 🥳

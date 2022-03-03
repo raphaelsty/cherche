@@ -1,36 +1,33 @@
 # Pipeline
 
-Search replaces the operators `+` (pipeline), `|` (union) and `|` (intersection) to build pipelines efficiently.
+Cherche replaces the operators `+` (pipeline), `|` (union), and `|` (intersection) to build pipelines efficiently.
 
 ## Pipeline `+`
 
-`+` is the main operator dedicated to pipelines. The first model in a pipeline should always be a
-retriever.
+`+` is the operator dedicated to pipelines. The first model in a pipeline should always be a retriever.
 
-Pipeline made of a retriever and a ranker:
+Here is a pipeline made of a retriever and a ranker:
 
 ```python
 >>> search = retriever + ranker
 >>> search.add(documents)
 ```
 
-Pipeline allows to map document indexes to their content (not needed with Elasticsearch):
+The pipeline allows to map document indexes to their content (not needed with Elasticsearch):
 
 ```python
 >>> search = retriever + ranker + documents
 >>> search.add(documents)
 ```
 
-Pipeline for question answering (mapping ids to documents is mandatory for question answering
-unless you are using Elasticsearch):
+Pipeline for question answering (mapping ids to documents is mandatory for question answering unless using Elasticsearch):
 
 ```python
 >>> search_qa = retriever + ranker + documents + question_answering
 >>> search.add(documents)
 ```
 
-Pipeline for summarization (mapping ids to documents is mandatory for summarization unless you are 
-using Elasticsearch):
+Pipeline for summarization (mapping ids to documents is mandatory for summarization unless using Elasticsearch):
 
 ```python
 >>> search_summarize = retriever + ranker + documents + summarize
@@ -51,13 +48,7 @@ Under the hood the `+` operator calls `compose.Pipeline`.
 
 ## Union `|`
 
-The union operator `|` is used to improve neural search recall by gathering documents retrieved by
-multiple models. The union will avoid duplicate documents and keep the first one. The first
-documents out of the union will be from the first model, the next ones will be from the second
-model and so on. This is not a bug, it is a feature 😅.  This strategy allows you to prioritize one
-model or pipeline over another. It may make sense to create a union between two separate pipelines,
-with the first one having the highest precision and the second one having better recall, like a
-spare tire.
+The union operator `|` improves neural search recall by gathering documents retrieved by multiple models. The union will avoid duplicate documents and keep the first one. The first documents out of the union will be from the first model; the next ones will be from the second model. This strategy allows prioritizing one model or pipeline over another. It may make sense to create a union between two separate pipelines, with the first one having the highest precision and the second one having better recall, like a spare tire.
 
 Union of two retrievers
 
@@ -96,8 +87,7 @@ Union of three pipelines
 
 ## Intersection `&`
 
-The intersection operator improves the precision of the model by filtering documents on the
-intersection of proposed candidates of retrievers and / or rankers.
+The intersection operator improves the precision of the model by filtering documents on the intersection of proposed candidates of retrievers and rankers.
 
 Intersection of two retrievers
 
@@ -106,28 +96,28 @@ Intersection of two retrievers
 >>> search.add(documents)
 ```
 
-Intersection of two retrievers folowed by a ranker
+The intersection of two retrievers followed by a ranker:
 
 ```python
 >>> search = (retriever_a & retriver_b) + ranker
 >>> search.add(documents)
 ```
 
-Intersection of two rankers
+Intersection of two rankers:
 
 ```python
 >>> search = retriever + (ranker_a & ranker_b)
 >>> search.add(documents)
 ```
 
-Intersection of two pipelines
+Intersection of two pipelines:
 
 ```python
 >>> search = (retriever_a + ranker_a) & (retriever_b + ranker_b)
 >>> search.add(documents)
 ```
 
-Intersection of three pipelines
+Intersection of three pipelines:
 
 ```python
 >>> search = (retriever_a + ranker_a) & (retriever_b + ranker_b) & retriever_c
@@ -136,9 +126,7 @@ Intersection of three pipelines
 
 ## Let's create a fancy pipeline
 
-Let's create a pipeline from the union of two distinct pipelines. The first part of the union is
-dedicated to precision and the second is dedicated to recall. We can use the Semanlink dataset to
-feed our neural search pipeline.
+Here we create a pipeline from the union of two distinct pipelines. The first part of the union improves precision, and the second improves recall. We can use the Semanlink dataset to feed our neural search pipeline.
 
 ```python
 >>> search = (retriever_a + ranker_a) | (retriever_b + ranker_b)

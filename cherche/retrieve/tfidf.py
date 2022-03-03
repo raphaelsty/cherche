@@ -93,7 +93,7 @@ class TfIdf(Retriever):
         """Retrieve the right document."""
         similarities = linear_kernel(self.tfidf.transform([q]), self.matrix).flatten()
         documents = [
-            {**self.documents[index], "similarity": round(similarities[index], 5)}
+            {**self.documents[index], "similarity": float(similarities[index])}
             for index in (-similarities).argsort()
             if similarities[index] > 0
         ]

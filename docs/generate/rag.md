@@ -1,7 +1,6 @@
 # RAG Generator
 
-RAG Generator allows to use Hugging Face pre-trained sequence to sequence model as part of a neural search pipeline.
-These models can be trained to generate a relevant response to a query by concatenating the query itself with relevant documents.
+RAG Generator allows using Hugging Face pre-trained sequence to sequence model as part of a neural search pipeline. In addition, these models generate a relevant response to a query by concatenating the query itself with relevant documents.
 
 ## Pre-trained
 
@@ -18,7 +17,7 @@ The Github page of Glass et al 2021 is available [here](https://github.com/IBM/k
 
 ## Documents
 
-When using `RAG` it is necessary to provide to the model the contents of the documents to generate an answer.
+When using `RAG` it is necessary to provide the model with the contents of the documents to generate an answer.
 
 ```python
 # + documents allows to map documents to ids.
@@ -70,6 +69,8 @@ The `Elastic` retriever returns the contents of documents by default, so there i
 
 ## GPU
 
+We can use RAG with a GPU to speed up the generation of answers.
+
 ```python
 >>> from transformers import RagTokenForGeneration, RagTokenizer
 >>> from cherche import generate, retrieve, rank
@@ -77,7 +78,7 @@ The `Elastic` retriever returns the contents of documents by default, so there i
 >>> generation = generate.RAG(
 ...     on = ["title", "article"],
 ...     tokenizer = RagTokenizer.from_pretrained("facebook/rag-token-nq"),
-...     model = RagTokenForGeneration.from_pretrained("michaelrglass/rag-token-nq-kgi0-trex", retriever=None),
+...     model = RagTokenForGeneration.from_pretrained("michaelrglass/rag-token-nq-kgi0-trex", retriever=None, device="cuda"),
 ...     k = 2,
 ...     num_beams = 2,
 ...     min_length = 1,

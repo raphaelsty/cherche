@@ -1,10 +1,8 @@
 # Save & Load
 
-Serialization in Python consists in saving an object on the disk to reload it during a new session.
-Using Cherche, we could prototype a neural search pipeline in a notebook before deploying it on an
-API. We can also save a neural search pipeline to avoid recomputing embeddings of the ranker.
+Serialization in Python saves an object on the disk to reload it during a new session. Using Cherche, we could prototype a neural search pipeline in a notebook before deploying it on an API. We can also save a neural search pipeline to avoid recomputing embeddings of the ranker.
 
-You have to make sure that the package versions are strictly identical on both environments.
+We must ensure that the package versions are identical in both environments (dumping and loading).
 
 ## Saving and loading on same environment
 
@@ -41,7 +39,7 @@ We will initialize and save our pipeline in a `search.pkl` file
 
 ### Loading
 
-After saving our pipeline in the file `search.pkl`, we can reload it with pickle.
+After saving our pipeline in the file `search.pkl`, we can reload it using Pickle.
 
 ```python
 >>> import pickle
@@ -67,13 +65,7 @@ After saving our pipeline in the file `search.pkl`, we can reload it with pickle
 Typically, we could pre-compute the document integration on google collab with a GPU before
 deploying our neural search pipeline on a CPU-based instance.
 
-When transferring the pipeline that runs on the GPU to a machine that will run it on the CPU, it
-will be necessary to avoid serializing the `retrieve.Encoder`, `retrieve.DPR`, `rank.DPR` and
-`rank.Encoder` with any `cuda` parameter set to `True`. These retrievers and folders will not be
-not be compatible if they have been initialized on a machine with a GPU.
-
-We will have to replace the models on GPU to put them on CPU. You have to make sure that the
-package versions are strictly identical on both environments (GPU and CPU).
+When transferring the pipeline that runs on the GPU to a machine that will run it on the CPU, it will be necessary to avoid serializing the `retrieve.Encoder`, `retrieve.DPR`, `rank.DPR` and `rank.Encoder`. These retrievers and rankers would not be compatible if we initialized them on GPU. We will have to replace the models on GPU to put them on CPU. We must ensure that the package versions are strictly identical in both environments (GPU and CPU).
 
 ### Saving on GPU
 
@@ -107,7 +99,7 @@ with open("search.pkl", "wb") as search_file:
 
 ### Loading on CPU
 
-In a new session you can load your neural search pipeline using `pickle.load`.
+We can load our neural search pipeline using `pickle.load` in a new session.
 
 ```python
 >>> import pickle

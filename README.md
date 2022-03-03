@@ -14,7 +14,7 @@
 </div>
 <br>
 
-Cherche (search in French) allows you to create a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche is meant to be used with small to medium sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
+Cherche allows creating a neural search pipeline using retrievers and pre-trained language models as rankers. We dedicated Cherche to small to medium-sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
 
 ![Alt text](docs/img/explain.png)
 
@@ -64,7 +64,7 @@ documents[:3]
 
 ### Retriever ranker 🔍
 
-Here is an example of a neural search pipeline composed of a TfIdf that quickly retrieves documents, followed by a ranking model. The ranking model sorts the documents produced by the retriever based on the semantic similarity between the query and the documents.
+Here is an example of a neural search pipeline composed of a TF-IDF that quickly retrieves documents, followed by a ranking model. The ranking model sorts the documents produced by the retriever based on the semantic similarity between the query and the documents.
 
 ```python
 from cherche import data, retrieve, rank
@@ -138,15 +138,15 @@ Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net
 
 ## Summarization and question answering
 
-Cherche provides modules dedicated to summarization and question answering. These modules are compatible with Hugging Face's pre-trained models and can be fully integrated into neural search pipelines.
+Cherche provides modules dedicated to summarization and question answering. These modules are compatible with Hugging Face's pre-trained models and fully integrated into neural search pipelines.
 
 ## Translation
 
-Hugging Face's translation models can be fully integrated into the neural search pipeline to translate queries, documents or answers.
+Hugging Face's translation models can be fully integrated into the neural search pipeline to translate queries, documents, or answers.
 
 ## Hugging Face Space
 
-A running demo [here](https://huggingface.co/spaces/raphaelsty/games).
+A running demo is available on [Hugging Face](https://huggingface.co/spaces/raphaelsty/games).
 
 ## Acknowledgements 👏
 
@@ -154,9 +154,9 @@ The BM25 models available in Cherche are wrappers around [rank_bm25](https://git
 
 ## See also 👀
 
-Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if you start with a list of documents as JSON with multiple fields to search on and want to create pipelines. Also ,Cherche is well suited for middle sized corpora.
+Cherche is a minimalist solution and meets a need for modularity. Cherche is the way to go if we start with a list of documents as JSON with multiple fields to search on and create pipelines. Also, Cherche is well suited for middle-sized corpora.
 
-Do not hesitate to look at Haystack, Jina, or TxtAi which offer very advanced solutions for neural search and are great.
+Do not hesitate to look at Jina, Haystack, or TxtAi, which offer advanced neural search solutions.
 
 - [Haystack](https://github.com/deepset-ai/haystack)
 - [Jina](https://github.com/jina-ai/jina)

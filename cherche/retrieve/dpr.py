@@ -1,4 +1,4 @@
-__all__ = ["Encoder"]
+__all__ = ["DPR"]
 
 import typing
 
@@ -39,7 +39,6 @@ class DPR(BaseEncoder):
     ...    key = "id",
     ...    on = ["title", "article"],
     ...    k = 2,
-    ...    path = "retriever_dpr.pkl"
     ... )
 
     >>> retriever.add(documents)
@@ -115,6 +114,6 @@ class DPR(BaseEncoder):
         ranked = []
         for index, distance in zip(indexes[0], distances[0]):
             document = self.documents[index]
-            document["similarity"] = round(1 / distance, 5) if distance > 0 else 0.0
+            document["similarity"] = float(1 / distance) if distance > 0 else 0.0
             ranked.append(document)
         return ranked

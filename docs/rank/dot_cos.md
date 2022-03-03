@@ -1,13 +1,10 @@
 # Similarity
 
-Cherche provides two functions to measure the semantic similarity between a query and a document:
- `similarity.cosine` (bigger is better) and `similarity.dot` (bigger is better).
+Cherche provides two functions to measure the semantic similarity between a query and a document: `similarity.cosine` (bigger is better) and `similarity.dot` (bigger is better).
 
-The choice of this function depends on the pre-trained model you are using for the ranking. If the
-model has been trained with the cosine similarity then you should use `similarity.cosine`
-otherwise if it has been trained with the dot product you should use `similarity.dot`.
+The choice of this function depends on the pre-trained model we are using for the ranking. For example, if we train our model with the cosine similarity, we should use `similarity.cosine`. Otherwise, if trained with the dot product, we should use `similarity.dot`.
 
-These functions are only used by the `rank.Encoder` and `rank.DPR` models.
+We only use these functions as part of the rankers `rank.Encoder` and `rank.DPR` models.
 
 ## Cosine
 

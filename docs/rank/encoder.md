@@ -1,17 +1,10 @@
 # rank.Encoder
 
-`rank.Encoder` integrate into a neural search pipeline a model capable of building an embedding of
-a document. The encoder model is compatible with pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html).
+`rank.Encoder` integrate into a neural search pipeline a model capable of building an embedding of a document. The encoder model is compatible with pre-trained [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html).
 
 ## Pre-compute
 
-The `rank.Encoder` can pre-compute the set of document embeddings to speed up search in the
-production environment. To store the embeddings of the ranker, it is necessary to to specify the
-`path` parameter. The document embeddings will then be stored in pickle format and at the specified address
-as a dictionary with the document identifier as key and the document embedding as value. `rank.Encoder`
-will load the embeddings from the `path` file when calling the `add` function. If the embedding is not already
-already calculated for a document, it will calculate it once for all. A GPU will significantly
-improves the time to pre-compute embeddings otherwise this step is slow.
+The `rank.Encoder` can pre-compute the set of document embeddings to speed up search in the production environment. To store the embeddings of the ranker, it is necessary to specify the `path` parameter. `rank.Encoder` will load the embeddings from the `path` file when calling the `add` function. A GPU will significantly reduce pre-computing time dedicated to document embeddings.
 
 ## Quickstart
 
@@ -58,7 +51,7 @@ improves the time to pre-compute embeddings otherwise this step is slow.
 
 ## Map index to documents
 
-Optionally, you can map the documents to the ids retrieved by the pipeline.
+We can map the documents to the ids retrieved by the pipeline.
 
 ```python
 >>> search += documents
@@ -77,7 +70,7 @@ Optionally, you can map the documents to the ids retrieved by the pipeline.
 
 ## Pre-trained encoders
 
-Here is the list of models provided by [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html). A more detailed version of this table and every details about models can be found on their website.This list of models is not exhaustive, there are a wide range of models available with [Hugging Face](https://huggingface.co/models?pipeline_tag=sentence-similarity&sort=downloads) and in many languages.  
+Here is the list of models provided by [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html). We can find a more detailed version of this table and every detail about models on their website. This list of models is not exhaustive; there is a wide range of models available with [Hugging Face](https://huggingface.co/models?pipeline_tag=sentence-similarity&sort=downloads) and in many languages.
 
 |                                          Model                                      |                      Avg. Performance                       |                      Speed                       |                      Model Size                       |
 |:---------------------------------------------------------------------------------------:|:-----------------------------------------------------------:|:------------------------------------------------:|:-----------------------------------------------------:|
@@ -114,12 +107,7 @@ Here is the list of models provided by [SentenceTransformers](https://www.sbert.
 
 ## Custom encoder
 
-You can train your own encoder using the tool of your choice and use it with Cherche. For example
-[CKB](https://github.com/raphaelsty/ckb) is well suited to perform neural search over knowledge
-bases and could be used for specific use case. Your own encodeur should have an API similar to the
-Sentence Transformers models. It should be a function which encodes a list of strings
-to return a numpy array with dimensions `(number of documents, embedding size)`. This same function
-must be able to encode a single string to return an embedding of size `(embedding dimension, )`.
+We can train our encoder using the tool of our choice and use it with Cherche. For example, [CKB](https://github.com/raphaelsty/ckb) is well suited to perform neural search over knowledge bases and could be used for a specific use case. Our encoder should have an API similar to the Sentence Transformers models. It should be a function that encodes a list of strings to return a NumPy array with dimensions `(number of documents, embedding size)`. This same function must encode a single string to return an embedding of size `(embedding dimension, )`.
 
 Here is an example of how to integrate a custom encoder as a ranker:
 
