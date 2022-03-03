@@ -146,7 +146,7 @@ Hugging Face's translation models can be fully integrated into the neural search
 
 ## Deploy
 
-We provide a minimalist API to deploy our neural search pipeline with FastAPI and Docker; information is available in the [documentation](https://raphaelsty.github.io/cherche/).
+We provide a minimalist API to deploy our neural search pipeline with FastAPI and Docker; information is available in the [documentation](https://raphaelsty.github.io/cherche/deployment/deployment/).
 
 ## Hugging Face Space
 
