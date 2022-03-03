@@ -96,10 +96,10 @@ pip install faiss-gpu
 ...    path = "retriever_dpr.pkl"
 ... )
 
+>>> retriever.add(documents)
+
 # 0 is the id of the GPU.
 >>> retriever.tree = faiss.index_cpu_to_gpu(faiss.StandardGpuResources(), 0, retriever.tree)
-
->>> retriever.add(documents)
 
 >>> retriever("paris")
 [{'id': 0, 'similarity': 0.9025790931437582},
