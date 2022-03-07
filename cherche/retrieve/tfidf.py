@@ -115,8 +115,9 @@ class TfIdf(Retriever):
             Xq = np.dot(Xq, np.array(qs.data))
         similarities = Xq
 
-        return [
+        documents = [
             {**self.documents[index], "similarity": float(similarities[index])}
             for index in similarities.argsort()[-self.k :][::-1]
-            if similarities[index] > 0
         ][: self.k]
+
+        return [doc for doc in documents if doc["similarity"] > 0]
