@@ -168,4 +168,4 @@ Do not hesitate to look at Jina, Haystack, or TxtAi, which offer advanced neural
 
 ## Dev Team 💾
 
-The Cherche dev team is made up of [Raphaël Sourty](https://github.com/raphaelsty), [François-Paul Servant](https://github.com/fpservant), [Nicolas Bizzozzero](https://github.com/NicolasBizzozzero) 🥳
+The Cherche dev team is made up of [Raphaël Sourty](https://github.com/raphaelsty), [François-Paul Servant](https://github.com/fpservant), [Nicolas Bizzozzero](https://github.com/NicolasBizzozzero), [Jose G Moreno](https://scholar.google.com/citations?user=4BZFUw8AAAAJ&hl=fr). 🥳

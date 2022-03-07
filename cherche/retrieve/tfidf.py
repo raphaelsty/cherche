@@ -2,8 +2,10 @@ __all__ = ["TfIdf"]
 
 import typing
 
+import numpy as np
+from cherche.retrieve import Retriever
+from scipy.sparse import csc_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import linear_kernel
 
 from .base import Retriever
 
@@ -47,7 +49,8 @@ class TfIdf(Retriever):
          documents: 3
 
     >>> print(retriever(q="paris"))
-    [{'id': 0, 'similarity': 0.28896}, {'id': 1, 'similarity': 0.23464}]
+    [{'id': 0, 'similarity': 0.28895767404089806},
+     {'id': 1, 'similarity': 0.23464049354653993}]
 
     >>> retriever += documents
 
@@ -55,13 +58,17 @@ class TfIdf(Retriever):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 0.28896,
+      'similarity': 0.28895767404089806,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.23464,
+      'similarity': 0.23464049354653993,
       'title': 'Eiffel tower'}]
+
+    >>> print(retriever("unknown"))
+    []
+
 
     References
     ----------
@@ -84,17 +91,32 @@ class TfIdf(Retriever):
         self.documents = {
             index: {self.key: document[self.key]} for index, document in enumerate(documents)
         }
-
-        self.matrix = self.tfidf.fit_transform(
-            [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
+        self.matrix = csc_matrix(
+            self.tfidf.fit_transform(
+                [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
+            )
         )
 
+        self.k = self.k if self.k is not None else len(self.documents)
+
     def __call__(self, q: str) -> list:
-        """Retrieve the right document."""
-        similarities = linear_kernel(self.tfidf.transform([q]), self.matrix).flatten()
-        documents = [
+        """Retrieve the right document.
+
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
+        qs = self.tfidf.transform([q])
+        Xq = np.zeros((self.matrix.shape[0],))
+        if len(qs.indices > 0):
+            Xq = np.concatenate([self.matrix.getcol(xqs).toarray() for xqs in qs.indices], axis=1)
+            Xq = np.dot(Xq, np.array(qs.data))
+        similarities = Xq
+
+        return [
             {**self.documents[index], "similarity": float(similarities[index])}
-            for index in (-similarities).argsort()
+            for index in similarities.argsort()[-self.k :][::-1]
             if similarities[index] > 0
-        ]
-        return documents[: self.k] if self.k is not None else documents
+        ][: self.k]
