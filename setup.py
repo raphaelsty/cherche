@@ -32,6 +32,7 @@ setuptools.setup(
         "sentence-transformers >= 2.1.0",
         "transformers >= 4.12.0",
         "tqdm >= 4.62.3",
+        "scipy >= 1.7.3",
     ],
     package_data={"cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]},
     classifiers=[
