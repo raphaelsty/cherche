@@ -6,7 +6,7 @@ import typing
 import faiss
 import numpy as np
 
-from ..compose import Intersection, Pipeline, Union
+from ..compose import Intersection, Pipeline, Union, Vote
 
 __all__ = ["Retriever"]
 
@@ -71,6 +71,12 @@ class Retriever(abc.ABC):
         if isinstance(other, Intersection):
             return Intersection([self] + other.models)
         return Intersection([self, other])
+
+    def __mul__(self, other) -> Vote:
+        """Voting operator."""
+        if isinstance(other, Vote):
+            return Vote([self] + other.models)
+        return Vote([self, other])
 
 
 class _BM25(Retriever):

@@ -1,6 +1,6 @@
 # Pipeline
 
-Cherche replaces the operators `+` (pipeline), `|` (union), and `|` (intersection) to build pipelines efficiently.
+Cherche replaces the operators `+` (pipeline), `|` (union), `&` (intersection) and `*` (voting) to build pipelines efficiently.
 
 ## Pipeline `+`
 
@@ -124,6 +124,45 @@ Intersection of three pipelines:
 >>> search.add(documents)
 ```
 
+## Voting `*`
+
+The voting operator improves both the precision and recall of the model by computing the average normalized similarity between the documents.
+
+Vote of two retrievers
+
+```python
+>>> search = retriever_a * retriver_b
+>>> search.add(documents)
+```
+
+Vote of two retrievers followed by a ranker:
+
+```python
+>>> search = (retriever_a * retriver_b) + ranker
+>>> search.add(documents)
+```
+
+Vote of two rankers:
+
+```python
+>>> search = retriever + (ranker_a * ranker_b)
+>>> search.add(documents)
+```
+
+Vote of two pipelines:
+
+```python
+>>> search = (retriever_a + ranker_a) * (retriever_b + ranker_b)
+>>> search.add(documents)
+```
+
+Vote of three pipelines:
+
+```python
+>>> search = (retriever_a + ranker_a) * (retriever_b + ranker_b) * retriever_c
+>>> search.add(documents)
+```
+
 ## Let's create a fancy pipeline
 
 Here we create a pipeline from the union of two distinct pipelines. The first part of the union improves precision, and the second improves recall. We can use the Semanlink dataset to feed our neural search pipeline.
@@ -152,15 +191,15 @@ And here is the code:
 
 >>> precision = retrieve.Flash(
 ...    key = "uri",
-...    on = ["prefLabel", "altLabel"], 
+...    on = ["prefLabel", "altLabel"],
 ...    k = 30,
 ... ) + ranker
 
 >>> recall = retrieve.TfIdf(
 ...    key = "uri",
-...    on = ["prefLabel_text", "altLabel_text"], 
+...    on = ["prefLabel_text", "altLabel_text"],
 ...    documents = documents,
-...    tfidf = TfidfVectorizer(lowercase=True, min_df=1, max_df=0.9, ngram_range=(3, 7), analyzer="char"), 
+...    tfidf = TfidfVectorizer(lowercase=True, min_df=1, max_df=0.9, ngram_range=(3, 7), analyzer="char"),
 ...    k = 10,
 ... ) + ranker
 
@@ -187,8 +226,8 @@ And here is the code:
 >>> from transformers import pipeline
 
 >>> question_answering = qa.QA(
-...    model = pipeline("question-answering", 
-...         model = "deepset/roberta-base-squad2", 
+...    model = pipeline("question-answering",
+...         model = "deepset/roberta-base-squad2",
 ...         tokenizer = "deepset/roberta-base-squad2"
 ...    ),
 ...    k = 2,
@@ -225,9 +264,9 @@ And here is the code:
 >>> from transformers import pipeline
 
 >>> summarizer = summary.Summary(
-...    model = pipeline("summarization", 
-...         model="sshleifer/distilbart-cnn-12-6", 
-...         tokenizer="sshleifer/distilbart-cnn-12-6", 
+...    model = pipeline("summarization",
+...         model="sshleifer/distilbart-cnn-12-6",
+...         tokenizer="sshleifer/distilbart-cnn-12-6",
 ...         framework="pt"
 ...    ),
 ...    on = ["title", "comment"],
