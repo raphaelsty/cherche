@@ -286,7 +286,7 @@ class Vote(UnionIntersection):
     Parameters
     ----------
     models
-        List of models of the union.
+        List of models of the vote.
 
     Examples
     --------
