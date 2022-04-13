@@ -1119,6 +1119,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../examples/voting/" class="md-nav__link">
+        Voting operator for retrievers and rankers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../examples/encoder_retriever/" class="md-nav__link">
         Encoder as a retriever
       </a>
@@ -1267,6 +1281,20 @@
     <li class="md-nav__item">
       <a href="../../compose/Union/" class="md-nav__link">
         Union
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/Vote/" class="md-nav__link">
+        Vote
       </a>
     </li>
   
@@ -2236,7 +2264,7 @@
                 
 
 <h1 id="prf">PRF<a class="headerlink" href="#prf" title="Permanent link">&para;</a></h1>
-<p>Pseudo (or blind) Relevance-Feedback module. Query-Augmentation method consisting of applying a fast document retrieving method, then extracting keywords from top documents. The main principle of this method is that the top documents from any working ranking method should give at least great results (ie: the user almost always considers the first documents as relevant). Thus, we juste have to retrieve top-words from relevant documents to give a proper augmentation of a given query.</p>
+<p>Pseudo (or blind) Relevance-Feedback module. The Query-Augmentation method applies a fast document retrieving method and then extracts keywords from relevant documents. Thus, we have to retrieve top words from relevant documents to give a proper augmentation of a given query.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
@@ -2277,7 +2305,7 @@
      <span class="n">Terms</span><span class="p">:</span> <span class="mi">1</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">prf</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;Europe&quot;</span><span class="p">)</span>
-<span class="s1">&#39;Europe centres metro space art paris bordeaux significance university&#39;</span>
+<span class="s1">&#39;Europe art metro space science bordeaux paris university significance&#39;</span>
 </code></pre></div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <details class="- note">

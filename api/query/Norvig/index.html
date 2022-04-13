@@ -1119,6 +1119,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../examples/voting/" class="md-nav__link">
+        Voting operator for retrievers and rankers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../examples/encoder_retriever/" class="md-nav__link">
         Encoder as a retriever
       </a>
@@ -1267,6 +1281,20 @@
     <li class="md-nav__item">
       <a href="../../compose/Union/" class="md-nav__link">
         Union
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/Vote/" class="md-nav__link">
+        Vote
       </a>
     </li>
   
@@ -2244,6 +2272,9 @@
 <p>Fields to use for fitting the spelling corrector on.</p>
 </li>
 <li>
+<p><strong>lower</strong> (<em>bool</em>) – defaults to <code>True</code></p>
+</li>
+<li>
 <p><strong>big</strong> (<em>bool</em>) – defaults to <code>False</code></p>
 <p>Use the big.txt provided by the Norvig spelling corrector. Contains english books from the Gutenberg project.</p>
 </li>
@@ -2257,16 +2288,16 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">Norvig</span><span class="p">(</span><span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">Norvig</span><span class="p">(</span><span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 <span class="n">Query</span> <span class="n">Norvig</span>
-     <span class="n">Vocabulary</span><span class="p">:</span> <span class="mi">1008</span>
+     <span class="n">Vocabulary</span><span class="p">:</span> <span class="mi">967</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="s2">&quot;tha citi af Parisa is in Fronce&quot;</span><span class="p">)</span>
-<span class="s1">&#39;the city of Paris is in France&#39;</span>
+<span class="s1">&#39;the city of paris is in france&#39;</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">Norvig</span><span class="p">(</span><span class="n">big</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">Norvig</span><span class="p">(</span><span class="n">big</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">corrector</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 <span class="n">Query</span> <span class="n">Norvig</span>

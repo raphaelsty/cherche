@@ -880,6 +880,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#voting" class="md-nav__link">
+    Voting *
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lets-create-a-fancy-pipeline" class="md-nav__link">
     Let's create a fancy pipeline
   </a>
@@ -1203,6 +1210,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../examples/voting/" class="md-nav__link">
+        Voting operator for retrievers and rankers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../examples/encoder_retriever/" class="md-nav__link">
         Encoder as a retriever
       </a>
@@ -1349,6 +1370,20 @@
     <li class="md-nav__item">
       <a href="../../api/compose/Union/" class="md-nav__link">
         Union
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/compose/Vote/" class="md-nav__link">
+        Vote
       </a>
     </li>
   
@@ -2220,6 +2255,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#voting" class="md-nav__link">
+    Voting *
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lets-create-a-fancy-pipeline" class="md-nav__link">
     Let's create a fancy pipeline
   </a>
@@ -2260,7 +2302,7 @@
                 
 
 <h1 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h1>
-<p>Cherche replaces the operators <code>+</code> (pipeline), <code>|</code> (union), and <code>|</code> (intersection) to build pipelines efficiently.</p>
+<p>Cherche replaces the operators <code>+</code> (pipeline), <code>|</code> (union), <code>&amp;</code> (intersection) and <code>*</code> (voting) to build pipelines efficiently.</p>
 <h2 id="pipeline_1">Pipeline <code>+</code><a class="headerlink" href="#pipeline_1" title="Permanent link">&para;</a></h2>
 <p><code>+</code> is the operator dedicated to pipelines. The first model in a pipeline should always be a retriever.</p>
 <p>Here is a pipeline made of a retriever and a ranker:</p>
@@ -2332,6 +2374,28 @@
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">retriever_c</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="voting">Voting <code>*</code><a class="headerlink" href="#voting" title="Permanent link">&para;</a></h2>
+<p>The voting operator improves both the precision and recall of the model by computing the average normalized similarity between the documents.</p>
+<p>Vote of two retrievers</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever_a</span> <span class="o">*</span> <span class="n">retriver_b</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Vote of two retrievers followed by a ranker:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">*</span> <span class="n">retriver_b</span><span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Vote of two rankers:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="p">(</span><span class="n">ranker_a</span> <span class="o">*</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Vote of two pipelines:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
+<p>Vote of three pipelines:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span> <span class="o">*</span> <span class="n">retriever_c</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="lets-create-a-fancy-pipeline">Let's create a fancy pipeline<a class="headerlink" href="#lets-create-a-fancy-pipeline" title="Permanent link">&para;</a></h2>
 <p>Here we create a pipeline from the union of two distinct pipelines. The first part of the union improves precision, and the second improves recall. We can use the Semanlink dataset to feed our neural search pipeline.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="p">(</span><span class="n">retriever_a</span> <span class="o">+</span> <span class="n">ranker_a</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">retriever_b</span> <span class="o">+</span> <span class="n">ranker_b</span><span class="p">)</span>
@@ -2354,15 +2418,15 @@
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">precision</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Flash</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">],</span> 
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel&quot;</span><span class="p">],</span>
 <span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">recall</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span> 
+<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span>
 <span class="o">...</span>    <span class="n">documents</span> <span class="o">=</span> <span class="n">documents</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char&quot;</span><span class="p">),</span> 
+<span class="o">...</span>    <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char&quot;</span><span class="p">),</span>
 <span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
 
@@ -2386,8 +2450,8 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">question_answering</span> <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="n">QA</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;question-answering&quot;</span><span class="p">,</span> 
-<span class="o">...</span>         <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">,</span> 
+<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;question-answering&quot;</span><span class="p">,</span>
+<span class="o">...</span>         <span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span><span class="p">,</span>
 <span class="o">...</span>         <span class="n">tokenizer</span> <span class="o">=</span> <span class="s2">&quot;deepset/roberta-base-squad2&quot;</span>
 <span class="o">...</span>    <span class="p">),</span>
 <span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -2421,9 +2485,9 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">summarizer</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;summarization&quot;</span><span class="p">,</span> 
-<span class="o">...</span>         <span class="n">model</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-12-6&quot;</span><span class="p">,</span> 
-<span class="o">...</span>         <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-12-6&quot;</span><span class="p">,</span> 
+<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;summarization&quot;</span><span class="p">,</span>
+<span class="o">...</span>         <span class="n">model</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-12-6&quot;</span><span class="p">,</span>
+<span class="o">...</span>         <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-12-6&quot;</span><span class="p">,</span>
 <span class="o">...</span>         <span class="n">framework</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span>
 <span class="o">...</span>    <span class="p">),</span>
 <span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">],</span>
