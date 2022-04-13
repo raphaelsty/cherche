@@ -2,6 +2,8 @@ __all__ = ["Pipeline"]
 
 import collections
 
+from scipy.special import softmax
+
 from .base import Compose
 
 
@@ -107,6 +109,105 @@ class PipelineIntersection(Compose):
                 models=self.models + [{document[self.key]: document for document in other}]
             )
         return PipelineIntersection(models=self.models + [other])
+
+
+class PipelineVote(Compose):
+    """Pipeline voting operator. Average of the similarity scores of the documents between
+    pipelines.
+
+    Parameters
+    ----------
+    models
+        List of models of the vote.
+
+    Examples
+    --------
+
+    >>> from cherche import compose, retrieve
+
+    >>> documents = [
+    ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
+    ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
+    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ... ]
+
+    >>> search = (
+    ...    (retrieve.TfIdf(key="id", on="title", documents=documents, k=3) + documents) *
+    ...    (retrieve.TfIdf(key="id", on="article", documents=documents, k=3) + documents)
+    ... )
+
+    >>> search
+    Vote Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    -----
+
+    >>> search("paris eiffel")
+    [{'id': 1, 'title': 'Eiffel tower', 'article': 'Eiffel tower is based in Paris.', 'author': 'Wiki', 'similarity': 0.5216793798120436}, {'id': 0, 'title': 'Paris', 'article': 'Paris is the capital of France', 'author': 'Wiki', 'similarity': 0.4783206201879563}]
+
+    """
+
+    def __init__(self, models: list):
+        super().__init__(models=models)
+
+    def __repr__(self) -> str:
+        repr = "Vote Pipeline"
+        repr += "\n-----\n"
+        repr += super().__repr__()
+        repr += "\n-----"
+        return repr
+
+    def __call__(self, q: str, **kwargs) -> list:
+        """
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
+        query = {"q": q, **kwargs}
+
+        scores, documents = collections.defaultdict(float), collections.defaultdict(dict)
+
+        for model in self.models:
+            retrieved = model(**query)
+
+            if not retrieved:
+                continue
+
+            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            for doc, similarity in zip(retrieved, similarities):
+                scores[doc[self.key]] += float(similarity) / len(self.models)
+                documents[doc[self.key]] = doc
+
+        ranked = []
+
+        if not scores or not documents:
+            return []
+
+        for key, similarity in sorted(scores.items(), key=lambda item: item[1], reverse=True):
+            doc = documents[key]
+            doc["similarity"] = similarity
+            ranked.append(doc)
+
+        return ranked
+
+    def __mul__(self, other) -> "Vote":
+        if isinstance(other, list):
+            # Documents are part of the pipeline.
+            return PipelineVote(
+                models=self.models + [{document[self.key]: document for document in other}]
+            )
+        return PipelineVote(models=self.models + [other])
 
 
 class Pipeline(Compose):
@@ -277,6 +378,10 @@ class Pipeline(Compose):
     def __and__(self, other) -> PipelineIntersection:
         """Custom operator for intersection."""
         return PipelineIntersection(models=[self, other])
+
+    def __mul__(self, other) -> PipelineVote:
+        """Custom operator for voting."""
+        return PipelineVote(models=[self, other])
 
     def __add__(self, other) -> "Pipeline":
         """Pipeline operator."""
