@@ -5,6 +5,7 @@
 - [Intersection](../compose/Intersection)
 - [Pipeline](../compose/Pipeline)
 - [Union](../compose/Union)
+- [Vote](../compose/Vote)
 
 ## data
 

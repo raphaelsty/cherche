@@ -56,12 +56,12 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 1.2017119,
+  'similarity': 1.1694221,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 1.0534589,
+  'similarity': 1.0251526,
   'title': 'Eiffel tower'}]
 ```
 

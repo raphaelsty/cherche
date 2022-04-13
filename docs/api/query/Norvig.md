@@ -10,6 +10,8 @@ Spelling corrector written by Peter Norvig: [How to Write a Spelling Corrector](
 
     Fields to use for fitting the spelling corrector on.
 
+- **lower** (*bool*) – defaults to `True`
+
 - **big** (*bool*) – defaults to `False`
 
     Use the big.txt provided by the Norvig spelling corrector. Contains english books from the Gutenberg project.
@@ -27,16 +29,16 @@ Spelling corrector written by Peter Norvig: [How to Write a Spelling Corrector](
 
 >>> documents = data.load_towns()
 
->>> corrector = query.Norvig(on = ["title", "article"])
+>>> corrector = query.Norvig(on = ["title", "article"], lower=True)
 
 >>> corrector.add(documents)
 Query Norvig
-     Vocabulary: 1008
+     Vocabulary: 967
 
 >>> corrector(q="tha citi af Parisa is in Fronce")
-'the city of Paris is in France'
+'the city of paris is in france'
 
->>> corrector = query.Norvig(big=True, on=["title", "article"])
+>>> corrector = query.Norvig(big=True, on=["title", "article"], lower=False)
 
 >>> corrector.add(documents)
 Query Norvig
