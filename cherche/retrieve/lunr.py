@@ -2,7 +2,10 @@ __all__ = ["Lunr"]
 
 import typing
 
-from lunr import lunr
+try:
+    from lunr import lunr
+except ImportError:
+    print("Unable to import Lunar")
 
 from .base import Retriever
 

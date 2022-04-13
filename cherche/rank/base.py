@@ -5,7 +5,7 @@ import os
 import pickle
 import typing
 
-from ..compose import Intersection, Pipeline, Union
+from ..compose import Intersection, Pipeline, Union, Vote
 
 
 class Ranker(abc.ABC):
@@ -159,6 +159,12 @@ class Ranker(abc.ABC):
         if isinstance(other, Intersection):
             return Intersection([self] + other.models)
         return Intersection([self, other])
+
+    def __mul__(self, other) -> Vote:
+        """Voting operator."""
+        if isinstance(other, Vote):
+            return Vote([self] + other.models)
+        return Vote([self, other])
 
     def embs(self, documents: list) -> list:
         """Computes and returns embeddings of input documents.

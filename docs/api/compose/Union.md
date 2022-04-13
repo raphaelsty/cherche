@@ -8,6 +8,8 @@ Union gathers retrieved documents from multiples retrievers and ranked documents
 
 - **models** (*list*)
 
+    List of models of the union.
+
 
 
 ## Examples

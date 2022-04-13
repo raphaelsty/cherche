@@ -1,5 +1,7 @@
-__all__ = ["Intersection", "Union"]
+__all__ = ["Intersection", "Union", "Vote"]
 import collections
+
+from scipy.special import softmax
 
 from .base import Compose
 from .pipeline import Pipeline
@@ -30,7 +32,7 @@ class Union(UnionIntersection):
 
     Parameters
     ----------
-    model
+    models
         List of models of the union.
 
     Examples
@@ -160,7 +162,7 @@ class Intersection(UnionIntersection):
 
     Parameters
     ----------
-    model
+    models
         List of models of the union.
 
     Examples
@@ -210,20 +212,20 @@ class Intersection(UnionIntersection):
     []
 
     >>> print(search(q = "Wiki Paris Montreal Eiffel"))
-    [{'article': 'Paris is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 0.57735,
-      'title': 'Paris'},
-     {'article': 'Montreal is in Canada.',
+    [{'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
-      'similarity': 0.57735,
+      'similarity': 0.5773502691896257,
       'title': 'Montreal'},
+     {'article': 'Paris is the capital of France',
+      'author': 'Wiki',
+      'id': 0,
+      'similarity': 0.5773502691896257,
+      'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.40825,
+      'similarity': 0.408248290463863,
       'title': 'Eiffel tower'}]
 
     """
@@ -248,9 +250,7 @@ class Intersection(UnionIntersection):
         counter_docs = collections.defaultdict(int)
 
         for model in self.models:
-
             for document in model(**query):
-
                 # Remove similarities to avoid duplicates
                 if "similarity" in document:
                     similarity = document.pop("similarity")
@@ -266,13 +266,103 @@ class Intersection(UnionIntersection):
 
         # Add similarity that we previously removed.
         ranked = []
+
         for document in intersection:
             similarity = similarities.get(document.get(self.key, None), None)
             if similarity is not None:
                 ranked.append({**document, **{"similarity": similarity}})
             else:
                 ranked.append(document)
+
         return ranked
 
     def __and__(self, other) -> "Intersection":
         return Intersection(models=self.models + [other])
+
+
+class Vote(UnionIntersection):
+    """Voting operator. Average of the similarity scores of the documents.
+
+    Parameters
+    ----------
+    models
+        List of models of the union.
+
+    Examples
+    --------
+
+    >>> from cherche import compose, retrieve
+
+    >>> documents = [
+    ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
+    ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
+    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ... ]
+
+    >>> search = (
+    ...    retrieve.TfIdf(key="id", on="title", documents=documents, k=3) *
+    ...    retrieve.TfIdf(key="id", on="article", documents=documents, k=3)
+    ... )
+
+    >>> search
+    Vote
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    -----
+
+    >>> search("paris eiffel")
+    [{'id': 1, 'similarity': 0.5216793798120436}, {'id': 0, 'similarity': 0.4783206201879563}]
+
+    """
+
+    def __init__(self, models: list):
+        super().__init__(models=models)
+        for model in self.models:
+            if hasattr(model, "key"):
+                self.key = model.key
+                break
+
+    def __call__(self, q: str, **kwargs) -> list:
+        """
+        Parameters
+        ----------
+        q
+            Input query.
+
+        """
+        query = {"q": q, **kwargs}
+
+        scores, documents = collections.defaultdict(float), collections.defaultdict(dict)
+
+        for model in self.models:
+            retrieved = model(**query)
+
+            if not retrieved:
+                continue
+
+            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            for doc, similarity in zip(retrieved, similarities):
+                scores[doc[self.key]] += float(similarity) / len(self.models)
+                documents[doc[self.key]] = doc
+
+        ranked = []
+
+        if not scores or not documents:
+            return []
+
+        for key, similarity in sorted(scores.items(), key=lambda item: item[1], reverse=True):
+            doc = documents[key]
+            doc["similarity"] = similarity
+            ranked.append(doc)
+
+        return ranked
+
+    def __mul__(self, other) -> "Vote":
+        return Vote(models=self.models + [other])

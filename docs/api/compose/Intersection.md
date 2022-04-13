@@ -8,6 +8,8 @@ Intersection gathers retrieved documents from multiples retrievers and ranked do
 
 - **models** (*list*)
 
+    List of models of the union.
+
 
 
 ## Examples
@@ -57,20 +59,20 @@ Mapping to documents
 []
 
 >>> print(search(q = "Wiki Paris Montreal Eiffel"))
-[{'article': 'Paris is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 0.57735,
-  'title': 'Paris'},
- {'article': 'Montreal is in Canada.',
+[{'article': 'Montreal is in Canada.',
   'author': 'Wiki',
   'id': 2,
-  'similarity': 0.57735,
+  'similarity': 0.5773502691896257,
   'title': 'Montreal'},
+ {'article': 'Paris is the capital of France',
+  'author': 'Wiki',
+  'id': 0,
+  'similarity': 0.5773502691896257,
+  'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris.',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 0.40825,
+  'similarity': 0.408248290463863,
   'title': 'Eiffel tower'}]
 ```
 

@@ -28,16 +28,16 @@ class Norvig(Query):
 
     >>> documents = data.load_towns()
 
-    >>> corrector = query.Norvig(on = ["title", "article"])
+    >>> corrector = query.Norvig(on = ["title", "article"], lower=True)
 
     >>> corrector.add(documents)
     Query Norvig
-         Vocabulary: 1008
+         Vocabulary: 967
 
     >>> corrector(q="tha citi af Parisa is in Fronce")
-    'the city of Paris is in France'
+    'the city of paris is in france'
 
-    >>> corrector = query.Norvig(big=True, on=["title", "article"])
+    >>> corrector = query.Norvig(big=True, on=["title", "article"], lower=False)
 
     >>> corrector.add(documents)
     Query Norvig
@@ -55,11 +55,13 @@ class Norvig(Query):
     def __init__(
         self,
         on: typing.Union[str, typing.List],
+        lower: bool = True,
         big: bool = False,
     ) -> None:
         super().__init__(on=on)
 
         self.occurrences = collections.Counter()
+        self.lower = lower
 
         if big:
             path_big = pathlib.Path(__file__).parent.parent.joinpath("data/norvig.txt")
@@ -78,7 +80,9 @@ class Norvig(Query):
 
     def correct(self, word: str) -> float:
         """Most probable spelling correction for word."""
-        return max(self._candidates(word), key=lambda w: self._probability(w))
+        return max(
+            self._candidates(word), key=lambda w: self._probability(w.lower() if self.lower else w)
+        )
 
     def _probability(self, word: str) -> float:
         """Probability of `word`."""
@@ -123,6 +127,9 @@ class Norvig(Query):
                 ]
             )
         )
+
+        if self.lower:
+            documents = documents.lower()
 
         self.occurrences.update(documents.split(" "))
         return self

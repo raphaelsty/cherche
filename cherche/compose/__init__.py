@@ -1,4 +1,4 @@
 from .pipeline import Pipeline
-from .union_inter import Intersection, Union
+from .union_inter_vote import Intersection, Union, Vote
 
-__all__ = ["Pipeline", "Intersection", "Union"]
+__all__ = ["Pipeline", "Intersection", "Union", "Vote"]

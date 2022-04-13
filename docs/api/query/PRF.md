@@ -1,6 +1,6 @@
 # PRF
 
-Pseudo (or blind) Relevance-Feedback module. Query-Augmentation method consisting of applying a fast document retrieving method, then extracting keywords from top documents. The main principle of this method is that the top documents from any working ranking method should give at least great results (ie: the user almost always considers the first documents as relevant). Thus, we juste have to retrieve top-words from relevant documents to give a proper augmentation of a given query.
+Pseudo (or blind) Relevance-Feedback module. The Query-Augmentation method applies a fast document retrieving method and then extracts keywords from relevant documents. Thus, we have to retrieve top words from relevant documents to give a proper augmentation of a given query.
 
 
 
@@ -46,7 +46,7 @@ Query PRF
      Terms: 1
 
 >>> prf(q="Europe")
-'Europe centres metro space art paris bordeaux significance university'
+'Europe art metro space science bordeaux paris university significance'
 ```
 
 ## Methods
