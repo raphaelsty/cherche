@@ -151,6 +151,11 @@ We provide a minimalist API to deploy our neural search pipeline with FastAPI an
 ## Hugging Face Space
 
 A running demo is available on [Hugging Face](https://huggingface.co/spaces/raphaelsty/games).
+## Contributors 🤝
+Cherche was created for/by Renault and is now available to all. 
+We welcome all contributions.
+
+<p align="center"><img src="docs/img/renault.jpg"/></p>
 
 ## Acknowledgements 👏
 
