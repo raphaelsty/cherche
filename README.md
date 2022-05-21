@@ -171,6 +171,19 @@ Do not hesitate to look at Jina, Haystack, or TxtAi, which offer advanced neural
 - [Jina](https://github.com/jina-ai/jina)
 - [txtai](https://github.com/neuml/txtai)
 
+## Citations 
+
+If you use cherche to produce results for your scientific publication, please refer to our SIGIR paper:
+
+```
+@inproceedings{Sourty2022sigir,
+    author = {Raphael Sourty and Jose G. Moreno and Lynda Tamine and Francois-Paul Servant},
+    title = {CHERCHE: A new tool to rapidly implement pipelines in information retrieval},
+    booktitle = {Proceedings of SIGIR 2022},
+    year = {2022}
+}
+```
+
 ## Dev Team 💾
 
 The Cherche dev team is made up of [Raphaël Sourty](https://github.com/raphaelsty), [François-Paul Servant](https://github.com/fpservant), [Nicolas Bizzozzero](https://github.com/NicolasBizzozzero), [Jose G Moreno](https://scholar.google.com/citations?user=4BZFUw8AAAAJ&hl=fr). 🥳
