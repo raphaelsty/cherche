@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 __all__ = ["DPR"]
+
 
 import typing
 
@@ -96,12 +99,12 @@ class DPR(Ranker):
     def __init__(
         self,
         key: str,
-        on: typing.Union[str, list],
+        on: str | list,
         encoder,
         query_encoder,
-        k: int = None,
-        path: str = None,
-        similarity: similarity = dot,
+        k: int | typing.Optionnal = None,
+        path: str | typing.Optionnal = None,
+        similarity=dot,
     ) -> None:
         super().__init__(key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity)
         self.query_encoder = query_encoder
@@ -122,7 +125,9 @@ class DPR(Ranker):
             return []
 
         emb_q = self.query_encoder(q) if q not in self.embeddings else self.embeddings[q]
+
         emb_documents = self._emb_documents(documents=documents)
+
         return self._rank(
             similarities=self.similarity(emb_q=emb_q, emb_documents=emb_documents),
             documents=documents,

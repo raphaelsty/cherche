@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = ["Encoder"]
 
 import typing
@@ -92,12 +94,12 @@ class Encoder(Ranker):
 
     def __init__(
         self,
-        on: typing.Union[str, list],
+        on: str | list,
         key: str,
         encoder,
-        k: int = None,
-        path: str = None,
-        similarity: similarity = cosine,
+        k: int | typing.Optionnal = None,
+        path: str | typing.Optionnal = None,
+        similarity=cosine,
     ) -> None:
         super().__init__(key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity)
 
