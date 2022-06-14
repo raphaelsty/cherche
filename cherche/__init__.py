@@ -1,9 +1,9 @@
 __all__ = [
     "compose",
     "data",
-    "deploy",
     "eval",
     "generate",
+    "onnx",
     "qa",
     "query",
     "rank",
@@ -11,4 +11,5 @@ __all__ = [
     "similarity",
     "summary",
     "translate",
+    "utils",
 ]

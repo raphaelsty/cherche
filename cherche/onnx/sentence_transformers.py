@@ -1,12 +1,26 @@
-__all__ = ["sentence_transformers_onx", "OnxEncoder"]
+from __future__ import annotations
+
+__all__ = ["sentence_transformers", "STEncoder"]
 
 import torch
 import transformers
-from sentence_transformers import SentenceTransformer, models
 
 
-class OnnxEncoder:
-    """OnxEncoder dedicated to run SentenceTransformer under OnnxRuntime."""
+class STEncoder:
+    """Encoder dedicated to run Sentence Transformer models with Onnxruntime.
+
+    Parameters
+    ----------
+    session
+        Onnxruntime inference session.
+    tokenizer
+        Transformer dedicated tokenizer.
+    pooling
+        Poolling layers of the Transformer.
+    normalization
+        Normalization layers of the Transformer.
+
+    """
 
     def __init__(self, session, tokenizer, pooling, normalization):
         self.session = session
@@ -15,7 +29,7 @@ class OnnxEncoder:
         self.pooling = pooling
         self.normalization = normalization
 
-    def encode(self, sentences: list):
+    def encode(self, sentences: str | list):
 
         sentences = [sentences] if isinstance(sentences, str) else sentences
 
@@ -31,6 +45,7 @@ class OnnxEncoder:
         }
 
         hidden_state = self.session.run(None, inputs)
+
         sentence_embedding = self.pooling.forward(
             features={
                 "token_embeddings": torch.Tensor(hidden_state[0]),
@@ -49,14 +64,16 @@ class OnnxEncoder:
         return sentence_embedding.numpy()
 
 
-def sentence_transformers_onx(
+def sentence_transformers(
     model,
     path,
     do_lower_case=True,
     input_names=["input_ids", "attention_mask", "segment_ids"],
     providers=["CPUExecutionProvider"],
+    quantize=True,
 ):
-    """OnxRuntime for sentence transformers.
+    """OnxRuntime for sentence transformers. The `sentence_transformers` function converts sentence
+    transformers to the Onnx format.
 
     Parameters
     ----------
@@ -65,7 +82,7 @@ def sentence_transformers_onx(
     path
         Model file dedicated to session inference.
     do_lower_case
-        Either or not the model is cased.
+        Either or not, the model should be uncased.
     input_names
         Fields needed by the Transformer.
     providers
@@ -74,7 +91,7 @@ def sentence_transformers_onx(
     Examples
     --------
 
-    >>> from cherche import deploy, retrieve
+    >>> from cherche import onnx, retrieve
     >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
@@ -83,9 +100,10 @@ def sentence_transformers_onx(
     ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
     ... ]
 
-    >>> model = sentence_transformers_onx(
+    >>> model = onnx.sentence_transformers(
     ...    model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2"),
-    ...    path = "onx",
+    ...    path = ".test",
+    ...    quantize = True,
     ... )
 
     >>> retriever = retrieve.Encoder(
@@ -95,17 +113,24 @@ def sentence_transformers_onx(
     ...    k = 2,
     ... )
 
+    >>> retriever = retrieve.Encoder(
+    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    ...    key = "id",
+    ...    on = ["title", "article"],
+    ...    k = 2,
+    ... )
+
     >>> retriever = retriever.add(documents)
 
     >>> retriever("paris")
+
     [{'id': 0, 'similarity': 1.4728151599072867}, {'id': 1, 'similarity': 1.029349867509033}]
 
-    """
+    References
+    ----------
 
-    try:
-        import onnxruntime
-    except:
-        raise ValueError("You need to install onnxruntime.")
+    """
+    import onnxruntime
 
     model.save(path)
 
@@ -154,18 +179,33 @@ def sentence_transformers_onx(
             },
         )
 
-        normalization = None
-        for modules in model.modules():
-            for idx, module in enumerate(modules):
-                if idx == 1:
-                    pooling = module
-                if idx == 2:
-                    normalization = module
-            break
+    normalization = None
+    for modules in model.modules():
+        for idx, module in enumerate(modules):
+            if idx == 1:
+                pooling = module
+            if idx == 2:
+                normalization = module
+        break
 
-        return OnnxEncoder(
-            session=onnxruntime.InferenceSession(f"{path}.onx", providers=providers),
-            tokenizer=tokenizer,
-            pooling=pooling,
-            normalization=normalization,
-        )
+    if quantize:
+        quant(path=f"{path}.onx", q_path=f"{path}.qonx")
+
+    return STEncoder(
+        session=onnxruntime.InferenceSession(f"{path}.qonx", providers=providers),
+        tokenizer=tokenizer,
+        pooling=pooling,
+        normalization=normalization,
+    )
+
+
+def quant(path, q_path):
+    """Onnx quantization.
+
+    References
+    ----------
+    1. [onnx installation](https://github.com/onnx/onnx/issues/3129)
+    """
+    from onnxruntime import quantization
+
+    quantization.quantize_dynamic(path, q_path, weight_type=quantization.QuantType.QInt8)
