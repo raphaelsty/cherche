@@ -2,91 +2,39 @@ from __future__ import annotations
 
 __all__ = ["sentence_transformers", "STEncoder"]
 
+import os
+import typing
+
 import torch
 import transformers
+from onnxruntime import InferenceSession, quantization
 
-
-class STEncoder:
-    """Encoder dedicated to run Sentence Transformer models with Onnxruntime.
-
-    Parameters
-    ----------
-    session
-        Onnxruntime inference session.
-    tokenizer
-        Transformer dedicated tokenizer.
-    pooling
-        Poolling layers of the Transformer.
-    normalization
-        Normalization layers of the Transformer.
-
-    """
-
-    def __init__(self, session, tokenizer, pooling, normalization):
-        self.session = session
-        self.tokenizer = tokenizer
-        self.max_length = tokenizer.__dict__["model_max_length"]
-        self.pooling = pooling
-        self.normalization = normalization
-
-    def encode(self, sentences: str | list):
-
-        sentences = [sentences] if isinstance(sentences, str) else sentences
-
-        inputs = {
-            k: v.numpy()
-            for k, v in self.tokenizer(
-                sentences,
-                padding=True,
-                truncation=True,
-                max_length=self.max_length,
-                return_tensors="pt",
-            ).items()
-        }
-
-        hidden_state = self.session.run(None, inputs)
-
-        sentence_embedding = self.pooling.forward(
-            features={
-                "token_embeddings": torch.Tensor(hidden_state[0]),
-                "attention_mask": torch.Tensor(inputs.get("attention_mask")),
-            },
-        )
-
-        if self.normalization is not None:
-            sentence_embedding = self.normalization.forward(features=sentence_embedding)
-
-        sentence_embedding = sentence_embedding["sentence_embedding"]
-
-        if sentence_embedding.shape[0] == 1:
-            sentence_embedding = sentence_embedding[0]
-
-        return sentence_embedding.numpy()
+from .base import clean_folder
 
 
 def sentence_transformers(
     model,
-    path,
-    do_lower_case=True,
-    input_names=["input_ids", "attention_mask", "segment_ids"],
-    providers=["CPUExecutionProvider"],
-    quantize=True,
+    name: str,
+    input_names: list = ["input_ids", "attention_mask", "segment_ids"],
+    providers: list = ["CPUExecutionProvider"],
+    quantize: bool = True,
 ):
     """OnxRuntime for sentence transformers. The `sentence_transformers` function converts sentence
-    transformers to the Onnx format.
+    transformers to the onnx format.
 
     Parameters
     ----------
     model
         SentenceTransformer model.
-    path
+    name
         Model file dedicated to session inference.
     do_lower_case
         Either or not, the model should be uncased.
     input_names
         Fields needed by the Transformer.
     providers
-        Either run the model on CPU or GPU: ["CPUExecutionProvider", "CUDAExecutionProvider"].
+        A provider from the list: ["CUDAExecutionProvider", "CPUExecutionProvider",
+        "TensorrtExecutionProvider", "DnnlExecutionProvider"].
 
     Examples
     --------
@@ -102,7 +50,7 @@ def sentence_transformers(
 
     >>> model = onnx.sentence_transformers(
     ...    model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2"),
-    ...    path = ".test",
+    ...    name = "test",
     ...    quantize = True,
     ... )
 
@@ -123,28 +71,31 @@ def sentence_transformers(
     >>> retriever = retriever.add(documents)
 
     >>> retriever("paris")
-
-    [{'id': 0, 'similarity': 1.4728151599072867}, {'id': 1, 'similarity': 1.029349867509033}]
+    [{'id': 0, 'similarity': 1.4728152892007695}, {'id': 1, 'similarity': 1.0293501832829597}]
 
     References
     ----------
+    1. [Onnx installation](https://github.com/onnx/onnx/issues/3129)
 
     """
-    import onnxruntime
+    if os.path.exists(name):
+        raise ValueError(f"Invalid name, {name} exists.")
 
-    model.save(path)
+    model.save(name)
 
     configuration = transformers.AutoConfig.from_pretrained(
-        path, from_tf=False, local_files_only=True
+        name, from_tf=False, local_files_only=True
     )
 
     tokenizer = transformers.AutoTokenizer.from_pretrained(
-        path, do_lower_case=do_lower_case, from_tf=False, local_files_only=True
+        name, from_tf=False, local_files_only=True
     )
 
     encoder = transformers.AutoModel.from_pretrained(
-        path, from_tf=False, config=configuration, local_files_only=True
+        name, from_tf=False, config=configuration, local_files_only=True
     )
+
+    clean_folder(name)
 
     st = ["cherche"]
 
@@ -158,6 +109,9 @@ def sentence_transformers(
 
     model.eval()
 
+    folder = f"{name}_onnx"
+    os.mkdir(folder)
+
     with torch.no_grad():
 
         symbolic_names = {0: "batch_size", 1: "max_seq_len"}
@@ -165,7 +119,7 @@ def sentence_transformers(
         torch.onnx.export(
             encoder,
             args=tuple(inputs.values()),
-            f=f"{path}.onx",
+            f=os.path.join(folder, f"{name}.onx"),
             opset_version=13,  # ONX version needs to be >= 13 for sentence transformers.
             do_constant_folding=True,
             input_names=input_names,
@@ -179,33 +133,97 @@ def sentence_transformers(
             },
         )
 
-    normalization = None
+    layers = []
     for modules in model.modules():
         for idx, module in enumerate(modules):
-            if idx == 1:
-                pooling = module
-            if idx == 2:
-                normalization = module
+            # Skip the transformer that run under onnx.
+            if idx == 0:
+                continue
+            layers.append(module)
         break
 
     if quantize:
-        quant(path=f"{path}.onx", q_path=f"{path}.qonx")
+        quantization.quantize_dynamic(
+            os.path.join(folder, f"{name}.onx"),
+            os.path.join(folder, f"{name}.qonx"),
+            weight_type=quantization.QuantType.QInt8,
+        )
+        name = os.path.join(folder, f"{name}.qonx")
+    else:
+        name = os.path.join(folder, f"{name}.onx")
 
-    return STEncoder(
-        session=onnxruntime.InferenceSession(f"{path}.qonx", providers=providers),
+    encoder = STEncoder(
+        session=InferenceSession(name, providers=providers),
         tokenizer=tokenizer,
-        pooling=pooling,
-        normalization=normalization,
+        layers=layers,
     )
 
+    clean_folder(folder)
 
-def quant(path, q_path):
-    """Onnx quantization.
+    return encoder
 
-    References
+
+class STEncoder:
+    """Encoder dedicated to run Sentence Transformer models with Onnxruntime.
+
+    Parameters
     ----------
-    1. [onnx installation](https://github.com/onnx/onnx/issues/3129)
-    """
-    from onnxruntime import quantization
+    session
+        Onnxruntime inference session.
+    tokenizer
+        Transformer dedicated tokenizer.
+    pooling
+        Poolling layers of the Transformer.
+    normalization
+        Normalization layers of the Transformer.
 
-    quantization.quantize_dynamic(path, q_path, weight_type=quantization.QuantType.QInt8)
+    """
+
+    def __init__(self, session, tokenizer, layers: list, max_length: typing.Optional[int] = None):
+        self.session = session
+        self.tokenizer = tokenizer
+        self.layers = layers
+        self.max_length = (
+            max_length if max_length is not None else tokenizer.__dict__["model_max_length"]
+        )
+
+    def encode(self, sentences: str | list):
+        """Sentence transformer encoding function.
+
+        Parameters
+        ----------
+        sentences
+            Either a sentence or a list of sentences to encode.
+
+        """
+        sentences = [sentences] if isinstance(sentences, str) else sentences
+
+        inputs = {
+            k: v.numpy()
+            for k, v in self.tokenizer(
+                sentences,
+                padding=True,
+                truncation=True,
+                max_length=self.max_length,
+                return_tensors="pt",
+            ).items()
+        }
+
+        hidden_state = self.session.run(None, inputs)
+
+        features = {
+            "token_embeddings": torch.Tensor(hidden_state[0]),
+            "attention_mask": torch.Tensor(inputs.get("attention_mask")),
+        }
+
+        for layer in self.layers:
+            features = layer.forward(
+                features=features,
+            )
+
+        # Sentence transformers API format:
+        sentence = features["sentence_embedding"]
+        if sentence.shape[0] == 1:
+            sentence = sentence[0]
+
+        return sentence.numpy()

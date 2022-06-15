@@ -1,3 +1,4 @@
+from .qa import qa
 from .sentence_transformers import STEncoder, sentence_transformers
 
-__all__ = ["STEncoder", "sentence_transformers", "tensorrt"]
+__all__ = ["qa", "STEncoder", "sentence_transformers"]
