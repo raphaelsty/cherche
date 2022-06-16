@@ -1,4 +1,4 @@
-# ONNX Sentence Transformer
+# ONNX for Sentence Transformers and Question Answering
 
 [Open Neural Network Exchange](https://github.com/onnx/onnx) (ONNX) is an open-source solution for accelerating model inference. Cherche brings compatibility between the ONNX format to accelerate Sentence Transformers (retriever and ranker) and question-answering models:
 
