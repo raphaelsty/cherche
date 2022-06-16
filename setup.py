@@ -23,7 +23,15 @@ base_packages = [
 ]
 
 onnx = ["onnx >= 1.10.2", "onnxruntime >= 1.9.0"]
+
 onnxgpu = ["onnx >= 1.10.2", "onnxruntime-gpu >= 1.9.0"]
+
+doc = [
+    "numpydoc >= 1.4.0",
+    "mkdocs_material >= 8.3.5",
+    "mkdocs-awesome-pages-plugin >= 2.7.0",
+    "mkdocs-jupyter >= 0.21.0",
+]
 
 setuptools.setup(
     name="cherche",
@@ -39,7 +47,11 @@ setuptools.setup(
     keywords=["neural", "search", "question", "answering", "summarization"],
     packages=setuptools.find_packages(),
     install_requires=base_packages,
-    extras_require={"onnx": base_packages + onnx, "onnxgpu": base_packages + onnxgpu},
+    extras_require={
+        "onnx": base_packages + onnx,
+        "onnxgpu": base_packages + onnxgpu,
+        "doc": base_packages + doc,
+    },
     package_data={"cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]},
     classifiers=[
         "Programming Language :: Python :: 3",

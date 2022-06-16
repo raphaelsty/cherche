@@ -6,11 +6,11 @@ SentenceBert Ranker.
 
 ## Parameters
 
-- **on** (*Union[str, list]*)
+- **on** (*'str | list'*)
 
     Fields to use to match the query to the documents.
 
-- **key** (*str*)
+- **key** (*'str'*)
 
     Field identifier of each document.
 
@@ -18,15 +18,15 @@ SentenceBert Ranker.
 
     Encoding function dedicated to documents and query.
 
-- **k** (*int*) – defaults to `None`
+- **k** (*'int | typing.Optionnal'*) – defaults to `None`
 
     Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
-- **path** (*str*) – defaults to `None`
+- **path** (*'str | typing.Optionnal'*) – defaults to `None`
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function cosine at 0x7fd4d11d6dc0>`
+- **similarity** – defaults to `<function cosine at 0x179307820>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -103,8 +103,8 @@ Encoder ranker
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **documents**     (*list*)    
+    - **q**     (*'str'*)    
+    - **documents**     (*'list'*)    
     - **kwargs**    
     
 ???- note "add"
@@ -113,7 +113,7 @@ Encoder ranker
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*'list'*)    
     
 ???- note "dump_embeddings"
 
@@ -122,7 +122,7 @@ Encoder ranker
     **Parameters**
 
     - **embeddings**    
-    - **path**     (*str*)    
+    - **path**     (*'str'*)    
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
     
 ???- note "embs"
@@ -131,12 +131,12 @@ Encoder ranker
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*'list'*)    
     
 ???- note "load_embeddings"
 
     Load embeddings from an existing directory.
 
-    - **path**     (*str*)    
+    - **path**     (*'str'*)    
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
     

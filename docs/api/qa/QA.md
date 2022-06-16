@@ -30,6 +30,7 @@ Question Answering model.
 >>> from pprint import pprint as print
 >>> from transformers import pipeline
 >>> from cherche import qa
+>>> from pprint import pprint as print
 
 >>> documents = [
 ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},

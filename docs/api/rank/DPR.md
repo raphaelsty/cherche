@@ -6,11 +6,11 @@ DPR ranks documents using distinct models to encode the query and document conte
 
 ## Parameters
 
-- **key** (*str*)
+- **key** (*'str'*)
 
     Field identifier of each document.
 
-- **on** (*Union[str, list]*)
+- **on** (*'str | list'*)
 
     Fields to use to match the query to the documents.
 
@@ -22,15 +22,15 @@ DPR ranks documents using distinct models to encode the query and document conte
 
     Encoding function dedicated to the query.
 
-- **k** (*int*) – defaults to `None`
+- **k** (*'int | typing.Optionnal'*) – defaults to `None`
 
     Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
-- **path** (*str*) – defaults to `None`
+- **path** (*'str | typing.Optionnal'*) – defaults to `None`
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** (*<module 'cherche.similarity' from '/Users/raphaelsourty/opt/miniconda3/envs/cherche/lib/python3.8/site-packages/cherche/similarity/__init__.py'>*) – defaults to `<function dot at 0x7fd4d11d6e50>`
+- **similarity** – defaults to `<function dot at 0x1793078b0>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
@@ -108,8 +108,8 @@ DPR ranker
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **documents**     (*list*)    
+    - **q**     (*'str'*)    
+    - **documents**     (*'list'*)    
     - **kwargs**    
     
 ???- note "add"
@@ -118,7 +118,7 @@ DPR ranker
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*'list'*)    
     
 ???- note "dump_embeddings"
 
@@ -127,7 +127,7 @@ DPR ranker
     **Parameters**
 
     - **embeddings**    
-    - **path**     (*str*)    
+    - **path**     (*'str'*)    
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
     
 ???- note "embs"
@@ -136,12 +136,12 @@ DPR ranker
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*'list'*)    
     
 ???- note "load_embeddings"
 
     Load embeddings from an existing directory.
 
-    - **path**     (*str*)    
+    - **path**     (*'str'*)    
         Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
     

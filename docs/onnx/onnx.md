@@ -15,7 +15,7 @@ The acceleration includes the transformation to the ONNX format and the quantiza
 We can benefit from executing models via the ONNX environment on the CPU; via installing the Cherche library with the `onnx` option:
 
 ```sh
-!pip install cherche -onnx
+!pip install cherche[onnx]
 ```
 
 ### ONNX GPU
@@ -23,7 +23,16 @@ We can benefit from executing models via the ONNX environment on the CPU; via in
 We can benefit from executing models via the ONNX environment on the GPU; via installing the Cherche library with the `onnxgpu` option:
 
 ```sh
-!pip install cherche -onnxgpu
+!pip install cherche[onnxgpu]
+```
+
+### Mac M1
+
+For MAC M1 owners, you may have difficulties installing ONNX. Here is how to set up compatibility with ONNX:
+
+```sh
+conda install onnx
+brew install onnxruntime
 ```
 
 ## Sentence Transformers
@@ -49,10 +58,10 @@ We can accelerate the model on GPU:
 >>> from sentence_transformers import SentenceTransformer
 
 >>> model = onnx.sentence_transformers(
-...    model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2"),
+...    model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2", device="cuda"),
 ...    name = "all-mpnet-base-v2",
 ...    quantize = True,
-...    providers = ["GPUExecutionProvider"], # GPU based runtime
+...    providers = ["CUDAExecutionProvider"], # GPU based runtime
 ... )
 ```
 
@@ -112,6 +121,21 @@ We can then declare our retriever or ranker from the model accelerated by ONNX.
 ...    model = pipeline("question-answering", model="deepset/roberta-base-squad2", tokenizer="deepset/roberta-base-squad2"),
 ...    name = "roberta-base-squad2",
 ...    quantize = True,
+...    providers = ["CPUExecutionProvider"], # CPU based runtime
+... )
+```
+
+We can accelerate the model on GPU:
+
+```python
+>>> from cherche import onnx
+>>> from transformers import pipeline
+
+>>> model = onnx.qa(
+...    model = pipeline("question-answering", model="deepset/roberta-base-squad2", tokenizer="deepset/roberta-base-squad2", device=0),
+...    name = "roberta-base-squad2",
+...    quantize = True,
+...    providers = ["CUDAExecutionProvider"], # GPU based runtime
 ... )
 ```
 

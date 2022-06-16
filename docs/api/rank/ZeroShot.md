@@ -6,9 +6,9 @@ ZeroShot classifier for ranking. Zero shot does not pre-compute embeddings, it n
 
 ## Parameters
 
-- **key** (*str*)
+- **key** (*'str'*)
 
-- **on** (*Union[str, list]*)
+- **on** (*'str | list'*)
 
     Fields to use to match the query to the documents.
 
@@ -16,11 +16,11 @@ ZeroShot classifier for ranking. Zero shot does not pre-compute embeddings, it n
 
     Zero shot classifier to use for ranking
 
-- **k** (*int*) – defaults to `None`
+- **k** (*'int | typing.Optionnal'*) – defaults to `None`
 
     Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
-- **multi_class** (*bool*) – defaults to `True`
+- **multi_class** (*'bool'*) – defaults to `True`
 
     If more than one candidate label can be correct, pass multi_class=True to calculate each class independently.
 
@@ -76,8 +76,8 @@ Zero Shot Classifier
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **documents**     (*list*)    
+    - **q**     (*'str'*)    
+    - **documents**     (*'list'*)    
     - **kwargs**    
     
 ???- note "add"

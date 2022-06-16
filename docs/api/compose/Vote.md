@@ -8,7 +8,7 @@ Voting operator. Average of the similarity scores of the documents.
 
 - **models** (*list*)
 
-    List of models of the union.
+    List of models of the vote.
 
 
 
