@@ -12,43 +12,45 @@
         <meta name="author" content="Raphael Sourty">
       
       
-        <link rel="canonical" href="https://raphaelsty.github.io/cherche/summary/summary/">
+        <link rel="canonical" href="https://raphaelsty.github.io/cherche/api/onnx/STEncoder/">
       
-      <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.4">
+      <link rel="icon" href="../../../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.5">
     
     
       
-        <title>Summary - cherche</title>
+        <title>STEncoder - cherche</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.2a4617e2.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.4a0965b7.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.9204c3b2.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
         
           
           
           <meta name="theme-color" content="#4051b5">
         
       
+      
     
     
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-      <link rel="stylesheet" href="../../css/version-select.css">
+      <link rel="stylesheet" href="../../../css/version-select.css">
     
-    <script>function __md_scope(e,t,_){return new URL(_||(t===localStorage?"../..":"../.."),location).pathname+"."+e}function __md_get(e,t=localStorage,_){return JSON.parse(t.getItem(__md_scope(e,t,_)))}function __md_set(e,t,_=localStorage,o){try{_.setItem(__md_scope(e,_,o),JSON.stringify(t))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -82,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#summary" class="md-skip">
+        <a href="#stencoder" class="md-skip">
           Skip to content
         </a>
       
@@ -96,14 +98,14 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="cherche" class="md-header__button md-logo" aria-label="cherche" data-md-component="logo">
+    <a href="../../.." title="cherche" class="md-header__button md-logo" aria-label="cherche" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -115,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Summary
+              STEncoder
             
           </span>
         </div>
@@ -125,7 +127,7 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -133,13 +135,13 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -162,7 +164,7 @@
         <a href="https://github.com/raphaelsty/cherche" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     raphaelsty/cherche
@@ -190,7 +192,7 @@
 
 
   <li class="md-tabs__item">
-    <a href="../.." class="md-tabs__link">
+    <a href="../../.." class="md-tabs__link">
       Home
     </a>
   </li>
@@ -205,7 +207,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../documents/documents/" class="md-tabs__link">
+      <a href="../../../documents/documents/" class="md-tabs__link">
         Documents
       </a>
     </li>
@@ -221,7 +223,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../retrieve/retrieve/" class="md-tabs__link">
+      <a href="../../../retrieve/retrieve/" class="md-tabs__link">
         Retrieve
       </a>
     </li>
@@ -237,7 +239,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../rank/rank/" class="md-tabs__link">
+      <a href="../../../rank/rank/" class="md-tabs__link">
         Rank
       </a>
     </li>
@@ -253,23 +255,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../pipeline/pipeline/" class="md-tabs__link">
-        Pipeline
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../qa/qa/" class="md-tabs__link">
+      <a href="../../../qa/qa/" class="md-tabs__link">
         QA
       </a>
     </li>
@@ -285,8 +271,24 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../generate/rag/" class="md-tabs__link">
+      <a href="../../../generate/summary/" class="md-tabs__link">
         Generation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../pipeline/pipeline/" class="md-tabs__link">
+        Pipeline
       </a>
     </li>
   
@@ -303,55 +305,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="./" class="md-tabs__link md-tabs__link--active">
-        Summary
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../translate/translate/" class="md-tabs__link">
-        Translation
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../examples/retriever_ranker/" class="md-tabs__link">
-        Examples
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../api/overview/" class="md-tabs__link">
+      <a href="../../overview/" class="md-tabs__link md-tabs__link--active">
         API reference
       </a>
     </li>
@@ -367,7 +321,39 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../serialize/serialize/" class="md-tabs__link">
+      <a href="../../../examples/retriever_ranker/" class="md-tabs__link">
+        Examples
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../onnx/onnx/" class="md-tabs__link">
+        Onnx
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../serialize/serialize/" class="md-tabs__link">
         Save & Load
       </a>
     </li>
@@ -383,7 +369,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../deployment/deployment/" class="md-tabs__link">
+      <a href="../../../deployment/deployment/" class="md-tabs__link">
         Deploy
       </a>
     </li>
@@ -411,10 +397,10 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="cherche" class="md-nav__button md-logo" aria-label="cherche" data-md-component="logo">
+    <a href="../../.." title="cherche" class="md-nav__button md-logo" aria-label="cherche" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
 
     </a>
     cherche
@@ -424,7 +410,7 @@
       <a href="https://github.com/raphaelsty/cherche" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     raphaelsty/cherche
@@ -442,7 +428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         Home
       </a>
     </li>
@@ -483,7 +469,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../documents/documents/" class="md-nav__link">
+      <a href="../../../documents/documents/" class="md-nav__link">
         Documents
       </a>
     </li>
@@ -497,7 +483,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../documents/towns/" class="md-nav__link">
+      <a href="../../../documents/towns/" class="md-nav__link">
         Towns
       </a>
     </li>
@@ -545,7 +531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/retrieve/" class="md-nav__link">
+      <a href="../../../retrieve/retrieve/" class="md-nav__link">
         Retrieve
       </a>
     </li>
@@ -559,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/tfidf/" class="md-nav__link">
+      <a href="../../../retrieve/tfidf/" class="md-nav__link">
         TfIdf
       </a>
     </li>
@@ -573,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/bm25/" class="md-nav__link">
+      <a href="../../../retrieve/bm25/" class="md-nav__link">
         BM25
       </a>
     </li>
@@ -587,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/elastic/" class="md-nav__link">
+      <a href="../../../retrieve/elastic/" class="md-nav__link">
         Elastic
       </a>
     </li>
@@ -601,7 +587,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/flash/" class="md-nav__link">
+      <a href="../../../retrieve/flash/" class="md-nav__link">
         Flash
       </a>
     </li>
@@ -615,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/lunr/" class="md-nav__link">
+      <a href="../../../retrieve/lunr/" class="md-nav__link">
         Lunr
       </a>
     </li>
@@ -629,7 +615,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/encoder/" class="md-nav__link">
+      <a href="../../../retrieve/encoder/" class="md-nav__link">
         Encoder
       </a>
     </li>
@@ -643,7 +629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/dpr/" class="md-nav__link">
+      <a href="../../../retrieve/dpr/" class="md-nav__link">
         DPR
       </a>
     </li>
@@ -657,7 +643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../retrieve/fuzz/" class="md-nav__link">
+      <a href="../../../retrieve/fuzz/" class="md-nav__link">
         Fuzz
       </a>
     </li>
@@ -705,7 +691,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/rank/" class="md-nav__link">
+      <a href="../../../rank/rank/" class="md-nav__link">
         Rank
       </a>
     </li>
@@ -719,7 +705,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/encoder/" class="md-nav__link">
+      <a href="../../../rank/encoder/" class="md-nav__link">
         rank.Encoder
       </a>
     </li>
@@ -733,7 +719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/dpr/" class="md-nav__link">
+      <a href="../../../rank/dpr/" class="md-nav__link">
         rank.DPR
       </a>
     </li>
@@ -747,7 +733,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/zero_shot/" class="md-nav__link">
+      <a href="../../../rank/zero_shot/" class="md-nav__link">
         rank.ZeroShot
       </a>
     </li>
@@ -761,7 +747,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/dot_cos/" class="md-nav__link">
+      <a href="../../../rank/dot_cos/" class="md-nav__link">
         Similarity
       </a>
     </li>
@@ -775,7 +761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../rank/gpu/" class="md-nav__link">
+      <a href="../../../rank/gpu/" class="md-nav__link">
         Gpu
       </a>
     </li>
@@ -806,14 +792,14 @@
       
       
         <label class="md-nav__link" for="__nav_5">
-          Pipeline
+          QA
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Pipeline" data-md-level="1">
+      <nav class="md-nav" aria-label="QA" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
-          Pipeline
+          QA
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -823,8 +809,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../pipeline/pipeline/" class="md-nav__link">
-        Pipeline
+      <a href="../../../qa/qa/" class="md-nav__link">
+        Question Answering
       </a>
     </li>
   
@@ -854,14 +840,14 @@
       
       
         <label class="md-nav__link" for="__nav_6">
-          QA
+          Generation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="QA" data-md-level="1">
+      <nav class="md-nav" aria-label="Generation" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
-          QA
+          Generation
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -871,8 +857,36 @@
   
   
     <li class="md-nav__item">
-      <a href="../../qa/qa/" class="md-nav__link">
-        Question Answering
+      <a href="../../../generate/summary/" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../generate/translate/" class="md-nav__link">
+        Translation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../generate/rag/" class="md-nav__link">
+        RAG Generator
       </a>
     </li>
   
@@ -902,14 +916,14 @@
       
       
         <label class="md-nav__link" for="__nav_7">
-          Generation
+          Pipeline
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Generation" data-md-level="1">
+      <nav class="md-nav" aria-label="Pipeline" data-md-level="1">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
-          Generation
+          Pipeline
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -919,8 +933,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generate/rag/" class="md-nav__link">
-        RAG Generator
+      <a href="../../../pipeline/pipeline/" class="md-nav__link">
+        Pipeline
       </a>
     </li>
   
@@ -952,14 +966,300 @@
       
       
         <label class="md-nav__link" for="__nav_8">
-          Summary
+          API reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Summary" data-md-level="1">
+      <nav class="md-nav" aria-label="API reference" data-md-level="1">
         <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
-          Summary
+          API reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_2">
+          compose
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="compose" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          compose
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/Intersection/" class="md-nav__link">
+        Intersection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/Pipeline/" class="md-nav__link">
+        Pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/Union/" class="md-nav__link">
+        Union
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/Vote/" class="md-nav__link">
+        Vote
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_3">
+          data
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="data" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          data
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/arxiv-tags/" class="md-nav__link">
+        arxiv_tags
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/load-towns/" class="md-nav__link">
+        load_towns
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_4">
+          eval
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="eval" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          eval
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eval/eval/" class="md-nav__link">
+        eval
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_5">
+          generate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="generate" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          generate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generate/RAG/" class="md-nav__link">
+        RAG
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_6">
+          onnx
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="onnx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          onnx
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -979,12 +1279,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Summary
+          STEncoder
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Summary
+        STEncoder
       </a>
       
         
@@ -1003,22 +1303,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#on" class="md-nav__link">
-    On
+  <a href="#parameters" class="md-nav__link">
+    Parameters
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#documents" class="md-nav__link">
-    Documents
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick Start
+  <a href="#methods" class="md-nav__link">
+    Methods
   </a>
   
 </li>
@@ -1027,6 +1320,641 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qa/" class="md-nav__link">
+        qa
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sentence-transformers/" class="md-nav__link">
+        sentence_transformers
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_7">
+          qa
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="qa" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          qa
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../qa/QA/" class="md-nav__link">
+        QA
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_8" type="checkbox" id="__nav_8_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_8">
+          query
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="query" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_8">
+          <span class="md-nav__icon md-icon"></span>
+          query
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../query/Norvig/" class="md-nav__link">
+        Norvig
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../query/PRF/" class="md-nav__link">
+        PRF
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../query/Query/" class="md-nav__link">
+        Query
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_9" type="checkbox" id="__nav_8_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_9">
+          rank
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="rank" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_9">
+          <span class="md-nav__icon md-icon"></span>
+          rank
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rank/DPR/" class="md-nav__link">
+        DPR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rank/Encoder/" class="md-nav__link">
+        Encoder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rank/Ranker/" class="md-nav__link">
+        Ranker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rank/ZeroShot/" class="md-nav__link">
+        ZeroShot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_10" type="checkbox" id="__nav_8_10" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_10">
+          retrieve
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="retrieve" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_10">
+          <span class="md-nav__icon md-icon"></span>
+          retrieve
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/BM25L/" class="md-nav__link">
+        BM25L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/BM25Okapi/" class="md-nav__link">
+        BM25Okapi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/DPR/" class="md-nav__link">
+        DPR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/Elastic/" class="md-nav__link">
+        Elastic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/Encoder/" class="md-nav__link">
+        Encoder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/Flash/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/Fuzz/" class="md-nav__link">
+        Fuzz
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/Lunr/" class="md-nav__link">
+        Lunr
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/Retriever/" class="md-nav__link">
+        Retriever
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/TfIdf/" class="md-nav__link">
+        TfIdf
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_11" type="checkbox" id="__nav_8_11" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_11">
+          similarity
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="similarity" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_11">
+          <span class="md-nav__icon md-icon"></span>
+          similarity
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../similarity/cosine/" class="md-nav__link">
+        cosine
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../similarity/dot/" class="md-nav__link">
+        dot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_12" type="checkbox" id="__nav_8_12" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_12">
+          summary
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="summary" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_12">
+          <span class="md-nav__icon md-icon"></span>
+          summary
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../summary/Summary/" class="md-nav__link">
+        Summary
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_13" type="checkbox" id="__nav_8_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_13">
+          translate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="translate" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_13">
+          <span class="md-nav__icon md-icon"></span>
+          translate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../translate/Translate/" class="md-nav__link">
+        Translate
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../translate/TranslateQuery/" class="md-nav__link">
+        TranslateQuery
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_14" type="checkbox" id="__nav_8_14" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8_14">
+          utils
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="utils" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_14">
+          <span class="md-nav__icon md-icon"></span>
+          utils
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utils/quantize/" class="md-nav__link">
+        quantize
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -1055,14 +1983,14 @@
       
       
         <label class="md-nav__link" for="__nav_9">
-          Translation
+          Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Translation" data-md-level="1">
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
-          Translation
+          Examples
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -1072,8 +2000,106 @@
   
   
     <li class="md-nav__item">
-      <a href="../../translate/translate/" class="md-nav__link">
-        Translation
+      <a href="../../../examples/retriever_ranker/" class="md-nav__link">
+        Retriever and ranker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/retriever_ranker_qa/" class="md-nav__link">
+        Retriever, ranker, question answering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/retriever_ranker_summary/" class="md-nav__link">
+        Retriever, ranker and Summarization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/union_intersection_rankers/" class="md-nav__link">
+        Union and intersection of rankers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/voting/" class="md-nav__link">
+        Voting operator for retrievers and rankers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/encoder_retriever/" class="md-nav__link">
+        Encoder as a retriever
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/eval_pipeline/" class="md-nav__link">
+        Semanlink automatic tagging and evaluation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/large_corpus/" class="md-nav__link">
+        Handle large corpus
       </a>
     </li>
   
@@ -1103,14 +2129,14 @@
       
       
         <label class="md-nav__link" for="__nav_10">
-          Examples
+          Onnx
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+      <nav class="md-nav" aria-label="Onnx" data-md-level="1">
         <label class="md-nav__title" for="__nav_10">
           <span class="md-nav__icon md-icon"></span>
-          Examples
+          Onnx
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -1120,106 +2146,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../examples/retriever_ranker/" class="md-nav__link">
-        Retriever and ranker
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/retriever_ranker_qa/" class="md-nav__link">
-        Retriever, ranker, question answering
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/retriever_ranker_summary/" class="md-nav__link">
-        Retriever, ranker and Summarization
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/union_intersection_rankers/" class="md-nav__link">
-        Union and intersection of rankers
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/voting/" class="md-nav__link">
-        Voting operator for retrievers and rankers
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/encoder_retriever/" class="md-nav__link">
-        Encoder as a retriever
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/eval_pipeline/" class="md-nav__link">
-        Semanlink automatic tagging and evaluation
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../examples/large_corpus/" class="md-nav__link">
-        Handle large corpus
+      <a href="../../../onnx/onnx/" class="md-nav__link">
+        ONNX Sentence Transformer
       </a>
     </li>
   
@@ -1249,14 +2177,14 @@
       
       
         <label class="md-nav__link" for="__nav_11">
-          API reference
+          Save & Load
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="API reference" data-md-level="1">
+      <nav class="md-nav" aria-label="Save & Load" data-md-level="1">
         <label class="md-nav__title" for="__nav_11">
           <span class="md-nav__icon md-icon"></span>
-          API reference
+          Save & Load
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -1266,806 +2194,9 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api/overview/" class="md-nav__link">
-        Overview
+      <a href="../../../serialize/serialize/" class="md-nav__link">
+        Save & Load
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_2" type="checkbox" id="__nav_11_2" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_2">
-          compose
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="compose" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_2">
-          <span class="md-nav__icon md-icon"></span>
-          compose
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/compose/Intersection/" class="md-nav__link">
-        Intersection
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/compose/Pipeline/" class="md-nav__link">
-        Pipeline
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/compose/Union/" class="md-nav__link">
-        Union
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/compose/Vote/" class="md-nav__link">
-        Vote
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_3" type="checkbox" id="__nav_11_3" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_3">
-          data
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="data" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_3">
-          <span class="md-nav__icon md-icon"></span>
-          data
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/data/arxiv-tags/" class="md-nav__link">
-        arxiv_tags
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/data/load-towns/" class="md-nav__link">
-        load_towns
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_4" type="checkbox" id="__nav_11_4" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_4">
-          eval
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="eval" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_4">
-          <span class="md-nav__icon md-icon"></span>
-          eval
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/eval/eval/" class="md-nav__link">
-        eval
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_5" type="checkbox" id="__nav_11_5" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_5">
-          generate
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="generate" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_5">
-          <span class="md-nav__icon md-icon"></span>
-          generate
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/generate/RAG/" class="md-nav__link">
-        RAG
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_6" type="checkbox" id="__nav_11_6" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_6">
-          qa
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="qa" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_6">
-          <span class="md-nav__icon md-icon"></span>
-          qa
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/qa/QA/" class="md-nav__link">
-        QA
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_7" type="checkbox" id="__nav_11_7" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_7">
-          query
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="query" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_7">
-          <span class="md-nav__icon md-icon"></span>
-          query
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/query/Norvig/" class="md-nav__link">
-        Norvig
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/query/PRF/" class="md-nav__link">
-        PRF
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/query/Query/" class="md-nav__link">
-        Query
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_8" type="checkbox" id="__nav_11_8" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_8">
-          rank
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="rank" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_8">
-          <span class="md-nav__icon md-icon"></span>
-          rank
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/rank/DPR/" class="md-nav__link">
-        DPR
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/rank/Encoder/" class="md-nav__link">
-        Encoder
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/rank/Ranker/" class="md-nav__link">
-        Ranker
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/rank/ZeroShot/" class="md-nav__link">
-        ZeroShot
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_9" type="checkbox" id="__nav_11_9" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_9">
-          retrieve
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="retrieve" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_9">
-          <span class="md-nav__icon md-icon"></span>
-          retrieve
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/BM25L/" class="md-nav__link">
-        BM25L
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/BM25Okapi/" class="md-nav__link">
-        BM25Okapi
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/DPR/" class="md-nav__link">
-        DPR
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/Elastic/" class="md-nav__link">
-        Elastic
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/Encoder/" class="md-nav__link">
-        Encoder
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/Flash/" class="md-nav__link">
-        Flash
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/Fuzz/" class="md-nav__link">
-        Fuzz
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/Lunr/" class="md-nav__link">
-        Lunr
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/Retriever/" class="md-nav__link">
-        Retriever
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/retrieve/TfIdf/" class="md-nav__link">
-        TfIdf
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_10" type="checkbox" id="__nav_11_10" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_10">
-          similarity
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="similarity" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_10">
-          <span class="md-nav__icon md-icon"></span>
-          similarity
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/similarity/cosine/" class="md-nav__link">
-        cosine
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/similarity/dot/" class="md-nav__link">
-        dot
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_11" type="checkbox" id="__nav_11_11" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_11">
-          summary
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="summary" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_11">
-          <span class="md-nav__icon md-icon"></span>
-          summary
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/summary/Summary/" class="md-nav__link">
-        Summary
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_12" type="checkbox" id="__nav_11_12" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_11_12">
-          translate
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="translate" data-md-level="2">
-        <label class="md-nav__title" for="__nav_11_12">
-          <span class="md-nav__icon md-icon"></span>
-          translate
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/translate/Translate/" class="md-nav__link">
-        Translate
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../api/translate/TranslateQuery/" class="md-nav__link">
-        TranslateQuery
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
     </li>
   
 
@@ -2094,60 +2225,12 @@
       
       
         <label class="md-nav__link" for="__nav_12">
-          Save & Load
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Save & Load" data-md-level="1">
-        <label class="md-nav__title" for="__nav_12">
-          <span class="md-nav__icon md-icon"></span>
-          Save & Load
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../serialize/serialize/" class="md-nav__link">
-        Save & Load
-      </a>
-    </li>
-  
-
-            
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_13">
           Deploy
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Deploy" data-md-level="1">
-        <label class="md-nav__title" for="__nav_13">
+        <label class="md-nav__title" for="__nav_12">
           <span class="md-nav__icon md-icon"></span>
           Deploy
         </label>
@@ -2159,7 +2242,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../deployment/deployment/" class="md-nav__link">
+      <a href="../../../deployment/deployment/" class="md-nav__link">
         Deployment
       </a>
     </li>
@@ -2200,22 +2283,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#on" class="md-nav__link">
-    On
+  <a href="#parameters" class="md-nav__link">
+    Parameters
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#documents" class="md-nav__link">
-    Documents
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick Start
+  <a href="#methods" class="md-nav__link">
+    Methods
   </a>
   
 </li>
@@ -2233,50 +2309,39 @@
               
                 
 
-<h1 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h1>
-<p>The <code>summary.Summary</code> module integrates a summarization model at the end of the neural search pipeline. It is a handy tool to summarize a subset of documents that match a query. However, summarization models are slow using CPU and require a GPU to get decent response times.</p>
-<h2 id="on">On<a class="headerlink" href="#on" title="Permanent link">&para;</a></h2>
-<p>The <code>on</code> parameter allows the selection of the field(s) used to generate a summary.</p>
-<h2 id="documents">Documents<a class="headerlink" href="#documents" title="Permanent link">&para;</a></h2>
-<p>The pipeline must provide the documents and not only the identifiers to the summarization model (except for Elasticsearch, which retrieve documents by default).</p>
-<div class="highlight"><pre><span></span><code><span class="n">search</span> <span class="o">=</span> <span class="n">pipeline</span> <span class="o">+</span> <span class="n">documents</span> <span class="o">+</span> <span class="n">summarization</span>
-</code></pre></div>
-<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">data</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">summary</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">load_towns</span><span class="p">()</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ranker</span> <span class="o">=</span> <span class="n">rank</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;encoder.pkl&quot;</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">summarization</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span>
-<span class="o">...</span>    <span class="n">model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span>
-<span class="o">...</span>         <span class="s2">&quot;summarization&quot;</span><span class="p">,</span>
-<span class="o">...</span>         <span class="n">model</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-6-6&quot;</span><span class="p">,</span>
-<span class="o">...</span>         <span class="n">tokenizer</span><span class="o">=</span><span class="s2">&quot;sshleifer/distilbart-cnn-6-6&quot;</span><span class="p">,</span>
-<span class="o">...</span>         <span class="n">framework</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span>
-<span class="o">...</span>    <span class="p">),</span>
-<span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
-<span class="o">...</span> <span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span> <span class="o">=</span> <span class="n">retriever</span> <span class="o">+</span> <span class="n">ranker</span> <span class="o">+</span> <span class="n">documents</span> <span class="o">+</span> <span class="n">summarization</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">search</span><span class="p">(</span><span class="s2">&quot;Bordeaux wine&quot;</span><span class="p">)</span>
-<span class="s2">&quot;Bordeaux has been voted European Destination of the year in a 2015 online poll. The region is home to the world&#39;s main wine&quot;</span>
-</code></pre></div>
+<h1 id="stencoder">STEncoder<a class="headerlink" href="#stencoder" title="Permanent link">&para;</a></h1>
+<p>Encoder dedicated to run Sentence Transformer models with Onnxruntime.</p>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p><strong>session</strong></p>
+<p>Onnxruntime inference session.</p>
+</li>
+<li>
+<p><strong>tokenizer</strong></p>
+<p>Transformer dedicated tokenizer.</p>
+</li>
+<li>
+<p><strong>layers</strong> (<em>'list'</em>)</p>
+</li>
+<li>
+<p><strong>max_length</strong> (<em>'typing.Optional[int]'</em>) – defaults to <code>None</code></p>
+</li>
+</ul>
+<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
+<details class="- note">
+<summary>encode</summary>
+<p>Sentence transformer encoding function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>sentences</strong>     (<em>'str | list'</em>)    </li>
+</ul>
+</details>
 
               
             </article>
+            
           </div>
         </div>
         
@@ -2284,36 +2349,37 @@
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../../generate/rag/" class="md-footer__link md-footer__link--prev" aria-label="Previous: RAG Generator" rel="prev">
+        <a href="../../generate/RAG/" class="md-footer__link md-footer__link--prev" aria-label="Previous: RAG" rel="prev">
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Previous
               </span>
-              RAG Generator
+              RAG
             </div>
           </div>
         </a>
       
       
         
-        <a href="../../translate/translate/" class="md-footer__link md-footer__link--next" aria-label="Next: Translation" rel="next">
+        <a href="../qa/" class="md-footer__link md-footer__link--next" aria-label="Next: qa" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Translation
+              qa
             </div>
           </div>
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
           </div>
         </a>
       
@@ -2343,7 +2409,7 @@
       
     
     <a href="https://github.com/raphaelsty/cherche" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
     </a>
   
 </div>
@@ -2356,18 +2422,18 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.ca141e46.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.instant"], "search": "../../../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.6baa0517.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.431f3d41.min.js"></script>
       
-        <script src="../../javascripts/config.js"></script>
+        <script src="../../../javascripts/config.js"></script>
       
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
-        <script src="../../js/version-select.js"></script>
+        <script src="../../../js/version-select.js"></script>
       
     
   </body>
