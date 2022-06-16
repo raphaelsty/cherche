@@ -651,8 +651,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#retriever-encoder-on-gpu" class="md-nav__link">
-    Retriever Encoder on GPU
+  <a href="#index" class="md-nav__link">
+    Index
   </a>
   
 </li>
@@ -2288,8 +2288,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#retriever-encoder-on-gpu" class="md-nav__link">
-    Retriever Encoder on GPU
+  <a href="#index" class="md-nav__link">
+    Index
   </a>
   
 </li>
@@ -2372,19 +2372,15 @@ identifier as key the embedding as value.</p>
 <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.9025790931437582</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8160134832855334</span><span class="p">}]</span>
 </code></pre></div>
-<h2 id="retriever-encoder-on-gpu">Retriever Encoder on GPU<a class="headerlink" href="#retriever-encoder-on-gpu" title="Permanent link">&para;</a></h2>
-<p>To speed up the search for the most relevant documents, we can:</p>
-<ul>
-<li>Use the GPU to speed up the encoder.</li>
-<li>Use the GPU to speed up faiss to retrieve documents.</li>
-</ul>
-<p>To use faiss GPU, we need first to install faiss-gpu; we have to update the attribute <code>tree</code> of the retriever with the <code>faiss.index_cpu_to_gpu</code> method. After that, Faiss GPU significantly speeds up the search.</p>
+<h2 id="index">Index<a class="headerlink" href="#index" title="Permanent link">&para;</a></h2>
+<p>The retriever.encoder is based on the <a href="https://github.com/facebookresearch/faiss/wiki/Faiss-indexes">faiss indexes</a> and is compatible with all the structures proposed by the library. By default, the index used is the <code>IndexFlatL2</code>. It is stored in memory and is called via the CPU. Faiss offers a wide range of algorithms that are suitable for different corpus sizes and speed constraints.</p>
+<p><a href="https://github.com/facebookresearch/faiss/wiki/Guidelines-to-choose-an-index">Here are the guidelines to choose an index</a>.</p>
+<p>Let's create a faiss index stored in memory that run on GPU with the sentence transformer as encoder that also run on gpu.</p>
 <div class="highlight"><pre><span></span><code>pip install faiss-gpu
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">faiss</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">faiss</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
@@ -2407,22 +2403,28 @@ identifier as key the embedding as value.</p>
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
+<span class="o">&gt;&gt;&gt;</span> <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;Embeddings size.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">index</span> <span class="o">=</span> <span class="n">faiss</span><span class="o">.</span><span class="n">IndexFlatL2</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">index</span> <span class="o">=</span> <span class="n">faiss</span><span class="o">.</span><span class="n">index_cpu_to_gpu</span><span class="p">(</span><span class="n">faiss</span><span class="o">.</span><span class="n">StandardGpuResources</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="c1"># 0 is the id of the GPU</span>
+
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span>
 <span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span>
-<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/all-mpnet-base-v2&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">encoder</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;all-mpnet-base-v2.pkl&quot;</span>
+<span class="o">...</span>    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;all-mpnet-base-v2.pkl&quot;</span><span class="p">,</span>
+<span class="o">...</span>    <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
 
-<span class="c1"># 0 is the id of the GPU.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">faiss</span><span class="o">.</span><span class="n">index_cpu_to_gpu</span><span class="p">(</span><span class="n">faiss</span><span class="o">.</span><span class="n">StandardGpuResources</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">retriever</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
-
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;paris&quot;</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.9025790931437582</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8160134832855334</span><span class="p">}]</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.9025790931437582</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.8160134832855334</span><span class="p">}]</span>
 </code></pre></div>
 <h2 id="map-keys-to-documents">Map keys to documents<a class="headerlink" href="#map-keys-to-documents" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
@@ -2458,7 +2460,7 @@ identifier as key the embedding as value.</p>
 <span class="n">model</span> <span class="o">=</span> <span class="n">CustomEncoder</span><span class="p">()</span>
 
 <span class="c1"># Your model should pass these tests, i.e Sentence Bert API.</span>
-<span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;France&quot;</span><span class="p">,</span> <span class="s2">&quot;Bordeaux&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span> 
+<span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;France&quot;</span><span class="p">,</span> <span class="s2">&quot;Bordeaux&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span> <span class="s2">&quot;France&quot;</span><span class="p">,</span> <span class="s2">&quot;Bordeaux&quot;</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
 
 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;Paris&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
