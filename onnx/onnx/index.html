@@ -2400,12 +2400,14 @@
 <p>The acceleration includes the transformation to the ONNX format and the quantization of the model. Quantizing a model involves replacing part of the model weights with integers (vs. floats initially). Quantization may reduce the model's accuracy but will significantly accelerate the model.</p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <h3 id="onnx-cpu">ONNX CPU<a class="headerlink" href="#onnx-cpu" title="Permanent link">&para;</a></h3>
-<p>We can benefit from executing models via the ONNX environment on the CPU; via installing the Cherche library with the <code>onnx</code> option:</p>
-<div class="highlight"><pre><span></span><code>!pip install cherche<span class="o">[</span>onnx<span class="o">]</span>
+<p>We can benefit from executing models via the ONNX environment on the CPU via installing:</p>
+<div class="highlight"><pre><span></span><code>pip install onnx
+pip install onnxruntime
 </code></pre></div>
 <h3 id="onnx-gpu">ONNX GPU<a class="headerlink" href="#onnx-gpu" title="Permanent link">&para;</a></h3>
-<p>We can benefit from executing models via the ONNX environment on the GPU; via installing the Cherche library with the <code>onnxgpu</code> option:</p>
-<div class="highlight"><pre><span></span><code>!pip install cherche<span class="o">[</span>onnxgpu<span class="o">]</span>
+<p>We can benefit from executing models via the ONNX environment on the GPU via installing:</p>
+<div class="highlight"><pre><span></span><code>pip install onnx
+pip install onnxruntime-gpu
 </code></pre></div>
 <h3 id="mac-m1">Mac M1<a class="headerlink" href="#mac-m1" title="Permanent link">&para;</a></h3>
 <p>For MAC M1 owners, you may have difficulties installing ONNX. Here is how to set up compatibility with ONNX:</p>
