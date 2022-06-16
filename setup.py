@@ -43,7 +43,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/raphaelsty/cherche",
-    download_url="https://github.com/user/cherche/archive/v_09.tar.gz",
+    download_url="https://github.com/user/cherche/archive/v_01.tar.gz",
     keywords=["neural", "search", "question", "answering", "summarization"],
     packages=setuptools.find_packages(),
     install_requires=base_packages,
