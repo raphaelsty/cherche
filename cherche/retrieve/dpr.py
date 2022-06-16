@@ -2,6 +2,7 @@ __all__ = ["DPR"]
 
 import typing
 
+import faiss
 import numpy as np
 
 from .base import BaseEncoder
@@ -99,13 +100,28 @@ class DPR(BaseEncoder):
         on: typing.Union[str, list],
         k: int,
         path: str = None,
+        index: faiss.IndexFlatL2 = None,
     ) -> None:
         super().__init__(
-            encoder=encoder, key=key, on=on, k=k, path=path, query_encoder=query_encoder
+            encoder=encoder,
+            key=key,
+            on=on,
+            k=k,
+            path=path,
+            query_encoder=query_encoder,
+            index=index,
         )
 
     def __call__(self, q: str) -> list:
-        distances, indexes = self.tree.search(
+        """Search for documents.
+
+        Parameters
+        ----------
+        q
+            Query.
+        """
+
+        distances, indexes = self.index.search(
             np.array(
                 [self.query_encoder(q) if q not in self.q_embeddings else self.q_embeddings[q]]
             ).astype(np.float32),
@@ -114,12 +130,12 @@ class DPR(BaseEncoder):
 
         ranked = []
 
-        for index, distance in zip(indexes[0], distances[0]):
+        for idx, distance in zip(indexes[0], distances[0]):
 
-            if index < 0:
+            if idx < 0:
                 continue
 
-            document = self.documents[index]
+            document = self.documents[idx]
             document["similarity"] = float(1 / distance) if distance > 0 else 0.0
             ranked.append(document)
 

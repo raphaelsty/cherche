@@ -153,36 +153,50 @@ class _BM25(Retriever):
 
 class BaseEncoder(Retriever):
     def __init__(
-        self, encoder, key: str, on: typing.Union[str, list], k: int, path: str, query_encoder=None
+        self,
+        encoder,
+        key: str,
+        on: typing.Union[str, list],
+        k: int,
+        path: str,
+        index: faiss.IndexFlatL2 = None,
+        query_encoder=None,
     ) -> None:
         super().__init__(key=key, on=on, k=k)
+
         self.encoder = encoder
         self.path = path
-        self.tree = None
-        self.documents = {}
-        self.q_embeddings = {}
+        self.index = index
         self.query_encoder = query_encoder
-        self.ids = {}
+
+        self.documents: dict = {}
+        self.q_embeddings: dict = {}
+        self.ids: dict = {}
 
     @staticmethod
-    def build_faiss(tree: faiss.IndexFlatL2, documents_embeddings: list) -> faiss.IndexFlatL2:
+    def build_faiss(index: faiss.IndexFlatL2, documents_embeddings: list) -> faiss.IndexFlatL2:
         """Build faiss index.
 
         Parameters
         ----------
-        tree
+        index
             faiss index.
         documents_embeddings
             Embeddings of the documents.
 
         """
         array_embeddings = np.array(documents_embeddings).astype(np.float32)
-        if tree is None and documents_embeddings:
-            tree = faiss.IndexFlatL2(array_embeddings.shape[1])
-        # Check that documents embeddings is not empty
+
+        if index is None and documents_embeddings:
+            index = faiss.IndexFlatL2(array_embeddings.shape[1])
+            # Check that documents embeddings is not empty
+        if not index.is_trained and documents_embeddings:
+            index.train(array_embeddings)
+
         if documents_embeddings:
-            tree.add(array_embeddings)
-        return tree
+            index.add(array_embeddings)
+
+        return index
 
     @staticmethod
     def load_embeddings(path: str) -> dict:
@@ -260,8 +274,8 @@ class BaseEncoder(Retriever):
         if self.path is not None:
             self.dump_embeddings(embeddings=embeddings, path=self.path)
 
-        self.tree = self.build_faiss(
-            tree=self.tree,
+        self.index = self.build_faiss(
+            index=self.index,
             documents_embeddings=[
                 embeddings[document[self.key]]
                 for document in documents

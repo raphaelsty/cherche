@@ -2,6 +2,7 @@ __all__ = ["Encoder"]
 
 import typing
 
+import faiss
 import numpy as np
 
 from .base import BaseEncoder
@@ -91,12 +92,26 @@ class Encoder(BaseEncoder):
     """
 
     def __init__(
-        self, encoder, key: str, on: typing.Union[str, list], k: int, path: str = None
+        self,
+        encoder,
+        key: str,
+        on: typing.Union[str, list],
+        k: int,
+        path: str = None,
+        index: faiss.IndexFlatL2 = None,
     ) -> None:
-        super().__init__(encoder=encoder, key=key, on=on, k=k, path=path)
+        super().__init__(encoder=encoder, key=key, on=on, k=k, path=path, index=index)
 
     def __call__(self, q: str) -> list:
-        distances, indexes = self.tree.search(
+        """Search for documents.
+
+        Parameters
+        ----------
+        q
+            Query.
+        """
+
+        distances, indexes = self.index.search(
             np.array(
                 [self.encoder(q) if q not in self.q_embeddings else self.q_embeddings[q]]
             ).astype(np.float32),
@@ -105,12 +120,12 @@ class Encoder(BaseEncoder):
 
         ranked = []
 
-        for index, distance in zip(indexes[0], distances[0]):
+        for idx, distance in zip(indexes[0], distances[0]):
 
-            if index < 0:
+            if idx < 0:
                 continue
 
-            document = self.documents[index]
+            document = self.documents[idx]
             document["similarity"] = float(1 / distance) if distance > 0 else 0.0
             ranked.append(document)
 
