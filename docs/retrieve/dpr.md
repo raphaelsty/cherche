@@ -47,24 +47,22 @@ If we want to deploy this retriever, we should rely on Pickle to serialize the r
 [{'id': 1, 'similarity': 0.01113}, {'id': 0, 'similarity': 0.01113}]
 ```
 
-## Retriever DPR on GPU
+## Index
 
-To speed up the search for the most relevant documents, we can:
+The retriever.DPR is based on the [faiss indexes](https://github.com/facebookresearch/faiss/wiki/Faiss-indexes) and is compatible with all the structures proposed by the library. By default, the index used is the `IndexFlatL2`. It is stored in memory and is called via the CPU. Faiss offers a wide range of algorithms that are suitable for different corpus sizes and speed constraints.
 
-- Use the GPU to speed up the DPR model.
-- Use the GPU to speed up faiss to retrieve documents.
+[Here are the guidelines to choose an index](https://github.com/facebookresearch/faiss/wiki/Guidelines-to-choose-an-index).
 
-To use faiss GPU, we need first to install faiss-gpu; we have to update the attribute `tree` of the retriever with the `faiss.index_cpu_to_gpu` method. After that, Faiss GPU significantly speeds up the search.
+Let's create a faiss index stored in memory that run on GPU with the DPR model that also run on gpu.
 
 ```sh
 pip install faiss-gpu
 ```
 
 ```python
->>> import faiss
-
 >>> from cherche import retrieve
 >>> from sentence_transformers import SentenceTransformer
+>>> import faiss
 
 >>> documents = [
 ...    {
@@ -87,9 +85,15 @@ pip install faiss-gpu
 ...    }
 ... ]
 
+>>> encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda")
+
+>>> d = encoder.encode("Embeddings size.").shape[0]
+>>> index = faiss.IndexFlatL2(d)
+>>> index = faiss.index_cpu_to_gpu(faiss.StandardGpuResources(), 0, index) # 0 is the id of the GPU
+
 >>> retriever = retrieve.DPR(
-...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda").encode,
-...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base', device="cuda").encode,
+...    encoder = encoder.encode,
+...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
@@ -98,12 +102,9 @@ pip install faiss-gpu
 
 >>> retriever.add(documents)
 
-# 0 is the id of the GPU.
->>> retriever.tree = faiss.index_cpu_to_gpu(faiss.StandardGpuResources(), 0, retriever.tree)
-
 >>> retriever("paris")
-[{'id': 0, 'similarity': 0.9025790931437582},
- {'id': 2, 'similarity': 0.8160134832855334}]
+[{'id': 1, 'similarity': 0.012779952697248447},
+ {'id': 0, 'similarity': 0.012022932290377224}]
 ```
 
 ## Map keys to documents
@@ -155,7 +156,7 @@ class CustomDPR:
 model = CustomDPR()
 
 # Your model should pass these tests, i.e Sentence Bert API.
-assert model.documents(["Paris", "France", "Bordeaux"]).shape[0] == 3 
+assert model.documents(["Paris", "France", "Bordeaux"]).shape[0] == 3
 assert isinstance(model.documents(["Paris", "France", "Bordeaux"]), np.ndarray)
 
 assert len(model.documents("Paris").shape) == 1

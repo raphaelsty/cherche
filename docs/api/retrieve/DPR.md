@@ -24,6 +24,8 @@ DPR as a retriever using Faiss Index.
 
 - **path** (*str*) – defaults to `None`
 
+- **index** (*faiss.swigfaiss.IndexFlatL2*) – defaults to `None`
+
 
 ## Attributes
 
@@ -100,7 +102,7 @@ DPR retriever
 
 ???- note "__call__"
 
-    Call self as a function.
+    Search for documents.
 
     **Parameters**
 
@@ -120,7 +122,7 @@ DPR retriever
 
     **Parameters**
 
-    - **tree**     (*faiss.swigfaiss.IndexFlatL2*)    
+    - **index**     (*faiss.swigfaiss.IndexFlatL2*)    
     - **documents_embeddings**     (*list*)    
     
 ???- note "dump_embeddings"

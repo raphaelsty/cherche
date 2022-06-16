@@ -30,7 +30,7 @@ DPR ranks documents using distinct models to encode the query and document conte
 
     Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
 
-- **similarity** – defaults to `<function dot at 0x1793078b0>`
+- **similarity** – defaults to `<function dot at 0x144f058b0>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
