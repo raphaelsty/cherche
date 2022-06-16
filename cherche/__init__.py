@@ -3,6 +3,7 @@ __all__ = [
     "data",
     "eval",
     "generate",
+    "onnx",
     "qa",
     "query",
     "rank",
@@ -10,4 +11,5 @@ __all__ = [
     "similarity",
     "summary",
     "translate",
+    "utils",
 ]

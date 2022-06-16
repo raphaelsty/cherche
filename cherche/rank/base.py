@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = ["Ranker"]
 
 import abc
@@ -28,9 +30,7 @@ class Ranker(abc.ABC):
 
     """
 
-    def __init__(
-        self, key: str, on: typing.Union[str, list], encoder, k: int, path: str, similarity
-    ) -> None:
+    def __init__(self, key: str, on: str | list, encoder, k: int, path: str, similarity) -> None:
         self.key = key
         self.on = on if isinstance(on, list) else [on]
         self.encoder = encoder
@@ -56,9 +56,7 @@ class Ranker(abc.ABC):
 
     @abc.abstractmethod
     def __call__(self, q: str, documents: list, **kwargs) -> list:
-        if not documents:
-            return []
-        return self
+        return []
 
     def add(self, documents: list) -> "Ranker":
         """Pre-compute embeddings and store them at the selected path.

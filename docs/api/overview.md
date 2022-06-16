@@ -20,6 +20,18 @@
 
 - [RAG](../generate/RAG)
 
+## onnx
+
+
+**Classes**
+
+- [STEncoder](../onnx/STEncoder)
+
+**Functions**
+
+- [qa](../onnx/qa)
+- [sentence_transformers](../onnx/sentence-transformers)
+
 ## qa
 
 - [QA](../qa/QA)
@@ -63,4 +75,8 @@
 
 - [Translate](../translate/Translate)
 - [TranslateQuery](../translate/TranslateQuery)
+
+## utils
+
+- [quantize](../utils/quantize)
 

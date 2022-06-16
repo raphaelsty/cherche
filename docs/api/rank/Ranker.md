@@ -6,11 +6,11 @@ Abstract class for ranking models.
 
 ## Parameters
 
-- **key** (*str*)
+- **key** (*'str'*)
 
     Field identifier of each document.
 
-- **on** (*Union[str, list]*)
+- **on** (*'str | list'*)
 
     Fields of the documents to use for ranking.
 
@@ -18,11 +18,11 @@ Abstract class for ranking models.
 
     Encoding function to computes embeddings of the documents.
 
-- **k** (*int*)
+- **k** (*'int'*)
 
     Number of documents to keep.
 
-- **path** (*str*)
+- **path** (*'str'*)
 
     Path of the file dedicated to store the embeddings as a pickle file.
 
@@ -45,8 +45,8 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **documents**     (*list*)    
+    - **q**     (*'str'*)    
+    - **documents**     (*'list'*)    
     - **kwargs**    
     
 ???- note "add"
@@ -55,7 +55,7 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*'list'*)    
     
 ???- note "dump_embeddings"
 
@@ -64,7 +64,7 @@ Abstract class for ranking models.
     **Parameters**
 
     - **embeddings**    
-    - **path**     (*str*)    
+    - **path**     (*'str'*)    
         Path of the file dedicated to store the embeddings as a pickle file.
     
 ???- note "embs"
@@ -73,12 +73,12 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*'list'*)    
     
 ???- note "load_embeddings"
 
     Load embeddings from an existing directory.
 
-    - **path**     (*str*)    
+    - **path**     (*'str'*)    
         Path of the file dedicated to store the embeddings as a pickle file.
     

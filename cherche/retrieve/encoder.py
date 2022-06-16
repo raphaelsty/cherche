@@ -102,9 +102,16 @@ class Encoder(BaseEncoder):
             ).astype(np.float32),
             self.k if self.k is not None else len(self.documents),
         )
+
         ranked = []
+
         for index, distance in zip(indexes[0], distances[0]):
+
+            if index < 0:
+                continue
+
             document = self.documents[index]
             document["similarity"] = float(1 / distance) if distance > 0 else 0.0
             ranked.append(document)
+
         return ranked

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = ["ZeroShot"]
 
 import typing
@@ -73,9 +75,9 @@ class ZeroShot:
     def __init__(
         self,
         key: str,
-        on: typing.Union[str, list],
+        on: str | list,
         encoder,
-        k: int = None,
+        k: int | typing.Optionnal = None,
         multi_class: bool = True,
     ):
         self.key = key
