@@ -12,18 +12,20 @@ The acceleration includes the transformation to the ONNX format and the quantiza
 
 ### ONNX CPU
 
-We can benefit from executing models via the ONNX environment on the CPU; via installing the Cherche library with the `onnx` option:
+We can benefit from executing models via the ONNX environment on the CPU via installing:
 
 ```sh
-!pip install cherche[onnx]
+pip install onnx
+pip install onnxruntime
 ```
 
 ### ONNX GPU
 
-We can benefit from executing models via the ONNX environment on the GPU; via installing the Cherche library with the `onnxgpu` option:
+We can benefit from executing models via the ONNX environment on the GPU via installing:
 
 ```sh
-!pip install cherche[onnxgpu]
+pip install onnx
+pip install onnxruntime-gpu
 ```
 
 ### Mac M1
