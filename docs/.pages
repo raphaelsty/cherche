@@ -3,12 +3,11 @@ nav:
     - documents
     - retrieve
     - rank
-    - pipeline
     - qa
     - generate
-    - summary
-    - translate
-    - examples
+    - pipeline
     - api
+    - examples
+    - onnx
     - serialize
     - deployment

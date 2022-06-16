@@ -159,7 +159,6 @@ def sentence_transformers(
     )
 
     clean_folder(folder)
-
     return encoder
 
 

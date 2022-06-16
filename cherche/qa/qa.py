@@ -4,6 +4,7 @@ import typing
 from operator import itemgetter
 
 from ..compose import Pipeline
+from ..onnx import qa
 
 
 class QA:
@@ -25,6 +26,7 @@ class QA:
     >>> from pprint import pprint as print
     >>> from transformers import pipeline
     >>> from cherche import qa
+    >>> from pprint import pprint as print
 
     >>> documents = [
     ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
@@ -91,7 +93,7 @@ class QA:
             return []
 
         answers = self.model(
-            {
+            **{
                 "question": [q for _ in documents],
                 "context": [
                     " ".join([document.get(field, "") for field in self.on])
