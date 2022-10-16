@@ -6,6 +6,7 @@ from .encoder import Encoder
 from .flash import Flash
 from .fuzz import Fuzz
 from .lunr import Lunr
+from .meilisearch import Meilisearch
 from .tfidf import TfIdf
 
 __all__ = [
@@ -18,5 +19,6 @@ __all__ = [
     "Flash",
     "Fuzz",
     "Lunr",
+    "Meilisearch",
     "TfIdf",
 ]

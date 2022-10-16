@@ -3,7 +3,6 @@ __all__ = ["TfIdf"]
 import typing
 
 import numpy as np
-from cherche.retrieve import Retriever
 from scipy.sparse import csc_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 

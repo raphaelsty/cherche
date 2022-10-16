@@ -26,7 +26,7 @@ class Retriever(abc.ABC):
 
     """
 
-    def __init__(self, key: str, on: typing.Union[str, list], k: int) -> None:
+    def __init__(self, key: str, on: typing.Union[str, list], k: typing.Optional[int]) -> None:
         super().__init__()
         self.key = key
         self.on = on if isinstance(on, list) else [on]

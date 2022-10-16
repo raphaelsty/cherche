@@ -10,6 +10,7 @@ base_packages = [
     "faiss-cpu >= 1.7.1.post3",
     "flashtext >= 2.7",
     "lunr >= 0.6.1",
+    "meilisearch >= 0.22.1",
     "numpy >= 1.19.0",
     "rank-bm25 == 0.2.1",
     "rapidfuzz >= 1.9.1",

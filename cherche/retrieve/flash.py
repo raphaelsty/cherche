@@ -47,7 +47,7 @@ class Flash(Retriever):
          documents: 6
 
     >>> print(retriever(q="paris"))
-    [{'id': 0}, {'id': 1}]
+    [{'id': 0, 'similarity': 1.0}, {'id': 1, 'similarity': 0.5}]
 
     >>> retriever += documents
 
@@ -55,13 +55,16 @@ class Flash(Retriever):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 1.0,
       'tags': ['paris', 'capital'],
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 0.5,
       'tags': ['paris', 'eiffel', 'tower'],
       'title': 'Eiffel tower'}]
+
 
     References
     ----------
@@ -117,5 +120,9 @@ class Flash(Retriever):
         )
 
         # Remove duplicates documents
-        documents = [i for n, i in enumerate(documents) if i not in documents[n + 1 :]]
+        documents = [
+            {**{"similarity": 1}, **doc}
+            for n, doc in enumerate(documents)
+            if doc not in documents[n + 1 :]
+        ]
         return documents[: self.k] if self.k is not None else documents

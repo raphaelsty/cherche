@@ -9,8 +9,7 @@ from .base import Retriever
 
 
 class Fuzz(Retriever):
-    """[RapidFuzz](https://github.com/maxbachmann/RapidFuzz) wrapper. Rapid fuzzy string matching
-    in Python and C++ using the Levenshtein Distance.
+    """[RapidFuzz](https://github.com/maxbachmann/RapidFuzz) wrapper. Rapid fuzzy string matching in Python and C++ using the Levenshtein Distance.
 
     Parameters
     ----------

@@ -1,6 +1,7 @@
 __all__ = ["Intersection", "Union", "Vote"]
 import collections
 
+from river import stats
 from scipy.special import softmax
 
 from .base import Compose
@@ -75,33 +76,36 @@ class Union(UnionIntersection):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.0,
+      'similarity': 0.3333333333333333,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.4505,
+      'similarity': 0.3333333333333333,
       'title': 'Eiffel tower'}]
 
     >>> print(search(q = "Montreal"))
     [{'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
-      'similarity': 1.0,
+      'similarity': 0.3333333333333333,
       'title': 'Montreal'}]
 
     >>> print(search(q = "Wiki"))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 0.1111111111111111,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 0.1111111111111111,
       'title': 'Eiffel tower'},
      {'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
+      'similarity': 0.1111111111111111,
       'title': 'Montreal'}]
 
     """
@@ -123,33 +127,32 @@ class Union(UnionIntersection):
         """
         query = {"q": q, **kwargs}
         union = []
-        similarities = {}
+        scores = collections.defaultdict(float)
 
         for model in self.models:
 
-            for document in model(**query):
+            retrieved = model(**query)
+
+            if not retrieved:
+                continue
+
+            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+
+            for document, similarity in zip(retrieved, similarities):
 
                 # Remove similarities to avoid duplicates
                 if "similarity" in document:
-                    similarity = document.pop("similarity")
+                    document.pop("similarity")
 
-                    if document[self.key] not in similarities:
-                        similarities[document[self.key]] = similarity
+                if document[self.key] not in scores:
+                    scores[document[self.key]] += float(similarity) / len(self.models)
 
                 # Drop duplicates documents:
                 if document in union:
                     continue
                 union.append(document)
 
-        ranked = []
-        for document in union:
-            similarity = similarities.get(document.get(self.key, None), None)
-            if similarity is not None:
-                ranked.append({**document, **{"similarity": similarity}})
-            else:
-                ranked.append(document)
-
-        return ranked
+        return [{**document, **{"similarity": scores[document[self.key]]}} for document in union]
 
     def __or__(self, other) -> "Union":
         """Union operator"""
@@ -318,7 +321,7 @@ class Vote(UnionIntersection):
     -----
 
     >>> search("paris eiffel")
-    [{'id': 1, 'similarity': 0.5216793798120436}, {'id': 0, 'similarity': 0.4783206201879563}]
+    [{'id': 1, 'similarity': 0.5216793798120437}, {'id': 0, 'similarity': 0.4783206201879563}]
 
     """
 
