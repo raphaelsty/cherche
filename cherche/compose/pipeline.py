@@ -64,6 +64,114 @@ class PipelineUnion(Compose):
     'similarity': 0.3333333333333333,
     'title': 'Paris'}]
 
+
+    >>> search + documents
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Mapping to documents
+
+
+    >>> search * search
+    Voting Pipeline
+    -----
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+    >>> search & search
+    Intersection Pipeline
+    -----
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+    >>> search | search
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    Union Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
     """
 
     def __init__(self, models: list):
@@ -191,6 +299,112 @@ class PipelineIntersection(Compose):
       'similarity': 0.3151014897246852,
       'title': 'Eiffel tower'}]
 
+    >>> search + documents
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Mapping to documents
+
+    >>> search * search
+    Voting Pipeline
+    -----
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+    >>> search | search
+    Union Pipeline
+    -----
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+    >>> search & search
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
     >>> from cherche import rank
     >>> from sentence_transformers import SentenceTransformer
 
@@ -201,9 +415,25 @@ class PipelineIntersection(Compose):
     ...    k = 2,
     ... )
 
-    >>> search += ranker
-
-    >>> search
+    >>> search + ranker
+    Intersection Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: author
+         documents: 3
+    Mapping to documents
+    -----
+    Encoder ranker
+         key: id
+         on: title, article
+         k: 2
+         similarity: cosine
 
     """
 
@@ -324,6 +554,113 @@ class PipelineVote(Compose):
       'similarity': 0.4783206201879563,
       'title': 'Paris'}]
 
+    >>> search + documents
+    Voting Pipeline
+    -----
+    TfIdf retriever
+        key: id
+        on: title
+        documents: 3
+    Mapping to documents
+    TfIdf retriever
+        key: id
+        on: article
+        documents: 3
+    Mapping to documents
+    -----
+    Mapping to documents
+
+    >>> search * search
+    Voting Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    Voting Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+    >>> search & search
+    Intersection Pipeline
+    -----
+    Voting Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    -----
+    Voting Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+    >>> search | search
+    Union Pipeline
+    -----
+    Voting Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    -----
+    Voting Pipeline
+    -----
+    TfIdf retriever
+         key: id
+         on: title
+         documents: 3
+    Mapping to documents
+    TfIdf retriever
+         key: id
+         on: article
+         documents: 3
+    Mapping to documents
+    -----
+    -----
+
+
     """
 
     def __init__(self, models: list):
@@ -387,9 +724,7 @@ class PipelineVote(Compose):
     def __add__(self, other) -> "Pipeline":
         if isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline(
-                models=self.models + [{document[self.key]: document for document in other}]
-            )
+            return Pipeline(models=[self, {document[self.key]: document for document in other}])
         return Pipeline(models=[self, other])
 
 

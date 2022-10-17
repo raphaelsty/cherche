@@ -5,7 +5,7 @@ from river import stats
 from scipy.special import softmax
 
 from .base import Compose
-from .pipeline import Pipeline
+from .pipeline import Pipeline, PipelineIntersection, PipelineUnion, PipelineVote
 
 
 class UnionIntersection(Compose):
@@ -21,10 +21,18 @@ class UnionIntersection(Compose):
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""
         if isinstance(other, list):
-            return Pipeline(
-                [self] + [{document[self.models[0].key]: document for document in other}]
-            )
+            return Pipeline([self, {document[self.models[0].key]: document for document in other}])
         return Pipeline([self, other])
+
+    def __or__(self, other) -> PipelineUnion:
+        return PipelineUnion(models=[self, other])
+
+    def __and__(self, other) -> PipelineIntersection:
+        return PipelineIntersection(models=[self, other])
+
+    def __mul__(self, other) -> PipelineVote:
+        """Custom operator for voting."""
+        return PipelineVote(models=[self, other])
 
 
 class Union(UnionIntersection):
