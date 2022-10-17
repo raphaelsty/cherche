@@ -1,7 +1,6 @@
 __all__ = ["Intersection", "Union", "Vote"]
 import collections
 
-from river import stats
 from scipy.special import softmax
 
 from .base import Compose
@@ -133,19 +132,17 @@ class Union(UnionIntersection):
             Input query.
 
         """
-        query = {"q": q, **kwargs}
         union = []
+        query = {"q": q, **kwargs}
         scores = collections.defaultdict(float)
 
         for model in self.models:
 
             retrieved = model(**query)
-
             if not retrieved:
                 continue
 
             similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
-
             for document, similarity in zip(retrieved, similarities):
 
                 # Remove similarities to avoid duplicates
@@ -216,8 +213,9 @@ class Intersection(UnionIntersection):
     [{'article': 'Paris is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.0,
+      'similarity': 0.6098051865303775,
       'title': 'Paris'}]
+
 
     >>> print(search(q = "Paris"))
     []
@@ -226,18 +224,19 @@ class Intersection(UnionIntersection):
     [{'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
-      'similarity': 0.5773502691896257,
+      'similarity': 0.3423964772770161,
       'title': 'Montreal'},
      {'article': 'Paris is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 0.5773502691896257,
+      'similarity': 0.3215535643422896,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.408248290463863,
+      'similarity': 0.33604995838069424,
       'title': 'Eiffel tower'}]
+
 
     """
 
@@ -257,34 +256,29 @@ class Intersection(UnionIntersection):
 
         """
         query = {"q": q, **kwargs}
-        similarities = {}
-        counter_docs = collections.defaultdict(int)
+        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(float)
 
         for model in self.models:
-            for document in model(**query):
-                # Remove similarities to avoid duplicates
+            retrieved = model(**query)
+            if not retrieved:
+                continue
+
+            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            for document, similarity in zip(retrieved, similarities):
+
                 if "similarity" in document:
-                    similarity = document.pop("similarity")
+                    document.pop("similarity")
 
-                    if document[self.key] not in similarities:
-                        similarities[document[self.key]] = similarity
-
+                scores[document[self.key]] += similarity / len(self.models)
                 counter_docs[tuple(sorted(document.items()))] += 1
 
-        intersection = [
-            dict(document) for document, count in counter_docs.items() if count >= len(self.models)
-        ]
-
-        # Add similarity that we previously removed.
         ranked = []
-
-        for document in intersection:
-            similarity = similarities.get(document.get(self.key, None), None)
-            if similarity is not None:
-                ranked.append({**document, **{"similarity": similarity}})
-            else:
-                ranked.append(document)
-
+        for document, count in counter_docs.items():
+            if count < len(self.models):
+                continue
+            document = dict(document)
+            document["similarity"] = scores[document[self.key]]
+            ranked.append(document)
         return ranked
 
     def __and__(self, other) -> "Intersection":
@@ -303,6 +297,7 @@ class Vote(UnionIntersection):
     --------
 
     >>> from cherche import compose, retrieve
+    >>> from pprint import pprint as print
 
     >>> documents = [
     ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
@@ -328,8 +323,10 @@ class Vote(UnionIntersection):
          documents: 3
     -----
 
-    >>> search("paris eiffel")
-    [{'id': 1, 'similarity': 0.5216793798120437}, {'id': 0, 'similarity': 0.4783206201879563}]
+    >>> print(search("paris eiffel"))
+    [{'id': 1, 'similarity': 0.5216793798120437},
+     {'id': 0, 'similarity': 0.4783206201879563}]
+
 
     """
 
