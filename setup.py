@@ -11,6 +11,7 @@ base_packages = [
     "flashtext >= 2.7",
     "lunr >= 0.6.1",
     "meilisearch >= 0.22.1",
+    "more-itertools >= 9.0.0",
     "numpy >= 1.19.0",
     "rank-bm25 == 0.2.1",
     "rapidfuzz >= 1.9.1",
@@ -20,7 +21,7 @@ base_packages = [
     "sentence-transformers >= 2.1.0",
     "transformers >= 4.12.0",
     "tqdm >= 4.62.3",
-    "scipy >= 1.7.3",
+    "typesense >= 0.14.0",
 ]
 
 onnx = ["onnx >= 1.10.2", "onnxruntime >= 1.9.0"]

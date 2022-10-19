@@ -90,7 +90,7 @@ class Lunr(Retriever):
             ],
         )
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, **kwargs) -> list:
         """Retrieve the right document."""
         # We do not handle all Lunr possibilites right now.
         q = q.replace(":", "").replace("-", "")

@@ -3,15 +3,40 @@
 The Elastic module is a wrapper for the [Elasticsearch](https://elasticsearch-py.readthedocs.io/en/v8.0.0a1/)
 Python client. This module allows us to use our Elasticsearch server to integrate it into a neural search pipeline.
 
-To use Elasticsearch as a retriever, we need to install Elasticsearch and start the server. Pieces of information are available [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html).
-
-We can find all the information associated with the `es` parameter, which establishes the connection to your Elasticsearch session on the [official documentation](https://elasticsearch-py.readthedocs.io/en/v8.0.0a1/api.html#module-elasticsearch).
-
-Once our Elasticsearch server is up and running, we can connect with Cherche to add documents to the index.
-
 The `retrieve.Elastic` retriever is the right solution to implement a neural search pipeline on a large corpus. The retriever allows the documents and pre-computed embeddings of the ranker to be indexed on Elasticsearch to avoid overloading the RAM.
 
 `retrieve.Elastic` has two methods to index new documents. These two methods are compatible with mini-batch indexing. The first `add` and the second `add_embeddings` methods are dedicated to indexing documents and eventually embeddings of a dedicated ranker.
+
+## Elasticsearch - Docker
+
+Here is a minimalist instance of Elasticsearch via Docker to call the Elastic retriever quickly. This configuration is not associated with a persistent volume; we will lose the indexed documents by stopping the docker.
+
+```sh
+docker pull docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+```
+
+```sh
+docker network create elastic
+```
+
+```sh
+docker run \
+    -p 9200:9200 \
+    -p 9300:9300 \
+    -e "discovery.type=single-node" \
+    -e "xpack.security.enabled=false" \
+    docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+```
+
+Once our Elasticsearch server is up and running, we can connect with Cherche to add documents to the index.
+
+## Elasticsearch
+
+To set up a persistent instance with Elasticsearch, we will find more information on the dedicated documentation [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html).
+
+## Elasticsearch client
+
+We can find all the information associated with the `es` parameter, which establishes the connection to your Elasticsearch session via Python with the [official documentation](https://elasticsearch-py.readthedocs.io/en/v8.0.0a1/api.html#module-elasticsearch).
 
 ## Elastic retriever
 
@@ -41,7 +66,7 @@ The `retrieve.Elastic` retriever is the right solution to implement a neural sea
 ... ]
 
 # Elasticsearch client
->>> es = Elasticsearch(hosts="localhost:9200")
+>>> es = Elasticsearch(hosts="http://localhost:9200")
 
 # Ask to cherche on title and article, retrieves the top 30 results, uses and create the index cherche if it does not exist.
 >>> retriever = retrieve.Elastic(key="id", on=["title", "article"], k=30, es=es, index="cherche")
@@ -92,7 +117,7 @@ Using `retrieve.Elastic`, we can customize the query to fit our needs.
 ... ]
 
 # Elasticsearch client
->>> es = Elasticsearch(hosts="localhost:9200")
+>>> es = Elasticsearch(hosts="http://localhost:9200")
 
 # Ask to cherche on title and article, retrieves the top 30 results, uses and create the index cherche if it does not exist.
 >>> retriever = retrieve.Elastic(key="id", on=["title", "article"], k=30, es=es, index="cherche")
@@ -153,7 +178,7 @@ It is mandatory to have a GPU to calculate embeddings to index millions of docum
 ... ]
 
 # Elasticsearch client, in localhost here but it could be done remotly.
->>> es = Elasticsearch(hosts="localhost:9200")
+>>> es = Elasticsearch(hosts="http://localhost:9200")
 
 >>> retriever = retrieve.Elastic(key="id", on=["title", "article"], k=30, es=es, index="cherche")
 

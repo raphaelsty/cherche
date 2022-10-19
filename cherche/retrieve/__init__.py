@@ -8,6 +8,7 @@ from .fuzz import Fuzz
 from .lunr import Lunr
 from .meilisearch import Meilisearch
 from .tfidf import TfIdf
+from .tpsense import Typesense
 
 __all__ = [
     "Retriever",
@@ -21,4 +22,5 @@ __all__ = [
     "Lunr",
     "Meilisearch",
     "TfIdf",
+    "Typesense",
 ]

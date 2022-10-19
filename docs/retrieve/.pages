@@ -9,4 +9,4 @@ nav:
     - encoder.md
     - dpr.md
     - fuzz.md
-    
+    - meilisearch.md

@@ -3,6 +3,9 @@ __all__ = ["Meilisearch"]
 
 import typing
 
+import more_itertools
+import tqdm
+
 from .base import Retriever
 
 
@@ -83,7 +86,7 @@ class Meilisearch(Retriever):
         if self.k is not None:
             self.fields["limit"] = self.k
 
-    def add(self, documents: list) -> "Meilisearch":
+    def add(self, documents: list, batch_size=128, **kwargs) -> "Meilisearch":
         """Meilisearch is streaming friendly.
 
         Parameters
@@ -94,13 +97,21 @@ class Meilisearch(Retriever):
         """
         for document in documents:
             document["id"] = document.pop(self.key)
-        self.index.add_documents(documents)
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(documents, batch_size),
+            position=0,
+            desc="Meilisearch indexing.",
+            total=1 + len(documents) // batch_size,
+        ):
+            self.index.add_documents(batch)
+
         return self
 
     def __len__(self) -> int:
         return self.index.get_stats().number_of_documents
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, opt_params=None, **kwargs) -> list:
         """Retrieve the right document.
 
         Parameters
@@ -110,7 +121,11 @@ class Meilisearch(Retriever):
 
         """
         documents = []
-        for rank, document in enumerate(self.index.search(q, opt_params=self.fields)["hits"]):
+
+        if opt_params is None:
+            opt_params = self.fields
+
+        for rank, document in enumerate(self.index.search(q, opt_params=opt_params)["hits"]):
             document[self.key] = document.pop("id")
             document["similarity"] = 1 / (rank + 1)
             documents.append(document)

@@ -116,7 +116,7 @@ class Fuzz(Retriever):
         repr += f"\n\t fuzzer: {self.fuzzer.__name__}"
         return repr
 
-    def add(self, documents: list) -> "Fuzz":
+    def add(self, documents: list, **kwargs) -> "Fuzz":
         """Fuzz is streaming friendly.
 
         Parameters

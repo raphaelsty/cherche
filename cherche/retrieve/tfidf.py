@@ -98,7 +98,7 @@ class TfIdf(Retriever):
 
         self.k = self.k if self.k is not None else len(self.documents)
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, **kwargs) -> list:
         """Retrieve the right document.
 
         Parameters

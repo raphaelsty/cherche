@@ -167,7 +167,7 @@ def test_elastic(documents, k):
     from elasticsearch import Elasticsearch
     from sentence_transformers import SentenceTransformer
 
-    es = Elasticsearch()
+    es = Elasticsearch("http://localhost:9200")
 
     if es.ping():
 

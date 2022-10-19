@@ -2,7 +2,9 @@ __all__ = ["Elastic"]
 
 import typing
 
+import more_itertools
 import numpy as np
+import tqdm
 from elasticsearch import Elasticsearch, helpers
 
 from ..rank import Ranker
@@ -29,35 +31,36 @@ class Elastic(Retriever):
     --------
 
     >>> from pprint import pprint as print
-    >>> from cherche import retrieve
     >>> from elasticsearch import Elasticsearch
+    >>> from cherche import retrieve, rank
+    >>> from sentence_transformers import SentenceTransformer
 
-    >>> es = Elasticsearch()
+    >>> es = Elasticsearch(hosts="http://localhost:9200")
 
     >>> if es.ping():
+    ...    retriever = retrieve.Elastic(key="id", on=["title", "author"], k=2, es=es, index="test")
     ...
-    ...     retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, es=es, index="test")
+    ...    documents = [
+    ...         {"id": 0, "title": "Paris", "author": "Wiki"},
+    ...         {"id": 1, "title": "Eiffel tower", "author": "Wiki"},
+    ...         {"id": 2, "title": "Montreal", "author": "Wiki"},
+    ...    ]
     ...
-    ...     documents = [
-    ...         {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...         {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...         {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-    ...     ]
+    ...    retriever = retriever.add(documents=documents)
+    ...    candidates = retriever(q="paris")
     ...
-    ...     retriever = retriever.add(documents=documents)
-    ...     candidates = retriever(q="paris")
-
-    >>> print(candidates)
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 1.2017119,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 1.0534589,
-      'title': 'Eiffel tower'}]
+    ...    ranker = rank.Encoder(
+    ...         key = "id",
+    ...         encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    ...         on = ["title", "article"],
+    ...         k = 10,
+    ...    )
+    ...
+    ...    retriever = retriever.reset()
+    ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
+    ...
+    ...    answers = retriever("Paris")
+    ...    assert answers[0]["embedding"].shape == (768,)
 
     References
     ----------
@@ -105,37 +108,6 @@ class Elastic(Retriever):
         embeddings
             Elastic can store embeddings of the ranker to limit ram usage.
 
-        Examples
-        --------
-
-        >>> from cherche import retrieve, rank
-        >>> from sentence_transformers import SentenceTransformer
-        >>> from elasticsearch import Elasticsearch
-
-        >>> documents = [
-        ...     {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-        ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-        ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-        ... ]
-
-        >>> es = Elasticsearch()
-
-        >>> if es.ping():
-        ...
-        ...    ranker = rank.Encoder(
-        ...         key = "id",
-        ...         encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-        ...         on = ["title", "article"],
-        ...         k = 10,
-        ...    )
-        ...
-        ...    retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, index="test")
-        ...    retriever = retriever.reset()
-        ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
-        ...
-        ...    answers = retriever("Paris")
-        ...    assert answers[0]["embedding"].shape == (768,)
-
         """
         if embeddings is None:
             embeddings = ranker.embs(documents=documents)
@@ -153,7 +125,7 @@ class Elastic(Retriever):
 
         return self
 
-    def add(self, documents: list) -> "Elastic":
+    def add(self, documents: list, batch_size=128, **kwargs) -> "Elastic":
         """ElasticSearch bulk indexing.
 
         Parameters
@@ -171,12 +143,19 @@ class Elastic(Retriever):
             for doc in documents
         ]
 
-        helpers.bulk(self.es, documents)
-        self.es.indices.refresh(index=self.index)
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(documents, batch_size),
+            position=0,
+            desc="Elasticsearch indexing.",
+            total=1 + len(documents) // batch_size,
+        ):
+
+            helpers.bulk(self.es, batch)
+            self.es.indices.refresh(index=self.index)
 
         return self
 
-    def __call__(self, q: str, query: str = None) -> list:
+    def __call__(self, q: str, query: str = None, **kwargs) -> list:
         """ElasticSearch query.
 
         Parameters

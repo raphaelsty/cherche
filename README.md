@@ -8,7 +8,7 @@
   <!-- Documentation -->
   <a href="https://raphaelsty.github.io/cherche/"><img src="https://img.shields.io/website?label=docs&style=flat-square&url=https%3A%2F%2Fraphaelsty.github.io/cherche/%2F" alt="documentation"></a>
   <!-- Demo -->
-  <a href="https://huggingface.co/spaces/raphaelsty/games"><img src="https://img.shields.io/badge/demo-running-blueviolet?style=flat-square" alt="Demo"></a>  
+  <a href="https://huggingface.co/spaces/raphaelsty/games"><img src="https://img.shields.io/badge/demo-running-blueviolet?style=flat-square" alt="Demo"></a>
   <!-- License -->
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="license"></a>
 </div>
@@ -21,7 +21,7 @@ Cherche allows creating a neural search pipeline using retrievers and pre-traine
 ## Installation 🤖
 
 ```sh
-pip install cherche --upgrade 
+pip install cherche --upgrade
 ```
 
 To install the development version:
@@ -120,7 +120,7 @@ search("Bordeaux")
 
 ## Retrieve 👻
 
-Cherche provides different retrievers that filter input documents based on a query.
+Cherche provides different [retrievers](https://raphaelsty.github.io/cherche/retrieve/retrieve/) that filter input documents based on a query.
 
 - retrieve.Elastic
 - retrieve.TfIdf
@@ -131,6 +131,8 @@ Cherche provides different retrievers that filter input documents based on a que
 - retrieve.Encoder
 - retrieve.DPR
 - retrieve.Fuzz
+- retrieve.Meilisearch
+- retrieve.TypeSense
 
 ## Rank 🤗
 
@@ -152,7 +154,7 @@ We provide a minimalist API to deploy our neural search pipeline with FastAPI an
 
 A running demo is available on [Hugging Face](https://huggingface.co/spaces/raphaelsty/games).
 ## Contributors 🤝
-Cherche was created for/by Renault and is now available to all. 
+Cherche was created for/by Renault and is now available to all.
 We welcome all contributions.
 
 <p align="center"><img src="docs/img/renault.jpg"/></p>
@@ -171,7 +173,7 @@ Do not hesitate to look at Jina, Haystack, or TxtAi, which offer advanced neural
 - [Jina](https://github.com/jina-ai/jina)
 - [txtai](https://github.com/neuml/txtai)
 
-## Citations 
+## Citations
 
 If you use cherche to produce results for your scientific publication, please refer to our SIGIR paper:
 

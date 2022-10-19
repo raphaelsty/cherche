@@ -47,7 +47,7 @@ class Flash(Retriever):
          documents: 6
 
     >>> print(retriever(q="paris"))
-    [{'id': 0, 'similarity': 1.0}, {'id': 1, 'similarity': 0.5}]
+    [{'id': 0, 'similarity': 1}, {'id': 1, 'similarity': 1}]
 
     >>> retriever += documents
 
@@ -55,13 +55,13 @@ class Flash(Retriever):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.0,
+      'similarity': 1,
       'tags': ['paris', 'capital'],
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.5,
+      'similarity': 1,
       'tags': ['paris', 'eiffel', 'tower'],
       'title': 'Eiffel tower'}]
 
@@ -84,7 +84,7 @@ class Flash(Retriever):
         self.documents = collections.defaultdict(list)
         self.keywords = KeywordProcessor() if keywords is None else keywords
 
-    def add(self, documents: list) -> "Flash":
+    def add(self, documents: list, **kwargs) -> "Flash":
         """Add keywords to the retriever. Streaming friendly.
 
         Parameters
