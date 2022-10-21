@@ -14,7 +14,12 @@ documents = [
         "article": "Eiffel tower is based in Paris",
         "author": "Wikipedia",
     },
-    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wikipedia"},
+    {
+        "id": 2,
+        "title": "Montreal",
+        "article": "Montreal is in Canada.",
+        "author": "Wikipedia",
+    },
 ]
 
 ranker = rank.Encoder(

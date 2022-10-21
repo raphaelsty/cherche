@@ -178,12 +178,16 @@ class STEncoder:
 
     """
 
-    def __init__(self, session, tokenizer, layers: list, max_length: typing.Optional[int] = None):
+    def __init__(
+        self, session, tokenizer, layers: list, max_length: typing.Optional[int] = None
+    ):
         self.session = session
         self.tokenizer = tokenizer
         self.layers = layers
         self.max_length = (
-            max_length if max_length is not None else tokenizer.__dict__["model_max_length"]
+            max_length
+            if max_length is not None
+            else tokenizer.__dict__["model_max_length"]
         )
 
     def encode(self, sentences: str | list):

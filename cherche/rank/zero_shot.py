@@ -111,7 +111,10 @@ class ZeroShot:
 
         scores = self.encoder(
             q,
-            [" ".join([document.get(field, "") for field in self.on]) for document in documents],
+            [
+                " ".join([document.get(field, "") for field in self.on])
+                for document in documents
+            ],
             multi_label=self.multi_class,
         )
 

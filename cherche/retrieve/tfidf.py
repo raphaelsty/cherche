@@ -88,11 +88,15 @@ class TfIdf(Retriever):
         self.tfidf = TfidfVectorizer() if tfidf is None else tfidf
 
         self.documents = {
-            index: {self.key: document[self.key]} for index, document in enumerate(documents)
+            index: {self.key: document[self.key]}
+            for index, document in enumerate(documents)
         }
         self.matrix = csc_matrix(
             self.tfidf.fit_transform(
-                [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
+                [
+                    " ".join([doc.get(field, "") for field in self.on])
+                    for doc in documents
+                ]
             )
         )
 
@@ -110,7 +114,9 @@ class TfIdf(Retriever):
         qs = self.tfidf.transform([q])
         Xq = np.zeros((self.matrix.shape[0],))
         if len(qs.indices > 0):
-            Xq = np.concatenate([self.matrix.getcol(xqs).toarray() for xqs in qs.indices], axis=1)
+            Xq = np.concatenate(
+                [self.matrix.getcol(xqs).toarray() for xqs in qs.indices], axis=1
+            )
             Xq = np.dot(Xq, np.array(qs.data))
         similarities = Xq
 

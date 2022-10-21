@@ -41,7 +41,8 @@ class _BM25(Retriever):
         self.bm25 = bm25
         self.tokenizer = tokenizer
         self.documents = {
-            index: {self.key: document[self.key]} for index, document in enumerate(documents)
+            index: {self.key: document[self.key]}
+            for index, document in enumerate(documents)
         }
         # Avoid adding documents to inversed index.
         self.ids = {}
@@ -160,7 +161,12 @@ class BM25Okapi(_BM25):
         epsilon: float = 0.25,
     ) -> None:
         super().__init__(
-            key=key, on=on, documents=documents, bm25=rank_bm25okapi, tokenizer=tokenizer, k=k
+            key=key,
+            on=on,
+            documents=documents,
+            bm25=rank_bm25okapi,
+            tokenizer=tokenizer,
+            k=k,
         )
 
         self.model = self.bm25(
@@ -252,7 +258,12 @@ class BM25L(_BM25):
         delta: float = 0.5,
     ) -> None:
         super().__init__(
-            key=key, on=on, documents=documents, bm25=rank_bm25l, tokenizer=tokenizer, k=k
+            key=key,
+            on=on,
+            documents=documents,
+            bm25=rank_bm25l,
+            tokenizer=tokenizer,
+            k=k,
         )
 
         self.model = self.bm25(

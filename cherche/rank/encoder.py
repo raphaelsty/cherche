@@ -101,7 +101,9 @@ class Encoder(Ranker):
         path: str | typing.Optionnal = None,
         similarity=cosine,
     ) -> None:
-        super().__init__(key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity)
+        super().__init__(
+            key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity
+        )
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
         """Encode input query and ranks documents based on the similarity between the query and

@@ -78,7 +78,8 @@ class Lunr(Retriever):
         super().__init__(key=key, on=on, k=k)
 
         self.documents = {
-            str(document[self.key]): {self.key: document[self.key]} for document in documents
+            str(document[self.key]): {self.key: document[self.key]}
+            for document in documents
         }
 
         self.idx = lunr(
@@ -86,7 +87,8 @@ class Lunr(Retriever):
             fields=tuple(self.on),
             # Lunr does not handle missing fields.
             documents=[
-                {field: doc.get(field, "") for field in [self.key] + self.on} for doc in documents
+                {field: doc.get(field, "") for field in [self.key] + self.on}
+                for doc in documents
             ],
         )
 

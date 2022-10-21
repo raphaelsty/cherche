@@ -106,7 +106,9 @@ class DPR(Ranker):
         path: str | typing.Optionnal = None,
         similarity=dot,
     ) -> None:
-        super().__init__(key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity)
+        super().__init__(
+            key=key, on=on, encoder=encoder, k=k, path=path, similarity=similarity
+        )
         self.query_encoder = query_encoder
 
     def __call__(self, q: str, documents: list, **kwargs) -> list:
@@ -124,7 +126,9 @@ class DPR(Ranker):
         if not documents:
             return []
 
-        emb_q = self.query_encoder(q) if q not in self.embeddings else self.embeddings[q]
+        emb_q = (
+            self.query_encoder(q) if q not in self.embeddings else self.embeddings[q]
+        )
 
         emb_documents = self._emb_documents(documents=documents)
 

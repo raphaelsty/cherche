@@ -162,10 +162,14 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
             for candidate in candidates[:k]:
                 if candidate in golds:
                     positives += 1
-            recall[k].update(positives / len(golds)) if positives > 0 else recall[k].update(0)
+            recall[k].update(positives / len(golds)) if positives > 0 else recall[
+                k
+            ].update(0)
 
         for k, candidate in enumerate(candidates):
-            global_precision.update(1) if candidate in golds else global_precision.update(0)
+            global_precision.update(
+                1
+            ) if candidate in golds else global_precision.update(0)
 
         # R-Precision
         relevant = 0
@@ -179,13 +183,18 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
         if k == 0:
             continue
         f1[k] = (
-            (2 * precision[k].get() * recall[k].get()) / (precision[k].get() + recall[k].get())
+            (2 * precision[k].get() * recall[k].get())
+            / (precision[k].get() + recall[k].get())
             if (precision[k].get() + recall[k].get()) > 0
             else 0
         )
 
-    metrics = {f"Precision@{k}": f"{metric.get():.2%}" for k, metric in precision.items()}
-    metrics.update({f"Recall@{k}": f"{metric.get():.2%}" for k, metric in recall.items()})
+    metrics = {
+        f"Precision@{k}": f"{metric.get():.2%}" for k, metric in precision.items()
+    }
+    metrics.update(
+        {f"Recall@{k}": f"{metric.get():.2%}" for k, metric in recall.items()}
+    )
     metrics.update({f"F1@{k}": f"{metric:.2%}" for k, metric in f1.items()})
     metrics.update({"R-Precision": f"{r_precision.get():.2%}"})
     metrics.update({"Precision": f"{global_precision.get():.2%}"})

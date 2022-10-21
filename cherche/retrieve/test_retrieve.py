@@ -15,13 +15,21 @@ def cherche_retrievers(on: str, k: int = None):
 
 def documents():
     return [
-        {"title": "Paris", "article": "This town is the capital of France", "author": "Wikipedia"},
+        {
+            "title": "Paris",
+            "article": "This town is the capital of France",
+            "author": "Wikipedia",
+        },
         {
             "title": "Eiffel tower",
             "article": "Eiffel tower is based in Paris",
             "author": "Wikipedia",
         },
-        {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wikipedia"},
+        {
+            "title": "Montreal",
+            "article": "Montreal is in Canada.",
+            "author": "Wikipedia",
+        },
     ]
 
 
@@ -180,13 +188,19 @@ def test_elastic(documents, k):
             k=k,
         )
 
-        retriever = retrieve.Elastic(key="title", on="article", k=k, es=es, index="test_cherche")
+        retriever = retrieve.Elastic(
+            key="title", on="article", k=k, es=es, index="test_cherche"
+        )
         retriever.reset()
         retriever.add(documents)
         test_retriever(retriever=retriever, documents=documents, k=k)
 
         retriever = retrieve.Elastic(
-            key="title", on=["title", "article", "author"], k=k, es=es, index="test_cherche"
+            key="title",
+            on=["title", "article", "author"],
+            k=k,
+            es=es,
+            index="test_cherche",
         )
         retriever.reset()
         retriever.add(documents)

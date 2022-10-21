@@ -204,7 +204,9 @@ class PipelineUnion(Compose):
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
 
             for document, similarity in zip(retrieved, similarities):
 
@@ -222,7 +224,8 @@ class PipelineUnion(Compose):
                 union.append(document)
 
         return [
-            {**document, **{"similarity": scores[document[self.key]].get()}} for document in union
+            {**document, **{"similarity": scores[document[self.key]].get()}}
+            for document in union
         ]
 
     def __or__(self, other) -> "PipelineUnion":
@@ -239,7 +242,9 @@ class PipelineUnion(Compose):
         """Pipeline operator."""
         if isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline(models=[self, {document[self.key]: document for document in other}])
+            return Pipeline(
+                models=[self, {document[self.key]: document for document in other}]
+            )
         return Pipeline(models=[self, other])
 
 
@@ -457,14 +462,18 @@ class PipelineIntersection(Compose):
 
         """
         query = {"q": q, **kwargs}
-        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(float)
+        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(
+            float
+        )
 
         for model in self.models:
             retrieved = model(**query)
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
             for document, similarity in zip(retrieved, similarities):
 
                 if "similarity" in document:
@@ -497,7 +506,9 @@ class PipelineIntersection(Compose):
         """Pipeline operator."""
         if isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline(models=[self, {document[self.key]: document for document in other}])
+            return Pipeline(
+                models=[self, {document[self.key]: document for document in other}]
+            )
         return Pipeline(models=[self, other])
 
 
@@ -683,7 +694,9 @@ class PipelineVote(Compose):
         """
         query = {"q": q, **kwargs}
 
-        scores, documents = collections.defaultdict(float), collections.defaultdict(dict)
+        scores, documents = collections.defaultdict(float), collections.defaultdict(
+            dict
+        )
 
         for model in self.models:
 
@@ -692,7 +705,9 @@ class PipelineVote(Compose):
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
             for doc, similarity in zip(retrieved, similarities):
                 scores[doc[self.key]] += float(similarity) / len(self.models)
                 documents[doc[self.key]] = doc
@@ -702,7 +717,9 @@ class PipelineVote(Compose):
         if not scores or not documents:
             return []
 
-        for key, similarity in sorted(scores.items(), key=lambda item: item[1], reverse=True):
+        for key, similarity in sorted(
+            scores.items(), key=lambda item: item[1], reverse=True
+        ):
             doc = documents[key]
             doc["similarity"] = similarity
             ranked.append(doc)
@@ -724,7 +741,9 @@ class PipelineVote(Compose):
     def __add__(self, other) -> "Pipeline":
         if isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline(models=[self, {document[self.key]: document for document in other}])
+            return Pipeline(
+                models=[self, {document[self.key]: document for document in other}]
+            )
         return Pipeline(models=[self, other])
 
 
@@ -906,6 +925,7 @@ class Pipeline(Compose):
         if isinstance(other, list):
             # Documents are part of the pipeline.
             return Pipeline(
-                models=self.models + [{document[self.key]: document for document in other}]
+                models=self.models
+                + [{document[self.key]: document for document in other}]
             )
         return Pipeline(models=self.models + [other])

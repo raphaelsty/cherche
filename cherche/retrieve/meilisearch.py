@@ -125,7 +125,9 @@ class Meilisearch(Retriever):
         if opt_params is None:
             opt_params = self.fields
 
-        for rank, document in enumerate(self.index.search(q, opt_params=opt_params)["hits"]):
+        for rank, document in enumerate(
+            self.index.search(q, opt_params=opt_params)["hits"]
+        ):
             document[self.key] = document.pop("id")
             document["similarity"] = 1 / (rank + 1)
             documents.append(document)

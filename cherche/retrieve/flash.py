@@ -101,7 +101,9 @@ class Flash(Retriever):
                     for tag in document[field]:
                         self.documents[tag].append({self.key: document[self.key]})
                 else:
-                    self.documents[document[field]].append({self.key: document[self.key]})
+                    self.documents[document[field]].append(
+                        {self.key: document[self.key]}
+                    )
                 self._add(document=document[field])
         return self
 
@@ -116,7 +118,9 @@ class Flash(Retriever):
     def __call__(self, q: str) -> list:
         """Retrieve tagss."""
         documents = list(
-            chain.from_iterable([self.documents[tag] for tag in self.keywords.extract_keywords(q)])
+            chain.from_iterable(
+                [self.documents[tag] for tag in self.keywords.extract_keywords(q)]
+            )
         )
 
         # Remove duplicates documents

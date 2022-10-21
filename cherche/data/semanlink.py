@@ -55,10 +55,14 @@ def arxiv_tags(
      'broader_related']
 
     """
-    with open(pathlib.Path(__file__).parent.joinpath("semanlink/arxiv.json"), "r") as input_file:
+    with open(
+        pathlib.Path(__file__).parent.joinpath("semanlink/arxiv.json"), "r"
+    ) as input_file:
         docs = json.load(input_file)
 
-    with open(pathlib.Path(__file__).parent.joinpath("semanlink/tags.json"), "r") as input_file:
+    with open(
+        pathlib.Path(__file__).parent.joinpath("semanlink/tags.json"), "r"
+    ) as input_file:
         tags = json.load(input_file)
 
     # Filter arxiv tags
@@ -85,7 +89,9 @@ def arxiv_tags(
     # Filter arxiv tags
     documents = []
     for tag in counter:
-        documents.append({key: value for key, value in tags[tag].items() if len(value) >= 1})
+        documents.append(
+            {key: value for key, value in tags[tag].items() if len(value) >= 1}
+        )
 
     for tag in documents:
         for field, include in [

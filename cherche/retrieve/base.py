@@ -21,7 +21,9 @@ class Retriever(abc.ABC):
 
     """
 
-    def __init__(self, key: str, on: typing.Union[str, list], k: typing.Optional[int]) -> None:
+    def __init__(
+        self, key: str, on: typing.Union[str, list], k: typing.Optional[int]
+    ) -> None:
         super().__init__()
         self.key = key
         self.on = on if isinstance(on, list) else [on]
@@ -52,7 +54,9 @@ class Retriever(abc.ABC):
             return Pipeline(self, other.models)
         elif isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline([self, {document[self.key]: document for document in other}])
+            return Pipeline(
+                [self, {document[self.key]: document for document in other}]
+            )
         return Pipeline([self, other])
 
     def __or__(self, other) -> Union:

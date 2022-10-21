@@ -47,7 +47,11 @@ class QAEncoder:
         for q, c in zip(question, context):
 
             inputs = self.tokenizer(
-                q, c, add_special_tokens=True, truncation="only_second", return_tensors="np"
+                q,
+                c,
+                add_special_tokens=True,
+                truncation="only_second",
+                return_tensors="np",
             )
 
             start, end = self.session.run(input_feed=dict(inputs), output_names=None)
@@ -64,7 +68,9 @@ class QAEncoder:
                     "start": span_start,
                     "end": span_end + 1,
                     "score": start[span_start] * end[span_end],
-                    "answer": self.tokenizer.decode(inputs[span_start : span_end + 1]).strip(),
+                    "answer": self.tokenizer.decode(
+                        inputs[span_start : span_end + 1]
+                    ).strip(),
                 }
             )
 
@@ -144,7 +150,9 @@ def qa(
 
     model.save_pretrained(name)
 
-    config = transformers.AutoConfig.from_pretrained(name, from_tf=False, local_files_only=True)
+    config = transformers.AutoConfig.from_pretrained(
+        name, from_tf=False, local_files_only=True
+    )
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         name, from_tf=False, local_files_only=True, config=config
     )

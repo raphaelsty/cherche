@@ -20,7 +20,9 @@ class UnionIntersection(Compose):
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""
         if isinstance(other, list):
-            return Pipeline([self, {document[self.models[0].key]: document for document in other}])
+            return Pipeline(
+                [self, {document[self.models[0].key]: document for document in other}]
+            )
         return Pipeline([self, other])
 
     def __or__(self, other) -> PipelineUnion:
@@ -142,7 +144,9 @@ class Union(UnionIntersection):
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
             for document, similarity in zip(retrieved, similarities):
 
                 # Remove similarities to avoid duplicates
@@ -157,7 +161,10 @@ class Union(UnionIntersection):
                     continue
                 union.append(document)
 
-        return [{**document, **{"similarity": scores[document[self.key]]}} for document in union]
+        return [
+            {**document, **{"similarity": scores[document[self.key]]}}
+            for document in union
+        ]
 
     def __or__(self, other) -> "Union":
         """Union operator"""
@@ -256,14 +263,18 @@ class Intersection(UnionIntersection):
 
         """
         query = {"q": q, **kwargs}
-        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(float)
+        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(
+            float
+        )
 
         for model in self.models:
             retrieved = model(**query)
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
             for document, similarity in zip(retrieved, similarities):
 
                 if "similarity" in document:
@@ -347,7 +358,9 @@ class Vote(UnionIntersection):
         """
         query = {"q": q, **kwargs}
 
-        scores, documents = collections.defaultdict(float), collections.defaultdict(dict)
+        scores, documents = collections.defaultdict(float), collections.defaultdict(
+            dict
+        )
 
         for model in self.models:
             retrieved = model(**query)
@@ -355,7 +368,9 @@ class Vote(UnionIntersection):
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
             for doc, similarity in zip(retrieved, similarities):
                 scores[doc[self.key]] += float(similarity) / len(self.models)
                 documents[doc[self.key]] = doc
@@ -365,7 +380,9 @@ class Vote(UnionIntersection):
         if not scores or not documents:
             return []
 
-        for key, similarity in sorted(scores.items(), key=lambda item: item[1], reverse=True):
+        for key, similarity in sorted(
+            scores.items(), key=lambda item: item[1], reverse=True
+        ):
             doc = documents[key]
             doc["similarity"] = similarity
             ranked.append(doc)

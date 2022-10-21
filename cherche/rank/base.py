@@ -30,14 +30,18 @@ class Ranker(abc.ABC):
 
     """
 
-    def __init__(self, key: str, on: str | list, encoder, k: int, path: str, similarity) -> None:
+    def __init__(
+        self, key: str, on: str | list, encoder, k: int, path: str, similarity
+    ) -> None:
         self.key = key
         self.on = on if isinstance(on, list) else [on]
         self.encoder = encoder
         self.k = k
         self.path = path
         self.similarity = similarity
-        self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
+        self.embeddings = (
+            self.load_embeddings(path=path) if self.path is not None else {}
+        )
 
     @property
     def type(self):
@@ -75,7 +79,9 @@ class Ranker(abc.ABC):
 
             elif document[self.key] not in self.embeddings:
                 keys.append(document[self.key])
-                documents_rankers.append(" ".join([document.get(field, "") for field in self.on]))
+                documents_rankers.append(
+                    " ".join([document.get(field, "") for field in self.on])
+                )
 
         if documents_rankers:
             for key, embedding in zip(keys, self.encoder(documents_rankers)):
@@ -143,7 +149,9 @@ class Ranker(abc.ABC):
             return other + self
         elif isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline([self, {document[self.key]: document for document in other}])
+            return Pipeline(
+                [self, {document[self.key]: document for document in other}]
+            )
         return Pipeline(models=[other, self])
 
     def __or__(self, other) -> Union:

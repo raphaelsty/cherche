@@ -32,7 +32,9 @@ class Compose(abc.ABC):
     def __repr__(self) -> str:
         repr = "\n".join(
             [
-                model.__repr__() if not isinstance(model, dict) else "Mapping to documents"
+                model.__repr__()
+                if not isinstance(model, dict)
+                else "Mapping to documents"
                 for model in self.models
             ]
         )

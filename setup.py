@@ -13,6 +13,7 @@ base_packages = [
     "meilisearch >= 0.22.1",
     "more-itertools >= 9.0.0",
     "numpy >= 1.19.0",
+    "pymilvus >= 2.1.3",
     "rank-bm25 == 0.2.1",
     "rapidfuzz >= 1.9.1",
     "river >= 0.8.0",
@@ -54,7 +55,9 @@ setuptools.setup(
         "onnxgpu": base_packages + onnxgpu,
         "doc": base_packages + doc,
     },
-    package_data={"cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]},
+    package_data={
+        "cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

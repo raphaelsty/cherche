@@ -150,7 +150,11 @@ class RAG(Generation):
         ]
 
         doc_scores = torch.tensor(
-            [softmax([document.get("similarity", 1.0) for document in documents], axis=0)],
+            [
+                softmax(
+                    [document.get("similarity", 1.0) for document in documents], axis=0
+                )
+            ],
             dtype=torch.float,
         )
 
@@ -180,6 +184,8 @@ class RAG(Generation):
                 {**document, **{"answer": answer.strip()}}
                 for document, answer in zip(
                     documents[: self.k] if self.k is not None else documents,
-                    self.tokenizer.batch_decode(generator_ids, skip_special_tokens=True),
+                    self.tokenizer.batch_decode(
+                        generator_ids, skip_special_tokens=True
+                    ),
                 )
             ]

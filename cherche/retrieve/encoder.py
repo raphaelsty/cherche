@@ -2,11 +2,10 @@ __all__ = ["Encoder"]
 
 import typing
 
-import faiss
 import more_itertools
 import tqdm
 
-from ..index import Faiss
+from ..index import Faiss, Milvus
 from .base import Retriever
 
 
@@ -76,7 +75,9 @@ class Encoder(Retriever):
 
         if index is None:
             self.index = Faiss(key=self.key)
-        elif isinstance(index, faiss):
+        elif isinstance(index, Milvus) or isinstance(index, Faiss):
+            self.index = index
+        else:
             self.index = Faiss(key=self.key, index=index)
 
     def __len__(self) -> int:
@@ -109,7 +110,14 @@ class Encoder(Retriever):
             )
         return self
 
-    def __call__(self, q: str) -> list:
+    def __call__(
+        self,
+        q: str,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs
+    ) -> list:
         """Search for documents.
 
         Parameters
@@ -117,4 +125,13 @@ class Encoder(Retriever):
         q
             Query.
         """
-        return self.index(embedding=self.encoder([q]), k=self.k)
+        return self.index(
+            **{
+                "embedding": self.encoder([q]),
+                "k": self.k,
+                "key": self.key,
+                "expr": expr,
+                "consistency_level": consistency_level,
+                "partition_names": partition_names,
+            }
+        )

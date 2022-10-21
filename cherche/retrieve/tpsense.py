@@ -117,7 +117,9 @@ class Typesense(Retriever):
         if query is None:
             query = {"q": q, "query_by": self.on}
 
-        for rank, document in enumerate(self.collection.documents.search(query)["hits"]):
+        for rank, document in enumerate(
+            self.collection.documents.search(query)["hits"]
+        ):
             document = document["document"]
             document["similarity"] = 1 / (1 + rank)
             document[self.key] = document.pop("id")

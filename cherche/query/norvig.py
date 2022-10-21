@@ -81,7 +81,8 @@ class Norvig(Query):
     def correct(self, word: str) -> float:
         """Most probable spelling correction for word."""
         return max(
-            self._candidates(word), key=lambda w: self._probability(w.lower() if self.lower else w)
+            self._candidates(word),
+            key=lambda w: self._probability(w.lower() if self.lower else w),
         )
 
     def _probability(self, word: str) -> float:
