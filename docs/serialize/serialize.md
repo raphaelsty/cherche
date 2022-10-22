@@ -89,12 +89,11 @@ When transferring the pipeline that runs on the GPU to a machine that will run i
 # Pre-compute embeddings of the ranker
 >>> search.add(documents=documents)
 
-# Replace the GPU-based encoder with a CPU-based encoder. 
+# Replace the GPU-based encoder with a CPU-based encoder.
 >>> ranker.encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode
 
 with open("search.pkl", "wb") as search_file:
     pickle.dump(search, search_file)
-
 ```
 
 ### Loading on CPU

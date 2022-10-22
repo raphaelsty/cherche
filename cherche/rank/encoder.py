@@ -4,9 +4,6 @@ __all__ = ["Encoder"]
 
 import typing
 
-import numpy as np
-from cherche import similarity
-
 from ..similarity import cosine
 from .base import Ranker
 
@@ -108,6 +105,9 @@ class Encoder(Ranker):
     def __call__(self, q: str, documents: list, **kwargs) -> list:
         """Encode input query and ranks documents based on the similarity between the query and
         the selected field of the documents.
+
+        https://pymilvus.readthedocs.io/en/latest/tutorial.html
+        status, documents = client.get_entity_by_id(collection_name, [id_1, id_2])
 
         Parameters
         ----------

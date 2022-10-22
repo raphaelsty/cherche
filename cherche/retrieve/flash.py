@@ -115,8 +115,8 @@ class Flash(Retriever):
             self.keywords.add_keyword(document)
         return self
 
-    def __call__(self, q: str) -> list:
-        """Retrieve tagss."""
+    def __call__(self, q: str, **kwargs) -> list:
+        """Retrieve tags."""
         documents = list(
             chain.from_iterable(
                 [self.documents[tag] for tag in self.keywords.extract_keywords(q)]

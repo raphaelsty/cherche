@@ -61,9 +61,12 @@ Large       |
 Large       |
 |  retrieve.Typesense  |     ✅     | disk     |
 Large       |
-|   retrieve.Flash   |     ✅     | memory   | Medium      |
+|  retrieve.Encoder * Milvus |     ✅     | disk   | large      |
+
+|  retrieve.DPR * Milvus |     ✅     | disk   | large      |
 |  retrieve.Encoder  |     ✅     | memory   | Medium      |
 |  retrieve.DPR  |     ✅     | memory   | Medium      |
+|   retrieve.Flash   |     ✅     | memory   | Medium      |
 |    retrieve.Fuzz   |     ✅     | memory   | Medium      |
 |   retrieve.TfIdf   |     ❌     | memory   | Medium      |
 |   retrieve.BM25L   |     ❌     | memory   | Medium      |
