@@ -48,33 +48,10 @@ The `rank.Encoder` and `rank.DPR` rankers pre-compute the document embeddings on
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 2,
-...    path = "encoder.pkl"
 ... )
 
->>> search = retriever + ranker 
+>>> search = retriever + ranker
 >>> search.add(documents)
 >>> search(q="france")
 [{'id': 0, 'similarity': 0.44967225}, {'id': 2, 'similarity': 0.3609671}]
-```
-
-## Save ranker embeddings
-
-At initialization, the `rank.Encoder` and `rank.DPR` have a `path` parameter. The ranker will export the embeddings calculated into a Pickle file if we specify this parameter. The pre-computed embeddings are a dictionary with the document id as key and the document embedding
-as value. We can reload the pre-computed embeddings in a new session by keeping the pickle file and specifying the `path` parameter with the address of the pickle file. We will have to call the `add` method and index all the documents, but this step will be quick because we have already
-pre-calculated the embeddings.
-
-Otherwise, it is also possible to serialize it directly with Pickle to save a ranker.
-
-```python
->>> import pickle
->>> with open("pipeline.pkl", "wb") as output_file:
-...    pickle.dump(search, output_file)
-```
-
-You can load your pipeline in another session using pickle again.
-
-```python
->>> import pickle
->>> with open("pipeline.pkl", "rb") as input_file:
-...    search = pickle.load(input_file)
 ```

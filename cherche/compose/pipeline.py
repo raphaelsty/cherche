@@ -36,14 +36,14 @@ class PipelineUnion(Compose):
     Union Pipeline
     -----
     TfIdf retriever
-        key: id
-        on: title
-        documents: 3
+         key: id
+         on: title
+         documents: 3
     Mapping to documents
     TfIdf retriever
-        key: id
-        on: author
-        documents: 3
+         key: id
+         on: author
+         documents: 3
     Mapping to documents
     -----
 
@@ -439,6 +439,7 @@ class PipelineIntersection(Compose):
          on: title, article
          k: 2
          similarity: cosine
+         Embeddings pre-computed: 3
 
     """
 
@@ -791,7 +792,7 @@ class Pipeline(Compose):
          on: article
          k: None
          similarity: cosine
-         embeddings stored at: pipeline_encoder.pkl
+         Embeddings pre-computed: 3
     Mapping to documents
 
     >>> print(search(q = "Paris"))
@@ -826,7 +827,7 @@ class Pipeline(Compose):
          on: article
          k: None
          similarity: cosine
-         embeddings stored at: pipeline_encoder.pkl
+         Embeddings pre-computed: 3
     Mapping to documents
     Question Answering
          model: deepset/roberta-base-squad2

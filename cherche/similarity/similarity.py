@@ -71,7 +71,7 @@ def dot(emb_q: np.ndarray, emb_documents: list) -> list:
     ... ]
 
     >>> print(similarity.dot(emb_q=emb_q, emb_documents=emb_documents))
-    [(0, 10), (1, 2)]
+    [(0, 10.0), (1, 2.0)]
 
     """
     distances = {}

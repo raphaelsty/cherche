@@ -10,8 +10,6 @@ The `ranker.ZeroShot` model is slow because no pre-computation is possible. Ther
 The zero-shot model needs the content of the documents to re-rank the retriever's output candidates. We can provide the documents to the `ranker.ZeroShot` using a pipeline:
 
 ```python
-# Addind documents is mandatory when rank.ZeroShot is paired with retrieve.TfIdf, retrieve.Lunr, 
-# retrieve.BM25L and retrieve.BM25Okapi.
 >>> search = retriever + documents + ranker
 ```
 

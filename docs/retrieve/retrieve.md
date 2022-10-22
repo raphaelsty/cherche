@@ -23,8 +23,7 @@ Here is the list of available retrievers using Cherche:
 
 ## k and on parameters
 
-The main parameter of retrievers is `on`; it is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the
-order provided.
+The main parameter of retrievers is `on`; it is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the order provided.
 
 The retrievers all have a `k`-parameter which allows selecting the number of documents to retrieve.
 The default value is `None`, i.e., the retrievers will retrieve all documents matching the query.

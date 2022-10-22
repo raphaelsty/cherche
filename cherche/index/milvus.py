@@ -1,5 +1,7 @@
 __all__ = ["Milvus"]
 
+import typing
+
 import numpy as np
 
 
@@ -171,6 +173,13 @@ class Milvus:
     [{'id': 1, 'similarity': 0.008724426096678638, 'title': 'Madrid'},
      {'id': 0, 'similarity': 0.0066852363141677515, 'title': 'Paris'}]
 
+    >>> known, embeddings, unknown = milvus.get(key="id", values=[1, 2, 999])
+    >>> known
+    [1, 2]
+
+    >>> unknown
+    [999]
+
     >>> utility.drop_collection("documentation")
 
     References
@@ -212,7 +221,7 @@ class Milvus:
         expr: str = None,
         consistency_level: str = None,
         partition_names: list = None,
-        **kwargs
+        **kwargs,
     ) -> list:
         """Retrieve documents
 
@@ -260,3 +269,28 @@ class Milvus:
             }
             for fields, distance in zip(match, match.distances)
         ]
+
+    def get(self, key: str, values: list, **kwargs) -> typing.Tuple[list, list, list]:
+        """Extract specific documents from their ids.
+
+        Parameters
+        ----------
+        key
+            Field name of the primary key.
+        values
+            List of keys associated with documents to retrieve.
+        """
+        known, embeddings = {}, []
+        for document in self.collection.query(
+            expr=f"{key} in {values}",
+            output_fields=[self.vector_field],
+            consistency_level="Strong",
+        ):
+            known[document[key]] = True
+            embeddings.append(document[self.vector_field])
+
+        return (
+            [key for key in known.keys()],
+            embeddings,
+            [key for key in values if key not in known],
+        )

@@ -6,7 +6,7 @@ encodes the documents.
 
 ## Pre-compute
 
-The `rank.DPR` can pre-compute the set of document embeddings to speed up search in the production environment. To store the embeddings of the ranker, it is necessary to specify the `path` parameter. `rank.Encoder` will load the embeddings from the `path` file when calling the `add` function. A GPU will significantly reduce pre-computing time dedicated to document embeddings.
+The `rank.DPR` can pre-compute the set of document embeddings to speed up search in the production environment. A GPU will significantly reduce pre-computing time dedicated to document embeddings.
 
 ## Quick Start
 
@@ -43,7 +43,6 @@ The `rank.DPR` can pre-compute the set of document embeddings to speed up search
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
 ...    k = 5,
-...    path = "dpr.pkl"
 ... )
 
 >>> search = retriever + ranker
@@ -110,7 +109,7 @@ class CustomDPR:
 model = CustomDPR()
 
 # Your model should pass these tests, i.e Sentence Bert API.
-assert model.documents(["Paris", "France", "Bordeaux"]).shape[0] == 3 
+assert model.documents(["Paris", "France", "Bordeaux"]).shape[0] == 3
 assert isinstance(model.documents(["Paris", "France", "Bordeaux"]), np.ndarray)
 
 assert len(model.documents("Paris").shape) == 1
@@ -128,6 +127,5 @@ retriever = rank.DPR(
     key = "id",
     on = ["title", "article"],
     k = 2,
-    path = "custom_dpr.pkl"
 )
 ```

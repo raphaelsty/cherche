@@ -4,7 +4,7 @@ from cherche.rank.zero_shot import ZeroShot
 from .. import rank
 
 
-def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
+def cherche_rankers(key: str, on: str, k: int = None):
     """List of rankers available in cherche."""
     from sentence_transformers import SentenceTransformer
     from transformers import pipeline
@@ -20,7 +20,6 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
                 "facebook-dpr-question_encoder-single-nq-base"
             ).encode,
             k=k,
-            path=path,
         ),
         rank.Encoder(
             key=key,
@@ -29,7 +28,6 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
                 "sentence-transformers/all-mpnet-base-v2"
             ).encode,
             k=k,
-            path=path,
         ),
         rank.ZeroShot(
             key=key,
@@ -81,7 +79,8 @@ def test_ranker(ranker, documents: list, key: str, k: int):
     """Test ranker. Test if the number of ranked documents is coherent.
     Check for empty retrieved documents should returns an empty list.
     """
-    ranker.add(documents)
+    if not isinstance(ranker, ZeroShot):
+        ranker.add(documents)
 
     # Zero shot needs all the fields
     if not isinstance(ranker, ZeroShot):

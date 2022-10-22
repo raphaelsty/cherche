@@ -42,7 +42,6 @@ Let's create a neural search pipeline for a French user. Let's start by translat
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 2,
-...    path = "encoder.pkl"
 ... )
 
 # Convert query from french to english
@@ -110,7 +109,6 @@ The `translate.TranslateQuery` model can be used to translate the summary output
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 2,
-...    path = "encoder.pkl"
 ... )
 
 # Convert query from french to english

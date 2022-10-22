@@ -106,7 +106,7 @@ class DPR(Retriever):
         for batch in tqdm.tqdm(
             more_itertools.chunked(documents, batch_size),
             position=0,
-            desc="Embeddings calculation.",
+            desc="Retriever embeddings calculation.",
             total=1 + len(documents) // batch_size,
         ):
             self.index.add(

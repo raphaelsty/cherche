@@ -53,14 +53,14 @@ The union operator `|` improves neural search recall by gathering documents retr
 Union of two retrievers
 
 ```python
->>> search = retriever_a | retriver_b
+>>> search = retriever_a | retriever_b
 >>> search.add(documents)
 ```
 
 Union of two retrievers folowed by a ranker
 
 ```python
->>> search = (retriever_a | retriver_b) + ranker
+>>> search = (retriever_a | retriever_b) + ranker
 >>> search.add(documents)
 ```
 
@@ -92,14 +92,14 @@ The intersection operator improves the precision of the model by filtering docum
 Intersection of two retrievers
 
 ```python
->>> search = retriever_a & retriver_b
+>>> search = retriever_a & retriever_b
 >>> search.add(documents)
 ```
 
 The intersection of two retrievers followed by a ranker:
 
 ```python
->>> search = (retriever_a & retriver_b) + ranker
+>>> search = (retriever_a & retriever_b) + ranker
 >>> search.add(documents)
 ```
 
@@ -131,14 +131,14 @@ The voting operator improves both the precision and recall of the model by compu
 Vote of two retrievers
 
 ```python
->>> search = retriever_a * retriver_b
+>>> search = retriever_a * retriever_b
 >>> search.add(documents)
 ```
 
 Vote of two retrievers followed by a ranker:
 
 ```python
->>> search = (retriever_a * retriver_b) + ranker
+>>> search = (retriever_a * retriever_b) + ranker
 >>> search.add(documents)
 ```
 
@@ -186,7 +186,6 @@ And here is the code:
 ...    on = ["prefLabel_text", "altLabel_text"],
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 10,
-...    path = "semanlink.pkl"
 ... )
 
 >>> precision = retrieve.Flash(

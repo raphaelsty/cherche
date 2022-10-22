@@ -52,7 +52,9 @@ def arxiv_tags(
      'comment',
      'uri',
      'broader_prefLabel',
-     'broader_related']
+     'broader_related',
+     'broader_prefLabel_text',
+     'prefLabel_text']
 
     """
     with open(

@@ -333,6 +333,5 @@ retriever = retrieve.DPR(
     key = "id",
     on = ["title", "article"],
     k = 2,
-    path = "custom_dpr.pkl"
 )
 ```
