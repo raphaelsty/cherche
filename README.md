@@ -82,7 +82,6 @@ ranker = rank.Encoder(
     on = ["title", "article"],
     encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     k = 3,
-    path = "encoder.pkl"
 )
 
 # Pipeline creation

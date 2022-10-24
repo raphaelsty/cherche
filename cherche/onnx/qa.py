@@ -123,7 +123,6 @@ def qa(
 
     >>> model
     Question Answering
-        model: test
         on: title, article
 
     >>> print(model(q="Where is the Eiffel tower?", documents=documents))

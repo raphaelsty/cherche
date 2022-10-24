@@ -784,15 +784,15 @@ class Pipeline(Compose):
 
     >>> search.add(documents=documents)
     TfIdf retriever
-         key: id
-         on: article
-         documents: 3
+        key: id
+        on: article
+        documents: 3
     Encoder ranker
-         key: id
-         on: article
-         k: None
-         similarity: cosine
-         Embeddings pre-computed: 3
+        key: id
+        on: article
+        k: None
+        similarity: cosine
+        Embeddings pre-computed: 3
     Mapping to documents
 
     >>> print(search(q = "Paris"))
@@ -819,19 +819,18 @@ class Pipeline(Compose):
 
     >>> search
     TfIdf retriever
-         key: id
-         on: article
-         documents: 3
+        key: id
+        on: article
+        documents: 3
     Encoder ranker
-         key: id
-         on: article
-         k: None
-         similarity: cosine
-         Embeddings pre-computed: 3
+        key: id
+        on: article
+        k: None
+        similarity: cosine
+        Embeddings pre-computed: 3
     Mapping to documents
     Question Answering
-         model: deepset/roberta-base-squad2
-         on: article
+        on: article
 
     >>> print(search(q = "What is based in Paris?"))
     [{'answer': 'Eiffel tower',

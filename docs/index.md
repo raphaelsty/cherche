@@ -14,7 +14,7 @@
 </div>
 <br>
 
-Cherche allows creating a neural search pipeline using retrievers and pre-trained language models as rankers. We dedicated Cherche to small to medium-sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
+Cherche allows creating a neural search pipeline using retrievers and pre-trained language models as rankers. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
 
 ![Alt text](img/doc.png)
 
@@ -77,7 +77,6 @@ ranker = rank.Encoder(
     on = ["title", "article"],
     encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     k = 3,
-    path = "encoder.pkl"
 )
 
 # Pipeline creation

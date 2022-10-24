@@ -18,9 +18,30 @@ class Compose(abc.ABC):
         return []
 
     def add(self, documents: list) -> "Compose":
+        """"""
+        history = {}
         for model in self.models:
             if hasattr(model, "add") and callable(model.add):
+
+                # Avoid indexing twice the same model, index or store.
+                if id(model) in history:
+                    continue
+                if hasattr(model, "index"):
+                    if id(model.index) in history:
+                        continue
+                if hasattr(model, "store"):
+                    if id(model.store) in history:
+                        continue
+
                 model = model.add(documents=documents)
+
+                history[id(model)] = True
+                if hasattr(model, "index"):
+                    history[model.index] = True
+
+                if hasattr(model, "store"):
+                    history[model.store] = True
+
         return self
 
     def reset(self) -> "Compose":

@@ -3,11 +3,9 @@ __all__ = ["Elastic"]
 import typing
 
 import more_itertools
-import numpy as np
 import tqdm
 from elasticsearch import Elasticsearch, helpers
 
-from ..rank import Ranker
 from .base import Retriever
 
 
@@ -48,19 +46,6 @@ class Elastic(Retriever):
     ...
     ...    retriever = retriever.add(documents=documents)
     ...    candidates = retriever(q="paris")
-    ...
-    ...    ranker = rank.Encoder(
-    ...         key = "id",
-    ...         encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-    ...         on = ["title", "article"],
-    ...         k = 10,
-    ...    )
-    ...
-    ...    retriever = retriever.reset()
-    ...    retriever = retriever.add_embeddings(documents=documents, ranker=ranker)
-    ...
-    ...    answers = retriever("Paris")
-    ...    assert answers[0]["embedding"].shape == (768,)
 
     References
     ----------
@@ -87,43 +72,6 @@ class Elastic(Retriever):
 
     def __len__(self) -> int:
         return int(self.es.cat.count(self.index, params={"format": "json"})[0]["count"])
-
-    def add_embeddings(
-        self, documents: list, ranker: Ranker = None, embeddings: list = None
-    ) -> "Elastic":
-        """Store documents and embeddings inside Elasticsearch using bulk indexing. Embeddings
-        parameter has the priority over ranker. If embeddings are provided, ElasticSearch will
-        index documents with their embeddings. If embeddings are not provided, the Ranker will
-        be called to compute embeddings. This method is useful if you have to deal with large
-        corpora.
-
-        Parameters
-        ----------
-        documents
-            List of documents to upload to Elasticsearch.
-        ranker
-              Elastic can store embeddings of the ranker to limit ram usage. If provided, when
-              elastic retrieves documents, it will retrieve embeddings also. If not provided, it
-              index embeddings.
-        embeddings
-            Elastic can store embeddings of the ranker to limit ram usage.
-
-        """
-        if embeddings is None:
-            embeddings = ranker.embs(documents=documents)
-
-        documents_embeddings = [
-            {
-                "_id": doc[self.key],
-                "_index": self.index,
-                "_source": {**doc, "embedding": embedding},
-            }
-            for doc, embedding in zip(documents, embeddings)
-        ]
-        helpers.bulk(self.es, documents_embeddings)
-        self.es.indices.refresh(index=self.index)
-
-        return self
 
     def add(self, documents: list, batch_size=128, **kwargs) -> "Elastic":
         """ElasticSearch bulk indexing.
@@ -188,9 +136,6 @@ class Elastic(Retriever):
         ranked = []
         for document in documents["hits"]["hits"]:
             document = {**document["_source"], "similarity": float(document["_score"])}
-            # Returns stored embeddings as numpy array.
-            if "embedding" in document:
-                document["embedding"] = np.array(document["embedding"])
             ranked.append(document)
 
         return ranked

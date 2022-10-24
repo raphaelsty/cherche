@@ -142,18 +142,11 @@ Start the milvus container:
 sudo docker-compose up -d
 ```
 
-Check that the milvus container is running:
-
-```sh
-
-```
-
-Stop the milvus container
+Stop the milvus container:
 
 ```sh
 sudo docker-compose down
 ```
-
 
 #### Collection
 
@@ -222,7 +215,7 @@ After creating the collection, we will create an index to be able to search. Mil
 ...    shards_num=2,
 ... )
 
-# Création de l'index
+# Creation of the index
 >>> _ = collection.create_index(
 ...    field_name = "embeddings",
 ...    index_params = {
