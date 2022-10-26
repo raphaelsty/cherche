@@ -10,3 +10,5 @@ nav:
     - dpr.md
     - fuzz.md
     - meilisearch.md
+    - typesense.md
+    - recommend.md

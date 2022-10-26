@@ -1,6 +1,7 @@
 __all__ = ["Pipeline"]
 
 import collections
+import typing
 
 from river import stats
 from scipy.special import softmax
@@ -184,16 +185,20 @@ class PipelineUnion(Compose):
         repr += "\n-----"
         return repr
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """Query for pipelines union.
 
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
         union = []
         scores = {}
 
@@ -453,16 +458,20 @@ class PipelineIntersection(Compose):
         repr += "\n-----"
         return repr
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """Retrieve documents.
 
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
         counter_docs, scores = collections.defaultdict(int), collections.defaultdict(
             float
         )
@@ -685,15 +694,19 @@ class PipelineVote(Compose):
         repr += "\n-----"
         return repr
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
 
         scores, documents = collections.defaultdict(float), collections.defaultdict(
             dict
@@ -866,16 +879,20 @@ class Pipeline(Compose):
     def __init__(self, models: list) -> None:
         super().__init__(models=models)
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """Compose pipeline
 
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {**kwargs}
+        query = {"user": user, **kwargs}
         summary = False
 
         for model in self.models:

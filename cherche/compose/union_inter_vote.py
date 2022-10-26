@@ -1,5 +1,6 @@
 __all__ = ["Intersection", "Union", "Vote"]
 import collections
+import typing
 
 from scipy.special import softmax
 
@@ -126,16 +127,20 @@ class Union(UnionIntersection):
                 self.key = model.key
                 break
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
         union = []
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
         scores = collections.defaultdict(float)
 
         for model in self.models:
@@ -254,15 +259,19 @@ class Intersection(UnionIntersection):
                 self.key = model.key
                 break
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
         counter_docs, scores = collections.defaultdict(int), collections.defaultdict(
             float
         )
@@ -348,15 +357,19 @@ class Vote(UnionIntersection):
                 self.key = model.key
                 break
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
 
         scores, documents = collections.defaultdict(float), collections.defaultdict(
             dict

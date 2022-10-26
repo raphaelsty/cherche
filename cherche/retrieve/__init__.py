@@ -7,6 +7,7 @@ from .flash import Flash
 from .fuzz import Fuzz
 from .lunr import Lunr
 from .meilisearch import Meilisearch
+from .recommend import Recommend
 from .tfidf import TfIdf
 from .tpsense import Typesense
 
@@ -21,6 +22,7 @@ __all__ = [
     "Fuzz",
     "Lunr",
     "Meilisearch",
+    "Recommend",
     "TfIdf",
     "Typesense",
 ]

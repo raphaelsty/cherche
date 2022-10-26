@@ -17,8 +17,8 @@ class Compose(abc.ABC):
     def __call__(self, q: str, **kwargs) -> list:
         return []
 
-    def add(self, documents: list) -> "Compose":
-        """"""
+    def add(self, documents: list, **kwargs) -> "Compose":
+        """Add new documents."""
         history = {}
         for model in self.models:
             if hasattr(model, "add") and callable(model.add):
@@ -33,7 +33,7 @@ class Compose(abc.ABC):
                     if id(model.store) in history:
                         continue
 
-                model = model.add(documents=documents)
+                model = model.add(documents=documents, **kwargs)
 
                 history[id(model)] = True
                 if hasattr(model, "index"):

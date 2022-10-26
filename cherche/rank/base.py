@@ -22,7 +22,12 @@ class MemoryStore:
         return len(self.embeddings)
 
     def add(
-        self, key: str, documents: list, embeddings: list, **kwargs
+        self,
+        embeddings: list,
+        key: str = None,
+        documents: list = None,
+        users=None,
+        **kwargs,
     ) -> "MemoryStore":
         """Pre-compute embeddings and store them at the selected path.
 
@@ -32,8 +37,12 @@ class MemoryStore:
             List of documents or list of string for embeddings pre-comptuting.
 
         """
-        for document, embedding in zip(documents, embeddings):
-            self.embeddings[document[key]] = embedding
+        if users is not None:
+            for user, embedding in zip(users, embeddings):
+                self.embeddings[user] = np.array(embedding).flatten()
+        elif documents is not None:
+            for document, embedding in zip(documents, embeddings):
+                self.embeddings[document[key]] = np.array(embedding).flatten()
         return self
 
     def get(self, values: list, **kwargs) -> typing.Tuple[list, list, list]:
