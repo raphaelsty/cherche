@@ -14,7 +14,7 @@
 </div>
 <br>
 
-Cherche allows creating a neural search pipeline using retrievers and pre-trained language models as rankers. We dedicated Cherche to small to medium-sized corpora. Cherche's main strength is its ability to build diverse and end-to-end pipelines.
+Cherche allows the creation of efficient neural search pipelines using retrievers and pre-trained language models as rankers. Cherche's main strength is its ability to build diverse and end-to-end pipelines from lexical matching, semantic matching, and collaborative filtering-based models.
 
 ![Alt text](docs/img/explain.png)
 
