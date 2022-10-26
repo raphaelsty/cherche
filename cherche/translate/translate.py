@@ -124,7 +124,8 @@ class Translate(BaseTranslate):
             [
                 item
                 for sublist in [
-                    [document.get(field, "") for field in self.on] for document in documents
+                    [document.get(field, "") for field in self.on]
+                    for document in documents
                 ]
                 for item in sublist
             ]
@@ -132,7 +133,9 @@ class Translate(BaseTranslate):
 
         documents = copy.deepcopy(documents)
         for document in documents:
-            for index, (content, field) in enumerate(zip(translated_documents, self.on)):
+            for index, (content, field) in enumerate(
+                zip(translated_documents, self.on)
+            ):
                 if index >= len(self.on):
                     break
                 document[field] = content["translation_text"]

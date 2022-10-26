@@ -47,7 +47,11 @@ class QAEncoder:
         for q, c in zip(question, context):
 
             inputs = self.tokenizer(
-                q, c, add_special_tokens=True, truncation="only_second", return_tensors="np"
+                q,
+                c,
+                add_special_tokens=True,
+                truncation="only_second",
+                return_tensors="np",
             )
 
             start, end = self.session.run(input_feed=dict(inputs), output_names=None)
@@ -64,7 +68,9 @@ class QAEncoder:
                     "start": span_start,
                     "end": span_end + 1,
                     "score": start[span_start] * end[span_end],
-                    "answer": self.tokenizer.decode(inputs[span_start : span_end + 1]).strip(),
+                    "answer": self.tokenizer.decode(
+                        inputs[span_start : span_end + 1]
+                    ).strip(),
                 }
             )
 
@@ -100,7 +106,7 @@ def qa(
     ONNX opset version set to: 13
     Loading pipeline (model: test, tokenizer: PreTrainedTokenizerFast(name_or_path='test', vocab_size=50265, model_max_len=512, is_fast=True, padding_side='right', truncation_side='right', special_tokens={'bos_token': AddedToken("<s>", rstrip=False, lstrip=False, single_word=False, normalized=True), 'eos_token': AddedToken("</s>", rstrip=False, lstrip=False, single_word=False, normalized=True), 'unk_token': AddedToken("<unk>", rstrip=False, lstrip=False, single_word=False, normalized=True), 'sep_token': AddedToken("</s>", rstrip=False, lstrip=False, single_word=False, normalized=True), 'pad_token': AddedToken("<pad>", rstrip=False, lstrip=False, single_word=False, normalized=True), 'cls_token': AddedToken("<s>", rstrip=False, lstrip=False, single_word=False, normalized=True), 'mask_token': AddedToken("<mask>", rstrip=False, lstrip=True, single_word=False, normalized=True)}))
     Creating folder test_onnx
-    Using framework PyTorch: 1.12.0.dev20220519
+    Using framework PyTorch: 1.12.1
     Found input input_ids with shape: {0: 'batch', 1: 'sequence'}
     Found input attention_mask with shape: {0: 'batch', 1: 'sequence'}
     Found output output_0 with shape: {0: 'batch', 1: 'sequence'}
@@ -117,7 +123,6 @@ def qa(
 
     >>> model
     Question Answering
-        model: test
         on: title, article
 
     >>> print(model(q="Where is the Eiffel tower?", documents=documents))
@@ -144,7 +149,9 @@ def qa(
 
     model.save_pretrained(name)
 
-    config = transformers.AutoConfig.from_pretrained(name, from_tf=False, local_files_only=True)
+    config = transformers.AutoConfig.from_pretrained(
+        name, from_tf=False, local_files_only=True
+    )
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         name, from_tf=False, local_files_only=True, config=config
     )

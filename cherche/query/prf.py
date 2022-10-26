@@ -66,7 +66,9 @@ class PRF(Query):
         self.nb_terms_per_doc = nb_terms_per_doc
         self.func = tf
 
-        documents = [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
+        documents = [
+            " ".join([doc.get(field, "") for field in self.on]) for doc in documents
+        ]
 
         self.tf = tf
         self.matrix = self.tf.fit_transform(documents)
@@ -98,7 +100,9 @@ class PRF(Query):
         terms = []
         for idx_document in idx_documents:
             document = self.matrix[idx_document].toarray().squeeze()
-            terms.extend(self._retrieve_terms(document=document, vocabulary=self.vocabulary))
+            terms.extend(
+                self._retrieve_terms(document=document, vocabulary=self.vocabulary)
+            )
         return terms
 
     def _retrieve_documents(self, matrix: np.ndarray, query: np.ndarray) -> np.ndarray:
@@ -112,8 +116,12 @@ class PRF(Query):
 
         return ind
 
-    def _retrieve_terms(self, document: np.ndarray, vocabulary: np.ndarray) -> typing.List[str]:
+    def _retrieve_terms(
+        self, document: np.ndarray, vocabulary: np.ndarray
+    ) -> typing.List[str]:
         """Extract top-terms in a given document."""
-        ind = np.argpartition(document, -self.nb_terms_per_doc)[-self.nb_terms_per_doc :]
+        ind = np.argpartition(document, -self.nb_terms_per_doc)[
+            -self.nb_terms_per_doc :
+        ]
         ind = ind[np.argsort((-document)[ind])]
         return vocabulary[ind].tolist()

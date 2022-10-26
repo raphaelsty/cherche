@@ -39,7 +39,9 @@ def cosine(emb_q: np.ndarray, emb_documents: list) -> list:
         )
     return [
         (index, float(distance))
-        for index, distance in sorted(distances.items(), key=lambda item: item[1], reverse=True)
+        for index, distance in sorted(
+            distances.items(), key=lambda item: item[1], reverse=True
+        )
     ]
 
 
@@ -69,7 +71,7 @@ def dot(emb_q: np.ndarray, emb_documents: list) -> list:
     ... ]
 
     >>> print(similarity.dot(emb_q=emb_q, emb_documents=emb_documents))
-    [(0, 10), (1, 2)]
+    [(0, 10.0), (1, 2.0)]
 
     """
     distances = {}
@@ -77,5 +79,7 @@ def dot(emb_q: np.ndarray, emb_documents: list) -> list:
         distances[index] = emb_q @ emb_document
     return [
         (index, float(distance))
-        for index, distance in sorted(distances.items(), key=lambda item: item[1], reverse=True)
+        for index, distance in sorted(
+            distances.items(), key=lambda item: item[1], reverse=True
+        )
     ]

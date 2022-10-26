@@ -1,7 +1,9 @@
 # Retrieve
 
 Retrievers speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers (slower) will then pull up the most relevant documents based on semantic
-similarity. The retrievers `retrieve.Elastic` and `retrieve.Encoder` are the only retrievers in Cherche that are compatible with large corpora. The other retrievers are adapted to small or medium-sized corpora since we will store documents in memory.
+similarity. The retrievers `retrieve.Elastic`, `retrieve.Meilisearch`, `retrieve.Typesense`, `retrieve.Encoder` and `retrieve.DPR` are the only retrievers in Cherche that are compatible with large corpora. The other retrievers are adapted to small or medium-sized corpora since we will store documents in memory.
+
+`retrieve.Encoder` and `retrieve.DPR` retrievers rely on semantic similarity, unlike the other retrievers, which match exact words.
 
 ## Retrievers
 
@@ -16,11 +18,12 @@ Here is the list of available retrievers using Cherche:
 - `retrieve.Encoder`
 - `retrieve.DPR`
 - `retrieve.Fuzz`
+- `retrieve.Meilisearch`
+- `retrieve.Typesens`
 
 ## k and on parameters
 
-The main parameter of retrievers is `on`; it is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the
-order provided.
+The main parameter of retrievers is `on`; it is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the order provided.
 
 The retrievers all have a `k`-parameter which allows selecting the number of documents to retrieve.
 The default value is `None`, i.e., the retrievers will retrieve all documents matching the query.
@@ -51,9 +54,18 @@ Retrievers store document `keys` to retrieve them later. Some retrievers can ind
 
 |      Retriever     |   Batch   |  Storage  | Corpus size |
 |:------------------:|:---------:|:---------:|:-----------:|
-|  retrieve.Elastic  |     ✅     | disk     | Large       |
-|   retrieve.Flash   |     ✅     | memory   | Medium      |  
+|  retrieve.Elastic  |     ✅     | disk     |
+Large       |
+|  retrieve.Meilisearch  |     ✅     | disk     |
+Large       |
+|  retrieve.Typesense  |     ✅     | disk     |
+Large       |
+|  retrieve.Encoder * Milvus |     ✅     | disk   | large      |
+
+|  retrieve.DPR * Milvus |     ✅     | disk   | large      |
 |  retrieve.Encoder  |     ✅     | memory   | Medium      |
+|  retrieve.DPR  |     ✅     | memory   | Medium      |
+|   retrieve.Flash   |     ✅     | memory   | Medium      |
 |    retrieve.Fuzz   |     ✅     | memory   | Medium      |
 |   retrieve.TfIdf   |     ❌     | memory   | Medium      |
 |   retrieve.BM25L   |     ❌     | memory   | Medium      |

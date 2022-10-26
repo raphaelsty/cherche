@@ -37,12 +37,11 @@ search = pipeline + documents + question_answering
 ...    on = "article",
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 3,
-...    path = "encoder.pkl"
 ... )
 
 >>> question_answering = qa.QA(
-...    model = pipeline("question-answering", 
-...         model = "deepset/roberta-base-squad2", 
+...    model = pipeline("question-answering",
+...         model = "deepset/roberta-base-squad2",
 ...         tokenizer = "deepset/roberta-base-squad2"
 ...    ),
 ...    on = "article",

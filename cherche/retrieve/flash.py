@@ -47,7 +47,7 @@ class Flash(Retriever):
          documents: 6
 
     >>> print(retriever(q="paris"))
-    [{'id': 0}, {'id': 1}]
+    [{'id': 0, 'similarity': 1}, {'id': 1, 'similarity': 1}]
 
     >>> retriever += documents
 
@@ -55,13 +55,16 @@ class Flash(Retriever):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 1,
       'tags': ['paris', 'capital'],
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 1,
       'tags': ['paris', 'eiffel', 'tower'],
       'title': 'Eiffel tower'}]
+
 
     References
     ----------
@@ -81,7 +84,7 @@ class Flash(Retriever):
         self.documents = collections.defaultdict(list)
         self.keywords = KeywordProcessor() if keywords is None else keywords
 
-    def add(self, documents: list) -> "Flash":
+    def add(self, documents: list, **kwargs) -> "Flash":
         """Add keywords to the retriever. Streaming friendly.
 
         Parameters
@@ -98,7 +101,9 @@ class Flash(Retriever):
                     for tag in document[field]:
                         self.documents[tag].append({self.key: document[self.key]})
                 else:
-                    self.documents[document[field]].append({self.key: document[self.key]})
+                    self.documents[document[field]].append(
+                        {self.key: document[self.key]}
+                    )
                 self._add(document=document[field])
         return self
 
@@ -110,12 +115,18 @@ class Flash(Retriever):
             self.keywords.add_keyword(document)
         return self
 
-    def __call__(self, q: str) -> list:
-        """Retrieve tagss."""
+    def __call__(self, q: str, **kwargs) -> list:
+        """Retrieve tags."""
         documents = list(
-            chain.from_iterable([self.documents[tag] for tag in self.keywords.extract_keywords(q)])
+            chain.from_iterable(
+                [self.documents[tag] for tag in self.keywords.extract_keywords(q)]
+            )
         )
 
         # Remove duplicates documents
-        documents = [i for n, i in enumerate(documents) if i not in documents[n + 1 :]]
+        documents = [
+            {**{"similarity": 1}, **doc}
+            for n, doc in enumerate(documents)
+            if doc not in documents[n + 1 :]
+        ]
         return documents[: self.k] if self.k is not None else documents

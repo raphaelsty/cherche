@@ -4,7 +4,7 @@
 
 ## Pre-compute
 
-The `rank.Encoder` can pre-compute the set of document embeddings to speed up search in the production environment. To store the embeddings of the ranker, it is necessary to specify the `path` parameter. `rank.Encoder` will load the embeddings from the `path` file when calling the `add` function. A GPU will significantly reduce pre-computing time dedicated to document embeddings.
+The `rank.Encoder` can pre-compute the set of document embeddings to speed up search in the production environment. A GPU will significantly reduce pre-computing time dedicated to document embeddings.
 
 ## Quickstart
 
@@ -40,10 +40,9 @@ The `rank.Encoder` can pre-compute the set of document embeddings to speed up se
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 2,
-...    path = "encoder.pkl"
 ... )
 
->>> search = retriever + ranker 
+>>> search = retriever + ranker
 >>> search.add(documents)
 >>> search(q="france")
 [{'id': 0, 'similarity': 0.44967225}, {'id': 2, 'similarity': 0.3609671}]
@@ -129,7 +128,7 @@ class CustomEncoder:
 model = CustomEncoder()
 
 # Your model should pass these tests, i.e Sentence Bert API.
-assert model.encode(["Paris", "France", "Bordeaux"]).shape[0] == 3 
+assert model.encode(["Paris", "France", "Bordeaux"]).shape[0] == 3
 assert isinstance(model.encode(["Paris", "France", "Bordeaux"]), np.ndarray)
 
 assert len(model.encode("Paris").shape) == 1
@@ -140,6 +139,5 @@ retriever = rank.Encoder(
     key = "id",
     on = ["title", "article"],
     k = 2,
-    path = "custom_encoder.pkl"
 )
 ```

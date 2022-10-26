@@ -22,7 +22,9 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
         rank.DPR(
             key=key,
             on=on,
-            encoder=SentenceTransformer("facebook-dpr-ctx_encoder-single-nq-base").encode,
+            encoder=SentenceTransformer(
+                "facebook-dpr-ctx_encoder-single-nq-base"
+            ).encode,
             query_encoder=SentenceTransformer(
                 "facebook-dpr-question_encoder-single-nq-base"
             ).encode,
@@ -32,7 +34,9 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
         rank.Encoder(
             key=key,
             on="title",
-            encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+            encoder=SentenceTransformer(
+                "sentence-transformers/all-mpnet-base-v2"
+            ).encode,
             k=k,
             path=path,
         ),
@@ -40,7 +44,8 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
             key=key,
             on=on,
             encoder=pipeline(
-                "zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"
+                "zero-shot-classification",
+                model="typeform/distilbert-base-uncased-mnli",
             ),
             k=k,
         ),
@@ -54,7 +59,11 @@ def documents():
             "title": "Github library with Pytorch and Transformers.",
             "date": "10-11-2021",
         },
-        {"url": "mkb/github.com", "title": "Github Library with PyTorch.", "date": "22-11-2021"},
+        {
+            "url": "mkb/github.com",
+            "title": "Github Library with PyTorch.",
+            "date": "22-11-2021",
+        },
         {
             "url": "blp/github.com",
             "title": "Github library with Pytorch and Transformers.",
@@ -65,7 +74,11 @@ def documents():
 
 def tags():
     return [
-        {"tags": ["Github", "git"], "title": "Github is a great tool.", "uri": "tag:github"},
+        {
+            "tags": ["Github", "git"],
+            "title": "Github is a great tool.",
+            "uri": "tag:github",
+        },
         {
             "tags": ["cherche", "tool"],
             "title": "Cherche is a tool to retrieve informations.",
@@ -105,7 +118,10 @@ def test_retriever_ranker(search, documents: list, k: int):
     answers = search(q="Github library with PyTorch and Transformers")
     for index in range(len(documents) if k is None else k):
         if index in [0, 1]:
-            assert answers[index]["title"] == "Github library with Pytorch and Transformers."
+            assert (
+                answers[index]["title"]
+                == "Github library with Pytorch and Transformers."
+            )
         elif index in [2]:
             assert answers[index]["title"] == "Github Library with PyTorch."
 

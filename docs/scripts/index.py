@@ -196,7 +196,9 @@ class Linkifier:
 
     def linkify_dotted(self, text, depth):
         dotted = re.compile("\w+\.[\.\w]+")
-        return dotted.sub(lambda x: self.linkify(x.group(), False, depth) or x.group(), text)
+        return dotted.sub(
+            lambda x: self.linkify(x.group(), False, depth) or x.group(), text
+        )
 
 
 def concat_lines(lines):
@@ -212,7 +214,11 @@ def print_docstring(obj, file, depth):
 
     printf(h1(obj.__name__))
     printf(linkifier.linkify_fences(paragraph(concat_lines(doc["Summary"])), depth))
-    printf(linkifier.linkify_fences(paragraph(concat_lines(doc["Extended Summary"])), depth))
+    printf(
+        linkifier.linkify_fences(
+            paragraph(concat_lines(doc["Extended Summary"])), depth
+        )
+    )
 
     # We infer the type annotations from the signatures, and therefore rely on the signature
     # instead of the docstring for documenting parameters
@@ -318,10 +324,14 @@ def print_docstring(obj, file, depth):
             # We infer the type annotations from the signatures, and therefore rely on the signature
             # instead of the docstring for documenting parameters
             signature = inherit_signature(obj, meth.name)
-            params_desc = {param.name: " ".join(param.desc) for param in doc["Parameters"]}
+            params_desc = {
+                param.name: " ".join(param.desc) for param in doc["Parameters"]
+            }
 
             # Parameters
-            if len(signature.parameters) > 1:  # signature is never empty, but self doesn't count
+            if (
+                len(signature.parameters) > 1
+            ):  # signature is never empty, but self doesn't count
                 printf_indent("**Parameters**\n")
             for param in signature.parameters.values():
                 if param.name == "self":
@@ -330,7 +340,9 @@ def print_docstring(obj, file, depth):
                 printf_indent(f"- **{param.name}**", end="")
                 # Type annotation
                 if param.annotation is not param.empty:
-                    printf_indent(f" (*{inspect.formatannotation(param.annotation)}*)", end="")
+                    printf_indent(
+                        f" (*{inspect.formatannotation(param.annotation)}*)", end=""
+                    )
                 # Default value
                 if param.default is not param.empty:
                     printf_indent(f" – defaults to `{param.default}`", end="")
@@ -347,7 +359,9 @@ def print_docstring(obj, file, depth):
                 return_val = meth_doc["Returns"][0]
                 if signature.return_annotation is not inspect._empty:
                     if inspect.isclass(signature.return_annotation):
-                        printf_indent(f"*{signature.return_annotation.__name__}*: ", end="")
+                        printf_indent(
+                            f"*{signature.return_annotation.__name__}*: ", end=""
+                        )
                     else:
                         printf_indent(f"*{signature.return_annotation}*: ", end="")
                 printf_indent(return_val.type)
@@ -399,7 +413,9 @@ def print_module(mod, path, overview, is_submodule=False):
 
         # Add the class to the overview
         slug = snake_to_kebab(c.__name__)
-        print(li(link(c.__name__, f"../{mod_short_path}/{slug}")), end="", file=overview)
+        print(
+            li(link(c.__name__, f"../{mod_short_path}/{slug}")), end="", file=overview
+        )
 
         # Write down the class' docstring
         with open(mod_path.joinpath(slug).with_suffix(".md"), "w") as file:
@@ -415,7 +431,9 @@ def print_module(mod, path, overview, is_submodule=False):
 
         # Add the function to the overview
         slug = snake_to_kebab(f.__name__)
-        print(li(link(f.__name__, f"../{mod_short_path}/{slug}")), end="", file=overview)
+        print(
+            li(link(f.__name__, f"../{mod_short_path}/{slug}")), end="", file=overview
+        )
 
         # Write down the function' docstring
         with open(mod_path.joinpath(slug).with_suffix(".md"), "w") as file:

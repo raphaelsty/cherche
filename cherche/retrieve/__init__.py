@@ -6,7 +6,10 @@ from .encoder import Encoder
 from .flash import Flash
 from .fuzz import Fuzz
 from .lunr import Lunr
+from .meilisearch import Meilisearch
+from .recommend import Recommend
 from .tfidf import TfIdf
+from .tpsense import Typesense
 
 __all__ = [
     "Retriever",
@@ -18,5 +21,8 @@ __all__ = [
     "Flash",
     "Fuzz",
     "Lunr",
+    "Meilisearch",
+    "Recommend",
     "TfIdf",
+    "Typesense",
 ]

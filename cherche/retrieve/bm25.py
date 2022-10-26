@@ -5,7 +5,79 @@ import typing
 from rank_bm25 import BM25L as rank_bm25l
 from rank_bm25 import BM25Okapi as rank_bm25okapi
 
-from .base import _BM25
+from .base import Retriever
+
+
+class _BM25(Retriever):
+    """Base class for BM25, BM25L and BM25Okapi Retriever.
+
+    Parameters
+    ----------
+    key
+        Field identifier of each document.
+    on
+        Field to use to match the query to the documents.
+    bm25
+        BM25 model from [Rank BM25](https://github.com/dorianbrown/rank_bm25).
+    tokenizer
+        Tokenizer to use, the default one split on spaces. This tokenizer should have a
+        `tokenizer.__call__` method that returns the list of tokenized tokens.
+    k
+        Number of documents to retrieve. Default is None, i.e all documents that match the query
+        will be retrieved.
+
+    """
+
+    def __init__(
+        self,
+        key: str,
+        on: typing.Union[str, list],
+        documents: list,
+        bm25,
+        tokenizer=None,
+        k: int = None,
+    ) -> None:
+        super().__init__(key=key, on=on, k=k)
+        self.bm25 = bm25
+        self.tokenizer = tokenizer
+        self.documents = {
+            index: {self.key: document[self.key]}
+            for index, document in enumerate(documents)
+        }
+        # Avoid adding documents to inversed index.
+        self.ids = {}
+
+    def __call__(self, q: str, **kwargs) -> list:
+        """Retrieve the right document using BM25."""
+        q = q.split(" ") if self.tokenizer is None else self.tokenizer(q)
+        similarities = abs(self.model.get_scores(q))
+        indexes, scores = [], []
+        for index, score in enumerate(similarities):
+            if score > 0:
+                indexes.append(index)
+                scores.append(score)
+
+        if not indexes:
+            return []
+
+        scores, indexes = zip(*sorted(zip(scores, indexes), reverse=True))
+        documents = [
+            {**self.documents[index], "similarity": float(score)}
+            for index, score in zip(indexes, scores)
+        ]
+        return documents[: self.k] if self.k is not None else documents
+
+    def _process_documents(self, documents: list) -> list:
+        """Documents to feed BM25 retriever."""
+        bm25_documents = []
+        for doc in documents:
+            doc = " ".join([doc.get(field, "") for field in self.on])
+            if self.tokenizer is None:
+                doc = doc.split(" ")
+            else:
+                doc = self.tokenizer(doc)
+            bm25_documents.append(doc)
+        return bm25_documents
 
 
 class BM25Okapi(_BM25):
@@ -89,7 +161,12 @@ class BM25Okapi(_BM25):
         epsilon: float = 0.25,
     ) -> None:
         super().__init__(
-            key=key, on=on, documents=documents, bm25=rank_bm25okapi, tokenizer=tokenizer, k=k
+            key=key,
+            on=on,
+            documents=documents,
+            bm25=rank_bm25okapi,
+            tokenizer=tokenizer,
+            k=k,
         )
 
         self.model = self.bm25(
@@ -181,7 +258,12 @@ class BM25L(_BM25):
         delta: float = 0.5,
     ) -> None:
         super().__init__(
-            key=key, on=on, documents=documents, bm25=rank_bm25l, tokenizer=tokenizer, k=k
+            key=key,
+            on=on,
+            documents=documents,
+            bm25=rank_bm25l,
+            tokenizer=tokenizer,
+            k=k,
         )
 
         self.model = self.bm25(

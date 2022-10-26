@@ -3,11 +3,59 @@ from __future__ import annotations
 __all__ = ["Ranker"]
 
 import abc
-import os
-import pickle
 import typing
 
+import more_itertools
+import numpy as np
+import tqdm
+
 from ..compose import Intersection, Pipeline, Union, Vote
+
+
+class MemoryStore:
+    """Store embeddings of rankers in memory."""
+
+    def __init__(self) -> None:
+        self.embeddings = {}
+
+    def __len__(self) -> int:
+        return len(self.embeddings)
+
+    def add(
+        self,
+        embeddings: list,
+        key: str = None,
+        documents: list = None,
+        users=None,
+        **kwargs,
+    ) -> "MemoryStore":
+        """Pre-compute embeddings and store them at the selected path.
+
+        Parameters
+        ----------
+        documents
+            List of documents or list of string for embeddings pre-comptuting.
+
+        """
+        if users is not None:
+            for user, embedding in zip(users, embeddings):
+                self.embeddings[user] = np.array(embedding).flatten()
+        elif documents is not None:
+            for document, embedding in zip(documents, embeddings):
+                self.embeddings[document[key]] = np.array(embedding).flatten()
+        return self
+
+    def get(self, values: list, **kwargs) -> typing.Tuple[list, list, list]:
+        """Get specific embeddings from documents ids."""
+        known, embeddings, unknown = [], [], []
+        for key in values:
+            embedding = self.embeddings.get(key, None)
+            if embedding is not None:
+                known.append(key)
+                embeddings.append(embedding)
+            else:
+                unknown.append(key)
+        return known, embeddings, unknown
 
 
 class Ranker(abc.ABC):
@@ -30,14 +78,21 @@ class Ranker(abc.ABC):
 
     """
 
-    def __init__(self, key: str, on: str | list, encoder, k: int, path: str, similarity) -> None:
+    def __init__(
+        self,
+        key: str,
+        on: str | list,
+        encoder,
+        k: int,
+        similarity,
+        store,
+    ) -> None:
         self.key = key
         self.on = on if isinstance(on, list) else [on]
-        self.encoder = encoder
         self.k = k
-        self.path = path
+        self.encoder = encoder
         self.similarity = similarity
-        self.embeddings = self.load_embeddings(path=path) if self.path is not None else {}
+        self.store = store
 
     @property
     def type(self):
@@ -49,16 +104,14 @@ class Ranker(abc.ABC):
         repr += f"\n\t on: {', '.join(self.on)}"
         repr += f"\n\t k: {self.k}"
         repr += f"\n\t similarity: {self.similarity.__name__}"
-        if self.path is not None:
-            repr += f"\n\t embeddings stored at: {self.path}"
-
+        repr += f"\n\t Embeddings pre-computed: {len(self.store)}"
         return repr
 
     @abc.abstractmethod
     def __call__(self, q: str, documents: list, **kwargs) -> list:
         return []
 
-    def add(self, documents: list) -> "Ranker":
+    def add(self, documents: list, batch_size: int = 64) -> "Ranker":
         """Pre-compute embeddings and store them at the selected path.
 
         Parameters
@@ -67,43 +120,49 @@ class Ranker(abc.ABC):
             List of documents or list of string for embeddings pre-comptuting.
 
         """
-        documents_rankers = []
-        keys = []
-        for document in documents:
-            if isinstance(document, str):
-                self.embeddings[document] = self.encoder(document)
-
-            elif document[self.key] not in self.embeddings:
-                keys.append(document[self.key])
-                documents_rankers.append(" ".join([document.get(field, "") for field in self.on]))
-
-        if documents_rankers:
-            for key, embedding in zip(keys, self.encoder(documents_rankers)):
-                self.embeddings[key] = embedding
-
-            if self.path is not None:
-                self.dump_embeddings(embeddings=self.embeddings, path=self.path)
-
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(documents, batch_size),
+            position=0,
+            desc="Ranker embeddings calculation.",
+            total=1 + len(documents) // batch_size,
+        ):
+            self.store.add(
+                **{
+                    "key": self.key,
+                    "documents": batch,
+                    "embeddings": self.encoder(
+                        [
+                            " ".join([document.get(field, "") for field in self.on])
+                            for document in batch
+                        ]
+                    ),
+                }
+            )
         return self
 
-    def _emb_documents(self, documents: list) -> list:
+    def encode(self, documents: list) -> typing.Tuple[dict, list]:
         """Computes documents embeddings."""
-        emb_documents = []
-        for document in documents:
-            # ElasticSearch can store embeddings
-            if "embedding" in document:
-                embedding = document.pop("embedding")
-            else:
-                if document[self.key] in self.embeddings:
-                    embedding = self.embeddings[document[self.key]]
-                else:
-                    embedding = self.encoder(
-                        " ".join([document.get(field, "") for field in self.on])
-                    )
-            emb_documents.append(embedding)
-        return emb_documents
+        known, embeddings, unknown = self.store.get(
+            **{
+                "key": self.key,
+                "values": [document[self.key] for document in documents],
+            }
+        )
+        index = {document[self.key]: document for document in documents}
 
-    def _rank(self, similarities: list, documents: list) -> list:
+        embeddings_unknown = self.encoder(
+            [
+                " ".join([index[key_unknown].get(field, "") for field in self.on])
+                for key_unknown in unknown
+            ]
+        )
+
+        return {
+            idx: index.get(key_document)
+            for idx, key_document in enumerate(known + unknown)
+        }, np.array(list(embeddings) + list(embeddings_unknown))
+
+    def rank(self, query_embedding: np.ndarray, documents: list) -> list:
         """Rank inputs documents ordered by relevance among the top k.
 
         Parameters
@@ -114,28 +173,15 @@ class Ranker(abc.ABC):
             List of documents.
 
         """
+        index, embeddings = self.encode(documents=documents)
+        similarities = self.similarity(emb_q=query_embedding, emb_documents=embeddings)
         similarities = similarities[: self.k] if self.k is not None else similarities
         ranked = []
-        for index, similarity in similarities:
-            document = documents[index]
+        for idx, similarity in similarities:
+            document = index[idx]
             document["similarity"] = similarity
             ranked.append(document)
         return ranked
-
-    @staticmethod
-    def load_embeddings(path: str) -> dict:
-        """Load embeddings from an existing directory."""
-        if not os.path.isfile(path):
-            return {}
-        with open(path, "rb") as input_embeddings:
-            embeddings = pickle.load(input_embeddings)
-        return embeddings
-
-    @staticmethod
-    def dump_embeddings(embeddings, path: str) -> None:
-        """Dump embeddings to the selected directory."""
-        with open(path, "wb") as ouput_embeddings:
-            pickle.dump(embeddings, ouput_embeddings)
 
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""
@@ -143,7 +189,9 @@ class Ranker(abc.ABC):
             return other + self
         elif isinstance(other, list):
             # Documents are part of the pipeline.
-            return Pipeline([self, {document[self.key]: document for document in other}])
+            return Pipeline(
+                [self, {document[self.key]: document for document in other}]
+            )
         return Pipeline(models=[other, self])
 
     def __or__(self, other) -> Union:
@@ -163,16 +211,3 @@ class Ranker(abc.ABC):
         if isinstance(other, Vote):
             return Vote([self] + other.models)
         return Vote([self, other])
-
-    def embs(self, documents: list) -> list:
-        """Computes and returns embeddings of input documents.
-
-        Parameters
-        ----------
-        documents
-            List of documents for whiwh to computes embeddings.
-
-        """
-        return self.encoder(
-            [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
-        )

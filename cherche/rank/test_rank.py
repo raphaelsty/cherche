@@ -4,7 +4,7 @@ from cherche.rank.zero_shot import ZeroShot
 from .. import rank
 
 
-def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
+def cherche_rankers(key: str, on: str, k: int = None):
     """List of rankers available in cherche."""
     from sentence_transformers import SentenceTransformer
     from transformers import pipeline
@@ -13,25 +13,28 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
         rank.DPR(
             key=key,
             on=on,
-            encoder=SentenceTransformer("facebook-dpr-ctx_encoder-single-nq-base").encode,
+            encoder=SentenceTransformer(
+                "facebook-dpr-ctx_encoder-single-nq-base"
+            ).encode,
             query_encoder=SentenceTransformer(
                 "facebook-dpr-question_encoder-single-nq-base"
             ).encode,
             k=k,
-            path=path,
         ),
         rank.Encoder(
             key=key,
             on=on,
-            encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+            encoder=SentenceTransformer(
+                "sentence-transformers/all-mpnet-base-v2"
+            ).encode,
             k=k,
-            path=path,
         ),
         rank.ZeroShot(
             key=key,
             on=on,
             encoder=pipeline(
-                "zero-shot-classification", model="typeform/distilbert-base-uncased-mnli"
+                "zero-shot-classification",
+                model="typeform/distilbert-base-uncased-mnli",
             ),
             k=k,
         ),
@@ -40,13 +43,21 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
 
 def documents():
     return [
-        {"title": "Paris", "article": "This town is the capital of France", "author": "Wikipedia"},
+        {
+            "title": "Paris",
+            "article": "This town is the capital of France",
+            "author": "Wikipedia",
+        },
         {
             "title": "Eiffel tower",
             "article": "Eiffel tower is based in Paris",
             "author": "Wikipedia",
         },
-        {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wikipedia"},
+        {
+            "title": "Montreal",
+            "article": "Montreal is in Canada.",
+            "author": "Wikipedia",
+        },
     ]
 
 
@@ -68,7 +79,8 @@ def test_ranker(ranker, documents: list, key: str, k: int):
     """Test ranker. Test if the number of ranked documents is coherent.
     Check for empty retrieved documents should returns an empty list.
     """
-    ranker.add(documents)
+    if not isinstance(ranker, ZeroShot):
+        ranker.add(documents)
 
     # Zero shot needs all the fields
     if not isinstance(ranker, ZeroShot):

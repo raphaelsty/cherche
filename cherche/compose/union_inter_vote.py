@@ -1,10 +1,11 @@
 __all__ = ["Intersection", "Union", "Vote"]
 import collections
+import typing
 
 from scipy.special import softmax
 
 from .base import Compose
-from .pipeline import Pipeline
+from .pipeline import Pipeline, PipelineIntersection, PipelineUnion, PipelineVote
 
 
 class UnionIntersection(Compose):
@@ -21,9 +22,19 @@ class UnionIntersection(Compose):
         """Pipeline operator."""
         if isinstance(other, list):
             return Pipeline(
-                [self] + [{document[self.models[0].key]: document for document in other}]
+                [self, {document[self.models[0].key]: document for document in other}]
             )
         return Pipeline([self, other])
+
+    def __or__(self, other) -> PipelineUnion:
+        return PipelineUnion(models=[self, other])
+
+    def __and__(self, other) -> PipelineIntersection:
+        return PipelineIntersection(models=[self, other])
+
+    def __mul__(self, other) -> PipelineVote:
+        """Custom operator for voting."""
+        return PipelineVote(models=[self, other])
 
 
 class Union(UnionIntersection):
@@ -75,33 +86,36 @@ class Union(UnionIntersection):
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.0,
+      'similarity': 0.3333333333333333,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.4505,
+      'similarity': 0.3333333333333333,
       'title': 'Eiffel tower'}]
 
     >>> print(search(q = "Montreal"))
     [{'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
-      'similarity': 1.0,
+      'similarity': 0.3333333333333333,
       'title': 'Montreal'}]
 
     >>> print(search(q = "Wiki"))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
+      'similarity': 0.1111111111111111,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
+      'similarity': 0.1111111111111111,
       'title': 'Eiffel tower'},
      {'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
+      'similarity': 0.1111111111111111,
       'title': 'Montreal'}]
 
     """
@@ -113,43 +127,49 @@ class Union(UnionIntersection):
                 self.key = model.key
                 break
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
         union = []
-        similarities = {}
+        query = {"q": q, "user": user, **kwargs}
+        scores = collections.defaultdict(float)
 
         for model in self.models:
 
-            for document in model(**query):
+            retrieved = model(**query)
+            if not retrieved:
+                continue
+
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
+            for document, similarity in zip(retrieved, similarities):
 
                 # Remove similarities to avoid duplicates
                 if "similarity" in document:
-                    similarity = document.pop("similarity")
+                    document.pop("similarity")
 
-                    if document[self.key] not in similarities:
-                        similarities[document[self.key]] = similarity
+                if document[self.key] not in scores:
+                    scores[document[self.key]] += float(similarity) / len(self.models)
 
                 # Drop duplicates documents:
                 if document in union:
                     continue
                 union.append(document)
 
-        ranked = []
-        for document in union:
-            similarity = similarities.get(document.get(self.key, None), None)
-            if similarity is not None:
-                ranked.append({**document, **{"similarity": similarity}})
-            else:
-                ranked.append(document)
-
-        return ranked
+        return [
+            {**document, **{"similarity": scores[document[self.key]]}}
+            for document in union
+        ]
 
     def __or__(self, other) -> "Union":
         """Union operator"""
@@ -205,8 +225,9 @@ class Intersection(UnionIntersection):
     [{'article': 'Paris is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 1.0,
+      'similarity': 0.6098051865303775,
       'title': 'Paris'}]
+
 
     >>> print(search(q = "Paris"))
     []
@@ -215,18 +236,19 @@ class Intersection(UnionIntersection):
     [{'article': 'Montreal is in Canada.',
       'author': 'Wiki',
       'id': 2,
-      'similarity': 0.5773502691896257,
+      'similarity': 0.3423964772770161,
       'title': 'Montreal'},
      {'article': 'Paris is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 0.5773502691896257,
+      'similarity': 0.3215535643422896,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris.',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.408248290463863,
+      'similarity': 0.33604995838069424,
       'title': 'Eiffel tower'}]
+
 
     """
 
@@ -237,43 +259,46 @@ class Intersection(UnionIntersection):
                 self.key = model.key
                 break
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
-        similarities = {}
-        counter_docs = collections.defaultdict(int)
+        query = {"q": q, "user": user, **kwargs}
+        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(
+            float
+        )
 
         for model in self.models:
-            for document in model(**query):
-                # Remove similarities to avoid duplicates
+            retrieved = model(**query)
+            if not retrieved:
+                continue
+
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
+            for document, similarity in zip(retrieved, similarities):
+
                 if "similarity" in document:
-                    similarity = document.pop("similarity")
+                    document.pop("similarity")
 
-                    if document[self.key] not in similarities:
-                        similarities[document[self.key]] = similarity
-
+                scores[document[self.key]] += similarity / len(self.models)
                 counter_docs[tuple(sorted(document.items()))] += 1
 
-        intersection = [
-            dict(document) for document, count in counter_docs.items() if count >= len(self.models)
-        ]
-
-        # Add similarity that we previously removed.
         ranked = []
-
-        for document in intersection:
-            similarity = similarities.get(document.get(self.key, None), None)
-            if similarity is not None:
-                ranked.append({**document, **{"similarity": similarity}})
-            else:
-                ranked.append(document)
-
+        for document, count in counter_docs.items():
+            if count < len(self.models):
+                continue
+            document = dict(document)
+            document["similarity"] = scores[document[self.key]]
+            ranked.append(document)
         return ranked
 
     def __and__(self, other) -> "Intersection":
@@ -292,6 +317,7 @@ class Vote(UnionIntersection):
     --------
 
     >>> from cherche import compose, retrieve
+    >>> from pprint import pprint as print
 
     >>> documents = [
     ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
@@ -317,8 +343,10 @@ class Vote(UnionIntersection):
          documents: 3
     -----
 
-    >>> search("paris eiffel")
-    [{'id': 1, 'similarity': 0.5216793798120436}, {'id': 0, 'similarity': 0.4783206201879563}]
+    >>> print(search("paris eiffel"))
+    [{'id': 1, 'similarity': 0.5216793798120437},
+     {'id': 0, 'similarity': 0.4783206201879563}]
+
 
     """
 
@@ -329,17 +357,23 @@ class Vote(UnionIntersection):
                 self.key = model.key
                 break
 
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
+    ) -> list:
         """
         Parameters
         ----------
         q
             Input query.
+        user
+            Input user.
 
         """
-        query = {"q": q, **kwargs}
+        query = {"q": q, "user": user, **kwargs}
 
-        scores, documents = collections.defaultdict(float), collections.defaultdict(dict)
+        scores, documents = collections.defaultdict(float), collections.defaultdict(
+            dict
+        )
 
         for model in self.models:
             retrieved = model(**query)
@@ -347,7 +381,9 @@ class Vote(UnionIntersection):
             if not retrieved:
                 continue
 
-            similarities = softmax([doc.get("similarity", 1.0) for doc in retrieved], axis=0)
+            similarities = softmax(
+                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
+            )
             for doc, similarity in zip(retrieved, similarities):
                 scores[doc[self.key]] += float(similarity) / len(self.models)
                 documents[doc[self.key]] = doc
@@ -357,7 +393,9 @@ class Vote(UnionIntersection):
         if not scores or not documents:
             return []
 
-        for key, similarity in sorted(scores.items(), key=lambda item: item[1], reverse=True):
+        for key, similarity in sorted(
+            scores.items(), key=lambda item: item[1], reverse=True
+        ):
             doc = documents[key]
             doc["similarity"] = similarity
             ranked.append(doc)

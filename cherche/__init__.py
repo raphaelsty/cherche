@@ -3,6 +3,7 @@ __all__ = [
     "data",
     "eval",
     "generate",
+    "index",
     "onnx",
     "qa",
     "query",

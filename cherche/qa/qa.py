@@ -42,8 +42,7 @@ class QA:
 
     >>> model
     Question Answering
-         model: deepset/roberta-base-squad2
-         on: title, article
+        on: title, article
 
     >>> print(model(q="Where is the Eiffel tower?", documents=documents))
     [{'answer': 'Paris',
@@ -74,7 +73,6 @@ class QA:
 
     def __repr__(self) -> str:
         repr = "Question Answering"
-        repr += f"\n\t model: {self.model.tokenizer.name_or_path}"
         repr += f"\n\t on: {', '.join(self.on)}"
         return repr
 
@@ -126,9 +124,13 @@ class QA:
             return Pipeline(models=[other, self])
 
     def __or__(self) -> None:
-        """Or operator is only available on retrievers and rankers."""
+        """Or operator is only available for retrievers and rankers."""
         raise NotImplementedError
 
     def __and__(self) -> None:
-        """And operator is only available on retrievers and rankers."""
+        """And operator is only available for retrievers and rankers."""
+        raise NotImplementedError
+
+    def __mul__(self) -> None:
+        """Mul operator is only available for retrievers and rankers."""
         raise NotImplementedError

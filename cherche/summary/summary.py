@@ -88,7 +88,7 @@ class Summary:
 
         """
         if not documents:
-            return []
+            return ""
 
         return self.model(
             " ".join(
@@ -112,9 +112,13 @@ class Summary:
             return Pipeline(models=[other, self])
 
     def __or__(self) -> None:
-        """Or operator is only available on retrievers and rankers."""
+        """Or operator is only available for retrievers and rankers."""
         raise NotImplementedError
 
     def __and__(self) -> None:
-        """And operator is only available on retrievers and rankers."""
+        """And operator is only available for retrievers and rankers."""
+        raise NotImplementedError
+
+    def __mul__(self) -> None:
+        """Mul operator is only available for retrievers and rankers."""
         raise NotImplementedError

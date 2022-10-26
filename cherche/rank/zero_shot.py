@@ -4,7 +4,7 @@ __all__ = ["ZeroShot"]
 
 import typing
 
-from ..compose import Intersection, Pipeline, Union
+from ..compose import Intersection, Pipeline, Union, Vote
 
 
 class ZeroShot:
@@ -47,23 +47,23 @@ class ZeroShot:
 
     >>> ranker
     Zero Shot Classifier
-         model: typeform/distilbert-base-uncased-mnli
-         key: id
-         on: title, article
-         k: 2
-         multi class: True
+        key: id
+        on: title, article
+        k: 2
+        multi class: True
 
     >>> print(ranker(q="Paris", documents=documents))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
       'id': 0,
-      'similarity': 0.44725707173347473,
+      'similarity': 0.44725653529167175,
       'title': 'Paris'},
      {'article': 'Eiffel tower is based in Paris',
       'author': 'Wiki',
       'id': 1,
-      'similarity': 0.31512799859046936,
+      'similarity': 0.31512802839279175,
       'title': 'Eiffel tower'}]
+
 
     References
     ----------
@@ -88,7 +88,6 @@ class ZeroShot:
 
     def __repr__(self) -> str:
         repr = "Zero Shot Classifier"
-        repr += f"\n\t model: {self.encoder.tokenizer.name_or_path}"
         repr += f"\n\t key: {self.key}"
         repr += f"\n\t on: {', '.join(self.on)}"
         repr += f"\n\t k: {self.k}"
@@ -111,7 +110,10 @@ class ZeroShot:
 
         scores = self.encoder(
             q,
-            [" ".join([document.get(field, "") for field in self.on]) for document in documents],
+            [
+                " ".join([document.get(field, "") for field in self.on])
+                for document in documents
+            ],
             multi_label=self.multi_class,
         )
 
@@ -133,19 +135,19 @@ class ZeroShot:
             return Pipeline(models=[other, self])
 
     def __or__(self, other) -> Union:
-        """Custom operator for union."""
+        """Union operator."""
         if isinstance(other, Union):
-            return Union(models=[self] + [other.models])
-        else:
-            return Union(models=[self, other])
+            return Union([self] + other.models)
+        return Union([self, other])
 
     def __and__(self, other) -> Intersection:
-        """Custom operator for intersection."""
+        """Intersection operator."""
         if isinstance(other, Intersection):
-            return Intersection(models=[self] + [other.models])
-        else:
-            return Intersection(models=[self, other])
+            return Intersection([self] + other.models)
+        return Intersection([self, other])
 
-    def add(self, documents) -> "ZeroShot":
-        """Zero shot do not pre-compute embeddings."""
-        return self
+    def __mul__(self, other) -> Vote:
+        """Voting operator."""
+        if isinstance(other, Vote):
+            return Vote([self] + other.models)
+        return Vote([self, other])

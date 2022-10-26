@@ -3,7 +3,6 @@ __all__ = ["TfIdf"]
 import typing
 
 import numpy as np
-from cherche.retrieve import Retriever
 from scipy.sparse import csc_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -89,17 +88,21 @@ class TfIdf(Retriever):
         self.tfidf = TfidfVectorizer() if tfidf is None else tfidf
 
         self.documents = {
-            index: {self.key: document[self.key]} for index, document in enumerate(documents)
+            index: {self.key: document[self.key]}
+            for index, document in enumerate(documents)
         }
         self.matrix = csc_matrix(
             self.tfidf.fit_transform(
-                [" ".join([doc.get(field, "") for field in self.on]) for doc in documents]
+                [
+                    " ".join([doc.get(field, "") for field in self.on])
+                    for doc in documents
+                ]
             )
         )
 
         self.k = self.k if self.k is not None else len(self.documents)
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, **kwargs) -> list:
         """Retrieve the right document.
 
         Parameters
@@ -111,7 +114,9 @@ class TfIdf(Retriever):
         qs = self.tfidf.transform([q])
         Xq = np.zeros((self.matrix.shape[0],))
         if len(qs.indices > 0):
-            Xq = np.concatenate([self.matrix.getcol(xqs).toarray() for xqs in qs.indices], axis=1)
+            Xq = np.concatenate(
+                [self.matrix.getcol(xqs).toarray() for xqs in qs.indices], axis=1
+            )
             Xq = np.dot(Xq, np.array(qs.data))
         similarities = Xq
 

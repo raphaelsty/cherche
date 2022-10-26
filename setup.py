@@ -9,8 +9,12 @@ base_packages = [
     "elasticsearch >= 7.10.0",
     "faiss-cpu >= 1.7.1.post3",
     "flashtext >= 2.7",
+    "implicit >= 0.6.1",
     "lunr >= 0.6.1",
+    "meilisearch >= 0.22.1",
+    "more-itertools >= 9.0.0",
     "numpy >= 1.19.0",
+    "pymilvus >= 2.1.3",
     "rank-bm25 == 0.2.1",
     "rapidfuzz >= 1.9.1",
     "river >= 0.8.0",
@@ -19,7 +23,7 @@ base_packages = [
     "sentence-transformers >= 2.1.0",
     "transformers >= 4.12.0",
     "tqdm >= 4.62.3",
-    "scipy >= 1.7.3",
+    "typesense >= 0.14.0",
 ]
 
 onnx = ["onnx >= 1.10.2", "onnxruntime >= 1.9.0"]
@@ -44,15 +48,25 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/raphaelsty/cherche",
     download_url="https://github.com/user/cherche/archive/v_01.tar.gz",
-    keywords=["neural", "search", "question", "answering", "summarization"],
+    keywords=[
+        "neural",
+        "search",
+        "question",
+        "answering",
+        "summarization",
+        "collaborative filtering",
+    ],
     packages=setuptools.find_packages(),
     install_requires=base_packages,
     extras_require={
+        "recommend": base_packages,
         "onnx": base_packages + onnx,
         "onnxgpu": base_packages + onnxgpu,
         "doc": base_packages + doc,
     },
-    package_data={"cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]},
+    package_data={
+        "cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

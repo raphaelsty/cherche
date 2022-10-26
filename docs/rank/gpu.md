@@ -39,7 +39,6 @@ We strongly recommend using a GPU with`rank.ZeroShot` to obtain decent results s
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2", device='cuda').encode,
 ...    k = 10,
-...    path = "all-mpnet-base-v2.pkl"
 ... )
 
 >>> search = retriever + ranker
@@ -82,7 +81,6 @@ We strongly recommend using a GPU with`rank.ZeroShot` to obtain decent results s
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base', device="cuda").encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base', devica="cuda").encode,
 ...    k = 10,
-...    path = "dpr.pkl"
 ... )
 
 >>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
@@ -124,10 +122,10 @@ We must set the `device` parameter to use GPU's `zero-shot-classification` model
 
 >>> ranker = rank.ZeroShot(
 ...     on = ["title", "article"],
-...     encoder = pipeline("zero-shot-classification", 
-...         model="typeform/distilbert-base-uncased-mnli", 
+...     encoder = pipeline("zero-shot-classification",
+...         model="typeform/distilbert-base-uncased-mnli",
 ...         device=0 # cuda:0, device=1 for cuda:1.
-...     ), 
+...     ),
 ...     k = 10,
 ... )
 

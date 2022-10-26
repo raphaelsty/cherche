@@ -53,6 +53,30 @@ def sentence_transformers(
     ...    name = "test",
     ...    quantize = True,
     ... )
+    Ignore MatMul due to non constant B: /[MatMul_229]
+    Ignore MatMul due to non constant B: /[MatMul_235]
+    Ignore MatMul due to non constant B: /[MatMul_332]
+    Ignore MatMul due to non constant B: /[MatMul_338]
+    Ignore MatMul due to non constant B: /[MatMul_435]
+    Ignore MatMul due to non constant B: /[MatMul_441]
+    Ignore MatMul due to non constant B: /[MatMul_538]
+    Ignore MatMul due to non constant B: /[MatMul_544]
+    Ignore MatMul due to non constant B: /[MatMul_641]
+    Ignore MatMul due to non constant B: /[MatMul_647]
+    Ignore MatMul due to non constant B: /[MatMul_744]
+    Ignore MatMul due to non constant B: /[MatMul_750]
+    Ignore MatMul due to non constant B: /[MatMul_847]
+    Ignore MatMul due to non constant B: /[MatMul_853]
+    Ignore MatMul due to non constant B: /[MatMul_950]
+    Ignore MatMul due to non constant B: /[MatMul_956]
+    Ignore MatMul due to non constant B: /[MatMul_1053]
+    Ignore MatMul due to non constant B: /[MatMul_1059]
+    Ignore MatMul due to non constant B: /[MatMul_1156]
+    Ignore MatMul due to non constant B: /[MatMul_1162]
+    Ignore MatMul due to non constant B: /[MatMul_1259]
+    Ignore MatMul due to non constant B: /[MatMul_1265]
+    Ignore MatMul due to non constant B: /[MatMul_1362]
+    Ignore MatMul due to non constant B: /[MatMul_1368]
 
     >>> retriever = retrieve.Encoder(
     ...    encoder = model.encode,
@@ -178,12 +202,16 @@ class STEncoder:
 
     """
 
-    def __init__(self, session, tokenizer, layers: list, max_length: typing.Optional[int] = None):
+    def __init__(
+        self, session, tokenizer, layers: list, max_length: typing.Optional[int] = None
+    ):
         self.session = session
         self.tokenizer = tokenizer
         self.layers = layers
         self.max_length = (
-            max_length if max_length is not None else tokenizer.__dict__["model_max_length"]
+            max_length
+            if max_length is not None
+            else tokenizer.__dict__["model_max_length"]
         )
 
     def encode(self, sentences: str | list):

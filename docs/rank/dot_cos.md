@@ -43,10 +43,9 @@ Initialization of `rank.Encoder` using cosine similarity:
 ...    encoder = SentenceTransformer(f"sentence-transformers/all-mpnet-base-v2").encode,
 ...    k = 2,
 ...    similarity = similarity.cosine,
-...    path = "encoder.pkl"
 ... )
 
->>> search = retriever + ranker 
+>>> search = retriever + ranker
 >>> search.add(documents)
 
 >>> search(q="paris")
@@ -89,10 +88,9 @@ Initialization of `rank.DPR` using dot product:
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
 ...    k = 30,
 ...    similarity = similarity.dot,
-...    path = "dpr.pkl"
 ... )
 
->>> search = retriever + ranker 
+>>> search = retriever + ranker
 >>> search.add(documents)
 
 >>> search(q="paris")

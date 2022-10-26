@@ -63,20 +63,20 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
     Union
     -----
     Flash retriever
-         key: uri
-         on: tags
-         documents: 8
+        key: uri
+        on: tags
+        documents: 8
     TfIdf retriever
-         key: uri
-         on: label
-         documents: 6
+        key: uri
+        on: label
+        documents: 6
     -----
     Encoder ranker
-         key: uri
-         on: label
-         k: 4
-         similarity: cosine
-         embeddings stored at: encoder.pkl
+        key: uri
+        on: label
+        k: 4
+        similarity: cosine
+        Embeddings pre-computed: 6
 
     >>> print(eval.eval(search=search, query_answers=query_answers, hits_k=range(6)))
     {'F1@1': '50.00%',
@@ -101,33 +101,33 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
 
     >>> print(search("Paris"))
     [{'label': 'Paris is the capital of France .',
-      'similarity': 0.72453946,
+      'similarity': 0.7245393395423889,
       'tags': 'Paris',
       'uri': 'tag:FranceCapital'},
      {'label': 'The Eiffel Tower can be found in Paris .',
-      'similarity': 0.52091306,
+      'similarity': 0.5209129452705383,
       'tags': ['Eiffel', 'Paris'],
       'uri': 'tag:EiffelTower'},
      {'label': 'It is known as the city of lights .',
-      'similarity': 0.42550576,
+      'similarity': 0.4255059063434601,
       'tags': ['lights', 'Paris'],
       'uri': 'tag:ParisLights'}]
 
     >>> print(search("Toulouse city"))
     [{'label': 'Toulouse has a famous rugby club .',
-      'similarity': 0.7541945,
+      'similarity': 0.7541944980621338,
       'tags': ['Toulouse', 'rugby'],
       'uri': 'tag:ToulouseRugby'},
      {'label': 'Toulouse is the capital of Occitanie .',
-      'similarity': 0.6744734,
+      'similarity': 0.6744731664657593,
       'tags': ['Toulouse', 'Occitanie'],
       'uri': 'tag:Occitanie'},
      {'label': 'It is known as the pink city .',
-      'similarity': 0.42794573,
+      'similarity': 0.42794570326805115,
       'tags': ['Toulouse', 'pink', 'rose'],
       'uri': 'tag:PinkCity'},
      {'label': 'It is known as the city of lights .',
-      'similarity': 0.3985046,
+      'similarity': 0.39850467443466187,
       'tags': ['lights', 'Paris'],
       'uri': 'tag:ParisLights'}]
 
@@ -162,10 +162,14 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
             for candidate in candidates[:k]:
                 if candidate in golds:
                     positives += 1
-            recall[k].update(positives / len(golds)) if positives > 0 else recall[k].update(0)
+            recall[k].update(positives / len(golds)) if positives > 0 else recall[
+                k
+            ].update(0)
 
         for k, candidate in enumerate(candidates):
-            global_precision.update(1) if candidate in golds else global_precision.update(0)
+            global_precision.update(
+                1
+            ) if candidate in golds else global_precision.update(0)
 
         # R-Precision
         relevant = 0
@@ -179,13 +183,18 @@ def eval(search, query_answers: list, hits_k: range = range(10)) -> dict:
         if k == 0:
             continue
         f1[k] = (
-            (2 * precision[k].get() * recall[k].get()) / (precision[k].get() + recall[k].get())
+            (2 * precision[k].get() * recall[k].get())
+            / (precision[k].get() + recall[k].get())
             if (precision[k].get() + recall[k].get()) > 0
             else 0
         )
 
-    metrics = {f"Precision@{k}": f"{metric.get():.2%}" for k, metric in precision.items()}
-    metrics.update({f"Recall@{k}": f"{metric.get():.2%}" for k, metric in recall.items()})
+    metrics = {
+        f"Precision@{k}": f"{metric.get():.2%}" for k, metric in precision.items()
+    }
+    metrics.update(
+        {f"Recall@{k}": f"{metric.get():.2%}" for k, metric in recall.items()}
+    )
     metrics.update({f"F1@{k}": f"{metric:.2%}" for k, metric in f1.items()})
     metrics.update({"R-Precision": f"{r_precision.get():.2%}"})
     metrics.update({"Precision": f"{global_precision.get():.2%}"})

@@ -78,7 +78,8 @@ class Lunr(Retriever):
         super().__init__(key=key, on=on, k=k)
 
         self.documents = {
-            str(document[self.key]): {self.key: document[self.key]} for document in documents
+            str(document[self.key]): {self.key: document[self.key]}
+            for document in documents
         }
 
         self.idx = lunr(
@@ -86,11 +87,12 @@ class Lunr(Retriever):
             fields=tuple(self.on),
             # Lunr does not handle missing fields.
             documents=[
-                {field: doc.get(field, "") for field in [self.key] + self.on} for doc in documents
+                {field: doc.get(field, "") for field in [self.key] + self.on}
+                for doc in documents
             ],
         )
 
-    def __call__(self, q: str) -> list:
+    def __call__(self, q: str, **kwargs) -> list:
         """Retrieve the right document."""
         # We do not handle all Lunr possibilites right now.
         q = q.replace(":", "").replace("-", "")
