@@ -49,22 +49,21 @@ ZeroShot classifier for ranking. Zero shot does not pre-compute embeddings, it n
 
 >>> ranker
 Zero Shot Classifier
-     model: typeform/distilbert-base-uncased-mnli
-     key: id
-     on: title, article
-     k: 2
-     multi class: True
+    key: id
+    on: title, article
+    k: 2
+    multi class: True
 
 >>> print(ranker(q="Paris", documents=documents))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 0.44725707173347473,
+  'similarity': 0.44725653529167175,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 0.31512799859046936,
+  'similarity': 0.31512802839279175,
   'title': 'Eiffel tower'}]
 ```
 
@@ -79,14 +78,6 @@ Zero Shot Classifier
     - **q**     (*'str'*)    
     - **documents**     (*'list'*)    
     - **kwargs**    
-    
-???- note "add"
-
-    Zero shot do not pre-compute embeddings.
-
-    **Parameters**
-
-    - **documents**    
     
 ## References
 

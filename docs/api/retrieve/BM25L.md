@@ -91,6 +91,7 @@ BM25L retriever
     **Parameters**
 
     - **q**     (*str*)    
+    - **kwargs**    
     
 ## References
 

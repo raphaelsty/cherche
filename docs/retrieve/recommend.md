@@ -80,7 +80,7 @@ The Recommend module is also available as a ranker.
 [{'id': 'document 1', 'similarity': 8.357158966165448},
  {'id': 'document 3', 'similarity': 0.4439385609854764},
  {'id': 'document 2', 'similarity': 0.3698757425749123}]
- ```
+```
 
 ### Map to documents
 

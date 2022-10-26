@@ -22,13 +22,13 @@ SentenceBert Ranker.
 
     Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
-- **path** (*'str | typing.Optionnal'*) – defaults to `None`
-
-    Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
-
-- **similarity** – defaults to `<function cosine at 0x168fa4c10>`
+- **similarity** – defaults to `<function cosine at 0x15efedf70>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
+
+- **store** – defaults to `<cherche.rank.base.MemoryStore object at 0x15efe17c0>`
+
+- **path** (*'str | typing.Optionnal'*) – defaults to `None`
 
 
 ## Attributes
@@ -54,30 +54,30 @@ SentenceBert Ranker.
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    k = 2,
-...    path = "encoder.pkl"
 ... )
 
 >>> ranker.add(documents=documents)
 Encoder ranker
-     key: id
-     on: title, article
-     k: 2
-     similarity: cosine
-     embeddings stored at: encoder.pkl
+    key: id
+    on: title, article
+    k: 2
+    similarity: cosine
+    Embeddings pre-computed: 3
 
 >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-[{'id': 0, 'similarity': 0.66051394}, {'id': 1, 'similarity': 0.5142564}]
+[{'id': 0, 'similarity': 0.6605141758918762},
+ {'id': 1, 'similarity': 0.5142566561698914}]
 
 >>> print(ranker(q="Paris", documents=documents))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 0.66051394,
+  'similarity': 0.6605141758918762,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 0.5142564,
+  'similarity': 0.5142566561698914,
   'title': 'Eiffel tower'}]
 
 >>> ranker += documents
@@ -86,12 +86,12 @@ Encoder ranker
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 0.66051394,
+  'similarity': 0.6605141758918762,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 0.5142564,
+  'similarity': 0.5142566561698914,
   'title': 'Eiffel tower'}]
 ```
 
@@ -100,6 +100,8 @@ Encoder ranker
 ???- note "__call__"
 
     Encode input query and ranks documents based on the similarity between the query and the selected field of the documents.
+
+    https://pymilvus.readthedocs.io/en/latest/tutorial.html status, documents = client.get_entity_by_id(collection_name, [id_1, id_2])
 
     **Parameters**
 
@@ -114,29 +116,22 @@ Encoder ranker
     **Parameters**
 
     - **documents**     (*'list'*)    
+    - **batch_size**     (*'int'*)     – defaults to `64`    
     
-???- note "dump_embeddings"
+???- note "encode"
 
-    Dump embeddings to the selected directory.
-
-    **Parameters**
-
-    - **embeddings**    
-    - **path**     (*'str'*)    
-        Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
-    
-???- note "embs"
-
-    Computes and returns embeddings of input documents.
+    Computes documents embeddings.
 
     **Parameters**
 
     - **documents**     (*'list'*)    
     
-???- note "load_embeddings"
+???- note "rank"
 
-    Load embeddings from an existing directory.
+    Rank inputs documents ordered by relevance among the top k.
 
-    - **path**     (*'str'*)    
-        Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
+    **Parameters**
+
+    - **query_embedding**     (*'np.ndarray'*)    
+    - **documents**     (*'list'*)    
     

@@ -34,35 +34,23 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
 ```python
 >>> from pprint import pprint as print
->>> from cherche import retrieve
 >>> from elasticsearch import Elasticsearch
+>>> from cherche import retrieve, rank
+>>> from sentence_transformers import SentenceTransformer
 
->>> es = Elasticsearch()
+>>> es = Elasticsearch(hosts="http://localhost:9200")
 
 >>> if es.ping():
+...    retriever = retrieve.Elastic(key="id", on=["title", "author"], k=2, es=es, index="test")
 ...
-...     retriever = retrieve.Elastic(key="id", on=["title", "article"], k=2, es=es, index="test")
+...    documents = [
+...         {"id": 0, "title": "Paris", "author": "Wiki"},
+...         {"id": 1, "title": "Eiffel tower", "author": "Wiki"},
+...         {"id": 2, "title": "Montreal", "author": "Wiki"},
+...    ]
 ...
-...     documents = [
-...         {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...         {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...         {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-...     ]
-...
-...     retriever = retriever.add(documents=documents)
-...     candidates = retriever(q="paris")
-
->>> print(candidates)
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 1.2017119,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 1.0534589,
-  'title': 'Eiffel tower'}]
+...    retriever = retriever.add(documents=documents)
+...    candidates = retriever(q="paris")
 ```
 
 ## Methods
@@ -75,6 +63,7 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
 
     - **q**     (*str*)    
     - **query**     (*str*)     – defaults to `None`    
+    - **kwargs**    
     
 ???- note "add"
 
@@ -83,16 +72,8 @@ ElasticSearch retriever based on the [Python client of Elasticsearch](https://el
     **Parameters**
 
     - **documents**     (*list*)    
-    
-???- note "add_embeddings"
-
-    Store documents and embeddings inside Elasticsearch using bulk indexing. Embeddings parameter has the priority over ranker. If embeddings are provided, ElasticSearch will index documents with their embeddings. If embeddings are not provided, the Ranker will be called to compute embeddings. This method is useful if you have to deal with large corpora.
-
-    **Parameters**
-
-    - **documents**     (*list*)    
-    - **ranker**     (*cherche.rank.base.Ranker*)     – defaults to `None`    
-    - **embeddings**     (*list*)     – defaults to `None`    
+    - **batch_size**     – defaults to `128`    
+    - **kwargs**    
     
 ???- note "reset"
 

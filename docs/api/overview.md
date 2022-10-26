@@ -20,6 +20,11 @@
 
 - [RAG](../generate/RAG)
 
+## index
+
+- [Faiss](../index/Faiss)
+- [Milvus](../index/Milvus)
+
 ## onnx
 
 
@@ -47,6 +52,7 @@
 - [DPR](../rank/DPR)
 - [Encoder](../rank/Encoder)
 - [Ranker](../rank/Ranker)
+- [Recommend](../rank/Recommend)
 - [ZeroShot](../rank/ZeroShot)
 
 ## retrieve
@@ -59,8 +65,11 @@
 - [Flash](../retrieve/Flash)
 - [Fuzz](../retrieve/Fuzz)
 - [Lunr](../retrieve/Lunr)
+- [Meilisearch](../retrieve/Meilisearch)
+- [Recommend](../retrieve/Recommend)
 - [Retriever](../retrieve/Retriever)
 - [TfIdf](../retrieve/TfIdf)
+- [Typesense](../retrieve/Typesense)
 
 ## similarity
 
@@ -79,4 +88,5 @@
 ## utils
 
 - [quantize](../utils/quantize)
+- [users_items_sparse](../utils/users-items-sparse)
 

@@ -22,13 +22,11 @@ Abstract class for ranking models.
 
     Number of documents to keep.
 
-- **path** (*'str'*)
-
-    Path of the file dedicated to store the embeddings as a pickle file.
-
 - **similarity**
 
     Similarity measure to use i.e similarity.cosine or similarity.dot.
+
+- **store**
 
 
 ## Attributes
@@ -56,29 +54,22 @@ Abstract class for ranking models.
     **Parameters**
 
     - **documents**     (*'list'*)    
+    - **batch_size**     (*'int'*)     – defaults to `64`    
     
-???- note "dump_embeddings"
+???- note "encode"
 
-    Dump embeddings to the selected directory.
-
-    **Parameters**
-
-    - **embeddings**    
-    - **path**     (*'str'*)    
-        Path of the file dedicated to store the embeddings as a pickle file.
-    
-???- note "embs"
-
-    Computes and returns embeddings of input documents.
+    Computes documents embeddings.
 
     **Parameters**
 
     - **documents**     (*'list'*)    
     
-???- note "load_embeddings"
+???- note "rank"
 
-    Load embeddings from an existing directory.
+    Rank inputs documents ordered by relevance among the top k.
 
-    - **path**     (*'str'*)    
-        Path of the file dedicated to store the embeddings as a pickle file.
+    **Parameters**
+
+    - **query_embedding**     (*'np.ndarray'*)    
+    - **documents**     (*'list'*)    
     

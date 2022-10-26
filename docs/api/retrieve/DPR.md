@@ -6,10 +6,6 @@ DPR as a retriever using Faiss Index.
 
 ## Parameters
 
-- **encoder**
-
-- **query_encoder**
-
 - **key** (*str*)
 
     Field identifier of each document.
@@ -22,9 +18,15 @@ DPR as a retriever using Faiss Index.
 
     Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
-- **path** (*str*) – defaults to `None`
+- **encoder**
 
-- **index** (*faiss.swigfaiss.IndexFlatL2*) – defaults to `None`
+- **query_encoder**
+
+- **index** – defaults to `None`
+
+    Index that will store the embeddings and perform the similarity search. The default index is Faiss.
+
+- **path** (*str*) – defaults to `None`
 
 
 ## Attributes
@@ -40,61 +42,39 @@ DPR as a retriever using Faiss Index.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris", "author": "Paris"},
+...    {"id": 1, "title": "Madrid", "author": "Madrid"},
+...    {"id": 2, "title": "Montreal", "author": "Montreal"},
 ... ]
 
 >>> retriever = retrieve.DPR(
+...    key = "id",
+...    on = ["title", "author"],
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    key = "id",
-...    on = ["title", "article"],
 ...    k = 2,
 ... )
 
 >>> retriever.add(documents)
 DPR retriever
      key: id
-     on: title, article
+     on: title, author
      documents: 3
 
->>> print(retriever("Paris"))
-[{'id': 0, 'similarity': 0.0111}, {'id': 2, 'similarity': 0.0102}]
-
->>> documents = [
-...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
-
->>> retriever.add(documents)
-DPR retriever
-     key: id
-     on: title, article
-     documents: 6
-
->>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
+>>> print(retriever("Spain"))
+[{'id': 1, 'similarity': 0.009192565994771673},
+ {'id': 0, 'similarity': 0.008331424302852155}]
 
 >>> retriever += documents
 
->>> print(retriever("Paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 3,
-  'similarity': 0.0111,
-  'title': 'Paris'},
- {'article': 'This town is the capital of France',
-  'author': 'Wiki',
+>>> print(retriever("Spain"))
+[{'author': 'Madrid',
+  'id': 1,
+  'similarity': 0.009192565994771673,
+  'title': 'Madrid'},
+ {'author': 'Paris',
   'id': 0,
-  'similarity': 0.0111,
+  'similarity': 0.008331424302852155,
   'title': 'Paris'}]
 ```
 
@@ -107,40 +87,18 @@ DPR retriever
     **Parameters**
 
     - **q**     (*str*)    
+    - **expr**     (*str*)     – defaults to `None`    
+    - **consistency_level**     (*str*)     – defaults to `None`    
+    - **partition_names**     (*list*)     – defaults to `None`    
+    - **kwargs**    
     
 ???- note "add"
 
-    Add documents to the faiss index and export embeddings if the path is provided. Streaming friendly.
+    Add documents to the index.
 
     **Parameters**
 
     - **documents**     (*list*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
+    - **kwargs**    
     
-???- note "build_faiss"
-
-    Build faiss index.
-
-    **Parameters**
-
-    - **index**     (*faiss.swigfaiss.IndexFlatL2*)    
-    - **documents_embeddings**     (*list*)    
-    
-???- note "dump_embeddings"
-
-    Dump embeddings to the selected directory.
-
-    **Parameters**
-
-    - **embeddings**     (*dict*)    
-    - **path**     (*str*)    
-    
-???- note "load_embeddings"
-
-    Load embeddings from an existing directory.
-
-    - **path**     (*str*)    
-    
-## References
-
-1. [Faiss](https://github.com/facebookresearch/faiss)
-

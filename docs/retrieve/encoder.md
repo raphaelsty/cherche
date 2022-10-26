@@ -47,6 +47,9 @@ By default, the index used is the `IndexFlatL2`. It is stored in memory and is c
 >>> retriever = retriever.add(documents=documents)
 
 >>> retriever("paris")
+```
+
+```python
 [{'id': 0, 'similarity': 0.9025790931437582},
  {'id': 2, 'similarity': 0.8160134832855334}]
 ```
@@ -101,6 +104,9 @@ pip install faiss-gpu
 >>> retriever.add(documents)
 
 >>> retriever("paris")
+```
+
+```python
 [{'id': 0,
   'similarity': 0.9025790931437582},
  {'id': 2,
@@ -271,7 +277,7 @@ Once we have created our Milvus collection and index, we can initialize our `ret
 ```python
 [{'id': 1, 'similarity': 1.5076334135501044, 'title': 'Madrid'},
  {'id': 0, 'similarity': 0.9021741164485997, 'title': 'Paris'}]
- ```
+```
 
 ## Custom Encoder
 

@@ -6,4 +6,3 @@ nav:
     - voting.ipynb
     - encoder_retriever.ipynb
     - eval_pipeline.ipynb
-    - large_corpus.ipynb

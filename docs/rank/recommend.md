@@ -91,7 +91,7 @@ The Recommend module is also available as a retriever.
   'title': 'title 3',
   'author': 'author 3',
   'similarity': -1.7862197410067893e-07}]
- ```
+```
 
 ## Store
 

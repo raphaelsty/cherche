@@ -91,6 +91,7 @@ BM25Okapi retriever
     **Parameters**
 
     - **q**     (*str*)    
+    - **kwargs**    
     
 ## References
 

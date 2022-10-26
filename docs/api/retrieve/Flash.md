@@ -49,7 +49,7 @@ Flash retriever
      documents: 6
 
 >>> print(retriever(q="paris"))
-[{'id': 0}, {'id': 1}]
+[{'id': 0, 'similarity': 1}, {'id': 1, 'similarity': 1}]
 
 >>> retriever += documents
 
@@ -57,11 +57,13 @@ Flash retriever
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
+  'similarity': 1,
   'tags': ['paris', 'capital'],
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris',
   'author': 'Wiki',
   'id': 1,
+  'similarity': 1,
   'tags': ['paris', 'eiffel', 'tower'],
   'title': 'Eiffel tower'}]
 ```
@@ -70,11 +72,12 @@ Flash retriever
 
 ???- note "__call__"
 
-    Retrieve tagss.
+    Retrieve tags.
 
     **Parameters**
 
     - **q**     (*str*)    
+    - **kwargs**    
     
 ???- note "add"
 
@@ -83,6 +86,7 @@ Flash retriever
     **Parameters**
 
     - **documents**     (*list*)    
+    - **kwargs**    
     
 ## References
 

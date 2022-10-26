@@ -16,6 +16,7 @@ Voting operator. Average of the similarity scores of the documents.
 
 ```python
 >>> from cherche import compose, retrieve
+>>> from pprint import pprint as print
 
 >>> documents = [
 ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
@@ -41,8 +42,9 @@ TfIdf retriever
      documents: 3
 -----
 
->>> search("paris eiffel")
-[{'id': 1, 'similarity': 0.5216793798120436}, {'id': 0, 'similarity': 0.4783206201879563}]
+>>> print(search("paris eiffel"))
+[{'id': 1, 'similarity': 0.5216793798120437},
+ {'id': 0, 'similarity': 0.4783206201879563}]
 ```
 
 ## Methods
@@ -53,10 +55,18 @@ TfIdf retriever
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*str*)     – defaults to ``    
+    - **user**     (*Union[str, int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
 
+    Add new documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    - **kwargs**    
+    
 ???- note "reset"
 

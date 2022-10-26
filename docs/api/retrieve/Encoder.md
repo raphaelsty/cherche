@@ -20,9 +20,11 @@ Encoder as a retriever using Faiss Index.
 
     Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
-- **path** (*str*) – defaults to `None`
+- **index** – defaults to `None`
 
-- **index** (*faiss.swigfaiss.IndexFlatL2*) – defaults to `None`
+    Index that will store the embeddings and perform the similarity search. The default index is Faiss.
+
+- **path** (*str*) – defaults to `None`
 
 
 ## Attributes
@@ -38,61 +40,27 @@ Encoder as a retriever using Faiss Index.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris", "author": "Paris"},
+...    {"id": 1, "title": "Madrid", "author": "Madrid"},
+...    {"id": 2, "title": "Montreal", "author": "Montreal"},
 ... ]
 
 >>> retriever = retrieve.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    key = "id",
-...    on = ["title", "article"],
+...    on = ["title", "author"],
 ...    k = 2,
 ... )
 
 >>> retriever.add(documents)
 Encoder retriever
      key: id
-     on: title, article
+     on: title, author
      documents: 3
 
->>> print(retriever("Paris"))
-[{'id': 0, 'similarity': 1.47281}, {'id': 1, 'similarity': 1.02935}]
-
->>> documents = [
-...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
-
->>> retriever.add(documents)
-Encoder retriever
-     key: id
-     on: title, article
-     documents: 6
-
->>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
-
->>> retriever += documents
-
->>> print(retriever("Paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 3,
-  'similarity': 1.47281,
-  'title': 'Paris'},
- {'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 1.47281,
-  'title': 'Paris'}]
+>>> print(retriever("Spain"))
+[{'id': 1, 'similarity': 1.1885032405192992},
+ {'id': 0, 'similarity': 0.8492543139964137}]
 ```
 
 ## Methods
@@ -104,38 +72,20 @@ Encoder retriever
     **Parameters**
 
     - **q**     (*str*)    
+    - **expr**     (*str*)     – defaults to `None`    
+    - **consistency_level**     (*str*)     – defaults to `None`    
+    - **partition_names**     (*list*)     – defaults to `None`    
+    - **kwargs**    
     
 ???- note "add"
 
-    Add documents to the faiss index and export embeddings if the path is provided. Streaming friendly.
+    Add documents to the index.
 
     **Parameters**
 
     - **documents**     (*list*)    
-    
-???- note "build_faiss"
-
-    Build faiss index.
-
-    **Parameters**
-
-    - **index**     (*faiss.swigfaiss.IndexFlatL2*)    
-    - **documents_embeddings**     (*list*)    
-    
-???- note "dump_embeddings"
-
-    Dump embeddings to the selected directory.
-
-    **Parameters**
-
-    - **embeddings**     (*dict*)    
-    - **path**     (*str*)    
-    
-???- note "load_embeddings"
-
-    Load embeddings from an existing directory.
-
-    - **path**     (*str*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
+    - **kwargs**    
     
 ## References
 

@@ -75,6 +75,7 @@ Lunr retriever
     **Parameters**
 
     - **q**     (*str*)    
+    - **kwargs**    
     
 ## References
 

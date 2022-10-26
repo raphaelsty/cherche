@@ -43,27 +43,27 @@ Retriever, Ranker:
 
 >>> search.add(documents=documents)
 TfIdf retriever
-     key: id
-     on: article
-     documents: 3
+    key: id
+    on: article
+    documents: 3
 Encoder ranker
-     key: id
-     on: article
-     k: None
-     similarity: cosine
-     embeddings stored at: pipeline_encoder.pkl
+    key: id
+    on: article
+    k: None
+    similarity: cosine
+    Embeddings pre-computed: 3
 Mapping to documents
 
 >>> print(search(q = "Paris"))
 [{'article': 'Paris is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 0.7014109,
+  'similarity': 0.7014107704162598,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris.',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 0.51787204,
+  'similarity': 0.5178720951080322,
   'title': 'Eiffel tower'}]
 
 ```
@@ -81,19 +81,18 @@ Retriever, Ranker, Question Answering:
 
 >>> search
 TfIdf retriever
-     key: id
-     on: article
-     documents: 3
+    key: id
+    on: article
+    documents: 3
 Encoder ranker
-     key: id
-     on: article
-     k: None
-     similarity: cosine
-     embeddings stored at: pipeline_encoder.pkl
+    key: id
+    on: article
+    k: None
+    similarity: cosine
+    Embeddings pre-computed: 3
 Mapping to documents
 Question Answering
-     model: deepset/roberta-base-squad2
-     on: article
+    on: article
 
 >>> print(search(q = "What is based in Paris?"))
 [{'answer': 'Eiffel tower',
@@ -101,8 +100,8 @@ Question Answering
   'author': 'Wiki',
   'end': 12,
   'id': 1,
-  'qa_score': 0.9643093347549438,
-  'similarity': 0.65787125,
+  'qa_score': 0.9643093943595886,
+  'similarity': 0.6578713655471802,
   'start': 0,
   'title': 'Eiffel tower'},
  {'answer': 'Paris is the capital of France',
@@ -110,8 +109,8 @@ Question Answering
   'author': 'Wiki',
   'end': 30,
   'id': 0,
-  'qa_score': 4.247476681484841e-05,
-  'similarity': 0.7062913,
+  'qa_score': 4.2473871872061864e-05,
+  'similarity': 0.7062915563583374,
   'start': 0,
   'title': 'Paris'},
  {'answer': 'Montreal is in Canada.',
@@ -119,8 +118,8 @@ Question Answering
   'author': 'Wiki',
   'end': 22,
   'id': 2,
-  'qa_score': 1.7172554933608808e-08,
-  'similarity': 0.3316515,
+  'qa_score': 1.7172791189068448e-08,
+  'similarity': 0.3316514492034912,
   'start': 0,
   'title': 'Montreal'}]
 ```
@@ -133,10 +132,18 @@ Question Answering
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*str*)     – defaults to ``    
+    - **user**     (*Union[str, int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
 
+    Add new documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    - **kwargs**    
+    
 ???- note "reset"
 

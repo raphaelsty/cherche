@@ -52,33 +52,36 @@ Mapping to documents
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
-  'similarity': 1.0,
+  'similarity': 0.3333333333333333,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris.',
   'author': 'Wiki',
   'id': 1,
-  'similarity': 0.4505,
+  'similarity': 0.3333333333333333,
   'title': 'Eiffel tower'}]
 
 >>> print(search(q = "Montreal"))
 [{'article': 'Montreal is in Canada.',
   'author': 'Wiki',
   'id': 2,
-  'similarity': 1.0,
+  'similarity': 0.3333333333333333,
   'title': 'Montreal'}]
 
 >>> print(search(q = "Wiki"))
 [{'article': 'This town is the capital of France',
   'author': 'Wiki',
   'id': 0,
+  'similarity': 0.1111111111111111,
   'title': 'Paris'},
  {'article': 'Eiffel tower is based in Paris.',
   'author': 'Wiki',
   'id': 1,
+  'similarity': 0.1111111111111111,
   'title': 'Eiffel tower'},
  {'article': 'Montreal is in Canada.',
   'author': 'Wiki',
   'id': 2,
+  'similarity': 0.1111111111111111,
   'title': 'Montreal'}]
 ```
 
@@ -90,10 +93,18 @@ Mapping to documents
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*str*)     – defaults to ``    
+    - **user**     (*Union[str, int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
 
+    Add new documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    - **kwargs**    
+    
 ???- note "reset"
 

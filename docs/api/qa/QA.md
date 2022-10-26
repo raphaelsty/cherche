@@ -46,8 +46,7 @@ Question Answering model.
 
 >>> model
 Question Answering
-     model: deepset/roberta-base-squad2
-     on: title, article
+    on: title, article
 
 >>> print(model(q="Where is the Eiffel tower?", documents=documents))
 [{'answer': 'Paris',
