@@ -85,8 +85,6 @@ class Recommend(Ranker):
         Users: 4
         Documents: 3
 
-    >>> recommend += documents
-
     >>> print(recommend(user="Geoffrey", documents=documents))
     [{'author': 'Paris',
       'id': 'a',
@@ -107,8 +105,7 @@ class Recommend(Ranker):
     >>> print(recommend(user="unknown", documents=documents))
     [{'author': 'Paris', 'id': 'a', 'similarity': 0, 'title': 'Paris'},
      {'author': 'Madrid', 'id': 'b', 'similarity': 0, 'title': 'Madrid'},
-     {'author': 'Montreal', 'id': 'c', 'similarity': 0, 'title': 'Montreal'},
-     {'author': 'unknown', 'id': 'unknown', 'similarity': 0, 'title': 'unknown'}]
+     {'author': 'Montreal', 'id': 'c', 'similarity': 0, 'title': 'Montreal'}]
 
     References
     ----------
