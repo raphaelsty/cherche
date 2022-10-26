@@ -132,6 +132,7 @@ Cherche provides different [retrievers](https://raphaelsty.github.io/cherche/ret
 - retrieve.Fuzz
 - retrieve.Meilisearch
 - retrieve.TypeSense
+- retrieve.Recommend
 
 ## Rank 🤗
 
@@ -144,6 +145,17 @@ Cherche provides modules dedicated to summarization and question answering. Thes
 ## Translation
 
 Hugging Face's translation models can be fully integrated into the neural search pipeline to translate queries, documents, or answers.
+
+## Collaborative filtering
+
+Search is fully compatible with the collaborative filtering library [Implicit](https://github.com/benfred/implicit). It is advantageous if you have a history associated with users and you want to retrieve / re-rank documents based on user preferences.
+
+|            | **Document 1** | **Document 2** | **Document 3** | **Document 4** |
+|:----------:|:--------------:|:--------------:|:--------------:|:--------------:|
+| **User 1** |        1       |        0       |        0       |        1       |
+| **User 2** |        0       |        1       |        0       |        0       |
+| **User 3** |        0       |        4       |        1       |        0       |
+
 
 ## Deploy
 
