@@ -54,17 +54,14 @@ Retrievers store document `keys` to retrieve them later. Some retrievers can ind
 
 |      Retriever     |   Batch   |  Storage  | Corpus size |
 |:------------------:|:---------:|:---------:|:-----------:|
-|  retrieve.Elastic  |     ✅     | disk     |
-Large       |
-|  retrieve.Meilisearch  |     ✅     | disk     |
-Large       |
-|  retrieve.Typesense  |     ✅     | disk     |
-Large       |
-|  retrieve.Encoder * Milvus |     ✅     | disk   | large      |
-
-|  retrieve.DPR * Milvus |     ✅     | disk   | large      |
+|  retrieve.Elastic  |     ✅     | disk     | Large       |
+|  retrieve.Meilisearch  |     ✅     | disk | Large       |
+|  retrieve.Typesense  |     ✅     | disk   | Large       |  retrieve.Encoder * Milvus |     ✅     | disk   | Large      |
+|  retrieve.DPR * Milvus |     ✅     | disk   | Large      |
+|  retrieve.Recommend * Milvus |     ✅     | disk | Large      |
 |  retrieve.Encoder  |     ✅     | memory   | Medium      |
 |  retrieve.DPR  |     ✅     | memory   | Medium      |
+|  retrieve.Recommend |     ✅     | memory | Medium      |
 |   retrieve.Flash   |     ✅     | memory   | Medium      |
 |    retrieve.Fuzz   |     ✅     | memory   | Medium      |
 |   retrieve.TfIdf   |     ❌     | memory   | Medium      |

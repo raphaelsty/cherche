@@ -26,11 +26,11 @@ DPR ranks documents using distinct models to encode the query and document conte
 
     Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
-- **similarity** – defaults to `<function dot at 0x15eff1040>`
+- **similarity** – defaults to `<function dot at 0x16684bc10>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
-- **store** – defaults to `<cherche.rank.base.MemoryStore object at 0x15ef4c520>`
+- **store** – defaults to `<cherche.rank.base.MemoryStore object at 0x166806cd0>`
 
 - **path** (*'str | typing.Optionnal'*) – defaults to `None`
 

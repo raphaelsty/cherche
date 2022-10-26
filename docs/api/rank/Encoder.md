@@ -22,11 +22,11 @@ SentenceBert Ranker.
 
     Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
 
-- **similarity** – defaults to `<function cosine at 0x15efedf70>`
+- **similarity** – defaults to `<function cosine at 0x16684bb80>`
 
     Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
 
-- **store** – defaults to `<cherche.rank.base.MemoryStore object at 0x15efe17c0>`
+- **store** – defaults to `<cherche.rank.base.MemoryStore object at 0x166841730>`
 
 - **path** (*'str | typing.Optionnal'*) – defaults to `None`
 

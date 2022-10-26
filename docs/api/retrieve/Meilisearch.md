@@ -16,7 +16,7 @@ Meilisearch is a RESTful search API. It aims to be a ready-to-go solution for ev
 
     Meilisearch index. Meilisearch will create the index if it does not exist.
 
-- **k** (*Optional[int]*) – defaults to `None`
+- **k** (*Union[int, NoneType]*) – defaults to `None`
 
     Number of documents to retrieve. Default is `None`, i.e all documents that match the query  will be retrieved.
 
