@@ -2,407 +2,407 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://raphaelsty.github.io/cherche/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/overview/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Intersection/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Pipeline/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Union/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/compose/Vote/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/data/arxiv-tags/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/data/load-towns/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/eval/eval/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/generate/RAG/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/index/Faiss/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/index/Milvus/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/onnx/STEncoder/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/onnx/qa/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/onnx/sentence-transformers/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/qa/QA/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/query/Norvig/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/query/PRF/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/query/Query/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/DPR/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/Encoder/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/Ranker/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/Recommend/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/rank/ZeroShot/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/BM25L/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/BM25Okapi/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/DPR/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Elastic/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Encoder/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Flash/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Fuzz/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Lunr/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Meilisearch/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Recommend/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Retriever/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/TfIdf/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/retrieve/Typesense/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/similarity/cosine/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/similarity/dot/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/summary/Summary/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/translate/Translate/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/translate/TranslateQuery/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/utils/quantize/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/api/utils/users-items-sparse/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/deployment/deployment/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/documents/documents/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/documents/towns/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/encoder_retriever/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/eval_pipeline/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/retriever_ranker/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/retriever_ranker_qa/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/retriever_ranker_summary/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/union_intersection_rankers/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/examples/voting/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/generate/rag/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/generate/summary/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/generate/translate/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/onnx/onnx/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/pipeline/pipeline/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/qa/qa/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/dot_cos/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/dpr/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/encoder/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/gpu/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/rank/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/recommend/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/rank/zero_shot/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/bm25/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/dpr/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/elastic/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/encoder/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/flash/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/fuzz/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/lunr/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/meilisearch/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/recommend/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/retrieve/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/tfidf/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/retrieve/typesense/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/scripts/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://raphaelsty.github.io/cherche/serialize/serialize/</loc>
-         <lastmod>2022-10-26</lastmod>
+         <lastmod>2022-10-27</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

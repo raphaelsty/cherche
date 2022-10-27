@@ -2624,6 +2624,9 @@
 </code></pre></div>
 <h3 id="collection">Collection<a class="headerlink" href="#collection" title="Permanent link">&para;</a></h3>
 <p>Before pre-computing documents embeddings, it is necessary to create a collection. We will use the Milvus Python API: <a href="https://milvus.io/api-reference/pymilvus/v2.1.1/About.md">pymilvus</a>.</p>
+<p>First we will install the python client pymilvus.</p>
+<div class="highlight"><pre><span></span><code>pip install pymilvus
+</code></pre></div>
 <p>The first step is to connect to the Milvus database:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pymilvus</span> <span class="kn">import</span> <span class="n">connections</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">CollectionSchema</span><span class="p">,</span> <span class="n">FieldSchema</span><span class="p">,</span> <span class="n">DataType</span>
 
