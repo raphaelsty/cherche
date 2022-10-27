@@ -12,7 +12,7 @@ Typesense retriever.
 
 - **collection**
 
-- **k** (*Union[int, NoneType]*) – defaults to `None`
+- **k** (*Optional[int]*) – defaults to `None`
 
 
 ## Attributes
@@ -82,7 +82,7 @@ Typesense retriever
     **Parameters**
 
     - **q**     (*str*)    
-    - **query**     (*Union[dict, NoneType]*)     – defaults to `None`    
+    - **query**     (*Optional[dict]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"

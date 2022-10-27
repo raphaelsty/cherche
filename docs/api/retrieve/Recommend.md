@@ -18,7 +18,7 @@ Collaborative filtering as a retriever. Recommend is compatible with the library
 
     Index that will store the embeddings of documents and perform the similarity search. The default index is Faiss. We can choose index.Milvus also.
 
-- **store** – defaults to `<cherche.retrieve.recommend.MemoryStore object at 0x168b6ca30>`
+- **store** – defaults to `<cherche.retrieve.recommend.MemoryStore object at 0x16f7a4a30>`
 
     Index that will store the embeddings of users. By default, it store users embeddings in memory. We can choose index.Milvus also.
 

@@ -14,7 +14,7 @@ Retriever base class.
 
     Fields to use to match the query to the documents.
 
-- **k** (*Union[int, NoneType]*)
+- **k** (*Optional[int]*)
 
     Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
 

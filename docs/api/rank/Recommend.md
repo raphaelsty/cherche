@@ -14,11 +14,11 @@ Collaborative filtering as a ranker. Recommend is compatible with the library [I
 
     Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
-- **similarity** – defaults to `<function cosine at 0x16684bb80>`
+- **similarity** – defaults to `<function cosine at 0x16bec7f70>`
 
-- **store_items** – defaults to `<cherche.rank.base.MemoryStore object at 0x166841ee0>`
+- **store_items** – defaults to `<cherche.rank.base.MemoryStore object at 0x16becd160>`
 
-- **store_users** – defaults to `<cherche.rank.base.MemoryStore object at 0x166841f40>`
+- **store_users** – defaults to `<cherche.rank.base.MemoryStore object at 0x16becd1c0>`
 
 
 ## Attributes

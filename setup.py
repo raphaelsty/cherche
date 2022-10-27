@@ -14,7 +14,6 @@ base_packages = [
     "meilisearch >= 0.22.1",
     "more-itertools >= 9.0.0",
     "numpy >= 1.19.0",
-    "pymilvus >= 2.1.3",
     "rank-bm25 == 0.2.1",
     "rapidfuzz >= 1.9.1",
     "river >= 0.8.0",
@@ -25,6 +24,8 @@ base_packages = [
     "tqdm >= 4.62.3",
     "typesense >= 0.14.0",
 ]
+
+milvus = ["pymilvus >= 2.1.3"]
 
 onnx = ["onnx >= 1.10.2", "onnxruntime >= 1.9.0"]
 
@@ -63,6 +64,7 @@ setuptools.setup(
         "onnx": base_packages + onnx,
         "onnxgpu": base_packages + onnxgpu,
         "doc": base_packages + doc,
+        "milvus": base_packages + milvus,
     },
     package_data={
         "cherche": ["data/towns.json", "data/semanlink/*.json", "data/norvig.txt"]

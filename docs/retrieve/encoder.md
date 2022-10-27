@@ -158,6 +158,12 @@ sudo docker-compose down
 
 Before indexing the documents, it is necessary to create a collection. We will use the Milvus Python API: [pymilvus](https://milvus.io/api-reference/pymilvus/v2.1.1/About.md).
 
+First we will install the python client pymilvus.
+
+```sh
+pip install pymilvus
+```
+
 The first step is to connect to the Milvus database:
 
 ```python
