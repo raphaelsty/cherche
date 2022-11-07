@@ -165,6 +165,12 @@ We provide a minimalist API to deploy our neural search pipeline with FastAPI an
 
 A running demo is available on [Hugging Face](https://huggingface.co/spaces/raphaelsty/games).
 
+## Contributors 🤝
+ Cherche was created for/by Renault and is now available to all.
+ We welcome all contributions.
+
+ <p align="center"><img width=180 src="docs/img/renault.jpg"/></p>
+
 ## Acknowledgements 👏
 
 The BM25 models available in Cherche are wrappers around [rank_bm25](https://github.com/dorianbrown/rank_bm25). Elastic retriever is a wrapper around [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v7.15.2/). TfIdf retriever is a wrapper around [scikit-learn's TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). Lunr retriever is a wrapper around [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). Flash retriever is a wrapper around [FlashText](https://github.com/vi3k6i5/flashtext). DPR and Encode rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline. ZeroShot ranker is a wrapper dedicated to the use of the zero-shot sequence classifiers of [Hugging Face](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) in a neural search pipeline.
