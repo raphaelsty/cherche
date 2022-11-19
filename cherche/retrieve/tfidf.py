@@ -149,7 +149,7 @@ class TfIdf(Retriever):
             ]
             for idx, (match, scores) in enumerate(
                 zip(
-                    np.flip(similarities.argsort(axis=1)[-self.k :], axis=1),
+                    np.fliplr(similarities.argsort(axis=1))[:,:self.k],
                     similarities,
                 )
             )
