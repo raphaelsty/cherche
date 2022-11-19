@@ -68,6 +68,10 @@ class TfIdf(Retriever):
     >>> print(retriever("unknown"))
     []
 
+    >>> print(retriever.batch(["paris", "unknown"]))
+    {0: [{'id': 0, 'similarity': 0.28895767404089806},
+         {'id': 1, 'similarity': 0.23464049354653993}],
+     1: []}
 
     References
     ----------
@@ -117,7 +121,7 @@ class TfIdf(Retriever):
             Xq = np.concatenate(
                 [self.matrix.getcol(xqs).toarray() for xqs in qs.indices], axis=1
             )
-            Xq = np.dot(Xq, np.array(qs.data))
+            Xq = np.dot(Xq, qs.data)
         similarities = Xq
 
         documents = [
@@ -126,3 +130,27 @@ class TfIdf(Retriever):
         ][: self.k]
 
         return [doc for doc in documents if doc["similarity"] > 0]
+    
+    def batch(self, q: list[str]) -> dict:
+        """Retrieve documents from batch of queries.
+
+        Parameters
+        ----------
+        q
+            List of queries.
+
+        """
+        similarities = (self.tfidf.transform(q) @ self.matrix.T).toarray()
+        return {
+            idx: [
+                {**self.documents[index], "similarity": similarity}
+                for index, similarity in zip(match, scores[match])
+                if similarity > 0
+            ]
+            for idx, (match, scores) in enumerate(
+                zip(
+                    np.flip(similarities.argsort(axis=1)[-self.k :], axis=1),
+                    similarities,
+                )
+            )
+        }
