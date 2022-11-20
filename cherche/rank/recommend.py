@@ -229,8 +229,6 @@ class Recommend(Ranker):
             for key, similarity in self.similarity(
                 emb_q=embedding_user[0], emb_documents=embeddings
             )
-        ]
+        ] + [{**index[key], "similarity": 0} for key in unknown]
 
-        # Addind unknown documents
-        ranked += [{**index[key], "similarity": 0} for key in unknown]
         return ranked[: self.k] if self.k is not None else ranked

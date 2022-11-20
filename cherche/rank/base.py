@@ -141,8 +141,11 @@ class Ranker(abc.ABC):
             )
         return self
 
-    def encode(self, documents: list) -> typing.Tuple[dict, list]:
+    def encode(
+        self, documents: list, recommender: bool = False
+    ) -> typing.Tuple[dict, list]:
         """Computes documents embeddings."""
+        # Get known documents ids, embeddings of known documents and unknown documents ids.
         known, embeddings, unknown = self.store.get(
             **{
                 "key": self.key,
@@ -151,12 +154,15 @@ class Ranker(abc.ABC):
         )
         index = {document[self.key]: document for document in documents}
 
-        embeddings_unknown = self.encoder(
-            [
-                " ".join([index[key_unknown].get(field, "") for field in self.on])
-                for key_unknown in unknown
-            ]
-        )
+        # Encode unknown documents:
+        embeddings_unknown = []
+        if unknown:
+            embeddings_unknown = self.encoder(
+                [
+                    " ".join([index[key_unknown].get(field, "") for field in self.on])
+                    for key_unknown in unknown
+                ]
+            )
 
         return {
             idx: index.get(key_document)

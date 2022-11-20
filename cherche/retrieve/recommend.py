@@ -118,7 +118,7 @@ class Recommend(Retriever):
         Users: 4
         Documents: 3
 
-    >>> print(recommend.batch(user=["Geoffrey", "Adil"]))
+    >>> print(recommend.batch(users=["Geoffrey", "Adil"]))
     {0: [{'id': 'c', 'similarity': 21229.834241369794},
          {'id': 'a', 'similarity': 21229.634204933023},
          {'id': 'b', 'similarity': 0.5075642957423536}],
@@ -265,14 +265,14 @@ class Recommend(Retriever):
             }
         )
 
-    def fitler(self, user: typing.List[typing.Union[str, int]]):
+    def fitler(self, users: typing.List[typing.Union[str, int]]):
         """Filter known users."""
-        known, _, unknown = self.store.get(values=user)
+        known, _, unknown = self.store.get(values=users)
         return known, unknown
 
     def batch(
         self,
-        user: typing.List[typing.Union[str, int]],
+        users: typing.List[typing.Union[str, int]],
         batch_size: int = 256,
         expr: str = None,
         consistency_level: str = None,
@@ -288,7 +288,7 @@ class Recommend(Retriever):
         batch_size
             Size of the batch.
         """
-        known, embeddings, unknown = self.store.get(values=user)
+        known, embeddings, unknown = self.store.get(values=users)
 
         if unknown:
             raise ValueError(f"Unknown users: {','.join(unknown)}")

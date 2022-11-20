@@ -135,7 +135,9 @@ class Faiss:
                 continue
 
             document = self.documents[idx]
-            document["similarity"] = float(1 / distance) if distance > 0 else 0.0
+            document["similarity"] = (
+                float(1 / (distance + 1e-4)) if distance > 0 else 0.0
+            )
             ranked.append(document)
 
         return ranked
@@ -154,7 +156,7 @@ class Faiss:
             + n: [
                 {
                     **self.documents[idx],
-                    "similarity": float(1 / d) if d > 0 else 0.0,
+                    "similarity": float(1 / (d + 1e-4)) if d >= 0 else 0.0,
                 }
                 for d, idx in zip(distance, index)
                 if idx > -1

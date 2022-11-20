@@ -97,9 +97,9 @@ class Milvus:
     ... )
 
     >>> print(milvus(embedding = encoder.encode(["Spain"]), key="id"))
-    [{'id': 1, 'similarity': 1.5076334135501044, 'title': 'Madrid'},
-     {'id': 2, 'similarity': 0.9021741164485997, 'title': 'Paris'},
-     {'id': 0, 'similarity': 0.9021741164485997, 'title': 'Paris'}]
+    [{'id': 1, 'similarity': 1.5074061519618556, 'title': 'Madrid'},
+     {'id': 2, 'similarity': 0.902092731977257, 'title': 'Paris'},
+     {'id': 0, 'similarity': 0.902092731977257, 'title': 'Paris'}]
 
     >>> known, embeddings, unknown = milvus.get(key="id", values=[1, 2, 999])
     >>> known
@@ -145,8 +145,18 @@ class Milvus:
     >>> retriever = retriever.add(documents)
 
     >>> print(retriever("spain"))
-    [{'id': 1, 'similarity': 1.5076334135501044, 'title': 'Madrid'},
-     {'id': 0, 'similarity': 0.9021741164485997, 'title': 'Paris'}]
+    [{'id': 1, 'similarity': 1.5074061519618556, 'title': 'Madrid'},
+     {'id': 0, 'similarity': 0.902092731977257, 'title': 'Paris'}]
+
+    >>> print(retriever("paris"))
+    [{'id': 2, 'similarity': 9999.999890748655, 'title': 'Paris'},
+     {'id': 0, 'similarity': 9999.999890748655, 'title': 'Paris'}]
+
+    >>> print(retriever.batch(["spain", "paris"]))
+    {0: [{'id': 1, 'similarity': 1.5074057456478351, 'title': 'Madrid'},
+         {'id': 0, 'similarity': 0.9020926349681694, 'title': 'Paris'}],
+     1: [{'id': 2, 'similarity': 10000.0, 'title': 'Paris'},
+        {'id': 0, 'similarity': 10000.0, 'title': 'Paris'}]}
 
     >>> utility.drop_collection("documentation")
 
@@ -447,7 +457,10 @@ class Milvus:
 
         return [
             {
-                **{key: key, "similarity": 1 / distance if distance > 0 else 0},
+                **{
+                    key: key,
+                    "similarity": 1 / (distance + 1e-4) if distance >= 0 else 0,
+                },
                 **{field: fields.entity.get(field) for field in self.output_fields},
             }
             for fields, distance in zip(match, match.distances)
@@ -488,5 +501,53 @@ class Milvus:
             [key for key in values if key not in known],
         )
 
-    def batch(self, **kwargs):
-        raise NotImplementedError("Batch is only available for Faiss index yet.")
+    def batch(
+        self,
+        embeddings: np.ndarray,
+        key: str,
+        k: int = None,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs,
+    ) -> dict:
+        """Batch retriever."""
+        if k is None:
+            k = len(self)
+
+        q = {
+            "data": embeddings,
+            "anns_field": self.vector_field,
+            "param": self.search_params,
+            "limit": k,
+            "output_fields": self.output_fields,
+        }
+
+        if expr is not None:
+            q["expr"] = expr
+
+        if consistency_level is not None:
+            q["consistency_level"] = consistency_level
+
+        if partition_names is not None:
+            q["partition_names"] = partition_names
+
+        self.collection.load(
+            partition_name=self.partition_name, replica_number=self.replica_number
+        )
+        matchs = self.collection.search(**q)
+        self.collection.release()
+
+        return {
+            idx: [
+                {
+                    **{
+                        key: key,
+                        "similarity": 1 / (distance + 1e-4) if distance >= 0 else 0,
+                    },
+                    **{field: fields.entity.get(field) for field in self.output_fields},
+                }
+                for fields, distance in zip(match, match.distances)
+            ]
+            for idx, match in enumerate(matchs)
+        }
