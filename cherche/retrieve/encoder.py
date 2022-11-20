@@ -52,8 +52,24 @@ class Encoder(Retriever):
          documents: 3
 
     >>> print(retriever("Spain"))
-    [{'id': 1, 'similarity': 1.1885032405192992},
-     {'id': 0, 'similarity': 0.8492543139964137}]
+    [{'id': 1, 'similarity': 1.1885026511619967},
+     {'id': 0, 'similarity': 0.8492537121532174}]
+
+    >>> print(retriever("Paris"))
+    [{'id': 0, 'similarity': 5.311705595297062},
+     {'id': 2, 'similarity': 1.1795194692378366}]
+
+    >>> print(retriever.batch(["Spain", "Paris"]))
+    {0: [{'id': 1, 'similarity': 1.1885026511619967},
+         {'id': 0, 'similarity': 0.8492537981307646}],
+     1: [{'id': 0, 'similarity': 5.311705595297062},
+         {'id': 2, 'similarity': 1.1795194692378366}]}
+
+    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
+    {0: [{'id': 1, 'similarity': 1.1885026511619967},
+         {'id': 0, 'similarity': 0.8492537121532174}],
+     1: [{'id': 0, 'similarity': 5.311705595297062},
+         {'id': 2, 'similarity': 1.1795194692378366}]}
 
     References
     ----------
@@ -135,3 +151,45 @@ class Encoder(Retriever):
                 "partition_names": partition_names,
             }
         )
+
+    def batch(
+        self,
+        q: list[str],
+        batch_size: int = 64,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs
+    ) -> dict:
+        """Search for documents per batch.
+
+        Parameters
+        ----------
+        q
+            List of queries.
+        """
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(q, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(q) // batch_size,
+        ):
+
+            rank = {
+                **rank,
+                **self.index.batch(
+                    **{
+                        "embeddings": self.encoder(batch),
+                        "k": self.k,
+                        "n": len(rank),
+                        "key": self.key,
+                        "expr": expr,
+                        "consistency_level": consistency_level,
+                        "partition_names": partition_names,
+                    }
+                ),
+            }
+
+        return rank

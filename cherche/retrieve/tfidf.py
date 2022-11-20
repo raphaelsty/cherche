@@ -1,6 +1,8 @@
 __all__ = ["TfIdf"]
 
 import typing
+import tqdm
+import more_itertools
 
 import numpy as np
 from scipy.sparse import csc_matrix
@@ -51,27 +53,23 @@ class TfIdf(Retriever):
     [{'id': 0, 'similarity': 0.28895767404089806},
      {'id': 1, 'similarity': 0.23464049354653993}]
 
-    >>> retriever += documents
-
-    >>> print(retriever(q="paris"))
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 0.28895767404089806,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 0.23464049354653993,
-      'title': 'Eiffel tower'}]
-
     >>> print(retriever("unknown"))
     []
 
-    >>> print(retriever.batch(["paris", "unknown"]))
+    >>> print(retriever("montreal"))
+    [{'id': 2, 'similarity': 0.8214936700177023}]
+
+    >>> print(retriever.batch(["paris", "unknown", "montreal"]))
     {0: [{'id': 0, 'similarity': 0.28895767404089806},
          {'id': 1, 'similarity': 0.23464049354653993}],
-     1: []}
+     1: [],
+     2: [{'id': 2, 'similarity': 0.8214936700177023}]}
+
+    >>> print(retriever.batch(["paris", "unknown", "montreal"], batch_size=1))
+    {0: [{'id': 0, 'similarity': 0.28895767404089806},
+         {'id': 1, 'similarity': 0.23464049354653993}],
+     1: [],
+     2: [{'id': 2, 'similarity': 0.8214936700177023}]}
 
     References
     ----------
@@ -130,8 +128,8 @@ class TfIdf(Retriever):
         ][: self.k]
 
         return [doc for doc in documents if doc["similarity"] > 0]
-    
-    def batch(self, q: list[str]) -> dict:
+
+    def batch(self, q: list[str], batch_size: int = 600, **kwargs) -> dict:
         """Retrieve documents from batch of queries.
 
         Parameters
@@ -140,17 +138,33 @@ class TfIdf(Retriever):
             List of queries.
 
         """
-        similarities = (self.tfidf.transform(q) @ self.matrix.T).toarray()
-        return {
-            idx: [
-                {**self.documents[index], "similarity": similarity}
-                for index, similarity in zip(match, scores[match])
-                if similarity > 0
-            ]
-            for idx, (match, scores) in enumerate(
-                zip(
-                    np.fliplr(similarities.argsort(axis=1))[:,:self.k],
-                    similarities,
-                )
-            )
-        }
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(q, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(q) // batch_size,
+        ):
+            n = len(rank)
+            similarities = (self.tfidf.transform(batch) @ self.matrix.T).toarray()
+
+            rank = {
+                **rank,
+                **{
+                    idx
+                    + n: [
+                        {**self.documents[index], "similarity": similarity}
+                        for index, similarity in zip(match, scores[match])
+                        if similarity > 0
+                    ]
+                    for idx, (match, scores) in enumerate(
+                        zip(
+                            np.fliplr(similarities.argsort(axis=1))[:, : self.k],
+                            similarities,
+                        )
+                    )
+                },
+            }
+
+        return rank

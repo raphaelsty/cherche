@@ -139,3 +139,24 @@ class Faiss:
             ranked.append(document)
 
         return ranked
+
+    def batch(
+        self, embeddings: np.ndarray, k: int = None, n: int = 0, **kwargs
+    ) -> list:
+
+        if k is None:
+            k = len(self)
+
+        distances, indexes = self.index.search(embeddings, k)
+
+        return {
+            q
+            + n: [
+                {
+                    **self.documents[idx],
+                    "similarity": float(1 / d) if d > 0 else 0.0,
+                }
+                for d, idx in zip(distance, index)
+            ]
+            for q, (distance, index) in enumerate(zip(distances, indexes))
+        }

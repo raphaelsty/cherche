@@ -40,8 +40,8 @@ class DPR(Retriever):
     >>> retriever = retrieve.DPR(
     ...    key = "id",
     ...    on = ["title", "author"],
-    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
-    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
+    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-multiset-base').encode,
+    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-multiset-base').encode,
     ...    k = 2,
     ... )
 
@@ -66,6 +66,14 @@ class DPR(Retriever):
       'id': 0,
       'similarity': 0.008331424302852155,
       'title': 'Paris'}]
+
+    >>> print(retriever("Paris"))
+
+    >>> print(retriever.batch(["Spain", "Paris"]))
+    {0: [{'id': 1, 'similarity': 0.009192558902980534}, {'id': 0, 'similarity': 0.008331423243699596}], 1: [{'id': 0, 'similarity': 0.012557486004178293}, {'id': 1, 'similarity': 0.008042770416310565}]}
+
+    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
+
 
     """
 
@@ -145,3 +153,45 @@ class DPR(Retriever):
                 "partition_names": partition_names,
             }
         )
+
+    def batch(
+        self,
+        q: list[str],
+        batch_size: int = 64,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs
+    ) -> dict:
+        """Search for documents per batch.
+
+        Parameters
+        ----------
+        q
+            List of queries.
+        """
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(q, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(q) // batch_size,
+        ):
+
+            rank = {
+                **rank,
+                **self.index.batch(
+                    **{
+                        "embeddings": self.query_encoder(batch),
+                        "k": self.k,
+                        "n": len(rank),
+                        "key": self.key,
+                        "expr": expr,
+                        "consistency_level": consistency_level,
+                        "partition_names": partition_names,
+                    }
+                ),
+            }
+
+        return rank

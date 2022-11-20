@@ -487,3 +487,6 @@ class Milvus:
             embeddings,
             [key for key in values if key not in known],
         )
+
+    def batch(self, **kwargs):
+        raise NotImplementedError("Batch is only available for Faiss index yet.")

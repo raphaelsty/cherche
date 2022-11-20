@@ -4,6 +4,9 @@ __all__ = ["Encoder"]
 
 import typing
 
+import tqdm
+import more_itertools
+
 from ..similarity import cosine
 from .base import MemoryStore, Ranker
 
@@ -55,8 +58,20 @@ class Encoder(Ranker):
         Embeddings pre-computed: 3
 
     >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'id': 0, 'similarity': 0.6605141758918762},
-     {'id': 1, 'similarity': 0.5142566561698914}]
+    [{'id': 0, 'similarity': 0.6605139970779419},
+     {'id': 1, 'similarity': 0.5142562985420227}]
+
+    >>> print(ranker(q="Montreal", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+    [{'id': 2, 'similarity': 0.799931526184082},
+     {'id': 0, 'similarity': 0.3506389558315277}]
+
+    >>> print(ranker.batch(
+    ...    q=["Paris", "Montreal"],
+    ...    documents={
+    ...         0: [{"id": 0}, {"id": 1}, {"id": 2}],
+    ...         1: [{"id": 0}, {"id": 1}, {"id": 2}]
+    ...    }
+    ... ))
 
     >>> print(ranker(q="Paris", documents=documents))
     [{'article': 'This town is the capital of France',
@@ -128,3 +143,37 @@ class Encoder(Ranker):
             query_embedding=self.encoder(q),
             documents=documents,
         )
+
+    def batch(self, q: list[str], documents: dict, batch_size: int, **kwargs) -> dict:
+        """Re-rank batch of documents-queries.
+
+        Parameters
+        ----------
+        q
+            List of queries.
+        documents
+            Batch of documents.
+        batch_size
+            Size of the batch.
+        """
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(q, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(q) // batch_size,
+        ):
+
+            rank = {
+                **rank,
+                **self.rank_batch(
+                    **{
+                        "query_embeddings": self.encoder(batch),
+                        "documents": documents,
+                        "n": len(rank),
+                    }
+                ),
+            }
+
+        return rank

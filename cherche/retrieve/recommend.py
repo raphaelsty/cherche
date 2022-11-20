@@ -1,7 +1,9 @@
 import typing
 
-import faiss
 import numpy as np
+
+import more_itertools
+import tqdm
 
 from ..index import Faiss, Milvus
 from .base import Retriever
@@ -133,6 +135,10 @@ class Recommend(Retriever):
       'similarity': 0.5075642957423536,
       'title': 'Madrid'}]
 
+    >>> print(recommend(user="Adil"))
+
+    >>> print(recommend(user=["Geoffrey", "Adil"]))
+
 
     References
     ----------
@@ -242,3 +248,58 @@ class Recommend(Retriever):
                 "partition_names": partition_names,
             }
         )
+
+    def fitler(self, user: list[typing.Union[str, int]]):
+        """Filter known users."""
+        known, _, unknown = self.store.get(values=user)
+        return known, unknown
+
+    def batch(
+        self,
+        user: list[typing.Union[str, int]],
+        batch_size: int = 256,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs,
+    ) -> list:
+        """Retrieve documents from user id.
+
+        Parameters
+        ----------
+        user
+            List of user ids.
+        batch_size
+            Size of the batch.
+        """
+        known, embeddings, unknown = self.store.get(values=user)
+
+        if unknown:
+            raise ValueError(f"Unknown users: {','.join(unknown)}")
+
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(embeddings, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(known) // batch_size,
+        ):
+            n = len(rank)
+
+            rank = {
+                **rank,
+                **self.index.batch(
+                    **{
+                        "embedding": np.array(batch),
+                        "k": self.k,
+                        "n": n,
+                        "key": self.key,
+                        "expr": expr,
+                        "consistency_level": consistency_level,
+                        "partition_names": partition_names,
+                    }
+                ),
+            }
+
+        return rank
