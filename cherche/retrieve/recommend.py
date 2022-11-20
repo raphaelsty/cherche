@@ -1,8 +1,7 @@
 import typing
 
-import numpy as np
-
 import more_itertools
+import numpy as np
 import tqdm
 
 from ..index import Faiss, Milvus
@@ -119,6 +118,14 @@ class Recommend(Retriever):
         Users: 4
         Documents: 3
 
+    >>> print(recommend.batch(user=["Geoffrey", "Adil"]))
+    {0: [{'id': 'c', 'similarity': 21229.834241369794},
+         {'id': 'a', 'similarity': 21229.634204933023},
+         {'id': 'b', 'similarity': 0.5075642957423536}],
+     1: [{'id': 'b', 'similarity': 5215.91262702973},
+         {'id': 'c', 'similarity': 0.5040069796422495},
+         {'id': 'a', 'similarity': 0.5040069796422495}]}
+
     >>> recommend += documents
 
     >>> print(recommend(user="Geoffrey"))
@@ -136,9 +143,18 @@ class Recommend(Retriever):
       'title': 'Madrid'}]
 
     >>> print(recommend(user="Adil"))
-
-    >>> print(recommend(user=["Geoffrey", "Adil"]))
-
+    [{'author': 'Madrid',
+      'id': 'b',
+      'similarity': 5215.91262702973,
+      'title': 'Madrid'},
+     {'author': 'Montreal',
+      'id': 'c',
+      'similarity': 0.5040069796422495,
+      'title': 'Montreal'},
+     {'author': 'Paris',
+      'id': 'a',
+      'similarity': 0.5040069796422495,
+      'title': 'Paris'}]
 
     References
     ----------
@@ -249,14 +265,14 @@ class Recommend(Retriever):
             }
         )
 
-    def fitler(self, user: list[typing.Union[str, int]]):
+    def fitler(self, user: typing.List[typing.Union[str, int]]):
         """Filter known users."""
         known, _, unknown = self.store.get(values=user)
         return known, unknown
 
     def batch(
         self,
-        user: list[typing.Union[str, int]],
+        user: typing.List[typing.Union[str, int]],
         batch_size: int = 256,
         expr: str = None,
         consistency_level: str = None,
@@ -291,7 +307,7 @@ class Recommend(Retriever):
                 **rank,
                 **self.index.batch(
                     **{
-                        "embedding": np.array(batch),
+                        "embeddings": np.array(batch),
                         "k": self.k,
                         "n": n,
                         "key": self.key,

@@ -52,24 +52,24 @@ class Encoder(Retriever):
          documents: 3
 
     >>> print(retriever("Spain"))
-    [{'id': 1, 'similarity': 1.1885026511619967},
-     {'id': 0, 'similarity': 0.8492537121532174}]
+    [{'id': 1, 'similarity': 1.1885032405192992},
+     {'id': 0, 'similarity': 0.8492543139964137}]
 
     >>> print(retriever("Paris"))
-    [{'id': 0, 'similarity': 5.311705595297062},
-     {'id': 2, 'similarity': 1.1795194692378366}]
+    [{'id': 0, 'similarity': 5.311708958695876},
+     {'id': 2, 'similarity': 1.179519718015668}]
 
     >>> print(retriever.batch(["Spain", "Paris"]))
-    {0: [{'id': 1, 'similarity': 1.1885026511619967},
-         {'id': 0, 'similarity': 0.8492537981307646}],
-     1: [{'id': 0, 'similarity': 5.311705595297062},
-         {'id': 2, 'similarity': 1.1795194692378366}]}
+    {0: [{'id': 1, 'similarity': 1.188503156325363},
+         {'id': 0, 'similarity': 0.8492543139964137}],
+     1: [{'id': 0, 'similarity': 5.311706015721681},
+         {'id': 2, 'similarity': 1.1795198009416352}]}
 
     >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
-    {0: [{'id': 1, 'similarity': 1.1885026511619967},
-         {'id': 0, 'similarity': 0.8492537121532174}],
-     1: [{'id': 0, 'similarity': 5.311705595297062},
-         {'id': 2, 'similarity': 1.1795194692378366}]}
+    {0: [{'id': 1, 'similarity': 1.1885032405192992},
+         {'id': 0, 'similarity': 0.8492543139964137}],
+     1: [{'id': 0, 'similarity': 5.311708958695876},
+         {'id': 2, 'similarity': 1.179519718015668}]}
 
     References
     ----------
@@ -154,7 +154,7 @@ class Encoder(Retriever):
 
     def batch(
         self,
-        q: list[str],
+        q: typing.List[str],
         batch_size: int = 64,
         expr: str = None,
         consistency_level: str = None,

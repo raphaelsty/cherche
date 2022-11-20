@@ -52,28 +52,36 @@ class DPR(Retriever):
          documents: 3
 
     >>> print(retriever("Spain"))
-    [{'id': 1, 'similarity': 0.009192565994771673},
-     {'id': 0, 'similarity': 0.008331424302852155}]
+    [{'id': 1, 'similarity': 0.006858040774451286},
+     {'id': 0, 'similarity': 0.0060191201849380555}]
+
+    >>> print(retriever("Paris"))
+    [{'id': 0, 'similarity': 0.00816787668669813},
+     {'id': 1, 'similarity': 0.007023785549903056}]
+
+    >>> print(retriever.batch(["Spain", "Paris"]))
+    {0: [{'id': 1, 'similarity': 0.006858040774451286},
+         {'id': 0, 'similarity': 0.006019121290584248}],
+     1: [{'id': 0, 'similarity': 0.008167878213665493},
+         {'id': 1, 'similarity': 0.007023786302673574}]}
+
+    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
+    {0: [{'id': 1, 'similarity': 0.006858040774451286},
+         {'id': 0, 'similarity': 0.0060191201849380555}],
+     1: [{'id': 0, 'similarity': 0.00816787668669813},
+         {'id': 1, 'similarity': 0.007023785549903056}]}
 
     >>> retriever += documents
 
     >>> print(retriever("Spain"))
     [{'author': 'Madrid',
       'id': 1,
-      'similarity': 0.009192565994771673,
+      'similarity': 0.006858040774451286,
       'title': 'Madrid'},
      {'author': 'Paris',
       'id': 0,
-      'similarity': 0.008331424302852155,
+      'similarity': 0.0060191201849380555,
       'title': 'Paris'}]
-
-    >>> print(retriever("Paris"))
-
-    >>> print(retriever.batch(["Spain", "Paris"]))
-    {0: [{'id': 1, 'similarity': 0.009192558902980534}, {'id': 0, 'similarity': 0.008331423243699596}], 1: [{'id': 0, 'similarity': 0.012557486004178293}, {'id': 1, 'similarity': 0.008042770416310565}]}
-
-    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
-
 
     """
 
@@ -156,7 +164,7 @@ class DPR(Retriever):
 
     def batch(
         self,
-        q: list[str],
+        q: typing.List[str],
         batch_size: int = 64,
         expr: str = None,
         consistency_level: str = None,

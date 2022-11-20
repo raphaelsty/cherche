@@ -1,10 +1,10 @@
 __all__ = ["TfIdf"]
 
 import typing
-import tqdm
-import more_itertools
 
+import more_itertools
 import numpy as np
+import tqdm
 from scipy.sparse import csc_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -129,7 +129,7 @@ class TfIdf(Retriever):
 
         return [doc for doc in documents if doc["similarity"] > 0]
 
-    def batch(self, q: list[str], batch_size: int = 600, **kwargs) -> dict:
+    def batch(self, q: typing.List[str], batch_size: int = 600, **kwargs) -> dict:
         """Retrieve documents from batch of queries.
 
         Parameters
