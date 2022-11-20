@@ -138,6 +138,10 @@ Cherche provides different [retrievers](https://raphaelsty.github.io/cherche/ret
 
 Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models, [Hugging Face sentence similarity](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, [Hugging Face zero shot classification](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, and of course with your own models.
 
+## Batch
+
+Batch processing is coming soon. Already available with Tf-Idf retriever.
+
 ## Summarization and question answering
 
 Cherche provides modules dedicated to summarization and question answering. These modules are compatible with Hugging Face's pre-trained models and fully integrated into neural search pipelines.
