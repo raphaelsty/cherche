@@ -138,6 +138,21 @@ Cherche provides different [retrievers](https://raphaelsty.github.io/cherche/ret
 
 Cherche rankers are compatible with [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) models, [Hugging Face sentence similarity](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, [Hugging Face zero shot classification](https://huggingface.co/models?pipeline_tag=zero-shot-classification&sort=downloads) models, and of course with your own models.
 
+## Batch - soon
+
+Retrieving documents with batch of queries can significantly speed up things. It is already available for few models using the **development version** via the `batch` method.
+
+Models involved are:
+
+- TfIdf retriever
+- Encoder retriever
+- Encoder ranker
+- DPR retriever
+- DPR ranker
+- Recommend retriever
+
+Batch is not yet compatible with pipelines.
+
 ## Summarization and question answering
 
 Cherche provides modules dedicated to summarization and question answering. These modules are compatible with Hugging Face's pre-trained models and fully integrated into neural search pipelines.

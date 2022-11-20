@@ -40,8 +40,8 @@ class DPR(Retriever):
     >>> retriever = retrieve.DPR(
     ...    key = "id",
     ...    on = ["title", "author"],
-    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
-    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
+    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-multiset-base').encode,
+    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-multiset-base').encode,
     ...    k = 2,
     ... )
 
@@ -52,19 +52,35 @@ class DPR(Retriever):
          documents: 3
 
     >>> print(retriever("Spain"))
-    [{'id': 1, 'similarity': 0.009192565994771673},
-     {'id': 0, 'similarity': 0.008331424302852155}]
+    [{'id': 1, 'similarity': 0.006858040774451286},
+     {'id': 0, 'similarity': 0.0060191201849380555}]
+
+    >>> print(retriever("Paris"))
+    [{'id': 0, 'similarity': 0.00816787668669813},
+     {'id': 1, 'similarity': 0.007023785549903056}]
+
+    >>> print(retriever.batch(["Spain", "Paris"]))
+    {0: [{'id': 1, 'similarity': 0.006858040774451286},
+         {'id': 0, 'similarity': 0.006019121290584248}],
+     1: [{'id': 0, 'similarity': 0.008167878213665493},
+         {'id': 1, 'similarity': 0.007023786302673574}]}
+
+    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
+    {0: [{'id': 1, 'similarity': 0.006858040774451286},
+         {'id': 0, 'similarity': 0.0060191201849380555}],
+     1: [{'id': 0, 'similarity': 0.00816787668669813},
+         {'id': 1, 'similarity': 0.007023785549903056}]}
 
     >>> retriever += documents
 
     >>> print(retriever("Spain"))
     [{'author': 'Madrid',
       'id': 1,
-      'similarity': 0.009192565994771673,
+      'similarity': 0.006858040774451286,
       'title': 'Madrid'},
      {'author': 'Paris',
       'id': 0,
-      'similarity': 0.008331424302852155,
+      'similarity': 0.0060191201849380555,
       'title': 'Paris'}]
 
     """
@@ -145,3 +161,45 @@ class DPR(Retriever):
                 "partition_names": partition_names,
             }
         )
+
+    def batch(
+        self,
+        q: typing.List[str],
+        batch_size: int = 64,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs
+    ) -> dict:
+        """Search for documents per batch.
+
+        Parameters
+        ----------
+        q
+            List of queries.
+        """
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(q, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(q) // batch_size,
+        ):
+
+            rank = {
+                **rank,
+                **self.index.batch(
+                    **{
+                        "embeddings": self.query_encoder(batch),
+                        "k": self.k,
+                        "n": len(rank),
+                        "key": self.key,
+                        "expr": expr,
+                        "consistency_level": consistency_level,
+                        "partition_names": partition_names,
+                    }
+                ),
+            }
+
+        return rank

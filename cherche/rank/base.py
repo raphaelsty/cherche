@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__ = ["Ranker"]
 
 import abc
+import collections
 import typing
 
 import more_itertools
@@ -140,8 +141,11 @@ class Ranker(abc.ABC):
             )
         return self
 
-    def encode(self, documents: list) -> typing.Tuple[dict, list]:
+    def encode(
+        self, documents: list, recommender: bool = False
+    ) -> typing.Tuple[dict, list]:
         """Computes documents embeddings."""
+        # Get known documents ids, embeddings of known documents and unknown documents ids.
         known, embeddings, unknown = self.store.get(
             **{
                 "key": self.key,
@@ -150,12 +154,15 @@ class Ranker(abc.ABC):
         )
         index = {document[self.key]: document for document in documents}
 
-        embeddings_unknown = self.encoder(
-            [
-                " ".join([index[key_unknown].get(field, "") for field in self.on])
-                for key_unknown in unknown
-            ]
-        )
+        # Encode unknown documents:
+        embeddings_unknown = []
+        if unknown:
+            embeddings_unknown = self.encoder(
+                [
+                    " ".join([index[key_unknown].get(field, "") for field in self.on])
+                    for key_unknown in unknown
+                ]
+            )
 
         return {
             idx: index.get(key_document)
@@ -182,6 +189,69 @@ class Ranker(abc.ABC):
             document["similarity"] = similarity
             ranked.append(document)
         return ranked
+
+    def encode_batch(self, batch: dict) -> dict:
+        """Encode batch of documents."""
+        values = []
+        index = collections.defaultdict(dict)
+
+        for idx, documents in batch.items():
+            for rank, document in enumerate(documents):
+                values.append(document[self.key])
+                index[idx][rank] = document
+
+        known, embeddings, unknown = self.store.get(
+            **{
+                "key": self.key,
+                "values": values,
+            }
+        )
+
+        embeddings = {idx: embedding for idx, embedding in zip(known, embeddings)}
+        embeddings_unknown = {
+            key_unknown: embedding
+            for key_unknown, embedding in zip(
+                unknown,
+                self.encoder(
+                    [
+                        " ".join(
+                            [index[key_unknown].get(field, "") for field in self.on]
+                        )
+                        for key_unknown in unknown
+                    ]
+                ),
+            )
+        }
+
+        return {**embeddings, **embeddings_unknown}, index
+
+    def rank_batch(self, query_embeddings: np.ndarray, batch: dict, n: int = 0) -> dict:
+        """Produce ranking in batch."""
+        documents_embeddings, index = self.encode_batch(batch=batch)
+        documents_embeddings = [
+            np.stack(
+                [documents_embeddings[document[self.key]] for document in documents],
+                axis=0,
+            ).T
+            for q, documents in batch.items()
+        ]
+
+        array_ranks, array_similarities = self.similarity(
+            emb_q=query_embeddings,
+            emb_documents=documents_embeddings,
+            batch=True,
+            k=self.k,
+        )
+
+        return {
+            idx: [
+                {**documents[rank], **{"similarity": similarity}}
+                for rank, similarity in zip(ranks, similarities)
+            ]
+            for ranks, similarities, (idx, documents) in zip(
+                array_ranks, array_similarities, index.items()
+            )
+        }
 
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""

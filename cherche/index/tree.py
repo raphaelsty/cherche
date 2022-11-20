@@ -135,7 +135,31 @@ class Faiss:
                 continue
 
             document = self.documents[idx]
-            document["similarity"] = float(1 / distance) if distance > 0 else 0.0
+            document["similarity"] = (
+                float(1 / (distance + 1e-4)) if distance > 0 else 0.0
+            )
             ranked.append(document)
 
         return ranked
+
+    def batch(
+        self, embeddings: np.ndarray, k: int = None, n: int = 0, **kwargs
+    ) -> list:
+
+        if k is None:
+            k = len(self)
+
+        distances, indexes = self.index.search(embeddings, k)
+
+        return {
+            q
+            + n: [
+                {
+                    **self.documents[idx],
+                    "similarity": float(1 / (d + 1e-4)) if d >= 0 else 0.0,
+                }
+                for d, idx in zip(distance, index)
+                if idx > -1
+            ]
+            for q, (distance, index) in enumerate(zip(distances, indexes))
+        }

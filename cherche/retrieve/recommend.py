@@ -1,7 +1,8 @@
 import typing
 
-import faiss
+import more_itertools
 import numpy as np
+import tqdm
 
 from ..index import Faiss, Milvus
 from .base import Retriever
@@ -117,6 +118,14 @@ class Recommend(Retriever):
         Users: 4
         Documents: 3
 
+    >>> print(recommend.batch(users=["Geoffrey", "Adil"]))
+    {0: [{'id': 'c', 'similarity': 21229.834241369794},
+         {'id': 'a', 'similarity': 21229.634204933023},
+         {'id': 'b', 'similarity': 0.5075642957423536}],
+     1: [{'id': 'b', 'similarity': 5215.91262702973},
+         {'id': 'c', 'similarity': 0.5040069796422495},
+         {'id': 'a', 'similarity': 0.5040069796422495}]}
+
     >>> recommend += documents
 
     >>> print(recommend(user="Geoffrey"))
@@ -133,6 +142,19 @@ class Recommend(Retriever):
       'similarity': 0.5075642957423536,
       'title': 'Madrid'}]
 
+    >>> print(recommend(user="Adil"))
+    [{'author': 'Madrid',
+      'id': 'b',
+      'similarity': 5215.91262702973,
+      'title': 'Madrid'},
+     {'author': 'Montreal',
+      'id': 'c',
+      'similarity': 0.5040069796422495,
+      'title': 'Montreal'},
+     {'author': 'Paris',
+      'id': 'a',
+      'similarity': 0.5040069796422495,
+      'title': 'Paris'}]
 
     References
     ----------
@@ -242,3 +264,58 @@ class Recommend(Retriever):
                 "partition_names": partition_names,
             }
         )
+
+    def fitler(self, users: typing.List[typing.Union[str, int]]):
+        """Filter known users."""
+        known, _, unknown = self.store.get(values=users)
+        return known, unknown
+
+    def batch(
+        self,
+        users: typing.List[typing.Union[str, int]],
+        batch_size: int = 256,
+        expr: str = None,
+        consistency_level: str = None,
+        partition_names: list = None,
+        **kwargs,
+    ) -> list:
+        """Retrieve documents from user id.
+
+        Parameters
+        ----------
+        user
+            List of user ids.
+        batch_size
+            Size of the batch.
+        """
+        known, embeddings, unknown = self.store.get(values=users)
+
+        if unknown:
+            raise ValueError(f"Unknown users: {','.join(unknown)}")
+
+        rank = {}
+
+        for batch in tqdm.tqdm(
+            more_itertools.chunked(embeddings, batch_size),
+            position=0,
+            desc="Retriever batch queries.",
+            total=1 + len(known) // batch_size,
+        ):
+            n = len(rank)
+
+            rank = {
+                **rank,
+                **self.index.batch(
+                    **{
+                        "embeddings": np.array(batch),
+                        "k": self.k,
+                        "n": n,
+                        "key": self.key,
+                        "expr": expr,
+                        "consistency_level": consistency_level,
+                        "partition_names": partition_names,
+                    }
+                ),
+            }
+
+        return rank

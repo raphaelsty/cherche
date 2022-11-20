@@ -222,15 +222,13 @@ class Recommend(Ranker):
             return [{**document, "similarity": 0} for document in documents]
 
         index = {document[self.key]: document for document in documents}
-        index_known = {i: key  for i, key in enumerate(known)}
+        index_known = {i: key for i, key in enumerate(known)}
 
         ranked = [
             {**index[index_known[key]], "similarity": similarity}
             for key, similarity in self.similarity(
                 emb_q=embedding_user[0], emb_documents=embeddings
             )
-        ]
+        ] + [{**index[key], "similarity": 0} for key in unknown]
 
-        # Addind unknown documents
-        ranked += [{**index[key], "similarity": 0} for key in unknown]
-        return ranked[:self.k] if self.k is not None else ranked
+        return ranked[: self.k] if self.k is not None else ranked
