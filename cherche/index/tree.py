@@ -156,7 +156,8 @@ class Faiss:
                     **self.documents[idx],
                     "similarity": float(1 / d) if d > 0 else 0.0,
                 }
-                for d, idx in zip(distance, index) if idx > -1
+                for d, idx in zip(distance, index)
+                if idx > -1
             ]
             for q, (distance, index) in enumerate(zip(distances, indexes))
         }

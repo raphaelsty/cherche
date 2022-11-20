@@ -4,8 +4,8 @@ __all__ = ["Encoder"]
 
 import typing
 
-import tqdm
 import more_itertools
+import tqdm
 
 from ..similarity import cosine
 from .base import MemoryStore, Ranker
@@ -57,14 +57,6 @@ class Encoder(Ranker):
         similarity: cosine
         Embeddings pre-computed: 3
 
-    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'id': 0, 'similarity': 0.6605139970779419},
-     {'id': 1, 'similarity': 0.5142562985420227}]
-
-    >>> print(ranker(q="Montreal", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'id': 2, 'similarity': 0.799931526184082},
-     {'id': 0, 'similarity': 0.3506389558315277}]
-
     >>> print(ranker.batch(
     ...    q=["Paris", "Montreal"],
     ...    documents={
@@ -72,6 +64,27 @@ class Encoder(Ranker):
     ...         1: [{"id": 0}, {"id": 1}, {"id": 2}]
     ...    }
     ... ))
+    {0: [{'id': 0, 'similarity': 0.66051406}, {'id': 1, 'similarity': 0.5142565}],
+     1: [{'id': 2, 'similarity': 0.79993165}, {'id': 0, 'similarity': 0.35063893}]}
+
+    >>> print(ranker.batch(
+    ...    q=["Paris", "Montreal"],
+    ...    batch_size=1,
+    ...    documents={
+    ...         0: [{"id": 0}, {"id": 1}, {"id": 2}],
+    ...         1: [{"id": 0}, {"id": 1}, {"id": 2}]
+    ...    }
+    ... ))
+    {0: [{'id': 0, 'similarity': 0.6605142}, {'id': 1, 'similarity': 0.51425666}],
+     1: [{'id': 2, 'similarity': 0.7999317}, {'id': 0, 'similarity': 0.35063893}]}
+
+    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+    [{'id': 0, 'similarity': 0.6605141758918762},
+     {'id': 1, 'similarity': 0.5142566561698914}]
+
+    >>> print(ranker(q="Montreal", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
+    [{'id': 2, 'similarity': 0.7999317646026611},
+     {'id': 0, 'similarity': 0.3506389260292053}]
 
     >>> print(ranker(q="Paris", documents=documents))
     [{'article': 'This town is the capital of France',
@@ -85,9 +98,7 @@ class Encoder(Ranker):
       'similarity': 0.5142566561698914,
       'title': 'Eiffel tower'}]
 
-
     >>> ranker += documents
-
     >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
     [{'article': 'This town is the capital of France',
       'author': 'Wiki',
@@ -144,7 +155,9 @@ class Encoder(Ranker):
             documents=documents,
         )
 
-    def batch(self, q: list[str], documents: dict, batch_size: int, **kwargs) -> dict:
+    def batch(
+        self, q: typing.List[str], documents: dict, batch_size: int = 64, **kwargs
+    ) -> dict:
         """Re-rank batch of documents-queries.
 
         Parameters
@@ -158,19 +171,21 @@ class Encoder(Ranker):
         """
         rank = {}
 
-        for batch in tqdm.tqdm(
-            more_itertools.chunked(q, batch_size),
+        for batch_queries, batch in tqdm.tqdm(
+            zip(
+                more_itertools.chunked(q, batch_size),
+                more_itertools.chunked(documents, batch_size),
+            ),
             position=0,
-            desc="Retriever batch queries.",
+            desc="Ranker batch queries.",
             total=1 + len(q) // batch_size,
         ):
-
             rank = {
                 **rank,
                 **self.rank_batch(
                     **{
-                        "query_embeddings": self.encoder(batch),
-                        "documents": documents,
+                        "query_embeddings": self.encoder(batch_queries),
+                        "batch": {idx: documents[idx] for idx in batch},
                         "n": len(rank),
                     }
                 ),
