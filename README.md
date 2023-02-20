@@ -4,6 +4,8 @@
 </div>
 <br>
 
+<p align="center"><img width=300 src="docs/img/logo.png"/></p>
+
 <div align="center">
   <!-- Documentation -->
   <a href="https://raphaelsty.github.io/cherche/"><img src="https://img.shields.io/website?label=docs&style=flat-square&url=https%3A%2F%2Fraphaelsty.github.io/cherche/%2F" alt="documentation"></a>
