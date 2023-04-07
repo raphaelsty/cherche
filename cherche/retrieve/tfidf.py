@@ -65,7 +65,7 @@ class TfIdf(Retriever):
      1: [],
      2: [{'id': 2, 'similarity': 0.8214936700177023}]}
 
-    >>> print(retriever.batch(["paris", "unknown", "montreal"], batch_size=1))
+    >>> print(retriever.batch(["paris", "unknown", "montreal"], batch_size=2))
     {0: [{'id': 0, 'similarity': 0.28895767404089806},
          {'id': 1, 'similarity': 0.23464049354653993}],
      1: [],
@@ -149,19 +149,22 @@ class TfIdf(Retriever):
             n = len(rank)
             similarities = (self.tfidf.transform(batch) @ self.matrix.T).toarray()
 
+            batch_match = np.fliplr(similarities.argsort(axis=1))[:, : self.k]
+            batch_similarities = np.take_along_axis(similarities, batch_match, axis=1)
+
             rank = {
                 **rank,
                 **{
                     idx
                     + n: [
                         {**self.documents[index], "similarity": similarity}
-                        for index, similarity in zip(match, scores[match])
+                        for index, similarity in zip(match, similarities)
                         if similarity > 0
                     ]
-                    for idx, (match, scores) in enumerate(
+                    for idx, (match, similarities) in enumerate(
                         zip(
-                            np.fliplr(similarities.argsort(axis=1))[:, : self.k],
-                            similarities,
+                            batch_match,
+                            batch_similarities,
                         )
                     )
                 },
