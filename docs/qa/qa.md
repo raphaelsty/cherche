@@ -1,27 +1,16 @@
 # Question Answering
 
-The `qa.QA` module integrates an extractive question answering model to the neural search pipeline. The `qa.Qa` module is compatible with [Hugging Face](https://huggingface.co/models?pipeline_tag=question-answering). The `qa.QA` model extracts the most likely spans to answer the user's question from a list of documents. The neural search pipeline filters the whole corpus to reduce the search of spans to a small number of documents and significantly accelerates the search for top answers. However, even when filtering the corpus, Question answering models are relatively slow using CPU and require a GPU to get decent response times.
-
-## On, k
-
-The `on` parameter allows selecting the field(s) on which the question-answering model will extract the answer. When selecting multiple fields via the `on` parameter, we will concatenate them.
-
-The parameter `k` allows retrieving top `k` answers.
-
-## qa_score, answer
-
-`qa.QA` model returns the candidate's documents, the `qa_score` and the `answer` fields. The `answer` field contains the span that is likely to answer the question. The `qa_score` (higher is better) is associated
-with the span. The question-answering model orders answer by score.
+The `qa.QA` module is a crucial component of our neural search pipeline, integrating an extractive question answering model that is compatible with [Hugging Face](https://huggingface.co/models?pipeline_tag=question-answering). This model efficiently extracts the most likely answer spans from a list of documents in response to user queries. To further expedite the search process, our neural search pipeline filters the entire corpus and narrows down the search to a few relevant documents, resulting in faster response times for top answers. However, it's worth noting that even with corpus filtering, question answering models can be slow when using a CPU and typically require a GPU to achieve optimal performance.
 
 ## Documents
 
-The pipeline must provide the documents and not only the identifiers to the question answering model such as (except for Elasticsearch, which retrieve documents by default):
+The pipeline must provide the documents and not only the identifiers to the question answering model such as:
 
 ```python
 search = pipeline + documents + question_answering
 ```
 
-## Quick Start
+## Tutorial
 
 ```python
 >>> from cherche import data, rank, retrieve, qa
@@ -30,13 +19,13 @@ search = pipeline + documents + question_answering
 
 >>> documents = data.load_towns()
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k = 30)
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=100)
 
 >>> ranker = rank.Encoder(
 ...    key = "id",
 ...    on = "article",
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    k = 3,
+...    k = 30,
 ... )
 
 >>> question_answering = qa.QA(
@@ -45,30 +34,40 @@ search = pipeline + documents + question_answering
 ...         tokenizer = "deepset/roberta-base-squad2"
 ...    ),
 ...    on = "article",
-...    k = 2,
 ... )
 
 >>> search = retriever + ranker + documents + question_answering
 >>> search.add(documents)
-# Paris Saint-Germain is the answer.
->>> search("What is the name of the football club of Paris?")
-[{'start': 18,
-  'end': 37,
-  'answer': 'Paris Saint-Germain',
-  'qa_score': 0.9848363399505615,
-  'id': 20,
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'The football club Paris Saint-Germain and the rugby union club Stade Français are based in Paris.',
-  'similarity': 0.7104821},
- {'start': 15,
-  'end': 17,
-  'answer': '12',
-  'qa_score': 0.015906214714050293,
-  'id': 16,
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'article': 'Paris received 12.',
-  'similarity': 0.46774143},
-]
+>>> answers = search(
+...   q=[
+...     "What is the name of the football club of Paris?",
+...     "What is the speciality of Lyon?"
+...   ]
+... )
+
+# The answer is Paris Saint-Germain
+>>> answers[0][0]
+{'id': 20,
+ 'title': 'Paris',
+ 'url': 'https://en.wikipedia.org/wiki/Paris',
+ 'article': 'The football club Paris Saint-Germain and the rugby union club Stade Français are based in Paris.',
+ 'similarity': 0.6905894,
+ 'score': 0.9848365783691406,
+ 'start': 18,
+ 'end': 37,
+ 'answer': 'Paris Saint-Germain',
+ 'question': 'What is the name of the football club of Paris?'}
+
+
+>>> answers[1][0]
+{'id': 52,
+'title': 'Lyon',
+'url': 'https://en.wikipedia.org/wiki/Lyon',
+'article': 'Economically, Lyon is a major centre for banking, as well as for the chemical, pharmaceutical and biotech industries.',
+'similarity': 0.64728546,
+'score': 0.6952874660491943,
+'start': 41,
+'end': 48,
+'answer': 'banking',
+'question': 'What is the speciality of Lyon?'}
 ```

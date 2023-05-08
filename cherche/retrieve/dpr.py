@@ -2,10 +2,10 @@ __all__ = ["DPR"]
 
 import typing
 
-import more_itertools
 import tqdm
 
-from ..index import Faiss, Milvus
+from ..index import Faiss
+from ..utils import yield_batch
 from .base import Retriever
 
 
@@ -18,12 +18,11 @@ class DPR(Retriever):
         Field identifier of each document.
     on
         Field to use to retrieve documents.
-    k
-        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
-        will be retrieved.
     index
-        Index that will store the embeddings and perform the similarity search. The default
-        index is Faiss.
+        Faiss index that will store the embeddings and perform the similarity search.
+    normalize
+        Whether to normalize the embeddings before adding them to the index in order to measure
+        cosine similarity.
 
     Examples
     --------
@@ -32,56 +31,34 @@ class DPR(Retriever):
     >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...    {"id": 0, "title": "Paris", "author": "Paris"},
-    ...    {"id": 1, "title": "Madrid", "author": "Madrid"},
-    ...    {"id": 2, "title": "Montreal", "author": "Montreal"},
+    ...    {"id": 0, "title": "Paris France"},
+    ...    {"id": 1, "title": "Madrid Spain"},
+    ...    {"id": 2, "title": "Montreal Canada"}
     ... ]
 
     >>> retriever = retrieve.DPR(
     ...    key = "id",
-    ...    on = ["title", "author"],
-    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-multiset-base').encode,
-    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-multiset-base').encode,
-    ...    k = 2,
+    ...    on = ["title"],
+    ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
+    ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
+    ...    normalize = True,
     ... )
 
     >>> retriever.add(documents)
     DPR retriever
-         key: id
-         on: title, author
-         documents: 3
+        key      : id
+        on       : title
+        documents: 3
 
-    >>> print(retriever("Spain"))
-    [{'id': 1, 'similarity': 0.006858040774451286},
-     {'id': 0, 'similarity': 0.0060191201849380555}]
+    >>> print(retriever("Spain", k=2))
+    [{'id': 1, 'similarity': 0.5534179127892946},
+     {'id': 0, 'similarity': 0.48604427456660426}]
 
-    >>> print(retriever("Paris"))
-    [{'id': 0, 'similarity': 0.00816787668669813},
-     {'id': 1, 'similarity': 0.007023785549903056}]
-
-    >>> print(retriever.batch(["Spain", "Paris"]))
-    {0: [{'id': 1, 'similarity': 0.006858040774451286},
-         {'id': 0, 'similarity': 0.006019121290584248}],
-     1: [{'id': 0, 'similarity': 0.008167878213665493},
-         {'id': 1, 'similarity': 0.007023786302673574}]}
-
-    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
-    {0: [{'id': 1, 'similarity': 0.006858040774451286},
-         {'id': 0, 'similarity': 0.0060191201849380555}],
-     1: [{'id': 0, 'similarity': 0.00816787668669813},
-         {'id': 1, 'similarity': 0.007023785549903056}]}
-
-    >>> retriever += documents
-
-    >>> print(retriever("Spain"))
-    [{'author': 'Madrid',
-      'id': 1,
-      'similarity': 0.006858040774451286,
-      'title': 'Madrid'},
-     {'author': 'Paris',
-      'id': 0,
-      'similarity': 0.0060191201849380555,
-      'title': 'Paris'}]
+    >>> print(retriever(["Spain", "Montreal"], k=2))
+    [[{'id': 1, 'similarity': 0.5534179492996913},
+      {'id': 0, 'similarity': 0.4860442182428353}],
+     [{'id': 2, 'similarity': 0.5451990410703741},
+      {'id': 0, 'similarity': 0.47405722260691213}]]
 
     """
 
@@ -89,41 +66,45 @@ class DPR(Retriever):
         self,
         key: str,
         on: typing.Union[str, list],
-        k: int,
         encoder,
         query_encoder,
+        normalize: bool = True,
+        k: typing.Optional[int] = None,
+        batch_size: int = 64,
         index=None,
-        path: str = None,
     ) -> None:
-        super().__init__(key=key, on=on, k=k)
+        super().__init__(key=key, on=on, k=k, batch_size=batch_size)
         self.encoder = encoder
         self.query_encoder = query_encoder
 
         if index is None:
-            self.index = Faiss(key=self.key)
-        elif isinstance(index, Milvus) or isinstance(index, Faiss):
-            self.index = index
+            self.index = Faiss(key=self.key, normalize=normalize)
         else:
-            self.index = Faiss(key=self.key, index=index)
+            self.index = Faiss(key=self.key, index=index, normalize=normalize)
 
     def __len__(self) -> int:
         return len(self.index)
 
-    def add(self, documents: list, batch_size: int = 64, **kwargs) -> "DPR":
+    def add(
+        self,
+        documents: typing.List[typing.Dict[str, str]],
+        batch_size: int = 64,
+        **kwargs,
+    ) -> "DPR":
         """Add documents to the index.
 
         Parameters
         ----------
         documents
-            List of documents.
+            List of documents to add the index.
         batch_size
-            Batch size to be encoded.
+            Number of documents to encode at once.
         """
-        for batch in tqdm.tqdm(
-            more_itertools.chunked(documents, batch_size),
-            position=0,
-            desc="Retriever embeddings calculation.",
-            total=1 + len(documents) // batch_size,
+
+        for batch in yield_batch(
+            array=documents,
+            batch_size=batch_size,
+            desc=f"{self.__class__.__name__} index creation",
         ):
             self.index.add(
                 documents=batch,
@@ -134,72 +115,46 @@ class DPR(Retriever):
                     ]
                 ),
             )
+
+        self.k = len(self.index)
         return self
 
     def __call__(
         self,
-        q: str,
-        expr: str = None,
-        consistency_level: str = None,
-        partition_names: list = None,
-        **kwargs
-    ) -> list:
-        """Search for documents.
+        q: typing.Union[typing.List[str], str],
+        k: typing.Optional[int] = None,
+        batch_size: typing.Optional[int] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """Retrieve documents from the index.
 
         Parameters
         ----------
         q
-            Query.
+            Either a single query or a list of queries.
+        k
+            Number of documents to retrieve. Default is `None`, i.e all documents that match the
+            query will be retrieved.
+        batch_size
+            Number of queries to encode at once.
         """
-        return self.index(
-            **{
-                "embedding": self.query_encoder([q]),
-                "k": self.k,
-                "key": self.key,
-                "expr": expr,
-                "consistency_level": consistency_level,
-                "partition_names": partition_names,
-            }
-        )
+        k = k if k is not None else len(self)
 
-    def batch(
-        self,
-        q: typing.List[str],
-        batch_size: int = 64,
-        expr: str = None,
-        consistency_level: str = None,
-        partition_names: list = None,
-        **kwargs
-    ) -> dict:
-        """Search for documents per batch.
+        rank = []
 
-        Parameters
-        ----------
-        q
-            List of queries.
-        """
-        rank = {}
-
-        for batch in tqdm.tqdm(
-            more_itertools.chunked(q, batch_size),
-            position=0,
-            desc="Retriever batch queries.",
-            total=1 + len(q) // batch_size,
+        for batch in yield_batch(
+            array=q,
+            batch_size=batch_size if batch_size is not None else self.batch_size,
+            desc=f"{self.__class__.__name__} retriever",
         ):
+            rank.extend(
+                self.index(
+                    embeddings=self.query_encoder(batch),
+                    k=k,
+                )
+            )
 
-            rank = {
-                **rank,
-                **self.index.batch(
-                    **{
-                        "embeddings": self.query_encoder(batch),
-                        "k": self.k,
-                        "n": len(rank),
-                        "key": self.key,
-                        "expr": expr,
-                        "consistency_level": consistency_level,
-                        "partition_names": partition_names,
-                    }
-                ),
-            }
-
-        return rank
+        return rank[0] if isinstance(q, str) else rank

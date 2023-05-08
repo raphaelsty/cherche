@@ -26,25 +26,33 @@
 ...    }
 ... ]
 
->>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents, k=30)
+>>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents)
 
->>> retriever("france")
+>>> retriever("france", k=30)
 [{'id': 0, 'similarity': 0.605}, {'id': 2, 'similarity': 0.47}]
+```
+
+## Batch retrieval
+
+If we have several queries for which we want to retrieve the top k documents then we can
+pass a list of queries to the retriever. In batch-mode, retriever returns a list of list of
+documents instead of a list of documents.
+
+```python
+>>> retriever(["france", "arts", "capital"], k=30)
+[[{'id': 0, 'similarity': 0.605}, {'id': 2, 'similarity': 0.47}], # Match query 1
+ [{'id': 1, 'similarity': 0.802}], # Match query 2
+ [{'id': 0, 'similarity': 1.263}]] # Match query 3
 ```
 
 ## Map keys to documents
 
 ```python
 >>> retriever += documents
->>> retriever("france")
-[{'id': 0,
-  'article': 'Paris is the capital and most populous city of France',
+>>> retriever("arts")
+[{'id': 1,
+  'article': 'Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.',
   'title': 'Paris',
   'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.605},
- {'id': 2,
-  'article': 'The City of Paris is the centre and seat of government of the region and province of Île-de-France .',
-  'title': 'Paris',
-  'url': 'https://en.wikipedia.org/wiki/Paris',
-  'similarity': 0.47}]
+  'similarity': 0.802}]
 ```

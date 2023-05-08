@@ -1,143 +1,108 @@
-from __future__ import annotations
-
 __all__ = ["Encoder"]
 
 import typing
 
-import more_itertools
-import tqdm
-
-from ..similarity import cosine
 from .base import MemoryStore, Ranker
 
 
 class Encoder(Ranker):
-    """SentenceBert Ranker.
+    """Sentence Transformer as a ranker. This ranker is compatible with any SentenceTransformer.
 
     Parameters
     ----------
     key
         Field identifier of each document.
     on
-        Fields to use to match the query to the documents.
+        Fields on wich encoder will perform similarity matching.
     encoder
-        Encoding function dedicated to documents and query.
-    k
-        Number of documents to reorder. The default value is None, i.e. all documents will be
-        reordered and returned.
-    similarity
-        Similarity measure to compare documents embeddings and query embedding (similarity.cosine
-        or similarity.dot).
+        Encoding function dedicated to both documents and queries.
+    normalize
+        If set to True, the similarity measure is cosine similarity, if set to False, similarity
+        measure is dot product.
 
     Examples
     --------
-
     >>> from pprint import pprint as print
     >>> from cherche import rank
     >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris France"},
+    ...    {"id": 1, "title": "Madrid Spain"},
+    ...    {"id": 2, "title": "Montreal Canada"}
     ... ]
 
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    key = "id",
-    ...    on = ["title", "article"],
-    ...    k = 2,
+    ...    on = ["title"],
     ... )
 
     >>> ranker.add(documents=documents)
     Encoder ranker
-        key: id
-        on: title, article
-        k: 2
-        similarity: cosine
-        Embeddings pre-computed: 3
+        key       : id
+        on        : title
+        normalize : True
+        embeddings: 3
 
-    >>> print(ranker.batch(
-    ...    q=["Paris", "Montreal"],
-    ...    documents={
-    ...         0: [{"id": 0}, {"id": 1}, {"id": 2}],
-    ...         1: [{"id": 0}, {"id": 1}, {"id": 2}]
-    ...    }
-    ... ))
-    {0: [{'id': 0, 'similarity': 0.66051406}, {'id': 1, 'similarity': 0.5142565}],
-     1: [{'id': 2, 'similarity': 0.79993165}, {'id': 0, 'similarity': 0.35063893}]}
+    >>> match = ranker(
+    ...     q="Paris",
+    ...     documents=documents
+    ... )
 
-    >>> print(ranker.batch(
-    ...    q=["Paris", "Montreal"],
-    ...    batch_size=1,
-    ...    documents={
-    ...         0: [{"id": 0}, {"id": 1}, {"id": 2}],
-    ...         1: [{"id": 0}, {"id": 1}, {"id": 2}]
-    ...    }
-    ... ))
-    {0: [{'id': 0, 'similarity': 0.6605142}, {'id': 1, 'similarity': 0.51425666}],
-     1: [{'id': 2, 'similarity': 0.7999317}, {'id': 0, 'similarity': 0.35063893}]}
+    >>> print(match)
+    [{'id': 0, 'similarity': 0.7127624, 'title': 'Paris France'},
+     {'id': 1, 'similarity': 0.5497405, 'title': 'Madrid Spain'},
+     {'id': 2, 'similarity': 0.50252455, 'title': 'Montreal Canada'}]
 
-    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'id': 0, 'similarity': 0.6605141758918762},
-     {'id': 1, 'similarity': 0.5142566561698914}]
+    >>> match = ranker(
+    ...     q=["Paris France", "Madrid Spain"],
+    ...     documents=[documents + [{"id": 3, "title": "Paris"}]] * 2,
+    ...     k=2,
+    ... )
 
-    >>> print(ranker(q="Montreal", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'id': 2, 'similarity': 0.7999317646026611},
-     {'id': 0, 'similarity': 0.3506389260292053}]
-
-    >>> print(ranker(q="Paris", documents=documents))
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 0.6605141758918762,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 0.5142566561698914,
-      'title': 'Eiffel tower'}]
-
-    >>> ranker += documents
-    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 0.6605141758918762,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 0.5142566561698914,
-      'title': 'Eiffel tower'}]
+    >>> print(match)
+    [[{'id': 0, 'similarity': 0.99999994, 'title': 'Paris France'},
+      {'id': 1, 'similarity': 0.856435, 'title': 'Madrid Spain'}],
+     [{'id': 1, 'similarity': 1.0, 'title': 'Madrid Spain'},
+      {'id': 0, 'similarity': 0.856435, 'title': 'Paris France'}]]
 
     """
 
     def __init__(
         self,
-        on: str | list,
+        on: typing.Union[str, typing.List[str]],
         key: str,
         encoder,
-        k: int | typing.Optionnal = None,
-        similarity=cosine,
-        store=MemoryStore(),
-        path: str | typing.Optionnal = None,
+        normalize: bool = True,
+        k: typing.Optional[int] = None,
+        batch_size: int = 64,
     ) -> None:
         super().__init__(
             key=key,
             on=on,
             encoder=encoder,
+            normalize=normalize,
             k=k,
-            similarity=similarity,
-            store=store,
+            batch_size=batch_size,
         )
 
-    def __call__(self, q: str, documents: list, **kwargs) -> list:
+    def __call__(
+        self,
+        q: typing.Union[typing.List[str], str],
+        documents: typing.Union[
+            typing.List[typing.List[typing.Dict[str, str]]],
+            typing.List[typing.Dict[str, str]],
+        ],
+        k: typing.Optional[int] = None,
+        batch_size: typing.Optional[int] = None,
+        **kwargs
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
         """Encode input query and ranks documents based on the similarity between the query and
         the selected field of the documents.
-
-        https://pymilvus.readthedocs.io/en/latest/tutorial.html
-        status, documents = client.get_entity_by_id(collection_name, [id_1, id_2])
 
         Parameters
         ----------
@@ -147,48 +112,23 @@ class Encoder(Ranker):
             List of documents to rank.
 
         """
-        if not documents:
+        if k is None:
+            k = self.k
+
+        if k is None:
+            k = len(self)
+
+        if not documents and isinstance(q, str):
             return []
 
-        return self.rank(
-            query_embedding=self.encoder(q),
-            documents=documents,
+        if not documents and isinstance(q, list):
+            return [[]]
+
+        rank = self.encode_rank(
+            embeddings_queries=self.encoder([q] if isinstance(q, str) else q),
+            documents=[documents] if isinstance(q, str) else documents,
+            k=k,
+            batch_size=batch_size if batch_size is not None else self.batch_size,
         )
 
-    def batch(
-        self, q: typing.List[str], documents: dict, batch_size: int = 64, **kwargs
-    ) -> dict:
-        """Re-rank batch of documents-queries.
-
-        Parameters
-        ----------
-        q
-            List of queries.
-        documents
-            Batch of documents.
-        batch_size
-            Size of the batch.
-        """
-        rank = {}
-
-        for batch_queries, batch in tqdm.tqdm(
-            zip(
-                more_itertools.chunked(q, batch_size),
-                more_itertools.chunked(documents, batch_size),
-            ),
-            position=0,
-            desc="Ranker batch queries.",
-            total=1 + len(q) // batch_size,
-        ):
-            rank = {
-                **rank,
-                **self.rank_batch(
-                    **{
-                        "query_embeddings": self.encoder(batch_queries),
-                        "batch": {idx: documents[idx] for idx in batch},
-                        "n": len(rank),
-                    }
-                ),
-            }
-
-        return rank
+        return rank[0] if isinstance(q, str) else rank

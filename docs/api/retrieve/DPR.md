@@ -14,24 +14,22 @@ DPR as a retriever using Faiss Index.
 
     Field to use to retrieve documents.
 
-- **k** (*int*)
-
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
-
 - **encoder**
 
 - **query_encoder**
 
+- **normalize** (*bool*) – defaults to `True`
+
+    Whether to normalize the embeddings before adding them to the index in order to measure cosine similarity.
+
+- **k** (*Optional[int]*) – defaults to `None`
+
+- **batch_size** (*int*) – defaults to `64`
+
 - **index** – defaults to `None`
 
-    Index that will store the embeddings and perform the similarity search. The default index is Faiss.
+    Faiss index that will store the embeddings and perform the similarity search.
 
-- **path** (*str*) – defaults to `None`
-
-
-## Attributes
-
-- **type**
 
 
 ## Examples
@@ -42,54 +40,47 @@ DPR as a retriever using Faiss Index.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "author": "Paris"},
-...    {"id": 1, "title": "Madrid", "author": "Madrid"},
-...    {"id": 2, "title": "Montreal", "author": "Montreal"},
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
 ... ]
 
 >>> retriever = retrieve.DPR(
 ...    key = "id",
-...    on = ["title", "author"],
+...    on = ["title"],
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    k = 2,
+...    normalize = True,
 ... )
 
 >>> retriever.add(documents)
 DPR retriever
-     key: id
-     on: title, author
-     documents: 3
+    key      : id
+    on       : title
+    documents: 3
 
->>> print(retriever("Spain"))
-[{'id': 1, 'similarity': 0.009192565994771673},
- {'id': 0, 'similarity': 0.008331424302852155}]
+>>> print(retriever("Spain", k=2))
+[{'id': 1, 'similarity': 0.5534179127892946},
+ {'id': 0, 'similarity': 0.48604427456660426}]
 
->>> retriever += documents
-
->>> print(retriever("Spain"))
-[{'author': 'Madrid',
-  'id': 1,
-  'similarity': 0.009192565994771673,
-  'title': 'Madrid'},
- {'author': 'Paris',
-  'id': 0,
-  'similarity': 0.008331424302852155,
-  'title': 'Paris'}]
+>>> print(retriever(["Spain", "Montreal"], k=2))
+[[{'id': 1, 'similarity': 0.5534179492996913},
+  {'id': 0, 'similarity': 0.4860442182428353}],
+ [{'id': 2, 'similarity': 0.5451990410703741},
+  {'id': 0, 'similarity': 0.47405722260691213}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Search for documents.
+    Retrieve documents from the index.
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **expr**     (*str*)     – defaults to `None`    
-    - **consistency_level**     (*str*)     – defaults to `None`    
-    - **partition_names**     (*list*)     – defaults to `None`    
+    - **q**     (*Union[List[str], str]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
@@ -98,7 +89,7 @@ DPR retriever
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*List[Dict[str, str]]*)    
     - **batch_size**     (*int*)     – defaults to `64`    
     - **kwargs**    
     

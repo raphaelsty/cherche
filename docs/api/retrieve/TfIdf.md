@@ -14,22 +14,20 @@ TfIdf retriever based on cosine similarities.
 
     Fields to use to match the query to the documents.
 
-- **documents** (*list*)
+- **documents** (*List[Dict[str, str]]*)
 
     Documents in TFIdf retriever are static. The retriever must be reseted to index new documents.
-
-- **k** (*int*) – defaults to `None`
-
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
 - **tfidf** (*sklearn.feature_extraction.text.TfidfVectorizer*) – defaults to `None`
 
     TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
 
+- **k** (*Optional[int]*) – defaults to `None`
 
-## Attributes
+    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
 
-- **type**
+- **batch_size** (*int*) – defaults to `1024`
+
 
 
 ## Examples
@@ -39,51 +37,59 @@ TfIdf retriever based on cosine similarities.
 >>> from cherche import retrieve
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...     {"id": 0, "title": "Paris", "article": "Eiffel tower"},
+...     {"id": 1, "title": "Paris", "article": "Paris is in France."},
+...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada."},
 ... ]
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=3)
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents)
 
 >>> retriever
 TfIdf retriever
-     key: id
-     on: title, article
-     documents: 3
+    key      : id
+    on       : title, article
+    documents: 3
 
->>> print(retriever(q="paris"))
-[{'id': 0, 'similarity': 0.28895767404089806},
- {'id': 1, 'similarity': 0.23464049354653993}]
+>>> print(retriever(q=["paris", "montreal paris"]))
+[[{'id': 1, 'similarity': 0.366173437788525},
+  {'id': 0, 'similarity': 0.23008513690129015}],
+ [{'id': 2, 'similarity': 0.6568592005036291},
+  {'id': 1, 'similarity': 0.18870017418263602},
+  {'id': 0, 'similarity': 0.07522017339345569}]]
 
->>> retriever += documents
+>>> print(retriever(["unknown", "montreal paris"], k=2))
+[[],
+ [{'id': 2, 'similarity': 0.6568592005036291},
+  {'id': 1, 'similarity': 0.18870017418263602}]]
 
->>> print(retriever(q="paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 0.28895767404089806,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.23464049354653993,
-  'title': 'Eiffel tower'}]
-
->>> print(retriever("unknown"))
-[]
+>>> print(retriever(q="paris", k=2))
+[{'id': 1, 'similarity': 0.366173437788525},
+ {'id': 0, 'similarity': 0.23008513690129015}]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Retrieve the right document.
+    Retrieve documents from batch of queries.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[str, List[str]]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
+    
+???- note "top_k_by_partition"
+
+    Top k elements by partition.
+
+    **Parameters**
+
+    - **similarities**     (*numpy.ndarray*)    
+    - **k**     (*int*)    
+        Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
     
 ## References
 

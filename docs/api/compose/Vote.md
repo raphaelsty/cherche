@@ -1,6 +1,6 @@
 # Vote
 
-Voting operator. Average of the similarity scores of the documents.
+Voting operator. Computes the score for each document based on it's number of occurences and based on documents ranks: $nb_occurences * sum_{rank \in ranks} 1 / rank$. The higher the score, the higher the document is ranked in output of the vote.
 
 
 
@@ -15,48 +15,60 @@ Voting operator. Average of the similarity scores of the documents.
 ## Examples
 
 ```python
->>> from cherche import compose, retrieve
 >>> from pprint import pprint as print
+>>> from cherche import retrieve, rank
+>>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
 ... ]
 
 >>> search = (
-...    retrieve.TfIdf(key="id", on="title", documents=documents, k=3) *
-...    retrieve.TfIdf(key="id", on="article", documents=documents, k=3)
+...     retrieve.TfIdf(key="id", on="town", documents=documents) *
+...     retrieve.TfIdf(key="id", on="country", documents=documents) *
+...     retrieve.Flash(key="id", on="continent")
 ... )
 
->>> search
-Vote
------
-TfIdf retriever
-     key: id
-     on: title
-     documents: 3
-TfIdf retriever
-     key: id
-     on: article
-     documents: 3
------
+>>> search = search.add(documents)
 
->>> print(search("paris eiffel"))
-[{'id': 1, 'similarity': 0.5216793798120437},
- {'id': 0, 'similarity': 0.4783206201879563}]
+>>> retriever = retrieve.TfIdf(key="id", on=["town", "country", "continent"], documents=documents)
+
+>>> ranker = rank.Encoder(
+...     key="id",
+...     on=["town", "country", "continent"],
+...     encoder=SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+... ) * rank.Encoder(
+...     key="id",
+...     on=["town", "country", "continent"],
+...     encoder=SentenceTransformer(
+...        "sentence-transformers/multi-qa-mpnet-base-cos-v1"
+...     ).encode,
+... )
+
+>>> search = retriever + ranker
+
+>>> search = search.add(documents)
+
+>>> print(search("What is the capital of Canada ? Is it paris, montreal or madrid ?"))
+[{'id': 1, 'similarity': 2.5},
+ {'id': 0, 'similarity': 1.4},
+ {'id': 2, 'similarity': 1.0}]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    
+    Call self as a function.
 
     **Parameters**
 
-    - **q**     (*str*)     – defaults to ``    
-    - **user**     (*Union[str, int]*)     – defaults to `None`    
+    - **q**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **documents**     (*Optional[List[Dict[str, str]]]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"

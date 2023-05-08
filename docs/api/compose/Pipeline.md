@@ -16,124 +16,90 @@ Neurals search pipeline.
 
 ```python
 >>> from pprint import pprint as print
->>> from cherche import retrieve, rank, qa, summary
+>>> from cherche import retrieve, rank
 >>> from sentence_transformers import SentenceTransformer
->>> from transformers import pipeline
 
 >>> documents = [
-...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
 ... ]
 
->>> retriever = retrieve.TfIdf(key="id", on="article", documents=documents)
+>>> retriever = retrieve.TfIdf(
+...     key="id", on=["town", "country", "continent"], documents=documents)
 
-```
-
-Retriever, Ranker:
-```python
 >>> ranker = rank.Encoder(
-...    on = "article",
-...    key = "id",
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    path = "pipeline_encoder.pkl"
+...    key = "id",
+...    on = ["town", "country", "continent"],
 ... )
 
->>> search = retriever + ranker + documents
+>>> pipeline = retriever + ranker
 
->>> search.add(documents=documents)
-TfIdf retriever
-    key: id
-    on: article
-    documents: 3
-Encoder ranker
-    key: id
-    on: article
-    k: None
-    similarity: cosine
-    Embeddings pre-computed: 3
-Mapping to documents
+>>> pipeline = pipeline.add(documents)
 
->>> print(search(q = "Paris"))
-[{'article': 'Paris is the capital of France',
-  'author': 'Wiki',
+>>> print(pipeline("Paris Europe"))
+[{'id': 0, 'similarity': 0.9149576}, {'id': 2, 'similarity': 0.8091332}]
+
+>>> print(pipeline(["Paris", "Europe", "Paris Madrid Europe France Spain"]))
+[[{'id': 0, 'similarity': 0.69523287}],
+ [{'id': 0, 'similarity': 0.7381397}, {'id': 2, 'similarity': 0.6488539}],
+ [{'id': 0, 'similarity': 0.8582063}, {'id': 2, 'similarity': 0.8200009}]]
+
+>>> pipeline = retriever + ranker + documents
+
+>>> print(pipeline("Paris Europe"))
+[{'continent': 'Europe',
+  'country': 'France',
   'id': 0,
-  'similarity': 0.7014107704162598,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris.',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.5178720951080322,
-  'title': 'Eiffel tower'}]
-
-```
-
-Retriever, Ranker, Question Answering:
-```python
->>> search += qa.QA(
-...     model = pipeline(
-...         "question-answering",
-...         model = "deepset/roberta-base-squad2",
-...         tokenizer = "deepset/roberta-base-squad2"
-...     ),
-...     on = "article",
-... )
-
->>> search
-TfIdf retriever
-    key: id
-    on: article
-    documents: 3
-Encoder ranker
-    key: id
-    on: article
-    k: None
-    similarity: cosine
-    Embeddings pre-computed: 3
-Mapping to documents
-Question Answering
-    on: article
-
->>> print(search(q = "What is based in Paris?"))
-[{'answer': 'Eiffel tower',
-  'article': 'Eiffel tower is based in Paris.',
-  'author': 'Wiki',
-  'end': 12,
-  'id': 1,
-  'qa_score': 0.9643093943595886,
-  'similarity': 0.6578713655471802,
-  'start': 0,
-  'title': 'Eiffel tower'},
- {'answer': 'Paris is the capital of France',
-  'article': 'Paris is the capital of France',
-  'author': 'Wiki',
-  'end': 30,
-  'id': 0,
-  'qa_score': 4.2473871872061864e-05,
-  'similarity': 0.7062915563583374,
-  'start': 0,
-  'title': 'Paris'},
- {'answer': 'Montreal is in Canada.',
-  'article': 'Montreal is in Canada.',
-  'author': 'Wiki',
-  'end': 22,
+  'similarity': 0.9149576,
+  'town': 'Paris'},
+ {'continent': 'Europe',
+  'country': 'Spain',
   'id': 2,
-  'qa_score': 1.7172791189068448e-08,
-  'similarity': 0.3316514492034912,
-  'start': 0,
-  'title': 'Montreal'}]
+  'similarity': 0.8091332,
+  'town': 'Madrid'}]
+
+>>> print(pipeline(["Paris", "Europe", "Paris Madrid Europe France Spain"]))
+[[{'continent': 'Europe',
+   'country': 'France',
+   'id': 0,
+   'similarity': 0.69523287,
+   'town': 'Paris'}],
+ [{'continent': 'Europe',
+   'country': 'France',
+   'id': 0,
+   'similarity': 0.7381397,
+   'town': 'Paris'},
+  {'continent': 'Europe',
+   'country': 'Spain',
+   'id': 2,
+   'similarity': 0.6488539,
+   'town': 'Madrid'}],
+ [{'continent': 'Europe',
+   'country': 'France',
+   'id': 0,
+   'similarity': 0.8582063,
+   'town': 'Paris'},
+  {'continent': 'Europe',
+   'country': 'Spain',
+   'id': 2,
+   'similarity': 0.8200009,
+   'town': 'Madrid'}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Compose pipeline
+    Pipeline main method. It takes a query and returns a list of documents. If the query is a list of queries, it returns a list of list of documents. If the batch_size_ranker, or batch_size_retriever it takes precedence over the batch_size. If the k_ranker, or k_retriever it takes precedence over the k parameter.
 
     **Parameters**
 
-    - **q**     (*str*)     – defaults to ``    
-    - **user**     (*Union[str, int]*)     – defaults to `None`    
+    - **q**     (*Union[List[str], str]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **documents**     (*Optional[List[Dict[str, str]]]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"

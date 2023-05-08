@@ -2,10 +2,10 @@ __all__ = ["Encoder"]
 
 import typing
 
-import more_itertools
 import tqdm
 
-from ..index import Faiss, Milvus
+from ..index import Faiss
+from ..utils import yield_batch
 from .base import Retriever
 
 
@@ -18,62 +18,45 @@ class Encoder(Retriever):
         Field identifier of each document.
     on
         Field to use to retrieve documents.
-    k
-        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
-        will be retrieved.
     index
-        Index that will store the embeddings and perform the similarity search. The default
-        index is Faiss.
+        Faiss index that will store the embeddings and perform the similarity search.
+    normalize
+        Whether to normalize the embeddings before adding them to the index in order to measure
+        cosine similarity.
 
     Examples
     --------
-
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
     >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...    {"id": 0, "title": "Paris", "author": "Paris"},
-    ...    {"id": 1, "title": "Madrid", "author": "Madrid"},
-    ...    {"id": 2, "title": "Montreal", "author": "Montreal"},
+    ...    {"id": 0, "title": "Paris France"},
+    ...    {"id": 1, "title": "Madrid Spain"},
+    ...    {"id": 2, "title": "Montreal Canada"}
     ... ]
 
     >>> retriever = retrieve.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    key = "id",
-    ...    on = ["title", "author"],
-    ...    k = 2,
+    ...    on = ["title"],
     ... )
 
-    >>> retriever.add(documents)
+    >>> retriever.add(documents, batch_size=1)
     Encoder retriever
-         key: id
-         on: title, author
-         documents: 3
+        key      : id
+        on       : title
+        documents: 3
 
-    >>> print(retriever("Spain"))
-    [{'id': 1, 'similarity': 1.1885032405192992},
-     {'id': 0, 'similarity': 0.8492543139964137}]
+    >>> print(retriever("Spain", k=2))
+    [{'id': 1, 'similarity': 0.6544566453117681},
+     {'id': 0, 'similarity': 0.5405465419981407}]
 
-    >>> print(retriever("Paris"))
-    [{'id': 0, 'similarity': 5.311708958695876},
-     {'id': 2, 'similarity': 1.179519718015668}]
-
-    >>> print(retriever.batch(["Spain", "Paris"]))
-    {0: [{'id': 1, 'similarity': 1.188503156325363},
-         {'id': 0, 'similarity': 0.8492543139964137}],
-     1: [{'id': 0, 'similarity': 5.311706015721681},
-         {'id': 2, 'similarity': 1.1795198009416352}]}
-
-    >>> print(retriever.batch(["Spain", "Paris"], batch_size=1))
-    {0: [{'id': 1, 'similarity': 1.1885032405192992},
-         {'id': 0, 'similarity': 0.8492543139964137}],
-     1: [{'id': 0, 'similarity': 5.311708958695876},
-         {'id': 2, 'similarity': 1.179519718015668}]}
-
-    References
-    ----------
-    1. [Faiss](https://github.com/facebookresearch/faiss)
+    >>> print(retriever(["Spain", "Montreal"], k=2))
+    [[{'id': 1, 'similarity': 0.6544566453117681},
+      {'id': 0, 'similarity': 0.54054659424589}],
+     [{'id': 2, 'similarity': 0.7372165680578416},
+      {'id': 0, 'similarity': 0.5185645704259234}]]
 
     """
 
@@ -82,38 +65,47 @@ class Encoder(Retriever):
         encoder,
         key: str,
         on: typing.Union[str, list],
-        k: int,
+        normalize: bool = True,
+        k: typing.Optional[int] = None,
+        batch_size: int = 64,
         index=None,
-        path: str = None,
     ) -> None:
-        super().__init__(key=key, on=on, k=k)
+        super().__init__(
+            key=key,
+            on=on,
+            k=k,
+            batch_size=batch_size,
+        )
         self.encoder = encoder
 
         if index is None:
-            self.index = Faiss(key=self.key)
-        elif isinstance(index, Milvus) or isinstance(index, Faiss):
-            self.index = index
+            self.index = Faiss(key=self.key, normalize=normalize)
         else:
-            self.index = Faiss(key=self.key, index=index)
+            self.index = Faiss(key=self.key, index=index, normalize=normalize)
 
     def __len__(self) -> int:
         return len(self.index)
 
-    def add(self, documents: list, batch_size: int = 64, **kwargs) -> "Encoder":
+    def add(
+        self,
+        documents: typing.List[typing.Dict[str, str]],
+        batch_size: int = 64,
+        **kwargs,
+    ) -> "Encoder":
         """Add documents to the index.
 
         Parameters
         ----------
         documents
-            List of documents.
+            List of documents to add to the index.
         batch_size
-            Batch size to be encoded.
+            Number of documents to encode at once.
         """
-        for batch in tqdm.tqdm(
-            more_itertools.chunked(documents, batch_size),
-            position=0,
-            desc="Retriever embeddings calculation.",
-            total=1 + len(documents) // batch_size,
+
+        for batch in yield_batch(
+            array=documents,
+            batch_size=batch_size,
+            desc=f"{self.__class__.__name__} index creation",
         ):
             self.index.add(
                 documents=batch,
@@ -124,72 +116,44 @@ class Encoder(Retriever):
                     ]
                 ),
             )
+
         return self
 
     def __call__(
         self,
-        q: str,
-        expr: str = None,
-        consistency_level: str = None,
-        partition_names: list = None,
-        **kwargs
-    ) -> list:
-        """Search for documents.
+        q: typing.Union[typing.List[str], str],
+        k: typing.Optional[int] = None,
+        batch_size: typing.Optional[int] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """Retrieve documents from the index.
 
         Parameters
         ----------
         q
-            Query.
+            Either a single query or a list of queries.
+        k
+            Number of documents to retrieve. Default is `None`, i.e all documents that match the
+            query will be retrieved.
+        batch_size
+            Number of queries to encode at once.
         """
-        return self.index(
-            **{
-                "embedding": self.encoder([q]),
-                "k": self.k,
-                "key": self.key,
-                "expr": expr,
-                "consistency_level": consistency_level,
-                "partition_names": partition_names,
-            }
-        )
+        k = k if k is not None else len(self)
 
-    def batch(
-        self,
-        q: typing.List[str],
-        batch_size: int = 64,
-        expr: str = None,
-        consistency_level: str = None,
-        partition_names: list = None,
-        **kwargs
-    ) -> dict:
-        """Search for documents per batch.
-
-        Parameters
-        ----------
-        q
-            List of queries.
-        """
-        rank = {}
-
-        for batch in tqdm.tqdm(
-            more_itertools.chunked(q, batch_size),
-            position=0,
-            desc="Retriever batch queries.",
-            total=1 + len(q) // batch_size,
+        rank = []
+        for batch in yield_batch(
+            array=q,
+            batch_size=batch_size if batch_size is not None else self.batch_size,
+            desc=f"{self.__class__.__name__} retriever",
         ):
+            rank.extend(
+                self.index(
+                    embeddings=self.encoder(batch),
+                    k=k,
+                )
+            )
 
-            rank = {
-                **rank,
-                **self.index.batch(
-                    **{
-                        "embeddings": self.encoder(batch),
-                        "k": self.k,
-                        "n": len(rank),
-                        "key": self.key,
-                        "expr": expr,
-                        "consistency_level": consistency_level,
-                        "partition_names": partition_names,
-                    }
-                ),
-            }
-
-        return rank
+        return rank[0] if isinstance(q, str) else rank

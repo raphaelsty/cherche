@@ -6,6 +6,7 @@ from itertools import chain
 
 from flashtext import KeywordProcessor
 
+from ..utils import yield_batch_single
 from .base import Retriever
 
 
@@ -19,52 +20,39 @@ class Flash(Retriever):
         Field identifier of each document.
     on
         Fields to use to match the query to the documents.
-    k
-        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
-        will be retrieved.
     keywords
         Keywords extractor from [FlashText](https://github.com/vi3k6i5/flashtext). If set to None,
         a default one is created.
 
     Examples
     --------
-
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
 
     >>> documents = [
-    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
-    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
+    ...     {"id": 0, "title": "paris", "article": "eiffel tower"},
+    ...     {"id": 1, "title": "paris", "article": "paris"},
+    ...     {"id": 2, "title": "montreal", "article": "montreal is in canada"},
     ... ]
 
-    >>> retriever = retrieve.Flash(key="id", on="tags", k=2)
+    >>> retriever = retrieve.Flash(key="id", on=["title", "article"])
 
     >>> retriever.add(documents=documents)
     Flash retriever
-         key: id
-         on: tags
-         documents: 6
+        key      : id
+        on       : title, article
+        documents: 4
 
-    >>> print(retriever(q="paris"))
+    >>> print(retriever(q="paris", k=2))
+    [{'id': 1, 'similarity': 0.6666666666666666},
+     {'id': 0, 'similarity': 0.3333333333333333}]
+
     [{'id': 0, 'similarity': 1}, {'id': 1, 'similarity': 1}]
 
-    >>> retriever += documents
-
-    >>> print(retriever(q="paris"))
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 1,
-      'tags': ['paris', 'capital'],
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 1,
-      'tags': ['paris', 'eiffel', 'tower'],
-      'title': 'Eiffel tower'}]
-
+    >>> print(retriever(q=["paris", "montreal"]))
+    [[{'id': 1, 'similarity': 0.6666666666666666},
+      {'id': 0, 'similarity': 0.3333333333333333}],
+     [{'id': 2, 'similarity': 1.0}]]
 
     References
     ----------
@@ -77,15 +65,17 @@ class Flash(Retriever):
         self,
         key: str,
         on: typing.Union[str, list],
-        k: int = None,
         keywords: KeywordProcessor = None,
+        lowercase: bool = True,
+        k: typing.Optional[int] = None,
     ) -> None:
-        super().__init__(key=key, on=on, k=k)
+        super().__init__(key=key, on=on, k=k, batch_size=1)
         self.documents = collections.defaultdict(list)
         self.keywords = KeywordProcessor() if keywords is None else keywords
+        self.lowercase = lowercase
 
-    def add(self, documents: list, **kwargs) -> "Flash":
-        """Add keywords to the retriever. Streaming friendly.
+    def add(self, documents: typing.List[typing.Dict[str, str]], **kwargs) -> "Flash":
+        """Add keywords to the retriever.
 
         Parameters
         ----------
@@ -97,36 +87,68 @@ class Flash(Retriever):
             for field in self.on:
                 if field not in document:
                     continue
-                if isinstance(document[field], list):
-                    for tag in document[field]:
-                        self.documents[tag].append({self.key: document[self.key]})
-                else:
-                    self.documents[document[field]].append(
-                        {self.key: document[self.key]}
-                    )
-                self._add(document=document[field])
+
+                if isinstance(document[field], str):
+                    words = document[field]
+                    if self.lowercase:
+                        words = words.lower()
+                    self.documents[words].append({self.key: document[self.key]})
+                    self.keywords.add_keyword(words)
+
+                elif isinstance(document[field], list):
+                    words = document[field]
+                    if self.lowercase:
+                        words = [word.lower() for word in words]
+
+                    for word in words:
+                        self.documents[word].append({self.key: document[self.key]})
+                    self.keywords.add_keywords_from_list(words)
+
         return self
 
-    def _add(self, document: typing.Union[list, str]) -> "Flash":
-        """Update keywords using dict, list or string."""
-        if isinstance(document, list):
-            self.keywords.add_keywords_from_list(document)
-        elif isinstance(document, str):
-            self.keywords.add_keyword(document)
-        return self
+    def __call__(
+        self,
+        q: typing.Union[typing.List[str], str],
+        k: typing.Optional[int] = None,
+        **kwargs,
+    ) -> list:
+        """Retrieve documents from the index.
 
-    def __call__(self, q: str, **kwargs) -> list:
-        """Retrieve tags."""
-        documents = list(
-            chain.from_iterable(
-                [self.documents[tag] for tag in self.keywords.extract_keywords(q)]
+        Parameters
+        ----------
+        q
+            Either a single query or a list of queries.
+        k
+            Number of documents to retrieve. Default is `None`, i.e all documents that match the
+            query will be retrieved.
+        """
+        rank = []
+
+        for batch in yield_batch_single(q, desc=f"{self.__class__.__name__} retriever"):
+            if self.lowercase:
+                batch = batch.lower()
+
+            match = list(
+                chain.from_iterable(
+                    [
+                        self.documents[tag]
+                        for tag in self.keywords.extract_keywords(batch)
+                    ]
+                )
             )
-        )
 
-        # Remove duplicates documents
-        documents = [
-            {**{"similarity": 1}, **doc}
-            for n, doc in enumerate(documents)
-            if doc not in documents[n + 1 :]
-        ]
-        return documents[: self.k] if self.k is not None else documents
+            scores = collections.defaultdict(int)
+            for document in match:
+                scores[document[self.key]] += 1
+
+            total = len(match)
+
+            documents = [
+                {self.key: key, "similarity": scores[key] / total}
+                for key in sorted(scores, key=scores.get, reverse=True)
+            ]
+
+            documents = documents[:k] if k is not None else documents
+            rank.append(documents)
+
+        return rank[0] if isinstance(q, str) else rank

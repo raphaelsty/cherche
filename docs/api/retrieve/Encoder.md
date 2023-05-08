@@ -16,20 +16,18 @@ Encoder as a retriever using Faiss Index.
 
     Field to use to retrieve documents.
 
-- **k** (*int*)
+- **normalize** (*bool*) – defaults to `True`
 
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
+    Whether to normalize the embeddings before adding them to the index in order to measure cosine similarity.
+
+- **k** (*Optional[int]*) – defaults to `None`
+
+- **batch_size** (*int*) – defaults to `64`
 
 - **index** – defaults to `None`
 
-    Index that will store the embeddings and perform the similarity search. The default index is Faiss.
+    Faiss index that will store the embeddings and perform the similarity search.
 
-- **path** (*str*) – defaults to `None`
-
-
-## Attributes
-
-- **type**
 
 
 ## Examples
@@ -40,41 +38,45 @@ Encoder as a retriever using Faiss Index.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "author": "Paris"},
-...    {"id": 1, "title": "Madrid", "author": "Madrid"},
-...    {"id": 2, "title": "Montreal", "author": "Montreal"},
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
 ... ]
 
 >>> retriever = retrieve.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    key = "id",
-...    on = ["title", "author"],
-...    k = 2,
+...    on = ["title"],
 ... )
 
->>> retriever.add(documents)
+>>> retriever.add(documents, batch_size=1)
 Encoder retriever
-     key: id
-     on: title, author
-     documents: 3
+    key      : id
+    on       : title
+    documents: 3
 
->>> print(retriever("Spain"))
-[{'id': 1, 'similarity': 1.1885032405192992},
- {'id': 0, 'similarity': 0.8492543139964137}]
+>>> print(retriever("Spain", k=2))
+[{'id': 1, 'similarity': 0.6544566453117681},
+ {'id': 0, 'similarity': 0.5405465419981407}]
+
+>>> print(retriever(["Spain", "Montreal"], k=2))
+[[{'id': 1, 'similarity': 0.6544566453117681},
+  {'id': 0, 'similarity': 0.54054659424589}],
+ [{'id': 2, 'similarity': 0.7372165680578416},
+  {'id': 0, 'similarity': 0.5185645704259234}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Search for documents.
+    Retrieve documents from the index.
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **expr**     (*str*)     – defaults to `None`    
-    - **consistency_level**     (*str*)     – defaults to `None`    
-    - **partition_names**     (*list*)     – defaults to `None`    
+    - **q**     (*Union[List[str], str]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
@@ -83,11 +85,7 @@ Encoder retriever
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*List[Dict[str, str]]*)    
     - **batch_size**     (*int*)     – defaults to `64`    
     - **kwargs**    
     
-## References
-
-1. [Faiss](https://github.com/facebookresearch/faiss)
-

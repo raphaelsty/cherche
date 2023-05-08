@@ -15,34 +15,41 @@ class Retriever(abc.ABC):
         Field identifier of each document.
     on
         Fields to use to match the query to the documents.
-    k
-        Number of documents to retrieve. Default is None, i.e all documents that match the query
-        will be retrieved.
-
     """
 
     def __init__(
-        self, key: str, on: typing.Union[str, list], k: typing.Optional[int]
+        self,
+        key: str,
+        on: typing.Union[str, list],
+        k: typing.Optional[int],
+        batch_size: int,
     ) -> None:
         super().__init__()
         self.key = key
         self.on = on if isinstance(on, list) else [on]
-        self.k = k
         self.documents = None
+        self.k = k
+        self.batch_size = batch_size
 
     def __repr__(self) -> str:
         repr = f"{self.__class__.__name__} retriever"
-        repr += f"\n \t key: {self.key}"
-        repr += f"\n \t on: {', '.join(self.on)}"
-        repr += f"\n \t documents: {self.__len__()}"
+        repr += f"\n\tkey      : {self.key}"
+        repr += f"\n\ton       : {', '.join(self.on)}"
+        repr += f"\n\tdocuments: {len(self)}"
         return repr
 
-    @property
-    def type(self):
-        return "retrieve"
-
     @abc.abstractclassmethod
-    def __call__(self, q: str, **kwargs) -> list:
+    def __call__(
+        self,
+        q: typing.Union[typing.List[str], str],
+        k: typing.Optional[int],
+        batch_size: typing.Optional[int],
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """Retrieve documents from the index."""
         return []
 
     def __len__(self):

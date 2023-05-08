@@ -14,19 +14,21 @@ Faiss index dedicated to vector search.
 
     Faiss index to use.
 
+- **normalize** (*bool*) – defaults to `True`
+
 
 
 ## Examples
 
 ```python
+>>> from pprint import pprint as print
 >>> from cherche import index
 >>> from sentence_transformers import SentenceTransformer
->>> from pprint import pprint as print
 
 >>> documents = [
-...    {"id": 0, "title": "Paris"},
-...    {"id": 1, "title": "Madrid"},
-...    {"id": 2, "title": "Paris"}
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
 ... ]
 
 >>> encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
@@ -37,15 +39,18 @@ Faiss index dedicated to vector search.
 ...    embeddings = encoder.encode([document["title"] for document in documents]),
 ... )
 
->>> print(faiss_index(embedding = encoder.encode(["Spain"])))
-[{'id': 1, 'similarity': 1.5076334135501044},
- {'id': 2, 'similarity': 0.9021741164485997},
- {'id': 0, 'similarity': 0.9021741164485997}]
+>>> print(faiss_index(embeddings=encoder.encode(["Spain", "Montreal"])))
+[[{'id': 1, 'similarity': 0.6544566197822951},
+  {'id': 0, 'similarity': 0.5405466290777285},
+  {'id': 2, 'similarity': 0.48717489472604614}],
+ [{'id': 2, 'similarity': 0.7372165680578416},
+  {'id': 0, 'similarity': 0.5185646665953703},
+  {'id': 1, 'similarity': 0.4834444940712032}]]
 
 >>> documents = [
-...    {"id": 3, "title": "Paris"},
-...    {"id": 4, "title": "Madrid"},
-...    {"id": 5, "title": "Paris"}
+...    {"id": 3, "title": "Paris France"},
+...    {"id": 4, "title": "Madrid Spain"},
+...    {"id": 5, "title": "Montreal Canada"}
 ... ]
 
 >>> faiss_index = faiss_index.add(
@@ -53,11 +58,15 @@ Faiss index dedicated to vector search.
 ...    embeddings = encoder.encode([document["title"] for document in documents]),
 ... )
 
->>> print(faiss_index(embedding = encoder.encode(["Spain"]), k=4))
-[{'id': 1, 'similarity': 1.5076334135501044},
- {'id': 4, 'similarity': 1.5076334135501044},
- {'id': 2, 'similarity': 0.9021741164485997},
- {'id': 3, 'similarity': 0.9021741164485997}]
+>>> print(faiss_index(embeddings=encoder.encode(["Spain", "Montreal"]), k=4))
+[[{'id': 1, 'similarity': 0.6544566197822951},
+  {'id': 4, 'similarity': 0.6544566197822951},
+  {'id': 0, 'similarity': 0.5405466290777285},
+  {'id': 3, 'similarity': 0.5405466290777285}],
+ [{'id': 2, 'similarity': 0.7372165680578416},
+  {'id': 5, 'similarity': 0.7372165680578416},
+  {'id': 0, 'similarity': 0.5185646665953703},
+  {'id': 3, 'similarity': 0.5185646665953703}]]
 ```
 
 ## Methods
@@ -68,9 +77,8 @@ Faiss index dedicated to vector search.
 
     **Parameters**
 
-    - **embedding**     (*numpy.ndarray*)    
-    - **k**     (*int*)     – defaults to `None`    
-    - **kwargs**    
+    - **embeddings**     (*numpy.ndarray*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
     
 ???- note "add"
 

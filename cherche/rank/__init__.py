@@ -1,7 +1,7 @@
 from .base import Ranker
+from .cross_encoder import CrossEncoder
 from .dpr import DPR
+from .embedding import Embedding
 from .encoder import Encoder
-from .recommend import Recommend
-from .zero_shot import ZeroShot
 
-__all__ = ["Ranker", "DPR", "Encoder", "Recommend", "ZeroShot"]
+__all__ = ["Ranker", "CrossEncoder", "DPR", "Embedding", "Encoder"]

@@ -2,13 +2,9 @@ title: Retrieve
 nav:
     - retrieve.md
     - tfidf.md
-    - bm25.md
-    - elastic.md
     - flash.md
     - lunr.md
+    - fuzz.md
     - encoder.md
     - dpr.md
-    - fuzz.md
-    - meilisearch.md
-    - typesense.md
-    - recommend.md
+    - embedding.md

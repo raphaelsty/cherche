@@ -6,11 +6,11 @@ Abstract class for ranking models.
 
 ## Parameters
 
-- **key** (*'str'*)
+- **key** (*str*)
 
     Field identifier of each document.
 
-- **on** (*'str | list'*)
+- **on** (*Union[str, List[str]]*)
 
     Fields of the documents to use for ranking.
 
@@ -18,20 +18,14 @@ Abstract class for ranking models.
 
     Encoding function to computes embeddings of the documents.
 
-- **k** (*'int'*)
+- **normalize** (*bool*)
 
-    Number of documents to keep.
+    Normalize the embeddings in order to measure cosine similarity if set to True, dot product if set to False.
 
-- **similarity**
+- **batch_size** (*int*)
 
-    Similarity measure to use i.e similarity.cosine or similarity.dot.
+- **k** (*Optional[int]*) – defaults to `None`
 
-- **store**
-
-
-## Attributes
-
-- **type**
 
 
 
@@ -39,12 +33,14 @@ Abstract class for ranking models.
 
 ???- note "__call__"
 
-    Call self as a function.
+    Rank documents according to the query.
 
     **Parameters**
 
-    - **q**     (*'str'*)    
-    - **documents**     (*'list'*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **documents**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
@@ -53,16 +49,19 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
-    - **batch_size**     (*'int'*)     – defaults to `64`    
+    - **documents**     (*List[Dict[str, str]]*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
     
-???- note "encode"
+???- note "encode_rank"
 
-    Computes documents embeddings.
+    Encode documents and rank them according to the query.
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     
 ???- note "rank"
 
@@ -70,6 +69,9 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **query_embedding**     (*'np.ndarray'*)    
-    - **documents**     (*'list'*)    
+    - **embeddings_documents**     (*Dict[str, numpy.ndarray]*)    
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     

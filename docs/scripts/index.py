@@ -73,14 +73,12 @@ def inherit_docstring(c, meth):
 
 
 def inherit_signature(c, method_name):
-
     m = getattr(c, method_name)
     sig = inspect.signature(m)
 
     params = []
 
     for param in sig.parameters.values():
-
         if param.name == "self" or param.annotation is not param.empty:
             params.append(param)
             continue
@@ -126,7 +124,6 @@ def pascal_to_kebab(string):
 
 class Linkifier:
     def __init__(self):
-
         path_index = {}
         name_index = {}
 
@@ -276,7 +273,6 @@ def print_docstring(obj, file, depth):
         after_space = False
 
         for line in inspect.cleandoc("\n".join(doc["Examples"])).splitlines():
-
             if (
                 in_code
                 and after_space
@@ -308,7 +304,6 @@ def print_docstring(obj, file, depth):
         printf_indent = lambda x, **kwargs: printf(f"    {x}", **kwargs)
 
         for meth in doc["Methods"]:
-
             printf(paragraph(f'???- note "{meth.name}"'))
 
             # Parse method docstring
@@ -379,7 +374,6 @@ def print_docstring(obj, file, depth):
 
 
 def print_module(mod, path, overview, is_submodule=False):
-
     mod_name = mod.__name__.split(".")[-1]
 
     # Create a directory for the module
@@ -454,7 +448,6 @@ def print_module(mod, path, overview, is_submodule=False):
 
 
 if __name__ == "__main__":
-
     api_path = pathlib.Path("docs/api")
 
     # Create a directory for the API reference

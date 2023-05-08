@@ -4,6 +4,7 @@ import re
 import string
 import typing
 
+from ..utils import yield_batch_single
 from .base import Query
 
 __all__ = ["Norvig"]
@@ -17,9 +18,6 @@ class Norvig(Query):
     ----------
     on
         Fields to use for fitting the spelling corrector on.
-    big
-        Use the big.txt provided by the Norvig spelling corrector. Contains
-        english books from the Gutenberg project.
 
     Examples
     --------
@@ -37,14 +35,8 @@ class Norvig(Query):
     >>> corrector(q="tha citi af Parisa is in Fronce")
     'the city of paris is in france'
 
-    >>> corrector = query.Norvig(big=True, on=["title", "article"], lower=False)
-
-    >>> corrector.add(documents)
-    Query Norvig
-         Vocabulary: 32790
-
-    >>> corrector(q="tha citi af Parisa is in Fronce")
-    'the city of Paris is in France'
+    >>> corrector(q=["tha citi af Parisa is in Fronce", "parisa"])
+    ['the city of paris is in france', 'paris']
 
     References
     ----------
@@ -56,27 +48,28 @@ class Norvig(Query):
         self,
         on: typing.Union[str, typing.List],
         lower: bool = True,
-        big: bool = False,
     ) -> None:
         super().__init__(on=on)
 
         self.occurrences = collections.Counter()
         self.lower = lower
 
-        if big:
-            path_big = pathlib.Path(__file__).parent.parent.joinpath("data/norvig.txt")
-            self._update_from_file(path_file=path_big)
-
     def __repr__(self) -> str:
         repr = super().__repr__()
         repr += f"\n\t Vocabulary: {len(self.occurrences)}"
         return repr
 
-    def __call__(self, q: str, **kwargs) -> str:
+    def __call__(
+        self, q: typing.Union[typing.List[str], str], **kwargs
+    ) -> typing.Union[typing.List[str], str]:
         """Correct spelling errors in a given query."""
-        if len(self.occurrences) == 0:
-            return q
-        return " ".join(map(self.correct, q.split(" ")))
+        queries = []
+        for batch in yield_batch_single(q, desc="Spelling-correction"):
+            if len(self.occurrences) == 0:
+                queries.append(batch)
+            else:
+                queries.append(" ".join(map(self.correct, batch.split(" "))))
+        return queries[0] if isinstance(q, str) else queries
 
     def correct(self, word: str) -> float:
         """Most probable spelling correction for word."""

@@ -1,43 +1,35 @@
 # DPR
 
-DPR ranks documents using distinct models to encode the query and document contents.
+Dual Sentence Transformer as a ranker. This ranker is compatible with any SentenceTransformer. DPR is a dual encoder model, it uses two SentenceTransformer, one for encoding documents and one for encoding queries.
 
 
 
 ## Parameters
 
-- **key** (*'str'*)
+- **on** (*Union[str, List[str]]*)
+
+    Fields on wich encoder will perform similarity matching.
+
+- **key** (*str*)
 
     Field identifier of each document.
 
-- **on** (*'str | list'*)
-
-    Fields to use to match the query to the documents.
-
 - **encoder**
 
-    Encoding function dedicated to documents.
+    Encoding function dedicated documents.
 
 - **query_encoder**
 
-    Encoding function dedicated to the query.
+    Encoding function dedicated to queries.
 
-- **k** (*'int | typing.Optionnal'*) – defaults to `None`
+- **normalize** (*bool*) – defaults to `True`
 
-    Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
+    If set to True, the similarity measure is cosine similarity, if set to False, similarity measure is dot product.
 
-- **similarity** – defaults to `<function dot at 0x16beca040>`
+- **k** (*Optional[int]*) – defaults to `None`
 
-    Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
+- **batch_size** (*int*) – defaults to `64`
 
-- **store** – defaults to `<cherche.rank.base.MemoryStore object at 0x16be3f910>`
-
-- **path** (*'str | typing.Optionnal'*) – defaults to `None`
-
-
-## Attributes
-
-- **type**
 
 
 ## Examples
@@ -47,69 +39,62 @@ DPR ranks documents using distinct models to encode the query and document conte
 >>> from cherche import rank
 >>> from sentence_transformers import SentenceTransformer
 
->>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
-
 >>> ranker = rank.DPR(
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
 ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-...    k = 2,
+...    normalize = True,
 ... )
+
+>>> documents = [
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
+... ]
 
 >>> ranker.add(documents=documents)
 DPR ranker
-    key: id
-    on: title, article
-    k: 2
-    similarity: dot
-    Embeddings pre-computed: 3
+    key       : id
+    on        : title, article
+    normalize : True
+    embeddings: 3
 
->>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-[{'id': 0, 'similarity': 74.0235366821289},
- {'id': 1, 'similarity': 68.8065185546875}]
+>>> match = ranker(
+...     q="Paris",
+...     documents=documents
+... )
 
->>> print(ranker(q="Paris", documents=documents))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 74.0235366821289,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 68.8065185546875,
-  'title': 'Eiffel tower'}]
+>>> print(match)
+[{'id': 0, 'similarity': 7.806636, 'title': 'Paris France'},
+ {'id': 1, 'similarity': 6.239272, 'title': 'Madrid Spain'},
+ {'id': 2, 'similarity': 6.168748, 'title': 'Montreal Canada'}]
 
->>> ranker += documents
+>>> match = ranker(
+...     q=["Paris", "Madrid"],
+...     documents=[documents + [{"id": 3, "title": "Paris"}]] * 2,
+...     k=2,
+... )
 
->>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 74.0235366821289,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 68.8065185546875,
-  'title': 'Eiffel tower'}]
+>>> print(match)
+[[{'id': 3, 'similarity': 7.906666, 'title': 'Paris'},
+  {'id': 0, 'similarity': 7.806636, 'title': 'Paris France'}],
+ [{'id': 1, 'similarity': 8.07025, 'title': 'Madrid Spain'},
+  {'id': 0, 'similarity': 6.1131663, 'title': 'Paris France'}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Encode inputs query and ranks documents based on the similarity between the query and the selected field of the documents.
+    Encode input query and ranks documents based on the similarity between the query and the selected field of the documents.
 
     **Parameters**
 
-    - **q**     (*'str'*)    
-    - **documents**     (*'list'*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **documents**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **k**     (*int*)     – defaults to `None`    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
@@ -118,16 +103,19 @@ DPR ranker
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
-    - **batch_size**     (*'int'*)     – defaults to `64`    
+    - **documents**     (*List[Dict[str, str]]*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
     
-???- note "encode"
+???- note "encode_rank"
 
-    Computes documents embeddings.
+    Encode documents and rank them according to the query.
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     
 ???- note "rank"
 
@@ -135,6 +123,9 @@ DPR ranker
 
     **Parameters**
 
-    - **query_embedding**     (*'np.ndarray'*)    
-    - **documents**     (*'list'*)    
+    - **embeddings_documents**     (*Dict[str, numpy.ndarray]*)    
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     

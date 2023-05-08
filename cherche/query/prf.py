@@ -5,6 +5,7 @@ import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from ..utils import yield_batch_single
 from .base import Query
 
 __all__ = ["PRF"]
@@ -35,16 +36,23 @@ class PRF(Query):
 
     >>> documents = data.load_towns()
 
-    >>> prf = query.PRF(on=["title", "article"], nb_docs=8, nb_terms_per_doc=1, documents=documents)
+    >>> prf = query.PRF(
+    ...     on=["title", "article"],
+    ...     nb_docs=8, nb_terms_per_doc=1,
+    ...     documents=documents
+    ... )
 
     >>> prf
     Query PRF
-         On: title, article
-         Documents: 8
-         Terms: 1
+        on       : title, article
+        documents: 8
+        terms    : 1
 
     >>> prf(q="Europe")
     'Europe art metro space science bordeaux paris university significance'
+
+    >>> prf(q=["Europe", "Paris"])
+    ['Europe art metro space science bordeaux paris university significance', 'Paris received paris club subway billion source tour tournament']
 
     References
     ----------
@@ -76,19 +84,25 @@ class PRF(Query):
 
     def __repr__(self) -> str:
         repr = super().__repr__()
-        repr += f"\n\t On: {', '.join(self.on)}"
-        repr += f"\n\t Documents: {self.nb_docs}"
-        repr += f"\n\t Terms: {self.nb_terms_per_doc}"
+        repr += f"\n\t on       : {', '.join(self.on)}"
+        repr += f"\n\t documents: {self.nb_docs}"
+        repr += f"\n\t terms    : {self.nb_terms_per_doc}"
         return repr
 
-    def __call__(self, q: str, **kwargs) -> str:
+    def __call__(
+        self, q: typing.Union[typing.List[str], str], **kwargs
+    ) -> typing.Union[typing.List[str], str]:
         """Augment a given query with new terms."""
         # Extract top terms from the documents wrt. a given query
-        top_terms = self._retrieve_top_terms(q=q)
-
-        # Augment the query
-        q += " " + " ".join([term for term in top_terms if term not in q.split(" ")])
-        return q
+        queries = []
+        for batch in yield_batch_single(q, desc="Query-augmentation"):
+            top_terms = self._retrieve_top_terms(q=batch)
+            # Augment the query
+            batch += " " + " ".join(
+                [term for term in top_terms if term not in batch.split(" ")]
+            )
+            queries.append(batch)
+        return queries[0] if isinstance(q, str) else queries
 
     def _retrieve_top_terms(self, q: str) -> typing.List[str]:
         """Retrieve new terms to augment a given query. Disregard dupes terms."""

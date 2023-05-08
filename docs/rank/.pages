@@ -3,7 +3,5 @@ nav:
     - rank.md
     - encoder.md
     - dpr.md
-    - zero_shot.md
-    - recommend.md
-    - dot_cos.md
-    - gpu.md
+    - crossencoder.md
+    - embedding.md

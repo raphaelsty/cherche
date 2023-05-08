@@ -1,14 +1,15 @@
 __all__ = ["QA"]
 
+import collections
 import typing
 from operator import itemgetter
 
 from ..compose import Pipeline
-from ..onnx import qa
+from ..utils import yield_batch
 
 
 class QA:
-    """Question Answering model.
+    """Question Answering model. QA models needs input documents contents to run.
 
     Parameters
     ----------
@@ -16,67 +17,132 @@ class QA:
         Fields to use to answer to the question.
     model
         Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
-    k
-        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
-        will be retrieved.
 
     Examples
     --------
-
     >>> from pprint import pprint as print
+    >>> from cherche import retrieve, qa
     >>> from transformers import pipeline
-    >>> from cherche import qa
-    >>> from pprint import pprint as print
 
     >>> documents = [
-    ...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "title": "Paris France"},
+    ...    {"id": 1, "title": "Madrid Spain"},
+    ...    {"id": 2, "title": "Montreal Canada"}
     ... ]
 
-    >>> model = qa.QA(
+    >>> retriever = retrieve.TfIdf(key="id", on=["title"], documents=documents)
+
+    >>> qa_model = qa.QA(
     ...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
-    ...     on = ["title", "article"],
-    ...     k = 2,
+    ...     on = ["title"],
     ...  )
 
-    >>> model
-    Question Answering
-        on: title, article
+    >>> pipeline = retriever + documents + qa_model
 
-    >>> print(model(q="Where is the Eiffel tower?", documents=documents))
+    >>> pipeline
+    TfIdf retriever
+        key      : id
+        on       : title
+        documents: 3
+    Mapping to documents
+    Question Answering
+        on: title
+
+    >>> print(pipeline(q="what is the capital of france?"))
     [{'answer': 'Paris',
-      'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'end': 43,
-      'qa_score': 0.9743021130561829,
-      'start': 38,
-      'title': 'Eiffel tower'},
-     {'answer': 'Paris',
-      'article': 'This town is the capital of France',
-      'author': 'Wiki',
       'end': 5,
-      'qa_score': 0.0003580129996407777,
+      'id': 0,
+      'question': 'what is the capital of france?',
+      'score': 0.05615315958857536,
+      'similarity': 0.5962847939999439,
       'start': 0,
-      'title': 'Paris'}]
+      'title': 'Paris France'},
+     {'answer': 'Montreal',
+      'end': 8,
+      'id': 2,
+      'question': 'what is the capital of france?',
+      'score': 0.01080897357314825,
+      'similarity': 0.0635641726163728,
+      'start': 0,
+      'title': 'Montreal Canada'}]
+
+    >>> print(pipeline(["what is the capital of France?", "what is the capital of Canada?"]))
+    [[{'answer': 'Paris',
+       'end': 5,
+       'id': 0,
+       'question': 'what is the capital of France?',
+       'score': 0.1554129421710968,
+       'similarity': 0.5962847939999439,
+       'start': 0,
+       'title': 'Paris France'},
+      {'answer': 'Montreal',
+       'end': 8,
+       'id': 2,
+       'question': 'what is the capital of France?',
+       'score': 1.2884755960840266e-05,
+       'similarity': 0.0635641726163728,
+       'start': 0,
+       'title': 'Montreal Canada'}],
+     [{'answer': 'Montreal',
+       'end': 8,
+       'id': 2,
+       'question': 'what is the capital of Canada?',
+       'score': 0.05316793918609619,
+       'similarity': 0.5125692857821978,
+       'start': 0,
+       'title': 'Montreal Canada'},
+      {'answer': 'Paris France',
+       'end': 12,
+       'id': 0,
+       'question': 'what is the capital of Canada?',
+       'score': 4.7594025431862974e-07,
+       'similarity': 0.035355339059327376,
+       'start': 0,
+       'title': 'Paris France'}]]
 
     """
 
-    def __init__(self, on: typing.Union[str, list], model, k: int = None) -> None:
+    def __init__(
+        self,
+        on: typing.Union[str, list],
+        model,
+        batch_size: int = 32,
+    ) -> None:
         self.on = on if isinstance(on, list) else [on]
         self.model = model
-        self.k = k
-
-    @property
-    def type(self):
-        return "qa"
+        self.batch_size = batch_size
 
     def __repr__(self) -> str:
         repr = "Question Answering"
-        repr += f"\n\t on: {', '.join(self.on)}"
+        repr += f"\n\ton: {', '.join(self.on)}"
         return repr
 
-    def __call__(self, q: str, documents: list, **kwargs) -> list:
+    def get_question_context(
+        self,
+        q: typing.List[str],
+        documents: typing.List[typing.List[typing.Dict[str, str]]],
+    ):
+        question_context = []
+        for query, documents_query in zip(q, documents):
+            for document in documents_query:
+                question_context.append(
+                    (query, " ".join([document.get(field, " ") for field in self.on]))
+                )
+        return question_context
+
+    def __call__(
+        self,
+        q: typing.Union[str, typing.List[str]],
+        documents: typing.Union[
+            typing.List[typing.List[typing.Dict[str, str]]],
+            typing.List[typing.Dict[str, str]],
+        ],
+        batch_size: typing.Optional[int] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
         """Question answering main method.
 
         Parameters
@@ -87,34 +153,49 @@ class QA:
             List of documents within which the model will retrieve the answer.
 
         """
-        if not documents:
+        if isinstance(q, str) and not documents:
             return []
 
-        answers = self.model(
-            **{
-                "question": [q for _ in documents],
-                "context": [
-                    " ".join([document.get(field, "") for field in self.on])
-                    for document in documents
+        if isinstance(q, list) and not documents:
+            return [[]]
+
+        if isinstance(q, str):
+            questions = [q]
+            documents = [documents]
+        else:
+            questions = q
+
+        question_context = self.get_question_context(questions, documents)
+
+        answers = []
+        for batch in yield_batch(
+            question_context,
+            batch_size=batch_size if batch_size is not None else self.batch_size,
+            desc="Question answering",
+        ):
+            answers.extend(
+                self.model(
+                    {
+                        "question": [question for question, _ in batch],
+                        "context": [context for _, context in batch],
+                    },
+                )
+            )
+
+        answers = collections.deque(answers)
+        ranked = [
+            sorted(
+                [
+                    {**document, **answers.popleft(), **{"question": question}}
+                    for document in documents_query
                 ],
-            },
-        )
+                key=itemgetter("score"),
+                reverse=True,
+            )
+            for question, documents_query in zip(questions, documents)
+        ]
 
-        top_answers = []
-        for answer, document in zip(answers, documents):
-            if isinstance(document, dict):
-                if isinstance(answer, list):
-                    for a in answer:
-                        a["qa_score"] = a.pop("score")
-                        a.update(**document)
-                        top_answers.append(a)
-                else:
-                    answer["qa_score"] = answer.pop("score")
-                    answer.update(**document)
-                    top_answers.append(answer)
-
-        answers = sorted(top_answers, key=itemgetter("qa_score"), reverse=True)
-        return answers[: self.k] if self.k is not None else answers
+        return ranked[0] if isinstance(q, str) else ranked
 
     def __add__(self, other) -> Pipeline:
         """Custom operator to make pipeline."""

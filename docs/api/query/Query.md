@@ -23,6 +23,6 @@ Abstract class for models working on a query.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[str], str]*)    
     - **kwargs**    
     

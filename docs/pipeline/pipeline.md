@@ -1,84 +1,65 @@
 # Pipeline
 
-Cherche replaces the operators `+` (pipeline), `|` (union), `&` (intersection) and `*` (voting) to build pipelines efficiently.
+Cherche is a tool that provides operators for building pipelines efficiently. The operators it replaces are `+` (pipeline), `|` (union), `&` (intersection), and `*` (voting).
 
 ## Pipeline `+`
 
-`+` is the operator dedicated to pipelines. The first model in a pipeline should always be a retriever.
-
-Here is a pipeline made of a retriever and a ranker:
+The `+` operator is used to create pipelines. Here's an example of a pipeline created with a retriever and a ranker:
 
 ```python
 >>> search = retriever + ranker
 >>> search.add(documents)
 ```
 
-The pipeline allows to map document indexes to their content (not needed with Elasticsearch):
+The pipeline allows you to map output indexes to their content, as shown here:
 
 ```python
 >>> search = retriever + ranker + documents
 >>> search.add(documents)
 ```
 
-Pipeline for question answering (mapping ids to documents is mandatory for question answering unless using Elasticsearch):
+When building a pipeline for question answering, mapping ids to documents is mandatory. Here's an example:
 
 ```python
 >>> search_qa = retriever + ranker + documents + question_answering
 >>> search.add(documents)
 ```
 
-Pipeline for summarization (mapping ids to documents is mandatory for summarization unless using Elasticsearch):
-
-```python
->>> search_summarize = retriever + ranker + documents + summarize
->>> search.add(documents)
-```
-
-Under the hood the `+` operator calls `compose.Pipeline`.
-
-```python
->>> from cherche import compose
-
->>> search = compose.Pipeline([retriever, ranker])
->>> search.add(documents)
-# is the same as
->>> search = retriever + ranker
->>> search.add(documents)
-```
-
 ## Union `|`
 
-The union operator `|` improves neural search recall by gathering documents retrieved by multiple models. The union will avoid duplicate documents and keep the first one. The first documents out of the union will be from the first model; the next ones will be from the second model. This strategy allows prioritizing one model or pipeline over another. It may make sense to create a union between two separate pipelines, with the first one having the highest precision and the second one having better recall, like a spare tire.
+The `|` operator improves neural search recall by gathering documents retrieved by multiple models. The union operator will avoid duplicate documents and keep the first one. The first documents out of the union will be from the first model, and the subsequent ones will be from the second model. This strategy allows prioritizing one model or pipeline over another. It may make sense to create a union between two separate pipelines, with the first one having the highest precision and the second one having better recall, like a spare tire.
 
-Union of two retrievers
+Here are some examples of unions:
+
+Union of two retrievers:
 
 ```python
 >>> search = retriever_a | retriever_b
 >>> search.add(documents)
 ```
 
-Union of two retrievers folowed by a ranker
+Union of two retrievers followed by a ranker:
 
 ```python
 >>> search = (retriever_a | retriever_b) + ranker
 >>> search.add(documents)
 ```
 
-Union of two rankers
+Union of two rankers:
 
 ```python
 >>> search = retriever + (ranker_a | ranker_b)
 >>> search.add(documents)
 ```
 
-Union of two pipelines
+Union of two pipelines:
 
 ```python
 >>> search = (retriever_a + ranker_a) | (retriever_b + ranker_b)
 >>> search.add(documents)
 ```
 
-Union of three pipelines
+Union of three pipelines:
 
 ```python
 >>> search = (retriever_a + ranker_a) | (retriever_b + ranker_b) | retriever_c
@@ -87,16 +68,18 @@ Union of three pipelines
 
 ## Intersection `&`
 
-The intersection operator improves the precision of the model by filtering documents on the intersection of proposed candidates of retrievers and rankers.
+The `&` operator improves the precision of the model by filtering documents on the intersection of proposed candidates of retrievers and rankers.
 
-Intersection of two retrievers
+Here are some examples of intersections:
+
+Intersection of two retrievers:
 
 ```python
 >>> search = retriever_a & retriever_b
 >>> search.add(documents)
 ```
 
-The intersection of two retrievers followed by a ranker:
+Intersection of two retrievers followed by a ranker:
 
 ```python
 >>> search = (retriever_a & retriever_b) + ranker
@@ -126,13 +109,15 @@ Intersection of three pipelines:
 
 ## Voting `*`
 
-The voting operator improves both the precision and recall of the model by computing the average normalized similarity between the documents.
+The `*` operator improves both the precision and recall of the model by computing the average normalized similarity between the documents.
 
-Vote of two retrievers
+Here are some examples of voting:
+
+Vote of two retrievers:
 
 ```python
 >>> search = retriever_a * retriever_b
->>> search.add(documents)
+>>> search.add
 ```
 
 Vote of two retrievers followed by a ranker:
@@ -163,7 +148,7 @@ Vote of three pipelines:
 >>> search.add(documents)
 ```
 
-## Let's create a fancy pipeline
+## Let's create a pipeline
 
 Here we create a pipeline from the union of two distinct pipelines. The first part of the union improves precision, and the second improves recall. We can use the Semanlink dataset to feed our neural search pipeline.
 
@@ -188,91 +173,47 @@ And here is the code:
 ...    k = 10,
 ... )
 
+>>> ranker.add(documents)
+
 >>> precision = retrieve.Flash(
 ...    key = "uri",
 ...    on = ["prefLabel", "altLabel"],
-...    k = 30,
-... ) + ranker
+...    k = 100,
+... ).add(documents) + ranker
 
 >>> recall = retrieve.TfIdf(
 ...    key = "uri",
 ...    on = ["prefLabel_text", "altLabel_text"],
 ...    documents = documents,
 ...    tfidf = TfidfVectorizer(lowercase=True, min_df=1, max_df=0.9, ngram_range=(3, 7), analyzer="char"),
-...    k = 10,
+...    k = 100,
 ... ) + ranker
 
 >>> search = precision | recall
->>> search.add(documents)
 
 >>> search("Knowledge Base Embedding By Cooperative Knowledge Distillation")
-[{'uri': 'http://www.semanlink.net/tag/knowledge_graph_embeddings'},
- {'uri': 'http://www.semanlink.net/tag/text_kg_and_embeddings'},
- {'uri': 'http://www.semanlink.net/tag/text_aware_kg_embedding'},
- {'uri': 'http://www.semanlink.net/tag/bert_kb'},
- {'uri': 'http://www.semanlink.net/tag/knowledge_graph_augmented_language_models'},
- {'uri': 'http://www.semanlink.net/tag/knowledge_graph'},
- {'uri': 'http://www.semanlink.net/tag/kg_and_nlp'},
- {'uri': 'http://www.semanlink.net/tag/knowledge_augmented_language_models'},
- {'uri': 'http://www.semanlink.net/tag/word_embedding'},
- {'uri': 'http://www.semanlink.net/tag/generative_adversarial_network'}]
-```
-
-### Fancy pipeline with a question answering model
-
-```python
->>> from cherche import qa
->>> from transformers import pipeline
-
->>> question_answering = qa.QA(
-...    model = pipeline("question-answering",
-...         model = "deepset/roberta-base-squad2",
-...         tokenizer = "deepset/roberta-base-squad2"
-...    ),
-...    k = 2,
-...    on = ["title", "comment"],
-... )
-
->>> search_qa = search + documents + question_answering
-
->>> search_qa("What are CNN ?")
-[{'start': 155,
-  'end': 218,
-  'answer': 'CNN use convolutions over the input layer to compute the output',
-  'qa_score': 0.14450952410697937,
-  'altLabel': ['CNN', 'Convnet', 'Convolutional neural networks', 'Convnets'],
-  'comment': 'Feed-forward artificial neural network where the individual neurons are tiled in such a way that they respond to overlapping regions in the visual field. CNN use convolutions over the input layer to compute the output. Widely used models for image and video recognition.\r\n\r\nMain assumption: Data are compositional, they are formed of patterns that are:\r\n\r\n- Local\r\n- Stationary\r\n- Multi-scale (hierarchical)\r\n\r\nConvNets leverage the compositionality structure: They extract compositional features and feed them to classifier, recommender, etc (end-to-end).',
-  'uri': 'http://www.semanlink.net/tag/convolutional_neural_network',
-  'broader_altLabel': ['Artificial neural network', 'ANN', 'NN'],
-  'broader_altLabel_text': 'Artificial neural network ANN NN',
-  'altLabel_text': 'CNN Convnet Convolutional neural networks Convnets'},
- {'start': 1,
-  'end': 65,
-  'answer': 'fast and space-efficient way of vectorizing categorical features',
-  'qa_score': 9.786998271010816e-05,
-  'altLabel': ['Hashing trick', 'Feature hashing'],
-  'comment': 'fast and space-efficient way of vectorizing categorical features. Applies a hash function to the features to determine their column index\r\n\r\n\r\n\r\n\r\n\r\n',
-  'uri': 'http://www.semanlink.net/tag/feature_hashing',
-  'altLabel_text': 'Hashing trick Feature hashing'}]
-```
-
-### Fancy pipeline with a summarization model
-
-```python
->>> from cherche import summary
->>> from transformers import pipeline
-
->>> summarizer = summary.Summary(
-...    model = pipeline("summarization",
-...         model="sshleifer/distilbart-cnn-12-6",
-...         tokenizer="sshleifer/distilbart-cnn-12-6",
-...         framework="pt"
-...    ),
-...    on = ["title", "comment"],
-... )
-
->>> search_summarize = search + documents + summarizer
-
->>> search_summarize("What are CNN ?")
-'CNN use convolutions over the input layer to compute the output. Widely used models for image and video recognition. Feed-forward artificial'
+[{'uri': 'http://www.semanlink.net/tag/knowledge_base',
+  'similarity': 2.1666666666666665},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_distillation',
+  'similarity': 0.5},
+ {'uri': 'http://www.semanlink.net/tag/embeddings',
+  'similarity': 0.3333333333333333},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_graph_embeddings',
+  'similarity': 0.25},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_driven_embeddings',
+  'similarity': 0.2},
+ {'uri': 'http://www.semanlink.net/tag/hierarchy_aware_knowledge_graph_embeddings',
+  'similarity': 0.16666666666666666},
+ {'uri': 'http://www.semanlink.net/tag/entity_embeddings',
+  'similarity': 0.14285714285714285},
+ {'uri': 'http://www.semanlink.net/tag/text_kg_and_embeddings',
+  'similarity': 0.125},
+ {'uri': 'http://www.semanlink.net/tag/text_aware_kg_embedding',
+  'similarity': 0.1111111111111111},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_graph_completion',
+  'similarity': 0.1},
+ {'uri': 'http://www.semanlink.net/tag/knowledge_graph_deep_learning',
+  'similarity': 0.09090909090909091},
+ {'uri': 'http://www.semanlink.net/tag/combining_knowledge_graphs',
+  'similarity': 0.07692307692307693}]
 ```
