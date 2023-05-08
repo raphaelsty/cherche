@@ -1,114 +1,116 @@
-from __future__ import annotations
-
 __all__ = ["DPR"]
 
 
 import typing
 
-from ..similarity import dot
 from .base import MemoryStore, Ranker
 
 
 class DPR(Ranker):
-    """DPR ranks documents using distinct models to encode the query and
-    document contents.
+    """Dual Sentence Transformer as a ranker. This ranker is compatible with any
+    SentenceTransformer. DPR is a dual encoder model, it uses two SentenceTransformer,
+    one for encoding documents and one for encoding queries.
 
     Parameters
     ----------
     key
         Field identifier of each document.
     on
-        Fields to use to match the query to the documents.
+        Fields on wich encoder will perform similarity matching.
     encoder
-        Encoding function dedicated to documents.
+        Encoding function dedicated documents.
     query_encoder
-        Encoding function dedicated to the query.
-    k
-        Number of documents to reorder. The default value is None, i.e. all documents will be
-        reordered and returned.
-    similarity
-        Similarity measure to compare documents embeddings and query embedding (similarity.cosine
-        or similarity.dot).
+        Encoding function dedicated to queries.
+    normalize
+        If set to True, the similarity measure is cosine similarity, if set to False, similarity
+        measure is dot product.
 
     Examples
     --------
-
     >>> from pprint import pprint as print
     >>> from cherche import rank
     >>> from sentence_transformers import SentenceTransformer
-
-    >>> documents = [
-    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-    ... ]
 
     >>> ranker = rank.DPR(
     ...    key = "id",
     ...    on = ["title", "article"],
     ...    encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base').encode,
     ...    query_encoder = SentenceTransformer('facebook-dpr-question_encoder-single-nq-base').encode,
-    ...    k = 2,
+    ...    normalize = True,
     ... )
+
+    >>> documents = [
+    ...    {"id": 0, "title": "Paris France"},
+    ...    {"id": 1, "title": "Madrid Spain"},
+    ...    {"id": 2, "title": "Montreal Canada"}
+    ... ]
 
     >>> ranker.add(documents=documents)
     DPR ranker
-        key: id
-        on: title, article
-        k: 2
-        similarity: dot
-        Embeddings pre-computed: 3
+        key       : id
+        on        : title, article
+        normalize : True
+        embeddings: 3
 
-    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'id': 0, 'similarity': 74.0235366821289},
-     {'id': 1, 'similarity': 68.8065185546875}]
+    >>> match = ranker(
+    ...     q="Paris",
+    ...     documents=documents
+    ... )
 
-    >>> print(ranker(q="Paris", documents=documents))
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 74.0235366821289,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 68.8065185546875,
-      'title': 'Eiffel tower'}]
+    >>> print(match)
+    [{'id': 0, 'similarity': 7.806636, 'title': 'Paris France'},
+     {'id': 1, 'similarity': 6.239272, 'title': 'Madrid Spain'},
+     {'id': 2, 'similarity': 6.168748, 'title': 'Montreal Canada'}]
 
-    >>> ranker += documents
+    >>> match = ranker(
+    ...     q=["Paris", "Madrid"],
+    ...     documents=[documents + [{"id": 3, "title": "Paris"}]] * 2,
+    ...     k=2,
+    ... )
 
-    >>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-    [{'article': 'This town is the capital of France',
-      'author': 'Wiki',
-      'id': 0,
-      'similarity': 74.0235366821289,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 68.8065185546875,
-      'title': 'Eiffel tower'}]
+    >>> print(match)
+    [[{'id': 3, 'similarity': 7.906666, 'title': 'Paris'},
+      {'id': 0, 'similarity': 7.806636, 'title': 'Paris France'}],
+     [{'id': 1, 'similarity': 8.07025, 'title': 'Madrid Spain'},
+      {'id': 0, 'similarity': 6.1131663, 'title': 'Paris France'}]]
 
     """
 
     def __init__(
         self,
+        on: typing.Union[str, typing.List[str]],
         key: str,
-        on: str | list,
         encoder,
         query_encoder,
-        k: int | typing.Optionnal = None,
-        similarity=dot,
-        store=MemoryStore(),
-        path: str | typing.Optionnal = None,
+        normalize: bool = True,
+        k: typing.Optional[int] = None,
+        batch_size: int = 64,
     ) -> None:
         super().__init__(
-            key=key, on=on, encoder=encoder, k=k, similarity=similarity, store=store
+            key=key,
+            on=on,
+            encoder=encoder,
+            normalize=normalize,
+            k=k,
+            batch_size=batch_size,
         )
         self.query_encoder = query_encoder
 
-    def __call__(self, q: str, documents: list, **kwargs) -> list:
-        """Encode inputs query and ranks documents based on the similarity between the query and
+    def __call__(
+        self,
+        q: typing.Union[typing.List[str], str],
+        documents: typing.Union[
+            typing.List[typing.List[typing.Dict[str, str]]],
+            typing.List[typing.Dict[str, str]],
+        ],
+        k: int = None,
+        batch_size: typing.Optional[int] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """Encode input query and ranks documents based on the similarity between the query and
         the selected field of the documents.
 
         Parameters
@@ -119,10 +121,23 @@ class DPR(Ranker):
             List of documents to rank.
 
         """
-        if not documents:
+        if k is None:
+            k = self.k
+
+        if k is None:
+            k = len(self)
+
+        if not documents and isinstance(q, str):
             return []
 
-        return self.rank(
-            query_embedding=self.query_encoder(q),
-            documents=documents,
+        if not documents and isinstance(q, list):
+            return [[]]
+
+        rank = self.encode_rank(
+            embeddings_queries=self.query_encoder([q] if isinstance(q, str) else q),
+            documents=[documents] if isinstance(q, str) else documents,
+            k=k,
+            batch_size=batch_size if batch_size is not None else self.batch_size,
         )
+
+        return rank[0] if isinstance(q, str) else rank

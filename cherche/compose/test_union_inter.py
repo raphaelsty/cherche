@@ -3,20 +3,18 @@ import pytest
 from .. import rank, retrieve
 
 
-def cherche_retrievers(key: str, on: str, k: int = None):
+def cherche_retrievers(key: str, on: str):
     """List of retrievers available in cherche."""
     for retriever in [
         retrieve.TfIdf,
-        retrieve.BM25Okapi,
-        retrieve.BM25L,
         retrieve.Lunr,
     ]:
-        yield retriever(key=key, on=on, documents=documents(), k=k)
+        yield retriever(key=key, on=on, documents=documents())
 
 
-def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
+def cherche_rankers(key: str, on: str):
     """List of rankers available in cherche."""
-    from sentence_transformers import SentenceTransformer
+    from sentence_transformers import CrossEncoder, SentenceTransformer
     from transformers import pipeline
 
     yield from [
@@ -29,8 +27,6 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
             ).encode,
             key=key,
             on=on,
-            k=k,
-            path=path,
         ),
         rank.Encoder(
             encoder=SentenceTransformer(
@@ -38,18 +34,10 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
             ).encode,
             key=key,
             on=on,
-            k=k,
-            path=path,
         ),
-        rank.ZeroShot(
-            encoder=pipeline(
-                "zero-shot-classification",
-                model="typeform/distilbert-base-uncased-mnli",
-                cache="cache",
-            ),
-            key=key,
+        rank.CrossEncoder(
             on=on,
-            k=k,
+            encoder=CrossEncoder("cross-encoder/mmarco-mMiniLMv2-L12-H384-v1").predict,
         ),
     ]
 
@@ -87,9 +75,9 @@ def documents():
             id=f"Union retrievers: {retriever_a.__class__.__name__} | {retriever_b.__class__.__name__} | {retriever_c.__class__.__name__} k: {k}",
         )
         for k in [None, 3, 4]
-        for retriever_c in cherche_retrievers(key="id", on="title", k=k)
-        for retriever_b in cherche_retrievers(key="id", on="article", k=k)
-        for retriever_a in cherche_retrievers(key="id", on="author", k=k)
+        for retriever_c in cherche_retrievers(key="id", on="title")
+        for retriever_b in cherche_retrievers(key="id", on="article")
+        for retriever_a in cherche_retrievers(key="id", on="author")
     ],
 )
 def test_retriever_union(search, documents: list, k: int):
@@ -97,14 +85,14 @@ def test_retriever_union(search, documents: list, k: int):
     # Empty documents
     search = search.add(documents)
 
-    answers = search(q="France")
+    answers = search(q="France", k=k)
     assert len(answers) == min(k, 1) if k is not None else 1
 
     for sample in answers:
         for key in ["title", "article", "author"]:
             assert key in sample
 
-    answers = search(q="Wikipedia")
+    answers = search(q="Wikipedia", k=k)
     assert len(answers) == min(k, len(documents)) if k is not None else len(documents)
 
     answers = search(q="Unknown")
@@ -121,9 +109,9 @@ def test_retriever_union(search, documents: list, k: int):
             id=f"Intersection retrievers: {retriever_a.__class__.__name__} & {retriever_b.__class__.__name__}, & {retriever_c.__class__.__name__},  k: {k}",
         )
         for k in [None, 3, 4]
-        for retriever_c in cherche_retrievers(key="id", on="title", k=k)
-        for retriever_b in cherche_retrievers(key="id", on="article", k=k)
-        for retriever_a in cherche_retrievers(key="id", on="author", k=k)
+        for retriever_c in cherche_retrievers(key="id", on="title")
+        for retriever_b in cherche_retrievers(key="id", on="article")
+        for retriever_a in cherche_retrievers(key="id", on="author")
     ],
 )
 def test_retriever_intersection(search, documents: list, k: int):
@@ -131,7 +119,7 @@ def test_retriever_intersection(search, documents: list, k: int):
     # Empty documents
     search = search.add(documents)
 
-    answers = search(q="Paris tower capital Montreal Canada France Wikipedia")
+    answers = search(q="Paris tower capital Montreal Canada France Wikipedia", k=k)
     if k is not None and k < len(documents):
         assert len(answers) >= (k // 3)
     else:
@@ -142,10 +130,10 @@ def test_retriever_intersection(search, documents: list, k: int):
         for key in ["title", "article", "author"]:
             assert key in sample
 
-    answers = search(q="is Wikipedia")
+    answers = search(q="is Wikipedia", k=k)
     assert len(answers) == 0
 
-    answers = search(q="Paris capital France Wikipedia")
+    answers = search(q="Paris capital France Wikipedia", k=k)
     if k is None or k >= 1:
         assert len(answers) == 1
     else:
@@ -162,14 +150,14 @@ def test_retriever_intersection(search, documents: list, k: int):
             id=f"Union rankers: {ranker_a.__class__.__name__} | {ranker_b.__class__.__name__} k: {k}",
         )
         for k in [None, 3, 4]
-        for ranker_b in cherche_rankers(key="id", on="article", k=k)
-        for ranker_a in cherche_rankers(key="id", on="title", k=k)
+        for ranker_b in cherche_rankers(key="id", on="article")
+        for ranker_a in cherche_rankers(key="id", on="title")
     ],
 )
 def test_ranker_union(search, documents: list, k: int):
     """Test retriever union operator."""
     search.add(documents)
-    answers = search(q="Eiffel tower France", documents=documents)
+    answers = search(q="Eiffel tower France", documents=documents, k=k)
 
     if k is not None:
         assert len(answers) == min(k, len(documents))
@@ -177,14 +165,13 @@ def test_ranker_union(search, documents: list, k: int):
         assert len(answers) == len(documents)
 
     for index, sample in enumerate(answers):
-
         for key in ["title", "article", "author"]:
             assert key in sample
 
         if index == 0:
             assert sample["title"] == "Eiffel tower"
 
-    answers = search(q="Canada", documents=documents)
+    answers = search(q="Canada", documents=documents, k=k)
 
     if k is None:
         assert answers[0]["title"] == "Montreal"
@@ -194,7 +181,7 @@ def test_ranker_union(search, documents: list, k: int):
         assert len(answers) == 0
 
     # Empty documents.
-    answers = search(q="Paris", documents=[])
+    answers = search(q="Paris", documents=[], k=k)
     assert len(answers) == 0
 
 
@@ -208,14 +195,14 @@ def test_ranker_union(search, documents: list, k: int):
             id=f"Intersection rankers: {ranker_a.__class__.__name__} | {ranker_b.__class__.__name__} k: {k}",
         )
         for k in [None, 3, 4]
-        for ranker_b in cherche_rankers(key="id", on="article", k=k)
-        for ranker_a in cherche_rankers(key="id", on="title", k=k)
+        for ranker_b in cherche_rankers(key="id", on="article")
+        for ranker_a in cherche_rankers(key="id", on="title")
     ],
 )
 def test_ranker_intersection(search, documents: list, k: int):
     """Test retriever intersection operator."""
     search.add(documents)
-    answers = search(q="Eiffel tower France", documents=documents)
+    answers = search(q="Eiffel tower France", documents=documents, k=k)
 
     if k is not None:
         assert len(answers) == min(k, len(documents))
@@ -223,14 +210,13 @@ def test_ranker_intersection(search, documents: list, k: int):
         assert len(answers) == len(documents)
 
     for index, sample in enumerate(answers):
-
         for key in ["title", "article", "author"]:
             assert key in sample
 
         if index == 0:
             assert sample["title"] == "Eiffel tower"
 
-    answers = search(q="Canada", documents=documents)
+    answers = search(q="Canada", documents=documents, k=k)
 
     if k is None:
         assert answers[0]["title"] == "Montreal"
@@ -240,5 +226,5 @@ def test_ranker_intersection(search, documents: list, k: int):
         assert len(answers) == 0
 
     # Empty documents.
-    answers = search(q="Paris", documents=[])
+    answers = search(q="Paris", documents=[], k=k)
     assert len(answers) == 0

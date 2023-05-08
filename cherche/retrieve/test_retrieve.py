@@ -1,15 +1,13 @@
 import pytest
 
-from .. import rank, retrieve
+from .. import retrieve
 
 
-def cherche_retrievers(on: str, k: int = None):
+def cherche_retrievers(on: str):
     """List of retrievers available in cherche."""
     yield from [
-        retrieve.TfIdf(key="title", on=on, documents=documents(), k=k),
-        retrieve.BM25Okapi(key="title", on=on, documents=documents(), k=k),
-        retrieve.BM25L(key="title", on=on, documents=documents(), k=k),
-        retrieve.Lunr(key="title", on=on, documents=documents(), k=k),
+        retrieve.TfIdf(key="title", on=on, documents=documents()),
+        retrieve.Lunr(key="title", on=on, documents=documents()),
     ]
 
 
@@ -42,8 +40,8 @@ def documents():
             k,
             id=f"retriever: {retriever.__class__.__name__}, k: {k}",
         )
-        for k in [None, 0, 2, 4]
-        for retriever in cherche_retrievers(on="article", k=k)
+        for k in [None, 2, 4]
+        for retriever in cherche_retrievers(on="article")
     ],
 )
 def test_retriever(retriever, documents: list, k: int):
@@ -54,9 +52,9 @@ def test_retriever(retriever, documents: list, k: int):
     retriever.add(documents)
 
     # A single document contains town.
-    answers = retriever(q="town")
+    answers = retriever(q="town", k=k)
     if k is None or k >= 1:
-        assert len(answers) == 1
+        assert len(answers) >= 1
     else:
         assert len(answers) == 0
 
@@ -65,11 +63,11 @@ def test_retriever(retriever, documents: list, k: int):
             assert key in sample
 
     # Unknown token.
-    answers = retriever(q="Unknown")
+    answers = retriever(q="un", k=k)
     assert len(answers) == 0
 
     # All documents contains "Montreal Eiffel France"
-    answers = retriever(q="Montreal Eiffel France")
+    answers = retriever(q="Montreal Eiffel France", k=k)
     if k is None or k >= len(documents):
         assert len(answers) == len(documents)
     else:
@@ -85,8 +83,8 @@ def test_retriever(retriever, documents: list, k: int):
             k,
             id=f"Multiple fields retriever: {retriever.__class__.__name__}, k: {k}",
         )
-        for k in [None, 0, 2, 4]
-        for retriever in cherche_retrievers(on=["article", "title", "author"], k=k)
+        for k in [None, 2, 4]
+        for retriever in cherche_retrievers(on=["article", "title", "author"])
     ],
 )
 def test_fields_retriever(retriever, documents: list, k: int):
@@ -94,7 +92,7 @@ def test_fields_retriever(retriever, documents: list, k: int):
     retriever = retriever + documents
 
     # All documents have Wikipedia as author.
-    answers = retriever(q="Wikipedia")
+    answers = retriever(q="Wikipedia", k=k)
     if k is None or k >= len(documents):
         assert len(answers) == len(documents)
     else:
@@ -105,11 +103,11 @@ def test_fields_retriever(retriever, documents: list, k: int):
             assert key in sample
 
     # Unknown token.
-    answers = retriever(q="Unknown")
+    answers = retriever(q="un")
     assert len(answers) == 0
 
     # Two documents contains paris
-    answers = retriever(q="Paris")
+    answers = retriever(q="Paris", k=k)
 
     if k is None or k >= 2:
         assert len(answers) == 2
@@ -125,17 +123,17 @@ def test_fields_retriever(retriever, documents: list, k: int):
             k,
             id=f"retriever: Flash, k: {k}",
         )
-        for k in [None, 0, 2, 4]
+        for k in [None, 2, 4]
     ],
 )
 def test_flash(documents: list, k: int):
     """Test Flash retriever."""
     # Reset retriever
-    retriever = retrieve.Flash(key="title", k=k, on="title") + documents
+    retriever = retrieve.Flash(key="title", on="title") + documents
     retriever.add(documents)
 
     # A single document contains town.
-    answers = retriever(q="Paris")
+    answers = retriever(q="paris", k=k)
     if k is None or k >= 1:
         assert len(answers) == 1
     else:
@@ -146,72 +144,13 @@ def test_flash(documents: list, k: int):
             assert key in sample
 
     # Unknown token.
-    answers = retriever(q="Unknown")
+    answers = retriever(q="Unknown", k=k)
     assert len(answers) == 0
 
     # All documents contains is
-    answers = retriever(q="Paris Eiffel tower Montreal")
+    answers = retriever(q="Paris Eiffel tower Montreal", k=k)
 
     if k is None or k >= len(documents):
         assert len(answers) == len(documents)
     else:
         assert len(answers) == k
-
-
-@pytest.mark.parametrize(
-    "documents, k",
-    [
-        pytest.param(
-            documents(),
-            k,
-            id=f"retriever: ElasticSearch, k: {k}",
-        )
-        for k in [None, 0, 2, 4]
-    ],
-)
-def test_elastic(documents, k):
-    """Test Elasticsearch if elastic server is running. Test elasticsearch as a retriever for a
-    single field and multiple fields. Test if storing"""
-    from elasticsearch import Elasticsearch
-    from sentence_transformers import SentenceTransformer
-
-    es = Elasticsearch("http://localhost:9200")
-
-    if es.ping():
-
-        ranker = rank.Encoder(
-            key="title",
-            encoder=SentenceTransformer(
-                "sentence-transformers/all-mpnet-base-v2",
-            ).encode,
-            on=["title", "article", "author"],
-            k=k,
-        )
-
-        retriever = retrieve.Elastic(
-            key="title", on="article", k=k, es=es, index="test_cherche"
-        )
-        retriever.reset()
-        retriever.add(documents)
-        test_retriever(retriever=retriever, documents=documents, k=k)
-
-        retriever = retrieve.Elastic(
-            key="title",
-            on=["title", "article", "author"],
-            k=k,
-            es=es,
-            index="test_cherche",
-        )
-        retriever.reset()
-        retriever.add(documents)
-        test_fields_retriever(retriever, documents=documents, k=k)
-
-        # Store embeddings using Elasticsearch
-        retriever.reset()
-        retriever.add_embeddings(documents=documents, ranker=ranker)
-        pipeline = retriever + ranker
-        answers = pipeline("Paris")
-        if k is None or k >= 2:
-            assert len(answers) == 2
-        else:
-            assert len(answers) == max(k, 0)

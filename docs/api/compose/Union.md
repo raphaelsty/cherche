@@ -1,6 +1,6 @@
 # Union
 
-Union gathers retrieved documents from multiples retrievers and ranked documents from multiples rankers.
+Union gathers retrieved documents from multiples retrievers and ranked documents from multiples rankers. The union operator concat results with respect of the orders of the models in the union.
 
 
 
@@ -19,67 +19,25 @@ Union gathers retrieved documents from multiples retrievers and ranked documents
 >>> from cherche import retrieve
 
 >>> documents = [
-...     {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
 ... ]
 
 >>> search = (
-...     retrieve.TfIdf(key="id", on="title", documents=documents) |
-...     retrieve.TfIdf(key="id", on="article", documents=documents) |
-...     retrieve.Flash(key="id", on="author")
-... ) + documents
+...     retrieve.TfIdf(key="id", on="town", documents=documents) |
+...     retrieve.TfIdf(key="id", on="country", documents=documents) |
+...     retrieve.Flash(key="id", on="continent")
+... )
 
->>> search.add(documents)
-Union
------
-TfIdf retriever
-     key: id
-     on: title
-     documents: 3
-TfIdf retriever
-     key: id
-     on: article
-     documents: 3
-Flash retriever
-     key: id
-     on: author
-     documents: 1
------
-Mapping to documents
+>>> search = search.add(documents)
 
->>> print(search(q = "Paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 1.0,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris.',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.4505,
-  'title': 'Eiffel tower'}]
+>>> print(search("Paris"))
+[{'id': 0, 'similarity': 1.0}]
 
->>> print(search(q = "Montreal"))
-[{'article': 'Montreal is in Canada.',
-  'author': 'Wiki',
-  'id': 2,
-  'similarity': 1.0,
-  'title': 'Montreal'}]
-
->>> print(search(q = "Wiki"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris.',
-  'author': 'Wiki',
-  'id': 1,
-  'title': 'Eiffel tower'},
- {'article': 'Montreal is in Canada.',
-  'author': 'Wiki',
-  'id': 2,
-  'title': 'Montreal'}]
+>>> print(search(["Paris", "Europe"]))
+[[{'id': 0, 'similarity': 1.0}],
+[{'id': 0, 'similarity': 1.0}, {'id': 2, 'similarity': 0.5}]]
 ```
 
 ## Methods
@@ -90,10 +48,20 @@ Mapping to documents
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **documents**     (*Optional[List[Dict[str, str]]]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
 
+    Add new documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    - **kwargs**    
+    
 ???- note "reset"
 

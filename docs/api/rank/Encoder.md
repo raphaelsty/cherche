@@ -1,39 +1,31 @@
 # Encoder
 
-SentenceBert Ranker.
+Sentence Transformer as a ranker. This ranker is compatible with any SentenceTransformer.
 
 
 
 ## Parameters
 
-- **on** (*'str | list'*)
+- **on** (*Union[str, List[str]]*)
 
-    Fields to use to match the query to the documents.
+    Fields on wich encoder will perform similarity matching.
 
-- **key** (*'str'*)
+- **key** (*str*)
 
     Field identifier of each document.
 
 - **encoder**
 
-    Encoding function dedicated to documents and query.
+    Encoding function dedicated to both documents and queries.
 
-- **k** (*'int | typing.Optionnal'*) – defaults to `None`
+- **normalize** (*bool*) – defaults to `True`
 
-    Number of documents to reorder. The default value is None, i.e. all documents will be reordered and returned.
+    If set to True, the similarity measure is cosine similarity, if set to False, similarity measure is dot product.
 
-- **path** (*'str | typing.Optionnal'*) – defaults to `None`
+- **k** (*Optional[int]*) – defaults to `None`
 
-    Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
+- **batch_size** (*int*) – defaults to `64`
 
-- **similarity** – defaults to `<function cosine at 0x168fa4c10>`
-
-    Similarity measure to compare documents embeddings and query embedding (similarity.cosine or similarity.dot).
-
-
-## Attributes
-
-- **type**
 
 
 ## Examples
@@ -44,55 +36,45 @@ SentenceBert Ranker.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
 ... ]
 
 >>> ranker = rank.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    key = "id",
-...    on = ["title", "article"],
-...    k = 2,
-...    path = "encoder.pkl"
+...    on = ["title"],
 ... )
 
 >>> ranker.add(documents=documents)
 Encoder ranker
-     key: id
-     on: title, article
-     k: 2
-     similarity: cosine
-     embeddings stored at: encoder.pkl
+    key       : id
+    on        : title
+    normalize : True
+    embeddings: 3
 
->>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-[{'id': 0, 'similarity': 0.66051394}, {'id': 1, 'similarity': 0.5142564}]
+>>> match = ranker(
+...     q="Paris",
+...     documents=documents
+... )
 
->>> print(ranker(q="Paris", documents=documents))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 0.66051394,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.5142564,
-  'title': 'Eiffel tower'}]
+>>> print(match)
+[{'id': 0, 'similarity': 0.7127624, 'title': 'Paris France'},
+ {'id': 1, 'similarity': 0.5497405, 'title': 'Madrid Spain'},
+ {'id': 2, 'similarity': 0.50252455, 'title': 'Montreal Canada'}]
 
->>> ranker += documents
+>>> match = ranker(
+...     q=["Paris France", "Madrid Spain"],
+...     documents=[documents + [{"id": 3, "title": "Paris"}]] * 2,
+...     k=2,
+... )
 
->>> print(ranker(q="Paris", documents=[{"id": 0}, {"id": 1}, {"id": 2}]))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 0.66051394,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.5142564,
-  'title': 'Eiffel tower'}]
+>>> print(match)
+[[{'id': 0, 'similarity': 0.99999994, 'title': 'Paris France'},
+  {'id': 1, 'similarity': 0.856435, 'title': 'Madrid Spain'}],
+ [{'id': 1, 'similarity': 1.0, 'title': 'Madrid Spain'},
+  {'id': 0, 'similarity': 0.856435, 'title': 'Paris France'}]]
 ```
 
 ## Methods
@@ -103,8 +85,10 @@ Encoder ranker
 
     **Parameters**
 
-    - **q**     (*'str'*)    
-    - **documents**     (*'list'*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **documents**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
@@ -113,30 +97,29 @@ Encoder ranker
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
+    - **documents**     (*List[Dict[str, str]]*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
     
-???- note "dump_embeddings"
+???- note "encode_rank"
 
-    Dump embeddings to the selected directory.
+    Encode documents and rank them according to the query.
 
     **Parameters**
 
-    - **embeddings**    
-    - **path**     (*'str'*)    
-        Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     
-???- note "embs"
+???- note "rank"
 
-    Computes and returns embeddings of input documents.
+    Rank inputs documents ordered by relevance among the top k.
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
-    
-???- note "load_embeddings"
-
-    Load embeddings from an existing directory.
-
-    - **path**     (*'str'*)    
-        Path to the file dedicated to storing the embeddings. The ranker will read this file if it already exists to load the embeddings and will update it when documents are added.
+    - **embeddings_documents**     (*Dict[str, numpy.ndarray]*)    
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     

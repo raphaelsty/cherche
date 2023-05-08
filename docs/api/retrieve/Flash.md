@@ -14,18 +14,14 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
 
     Fields to use to match the query to the documents.
 
-- **k** (*int*) – defaults to `None`
-
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
-
 - **keywords** (*flashtext.keyword.KeywordProcessor*) – defaults to `None`
 
     Keywords extractor from [FlashText](https://github.com/vi3k6i5/flashtext). If set to None, a default one is created.
 
+- **lowercase** (*bool*) – defaults to `True`
 
-## Attributes
+- **k** (*Optional[int]*) – defaults to `None`
 
-- **type**
 
 
 ## Examples
@@ -35,54 +31,54 @@ FlashText Retriever. Flash aims to find documents that contain keywords such as 
 >>> from cherche import retrieve
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
+...     {"id": 0, "title": "paris", "article": "eiffel tower"},
+...     {"id": 1, "title": "paris", "article": "paris"},
+...     {"id": 2, "title": "montreal", "article": "montreal is in canada"},
 ... ]
 
->>> retriever = retrieve.Flash(key="id", on="tags", k=2)
+>>> retriever = retrieve.Flash(key="id", on=["title", "article"])
 
 >>> retriever.add(documents=documents)
 Flash retriever
-     key: id
-     on: tags
-     documents: 6
+    key      : id
+    on       : title, article
+    documents: 4
 
->>> print(retriever(q="paris"))
-[{'id': 0}, {'id': 1}]
+>>> print(retriever(q="paris", k=2))
+[{'id': 1, 'similarity': 0.6666666666666666},
+ {'id': 0, 'similarity': 0.3333333333333333}]
 
->>> retriever += documents
+```
 
->>> print(retriever(q="paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'tags': ['paris', 'capital'],
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'tags': ['paris', 'eiffel', 'tower'],
-  'title': 'Eiffel tower'}]
+[{'id': 0, 'similarity': 1}, {'id': 1, 'similarity': 1}]
+
+```python
+>>> print(retriever(q=["paris", "montreal"]))
+[[{'id': 1, 'similarity': 0.6666666666666666},
+  {'id': 0, 'similarity': 0.3333333333333333}],
+ [{'id': 2, 'similarity': 1.0}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Retrieve tagss.
+    Retrieve documents from the index.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **kwargs**    
     
 ???- note "add"
 
-    Add keywords to the retriever. Streaming friendly.
+    Add keywords to the retriever.
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*List[Dict[str, str]]*)    
+    - **kwargs**    
     
 ## References
 

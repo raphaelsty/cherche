@@ -1,4 +1,5 @@
+from .batch import yield_batch, yield_batch_single
 from .quantize import quantize
-from .recommend import users_items_sparse
+from .topk import TopK
 
-__all__ = ["quantize", "users_items_sparse"]
+__all__ = ["quantize", "yield_batch", "yield_batch_single", "TopK"]

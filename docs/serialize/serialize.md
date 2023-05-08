@@ -17,13 +17,12 @@ We will initialize and save our pipeline in a `search.pkl` file
 
 >>> documents = data.load_towns()
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents)
 
 >>> ranker = rank.Encoder(
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-...    k = 10,
 ... )
 
 >>> search = retriever + ranker
@@ -47,7 +46,7 @@ After saving our pipeline in the file `search.pkl`, we can reload it using Pickl
 >>> with open("search.pkl", "rb") as search_file:
 ...    search = pickle.load(search_file)
 
->>> search("bordeaux")
+>>> search("bordeaux", k=10)
 [{'id': 57, 'similarity': 0.69513476},
  {'id': 63, 'similarity': 0.6214991},
  {'id': 65, 'similarity': 0.61809057},
@@ -76,13 +75,12 @@ When transferring the pipeline that runs on the GPU to a machine that will run i
 
 >>> documents = data.load_towns()
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+>>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents)
 
 >>> ranker = rank.Encoder(
 ...    key = "id",
 ...    on = ["title", "article"],
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2", device="cuda").encode,
-...    k = 10,
 ... )
 
 >>> search = retriever + ranker
@@ -106,7 +104,7 @@ We can load our neural search pipeline using `pickle.load` in a new session.
 >>> with open("search.pkl", "rb") as search_file:
 ...    search = pickle.load(search_file)
 
->>> search("bordeaux")
+>>> search("bordeaux", k=10)
 [{'id': 57, 'similarity': 0.69513476},
  {'id': 63, 'similarity': 0.6214991},
  {'id': 65, 'similarity': 0.61809057},

@@ -12,10 +12,6 @@ Spelling corrector written by Peter Norvig: [How to Write a Spelling Corrector](
 
 - **lower** (*bool*) – defaults to `True`
 
-- **big** (*bool*) – defaults to `False`
-
-    Use the big.txt provided by the Norvig spelling corrector. Contains english books from the Gutenberg project.
-
 
 ## Attributes
 
@@ -38,14 +34,8 @@ Query Norvig
 >>> corrector(q="tha citi af Parisa is in Fronce")
 'the city of paris is in france'
 
->>> corrector = query.Norvig(big=True, on=["title", "article"], lower=False)
-
->>> corrector.add(documents)
-Query Norvig
-     Vocabulary: 32790
-
->>> corrector(q="tha citi af Parisa is in Fronce")
-'the city of Paris is in France'
+>>> corrector(q=["tha citi af Parisa is in Fronce", "parisa"])
+['the city of paris is in france', 'paris']
 ```
 
 ## Methods
@@ -56,7 +46,7 @@ Query Norvig
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[str], str]*)    
     - **kwargs**    
     
 ???- note "add"

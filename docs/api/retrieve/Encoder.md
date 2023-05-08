@@ -16,18 +16,18 @@ Encoder as a retriever using Faiss Index.
 
     Field to use to retrieve documents.
 
-- **k** (*int*)
+- **normalize** (*bool*) – defaults to `True`
 
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
+    Whether to normalize the embeddings before adding them to the index in order to measure cosine similarity.
 
-- **path** (*str*) – defaults to `None`
+- **k** (*Optional[int]*) – defaults to `None`
 
-- **index** (*faiss.swigfaiss.IndexFlatL2*) – defaults to `None`
+- **batch_size** (*int*) – defaults to `64`
 
+- **index** – defaults to `None`
 
-## Attributes
+    Faiss index that will store the embeddings and perform the similarity search.
 
-- **type**
 
 
 ## Examples
@@ -38,106 +38,54 @@ Encoder as a retriever using Faiss Index.
 >>> from sentence_transformers import SentenceTransformer
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
 ... ]
 
 >>> retriever = retrieve.Encoder(
 ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
 ...    key = "id",
-...    on = ["title", "article"],
-...    k = 2,
+...    on = ["title"],
 ... )
 
->>> retriever.add(documents)
+>>> retriever.add(documents, batch_size=1)
 Encoder retriever
-     key: id
-     on: title, article
-     documents: 3
+    key      : id
+    on       : title
+    documents: 3
 
->>> print(retriever("Paris"))
-[{'id': 0, 'similarity': 1.47281}, {'id': 1, 'similarity': 1.02935}]
+>>> print(retriever("Spain", k=2))
+[{'id': 1, 'similarity': 0.6544566453117681},
+ {'id': 0, 'similarity': 0.5405465419981407}]
 
->>> documents = [
-...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
-
->>> retriever.add(documents)
-Encoder retriever
-     key: id
-     on: title, article
-     documents: 6
-
->>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-...    {"id": 3, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 4, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 5, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
-... ]
-
->>> retriever += documents
-
->>> print(retriever("Paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 3,
-  'similarity': 1.47281,
-  'title': 'Paris'},
- {'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 1.47281,
-  'title': 'Paris'}]
+>>> print(retriever(["Spain", "Montreal"], k=2))
+[[{'id': 1, 'similarity': 0.6544566453117681},
+  {'id': 0, 'similarity': 0.54054659424589}],
+ [{'id': 2, 'similarity': 0.7372165680578416},
+  {'id': 0, 'similarity': 0.5185645704259234}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Search for documents.
+    Retrieve documents from the index.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **kwargs**    
     
 ???- note "add"
 
-    Add documents to the faiss index and export embeddings if the path is provided. Streaming friendly.
+    Add documents to the index.
 
     **Parameters**
 
-    - **documents**     (*list*)    
+    - **documents**     (*List[Dict[str, str]]*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
+    - **kwargs**    
     
-???- note "build_faiss"
-
-    Build faiss index.
-
-    **Parameters**
-
-    - **index**     (*faiss.swigfaiss.IndexFlatL2*)    
-    - **documents_embeddings**     (*list*)    
-    
-???- note "dump_embeddings"
-
-    Dump embeddings to the selected directory.
-
-    **Parameters**
-
-    - **embeddings**     (*dict*)    
-    - **path**     (*str*)    
-    
-???- note "load_embeddings"
-
-    Load embeddings from an existing directory.
-
-    - **path**     (*str*)    
-    
-## References
-
-1. [Faiss](https://github.com/facebookresearch/faiss)
-

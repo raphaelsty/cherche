@@ -1,4 +1,3 @@
-from .milvus import Milvus
-from .tree import Faiss
+from .faiss_index import Faiss
 
-__all__ = ["Milvus", "Faiss"]
+__all__ = ["Faiss"]

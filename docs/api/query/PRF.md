@@ -37,16 +37,23 @@ Pseudo (or blind) Relevance-Feedback module. The Query-Augmentation method appli
 
 >>> documents = data.load_towns()
 
->>> prf = query.PRF(on=["title", "article"], nb_docs=8, nb_terms_per_doc=1, documents=documents)
+>>> prf = query.PRF(
+...     on=["title", "article"],
+...     nb_docs=8, nb_terms_per_doc=1,
+...     documents=documents
+... )
 
 >>> prf
 Query PRF
-     On: title, article
-     Documents: 8
-     Terms: 1
+    on       : title, article
+    documents: 8
+    terms    : 1
 
 >>> prf(q="Europe")
 'Europe art metro space science bordeaux paris university significance'
+
+>>> prf(q=["Europe", "Paris"])
+['Europe art metro space science bordeaux paris university significance', 'Paris received paris club subway billion source tour tournament']
 ```
 
 ## Methods
@@ -57,7 +64,7 @@ Query PRF
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[str], str]*)    
     - **kwargs**    
     
 ## References

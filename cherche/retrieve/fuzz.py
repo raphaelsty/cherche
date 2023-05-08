@@ -5,6 +5,7 @@ import typing
 
 from rapidfuzz import fuzz, process, utils
 
+from ..utils import yield_batch_single
 from .base import Retriever
 
 
@@ -17,9 +18,6 @@ class Fuzz(Retriever):
         Field identifier of each document.
     on
         Fields to use to match the query to the documents.
-    k
-        Number of documents to retrieve. Default is `None`, i.e all documents that match the query
-        will be retrieved.
     fuzzer
         [RapidFuzz scorer](https://maxbachmann.github.io/RapidFuzz/Usage/fuzz.html): fuzz.ratio,
         fuzz.partial_ratio, fuzz.token_set_ratio, fuzz.partial_token_set_ratio,
@@ -38,58 +36,33 @@ class Fuzz(Retriever):
     >>> from rapidfuzz import fuzz
 
     >>> documents = [
-    ...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki", "tags": ["paris", "capital"]},
-    ...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-    ...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
+    ...     {"id": 0, "title": "Paris", "article": "Eiffel tower"},
+    ...     {"id": 1, "title": "Paris", "article": "Paris is in France."},
+    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada."},
     ... ]
 
     >>> retriever = retrieve.Fuzz(
     ...    key = "id",
     ...    on = ["title", "article"],
-    ...    k = 2,
     ...    fuzzer = fuzz.partial_ratio,
     ... )
 
     >>> retriever.add(documents=documents)
     Fuzz retriever
-         key: id
-         on: title, article
-         documents: 3
-         fuzzer: partial_ratio
+        key      : id
+        on       : title, article
+        documents: 3
 
-    >>> retriever("Paris")
+    >>> print(retriever(q="paris", k=2))
     [{'id': 0, 'similarity': 100.0}, {'id': 1, 'similarity': 100.0}]
 
-    >>> documents = [
-    ...    {"id": 0, "title": "Paris", "article": "Paris", "author": "Wiki", "tags": ["paris", "capital"]},
-    ...    {"id": 1, "title": "Eiffel tower", "article": "Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-    ...    {"id": 2, "title": "Montreal", "article": "Canada.", "author": "Wiki", "tags": ["canada", "montreal"]},
-    ... ]
+    >>> print(retriever(q=["paris", "montreal"], k=2))
+    [[{'id': 0, 'similarity': 100.0}, {'id': 1, 'similarity': 100.0}],
+     [{'id': 2, 'similarity': 100.0}, {'id': 1, 'similarity': 37.5}]]
 
-    >>> retriever.add(documents=documents)
-    Fuzz retriever
-         key: id
-         on: title, article
-         documents: 3
-         fuzzer: partial_ratio
-
-    >>> retriever("Paris")
-    [{'id': 0, 'similarity': 100.0}, {'id': 1, 'similarity': 100.0}]
-
-    >>> documents = [
-    ...    {"id": 3, "title": "Paris", "article": "Paris", "author": "Wiki", "tags": ["paris", "capital"]},
-    ...    {"id": 4, "title": "Paris", "article": "Paris", "author": "Wiki", "tags": ["paris", "eiffel", "tower"]},
-    ... ]
-
-    >>> retriever.add(documents = documents)
-    Fuzz retriever
-         key: id
-         on: title, article
-         documents: 5
-         fuzzer: partial_ratio
-
-    >>> retriever("Paris")
-    [{'id': 0, 'similarity': 100.0}, {'id': 1, 'similarity': 100.0}]
+    >>> print(retriever(q=["unknown", "montreal"], k=2))
+    [[{'id': 2, 'similarity': 40.0}, {'id': 0, 'similarity': 36.36363636363637}],
+     [{'id': 2, 'similarity': 100.0}, {'id': 1, 'similarity': 37.5}]]
 
     References
     ----------
@@ -101,22 +74,17 @@ class Fuzz(Retriever):
         self,
         key: str,
         on: typing.Union[str, list],
-        k: int,
         fuzzer=fuzz.partial_ratio,
         default_process: bool = True,
+        k: typing.Optional[int] = None,
     ) -> None:
-        super().__init__(key=key, on=on, k=k)
+        super().__init__(key=key, on=on, k=k, batch_size=1)
         self.fuzzer = fuzzer
         self.documents = collections.OrderedDict()
         self.index = {}
         self.default_process = default_process
 
-    def __repr__(self):
-        repr = super().__repr__()
-        repr += f"\n\t fuzzer: {self.fuzzer.__name__}"
-        return repr
-
-    def add(self, documents: list, **kwargs) -> "Fuzz":
+    def add(self, documents: typing.List[typing.Dict[str, str]], **kwargs) -> "Fuzz":
         """Fuzz is streaming friendly.
 
         Parameters
@@ -126,7 +94,6 @@ class Fuzz(Retriever):
 
         """
         for doc in documents:
-
             idx = len(self.documents)
 
             content = " ".join([doc.get(field, "") for field in self.on])
@@ -149,21 +116,40 @@ class Fuzz(Retriever):
 
         return self
 
-    def __call__(self, q: str, **kwargs) -> dict:
-        """Retrieve documents using Fuzz.
+    def __call__(
+        self,
+        q: typing.Union[typing.List[str], str],
+        k: typing.Optional[int] = None,
+        **kwargs,
+    ) -> dict:
+        """Retrieve documents from the index.
 
         Parameters
         ----------
         q
-            Input query.
-
+            Either a single query or a list of queries.
+        k
+            Number of documents to retrieve. Default is `None`, i.e all documents that match the
+            query will be retrieved.
         """
-        return [
-            {self.key: self.documents[idx][self.key], "similarity": float(similarity)}
-            for _, similarity, idx in process.extract(
-                q,
-                [doc["fuzzer"] for doc in self.documents.values()],
-                scorer=self.fuzzer,
-                limit=self.k,
+        if k is None:
+            k = len(self.documents)
+
+        rank = []
+
+        for batch in yield_batch_single(
+            array=q, desc=f"{self.__class__.__name__} retriever"
+        ):
+            rank.append(
+                [
+                    {self.key: self.documents[idx][self.key], "similarity": similarity}
+                    for _, similarity, idx in process.extract(
+                        batch,
+                        [doc["fuzzer"] for doc in self.documents.values()],
+                        scorer=self.fuzzer,
+                        limit=k,
+                    )
+                ]
             )
-        ]
+
+        return rank[0] if isinstance(q, str) else rank

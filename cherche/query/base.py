@@ -21,8 +21,10 @@ class Query(abc.ABC):
         return repr
 
     @abc.abstractmethod
-    def __call__(self, q: str, **kwargs) -> str:
-        return self
+    def __call__(
+        self, q: typing.Union[typing.List[str], str], **kwargs
+    ) -> typing.Union[typing.List[str], str]:
+        return []
 
     def __add__(self, other) -> Pipeline:
         """Pipeline operator."""

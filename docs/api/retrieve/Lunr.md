@@ -18,14 +18,8 @@ Lunr is a Python implementation of Lunr.js by Oliver Nightingale. Lunr is a retr
 
     Documents in Lunr retriever are static. The retriever must be reseted to index new documents.
 
-- **k** (*int*) – defaults to `None`
+- **k** (*Optional[int]*) – defaults to `None`
 
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
-
-
-## Attributes
-
-- **type**
 
 
 ## Examples
@@ -35,46 +29,42 @@ Lunr is a Python implementation of Lunr.js by Oliver Nightingale. Lunr is a retr
 >>> from cherche import retrieve
 
 >>> documents = [
-...    {"id": 0, "title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...     {"id": 0, "title": "Paris", "article": "Eiffel tower"},
+...     {"id": 1, "title": "Paris", "article": "Paris is in France."},
+...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada."},
 ... ]
 
->>> retriever = retrieve.Lunr(key="id", on=["title", "article"], documents=documents, k=3)
+>>> retriever = retrieve.Lunr(
+...     key="id",
+...     on=["title", "article"],
+...     documents=documents,
+... )
 
 >>> retriever
 Lunr retriever
-     key: id
-     on: title, article
-     documents: 3
+    key      : id
+    on       : title, article
+    documents: 3
 
->>> print(retriever(q="paris"))
-[{'id': 0, 'similarity': 0.524}, {'id': 1, 'similarity': 0.414}]
+>>> print(retriever(q="paris", k=2))
+[{'id': 1, 'similarity': 0.268}, {'id': 0, 'similarity': 0.134}]
 
->>> retriever += documents
-
->>> print(retriever(q="paris"))
-[{'article': 'This town is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 0.524,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.414,
-  'title': 'Eiffel tower'}]
+>>> print(retriever(q=["paris", "montreal"], k=2))
+[[{'id': 1, 'similarity': 0.268}, {'id': 0, 'similarity': 0.134}],
+ [{'id': 2, 'similarity': 0.94}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    Retrieve the right document.
+    Retrieve documents from the index.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[str, List[str]]*)    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **kwargs**    
     
 ## References
 

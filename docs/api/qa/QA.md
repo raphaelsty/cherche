@@ -1,6 +1,6 @@
 # QA
 
-Question Answering model.
+Question Answering model. QA models needs input documents contents to run.
 
 
 
@@ -14,56 +14,92 @@ Question Answering model.
 
     Hugging Face question answering model available [here](https://huggingface.co/models?pipeline_tag=question-answering).
 
-- **k** (*int*) – defaults to `None`
+- **batch_size** (*int*) – defaults to `32`
 
-    Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
-
-
-## Attributes
-
-- **type**
 
 
 ## Examples
 
 ```python
 >>> from pprint import pprint as print
+>>> from cherche import retrieve, qa
 >>> from transformers import pipeline
->>> from cherche import qa
->>> from pprint import pprint as print
 
 >>> documents = [
-...    {"title": "Paris", "article": "This town is the capital of France", "author": "Wiki"},
-...    {"title": "Eiffel tower", "article": "Eiffel tower is based in Paris", "author": "Wiki"},
-...    {"title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "title": "Paris France"},
+...    {"id": 1, "title": "Madrid Spain"},
+...    {"id": 2, "title": "Montreal Canada"}
 ... ]
 
->>> model = qa.QA(
+>>> retriever = retrieve.TfIdf(key="id", on=["title"], documents=documents)
+
+>>> qa_model = qa.QA(
 ...     model = pipeline("question-answering", model = "deepset/roberta-base-squad2", tokenizer = "deepset/roberta-base-squad2"),
-...     on = ["title", "article"],
-...     k = 2,
+...     on = ["title"],
 ...  )
 
->>> model
-Question Answering
-     model: deepset/roberta-base-squad2
-     on: title, article
+>>> pipeline = retriever + documents + qa_model
 
->>> print(model(q="Where is the Eiffel tower?", documents=documents))
+>>> pipeline
+TfIdf retriever
+    key      : id
+    on       : title
+    documents: 3
+Mapping to documents
+Question Answering
+    on: title
+
+>>> print(pipeline(q="what is the capital of france?"))
 [{'answer': 'Paris',
-  'article': 'Eiffel tower is based in Paris',
-  'author': 'Wiki',
-  'end': 43,
-  'qa_score': 0.9743021130561829,
-  'start': 38,
-  'title': 'Eiffel tower'},
- {'answer': 'Paris',
-  'article': 'This town is the capital of France',
-  'author': 'Wiki',
   'end': 5,
-  'qa_score': 0.0003580129996407777,
+  'id': 0,
+  'question': 'what is the capital of france?',
+  'score': 0.05615315958857536,
+  'similarity': 0.5962847939999439,
   'start': 0,
-  'title': 'Paris'}]
+  'title': 'Paris France'},
+ {'answer': 'Montreal',
+  'end': 8,
+  'id': 2,
+  'question': 'what is the capital of france?',
+  'score': 0.01080897357314825,
+  'similarity': 0.0635641726163728,
+  'start': 0,
+  'title': 'Montreal Canada'}]
+
+>>> print(pipeline(["what is the capital of France?", "what is the capital of Canada?"]))
+[[{'answer': 'Paris',
+   'end': 5,
+   'id': 0,
+   'question': 'what is the capital of France?',
+   'score': 0.1554129421710968,
+   'similarity': 0.5962847939999439,
+   'start': 0,
+   'title': 'Paris France'},
+  {'answer': 'Montreal',
+   'end': 8,
+   'id': 2,
+   'question': 'what is the capital of France?',
+   'score': 1.2884755960840266e-05,
+   'similarity': 0.0635641726163728,
+   'start': 0,
+   'title': 'Montreal Canada'}],
+ [{'answer': 'Montreal',
+   'end': 8,
+   'id': 2,
+   'question': 'what is the capital of Canada?',
+   'score': 0.05316793918609619,
+   'similarity': 0.5125692857821978,
+   'start': 0,
+   'title': 'Montreal Canada'},
+  {'answer': 'Paris France',
+   'end': 12,
+   'id': 0,
+   'question': 'what is the capital of Canada?',
+   'score': 4.7594025431862974e-07,
+   'similarity': 0.035355339059327376,
+   'start': 0,
+   'title': 'Paris France'}]]
 ```
 
 ## Methods
@@ -74,7 +110,10 @@ Question Answering
 
     **Parameters**
 
-    - **q**     (*str*)    
-    - **documents**     (*list*)    
+    - **q**     (*Union[str, List[str]]*)    
+    - **documents**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
+???- note "get_question_context"
+

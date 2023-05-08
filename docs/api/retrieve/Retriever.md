@@ -14,14 +14,10 @@ Retriever base class.
 
     Fields to use to match the query to the documents.
 
-- **k** (*int*)
+- **k** (*Optional[int]*)
 
-    Number of documents to retrieve. Default is None, i.e all documents that match the query will be retrieved.
+- **batch_size** (*int*)
 
-
-## Attributes
-
-- **type**
 
 
 
@@ -29,10 +25,12 @@ Retriever base class.
 
 ???- note "__call__"
 
-    Call self as a function.
+    Retrieve documents from the index.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **k**     (*Optional[int]*)    
+    - **batch_size**     (*Optional[int]*)    
     - **kwargs**    
     

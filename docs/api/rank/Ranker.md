@@ -6,11 +6,11 @@ Abstract class for ranking models.
 
 ## Parameters
 
-- **key** (*'str'*)
+- **key** (*str*)
 
     Field identifier of each document.
 
-- **on** (*'str | list'*)
+- **on** (*Union[str, List[str]]*)
 
     Fields of the documents to use for ranking.
 
@@ -18,22 +18,14 @@ Abstract class for ranking models.
 
     Encoding function to computes embeddings of the documents.
 
-- **k** (*'int'*)
+- **normalize** (*bool*)
 
-    Number of documents to keep.
+    Normalize the embeddings in order to measure cosine similarity if set to True, dot product if set to False.
 
-- **path** (*'str'*)
+- **batch_size** (*int*)
 
-    Path of the file dedicated to store the embeddings as a pickle file.
+- **k** (*Optional[int]*) – defaults to `None`
 
-- **similarity**
-
-    Similarity measure to use i.e similarity.cosine or similarity.dot.
-
-
-## Attributes
-
-- **type**
 
 
 
@@ -41,12 +33,14 @@ Abstract class for ranking models.
 
 ???- note "__call__"
 
-    Call self as a function.
+    Rank documents according to the query.
 
     **Parameters**
 
-    - **q**     (*'str'*)    
-    - **documents**     (*'list'*)    
+    - **q**     (*Union[List[str], str]*)    
+    - **documents**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
@@ -55,30 +49,29 @@ Abstract class for ranking models.
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
+    - **documents**     (*List[Dict[str, str]]*)    
+    - **batch_size**     (*int*)     – defaults to `64`    
     
-???- note "dump_embeddings"
+???- note "encode_rank"
 
-    Dump embeddings to the selected directory.
+    Encode documents and rank them according to the query.
 
     **Parameters**
 
-    - **embeddings**    
-    - **path**     (*'str'*)    
-        Path of the file dedicated to store the embeddings as a pickle file.
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     
-???- note "embs"
+???- note "rank"
 
-    Computes and returns embeddings of input documents.
+    Rank inputs documents ordered by relevance among the top k.
 
     **Parameters**
 
-    - **documents**     (*'list'*)    
-    
-???- note "load_embeddings"
-
-    Load embeddings from an existing directory.
-
-    - **path**     (*'str'*)    
-        Path of the file dedicated to store the embeddings as a pickle file.
+    - **embeddings_documents**     (*Dict[str, numpy.ndarray]*)    
+    - **embeddings_queries**     (*numpy.ndarray*)    
+    - **documents**     (*List[List[Dict[str, str]]]*)    
+    - **k**     (*int*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
     

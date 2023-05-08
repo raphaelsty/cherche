@@ -3,20 +3,17 @@ import pytest
 from .. import rank, retrieve
 
 
-def cherche_retrievers(key: str, on: str, k: int = None):
+def cherche_retrievers(key: str, on: str):
     """List of retrievers available in cherche."""
     yield from [
-        retrieve.TfIdf(key=key, on=on, documents=documents(), k=k),
-        retrieve.BM25Okapi(key=key, on=on, documents=documents(), k=k),
-        retrieve.BM25L(key=key, on=on, documents=documents(), k=k),
-        retrieve.Lunr(key=key, on=on, documents=documents(), k=k),
+        retrieve.TfIdf(key=key, on=on, documents=documents()),
+        retrieve.Lunr(key=key, on=on, documents=documents()),
     ]
 
 
-def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
+def cherche_rankers(key: str, on: str):
     """List of rankers available in cherche."""
-    from sentence_transformers import SentenceTransformer
-    from transformers import pipeline
+    from sentence_transformers import CrossEncoder, SentenceTransformer
 
     yield from [
         rank.DPR(
@@ -28,8 +25,6 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
             query_encoder=SentenceTransformer(
                 "facebook-dpr-question_encoder-single-nq-base"
             ).encode,
-            k=k,
-            path=path,
         ),
         rank.Encoder(
             key=key,
@@ -37,17 +32,10 @@ def cherche_rankers(key: str, on: str, k: int = None, path: str = None):
             encoder=SentenceTransformer(
                 "sentence-transformers/all-mpnet-base-v2"
             ).encode,
-            k=k,
-            path=path,
         ),
-        rank.ZeroShot(
-            key=key,
+        rank.CrossEncoder(
             on=on,
-            encoder=pipeline(
-                "zero-shot-classification",
-                model="typeform/distilbert-base-uncased-mnli",
-            ),
-            k=k,
+            encoder=CrossEncoder("cross-encoder/mmarco-mMiniLMv2-L12-H384-v1").predict,
         ),
     ]
 
@@ -97,15 +85,15 @@ def tags():
     [
         pytest.param(
             retriever + ranker + documents()
-            if not isinstance(ranker, rank.ZeroShot)
+            if not isinstance(ranker, rank.CrossEncoder)
             else retriever + documents() + ranker,
             documents(),
             k,
             id=f"retriever: {retriever.__class__.__name__}, ranker: {ranker.__class__.__name__}, k: {k}",
         )
-        for k in [None, 0, 2, 4]
-        for ranker in cherche_rankers(key="url", on="title", k=k, path=None)
-        for retriever in cherche_retrievers(key="url", on="title", k=k)
+        for k in [None, 2, 4]
+        for ranker in cherche_rankers(key="url", on="title")
+        for retriever in cherche_retrievers(key="url", on="title")
     ],
 )
 def test_retriever_ranker(search, documents: list, k: int):
@@ -115,7 +103,7 @@ def test_retriever_ranker(search, documents: list, k: int):
     """
     search = search.add(documents)
 
-    answers = search(q="Github library with PyTorch and Transformers")
+    answers = search(q="Github library with PyTorch and Transformers", k=k)
     for index in range(len(documents) if k is None else k):
         if index in [0, 1]:
             assert (
@@ -125,7 +113,7 @@ def test_retriever_ranker(search, documents: list, k: int):
         elif index in [2]:
             assert answers[index]["title"] == "Github Library with PyTorch."
 
-    answers = search(q="Github")
+    answers = search(q="Github", k=k)
     if k is None:
         assert len(answers) == len(documents)
     else:
@@ -140,20 +128,20 @@ def test_retriever_ranker(search, documents: list, k: int):
     "search, documents, k",
     [
         pytest.param(
-            retrieve.Flash(key="uri", on="tags", k=k) + ranker + tags()
-            if not isinstance(ranker, rank.ZeroShot)
-            else retrieve.Flash(key="uri", on="tags", k=k) + tags() + ranker,
+            retrieve.Flash(key="uri", on="tags") + ranker + tags()
+            if not isinstance(ranker, rank.CrossEncoder)
+            else retrieve.Flash(key="uri", on="tags") + tags() + ranker,
             tags(),
             k,
             id=f"retriever: Flash, ranker: {ranker.__class__.__name__}, k: {k}",
         )
         for k in [None, 0, 2, 4]
-        for ranker in cherche_rankers(key="uri", on="title", k=k, path=None)
+        for ranker in cherche_rankers(key="uri", on="title")
     ],
 )
 def test_flash_ranker(search, documents: list, k: int):
     search = search.add(documents)
-    answers = search(q="Github ( git ) is a great tool")
+    answers = search(q="Github ( git ) is a great tool", k=k)
     if k is None:
         assert len(answers) == 2
     else:

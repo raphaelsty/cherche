@@ -19,75 +19,53 @@ Intersection gathers retrieved documents from multiples retrievers and ranked do
 >>> from cherche import retrieve
 
 >>> documents = [
-...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
 ... ]
 
 >>> search = (
-...    retrieve.TfIdf(key="id", on="title", documents=documents) &
-...    retrieve.TfIdf(key="id", on="article", documents=documents) &
-...    retrieve.Flash(key="id", on="author")
-... ) + documents
+...     retrieve.TfIdf(key="id", on="town", documents=documents) &
+...     retrieve.TfIdf(key="id", on="country", documents=documents) &
+...     retrieve.Flash(key="id", on="continent")
+... )
 
->>> search.add(documents)
-Intersection
------
-TfIdf retriever
-     key: id
-     on: title
-     documents: 3
-TfIdf retriever
-     key: id
-     on: article
-     documents: 3
-Flash retriever
-     key: id
-     on: author
-     documents: 1
------
-Mapping to documents
+>>> search = search.add(documents)
 
->>> print(search(q = "Wiki Paris"))
-[{'article': 'Paris is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 1.0,
-  'title': 'Paris'}]
-
->>> print(search(q = "Paris"))
+>>> print(search("Paris"))
 []
 
->>> print(search(q = "Wiki Paris Montreal Eiffel"))
-[{'article': 'Montreal is in Canada.',
-  'author': 'Wiki',
-  'id': 2,
-  'similarity': 0.5773502691896257,
-  'title': 'Montreal'},
- {'article': 'Paris is the capital of France',
-  'author': 'Wiki',
-  'id': 0,
-  'similarity': 0.5773502691896257,
-  'title': 'Paris'},
- {'article': 'Eiffel tower is based in Paris.',
-  'author': 'Wiki',
-  'id': 1,
-  'similarity': 0.408248290463863,
-  'title': 'Eiffel tower'}]
+>>> print(search(["Paris", "Europe"]))
+[[], []]
+
+>>> print(search(["Paris", "Europe", "Paris Madrid Europe France Spain"]))
+[[],
+[],
+[{'id': 2, 'similarity': 4.25}, {'id': 0, 'similarity': 3.0999999999999996}]]
 ```
 
 ## Methods
 
 ???- note "__call__"
 
-    
+    Call self as a function.
 
     **Parameters**
 
-    - **q**     (*str*)    
+    - **q**     (*Union[List[List[Dict[str, str]]], List[Dict[str, str]]]*)    
+    - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **documents**     (*Optional[List[Dict[str, str]]]*)     – defaults to `None`    
     - **kwargs**    
     
 ???- note "add"
 
+    Add new documents.
+
+    **Parameters**
+
+    - **documents**     (*list*)    
+    - **kwargs**    
+    
 ???- note "reset"
 

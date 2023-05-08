@@ -3,10 +3,9 @@ __all__ = ["Pipeline"]
 import collections
 import typing
 
-from river import stats
 from scipy.special import softmax
 
-from .base import Compose
+from .base import Compose, rank_intersection, rank_union, rank_vote
 
 
 class PipelineUnion(Compose):
@@ -19,159 +18,71 @@ class PipelineUnion(Compose):
 
     Examples
     --------
-    >>> from cherche import retrieve
+
     >>> from pprint import pprint as print
+    >>> from cherche import retrieve, rank
+    >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...     {"id": 0, "title": "Paris", "author": "Wiki"},
-    ...     {"id": 1, "title": "Eiffel tower", "author": "Wiki"},
-    ...     {"id": 2, "title": "Montreal", "author": "Wiki"},
+    ...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+    ...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+    ...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
     ... ]
 
-    >>> search = (
-    ...     (retrieve.TfIdf(key="id", on="title", documents=documents) + documents) |
-    ...     (retrieve.TfIdf(key="id", on="author", documents=documents) + documents)
+    >>> retriever_tfidf = retrieve.TfIdf(
+    ...     key="id", on=["town"], documents=documents)
+
+    >>> retriever_flash = retrieve.Flash(
+    ...     key="id", on=["continent"])
+
+    >>> ranker = rank.Encoder(
+    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    ...    key = "id",
+    ...    on = ["town", "country", "continent"],
     ... )
 
-    >>> search
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
+    >>> pipeline = (retriever_tfidf + documents) | (retriever_flash + documents)
 
-    >>> print(search("paris"))
-    [{'author': 'Wiki', 'id': 0, 'similarity': 1.0, 'title': 'Paris'}]
+    >>> pipeline = pipeline.add(documents)
 
-    >>> print(search("wiki"))
-    [{'author': 'Wiki',
-    'id': 2,
-    'similarity': 0.3333333333333333,
-    'title': 'Montreal'},
-    {'author': 'Wiki',
-    'id': 1,
-    'similarity': 0.3333333333333333,
-    'title': 'Eiffel tower'},
-    {'author': 'Wiki',
-    'id': 0,
-    'similarity': 0.3333333333333333,
-    'title': 'Paris'}]
+    >>> print(pipeline("Paris Europe North America"))
+    [{'continent': 'Europe',
+      'country': 'France',
+      'id': 0,
+      'similarity': 3.0,
+      'town': 'Paris'},
+     {'continent': 'Europe',
+      'country': 'Spain',
+      'id': 2,
+      'similarity': 0.3333333333333333,
+      'town': 'Madrid'},
+     {'continent': 'North America',
+      'country': 'Canada',
+      'id': 1,
+      'similarity': 0.25,
+      'town': 'Montreal'}]
 
-
-    >>> search + documents
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Mapping to documents
-
-
-    >>> search * search
-    Voting Pipeline
-    -----
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> search & search
-    Intersection Pipeline
-    -----
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> search | search
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    Union Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    -----
+    >>> print(pipeline(["Paris Europe", "Madrid Europe"]))
+    [[{'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 3.0,
+       'town': 'Paris'},
+      {'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 0.3333333333333333,
+       'town': 'Madrid'}],
+     [{'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 2.6666666666666665,
+       'town': 'Madrid'},
+      {'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 0.5,
+       'town': 'Paris'}]]
 
     """
 
@@ -186,52 +97,33 @@ class PipelineUnion(Compose):
         return repr
 
     def __call__(
-        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
-    ) -> list:
-        """Query for pipelines union.
-
+        self,
+        q: typing.Union[
+            typing.List[typing.List[typing.Dict[str, str]]],
+            typing.List[typing.Dict[str, str]],
+        ],
+        batch_size: typing.Optional[int] = None,
+        k: typing.Optional[int] = None,
+        documents: typing.Optional[typing.List[typing.Dict[str, str]]] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """
         Parameters
         ----------
         q
             Input query.
-        user
-            Input user.
 
         """
-        query = {"q": q, "user": user, **kwargs}
-        union = []
-        scores = {}
-
-        for model in self.models:
-
-            retrieved = model(**query)
-
-            if not retrieved:
-                continue
-
-            similarities = softmax(
-                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
-            )
-
-            for document, similarity in zip(retrieved, similarities):
-
-                # Remove similarities to avoid duplicates
-                if "similarity" in document:
-                    document.pop("similarity")
-
-                if document[self.key] not in scores:
-                    scores[document[self.key]] = stats.Mean()
-                scores[document[self.key]].update(similarity)
-
-                # Drop duplicates documents:
-                if document in union:
-                    continue
-                union.append(document)
-
-        return [
-            {**document, **{"similarity": scores[document[self.key]].get()}}
-            for document in union
-        ]
+        query = self._build_query(
+            q=q, batch_size=batch_size, k=k, documents=documents, **kwargs
+        )
+        match = self._build_match(query=query)
+        scores, _ = self._scores(match=match)
+        ranked = rank_union(key=self.key, match=match, scores=scores)
+        return ranked[0] if isinstance(q, str) else ranked
 
     def __or__(self, other) -> "PipelineUnion":
         return PipelineUnion(models=self.models + [other])
@@ -246,7 +138,7 @@ class PipelineUnion(Compose):
     def __add__(self, other) -> "Pipeline":
         """Pipeline operator."""
         if isinstance(other, list):
-            # Documents are part of the pipeline.
+            # Mapping to documents
             return Pipeline(
                 models=[self, {document[self.key]: document for document in other}]
             )
@@ -263,188 +155,50 @@ class PipelineIntersection(Compose):
 
     Examples
     --------
-    >>> from cherche import retrieve
     >>> from pprint import pprint as print
+    >>> from cherche import retrieve, rank
+    >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...     {"id": 0, "title": "Paris", "author": "Wiki"},
-    ...     {"id": 1, "title": "Eiffel tower", "author": "Wiki"},
-    ...     {"id": 2, "title": "Montreal", "author": "Wiki"},
+    ...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+    ...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+    ...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
     ... ]
 
-    >>> search = (
-    ...     (retrieve.TfIdf(key="id", on="title", documents=documents) + documents) &
-    ...     (retrieve.TfIdf(key="id", on="author", documents=documents) + documents)
-    ... )
+    >>> retriever_tfidf = retrieve.TfIdf(
+    ...     key="id", on=["town"], documents=documents)
 
-    >>> search
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-
-    >>> print(search("paris"))
-    []
-
-    >>> print(search("wiki paris montreal eiffel"))
-    [{'author': 'Wiki',
-      'id': 2,
-      'similarity': 0.3424492551376574,
-      'title': 'Montreal'},
-     {'author': 'Wiki',
-      'id': 0,
-      'similarity': 0.3424492551376574,
-      'title': 'Paris'},
-     {'author': 'Wiki',
-      'id': 1,
-      'similarity': 0.3151014897246852,
-      'title': 'Eiffel tower'}]
-
-    >>> search + documents
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Mapping to documents
-
-    >>> search * search
-    Voting Pipeline
-    -----
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> search | search
-    Union Pipeline
-    -----
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> search & search
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> from cherche import rank
-    >>> from sentence_transformers import SentenceTransformer
+    >>> retriever_flash = retrieve.Flash(
+    ...     key="id", on=["continent"])
 
     >>> ranker = rank.Encoder(
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
     ...    key = "id",
-    ...    on = ["title", "article"],
-    ...    k = 2,
+    ...    on = ["town", "country", "continent"],
     ... )
 
-    >>> search + ranker
-    Intersection Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: author
-         documents: 3
-    Mapping to documents
-    -----
-    Encoder ranker
-         key: id
-         on: title, article
-         k: 2
-         similarity: cosine
-         Embeddings pre-computed: 3
+    >>> pipeline = (retriever_tfidf + documents) & (retriever_flash + documents)
+
+    >>> pipeline = pipeline.add(documents)
+
+    >>> print(pipeline("Paris Europe"))
+    [{'continent': 'Europe',
+      'country': 'France',
+      'id': 0,
+      'similarity': 3.0,
+      'town': 'Paris'}]
+
+    >>> print(pipeline(["Paris Europe", "Madrid Europe"]))
+    [[{'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 3.0,
+       'town': 'Paris'}],
+     [{'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 2.6666666666666665,
+       'town': 'Madrid'}]]
 
     """
 
@@ -459,47 +213,32 @@ class PipelineIntersection(Compose):
         return repr
 
     def __call__(
-        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
-    ) -> list:
-        """Retrieve documents.
-
-        Parameters
-        ----------
-        q
-            Input query.
-        user
-            Input user.
-
-        """
-        query = {"q": q, "user": user, **kwargs}
-        counter_docs, scores = collections.defaultdict(int), collections.defaultdict(
-            float
+        self,
+        q: typing.Union[
+            typing.List[str],
+            str,
+        ],
+        batch_size: typing.Optional[int] = None,
+        k: typing.Optional[int] = None,
+        documents: typing.Optional[typing.List[typing.Dict[str, str]]] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        query = self._build_query(
+            q=q, batch_size=batch_size, k=k, documents=documents, **kwargs
         )
-
-        for model in self.models:
-            retrieved = model(**query)
-            if not retrieved:
-                continue
-
-            similarities = softmax(
-                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
-            )
-            for document, similarity in zip(retrieved, similarities):
-
-                if "similarity" in document:
-                    document.pop("similarity")
-
-                scores[document[self.key]] += similarity / len(self.models)
-                counter_docs[tuple(sorted(document.items()))] += 1
-
-        ranked = []
-        for document, count in counter_docs.items():
-            if count < len(self.models):
-                continue
-            document = dict(document)
-            document["similarity"] = scores[document[self.key]]
-            ranked.append(document)
-        return ranked
+        match = self._build_match(query=query)
+        scores, counter = self._scores(match=match)
+        ranked = rank_intersection(
+            key=self.key,
+            models=self.models,
+            match=match,
+            scores=scores,
+            counter=counter,
+        )
+        return ranked[0] if isinstance(q, str) else ranked
 
     def __or__(self, other) -> "PipelineUnion":
         """Custom operator for union."""
@@ -515,7 +254,7 @@ class PipelineIntersection(Compose):
     def __add__(self, other) -> "Pipeline":
         """Pipeline operator."""
         if isinstance(other, list):
-            # Documents are part of the pipeline.
+            # Mapping to documents.
             return Pipeline(
                 models=[self, {document[self.key]: document for document in other}]
             )
@@ -533,154 +272,70 @@ class PipelineVote(Compose):
 
     Examples
     --------
-
-    >>> from cherche import compose, retrieve
     >>> from pprint import pprint as print
+    >>> from cherche import retrieve, rank
+    >>> from sentence_transformers import SentenceTransformer
 
     >>> documents = [
-    ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-    ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+    ...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+    ...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
     ... ]
 
-    >>> search = (
-    ...    (retrieve.TfIdf(key="id", on="title", documents=documents, k=3) + documents) *
-    ...    (retrieve.TfIdf(key="id", on="article", documents=documents, k=3) + documents)
+    >>> retriever_tfidf = retrieve.TfIdf(
+    ...     key="id", on=["town", "country", "continent"], documents=documents)
+
+    >>> retriever_flash = retrieve.Flash(
+    ...     key="id", on=["town", "country", "continent"])
+
+    >>> ranker = rank.Encoder(
+    ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
+    ...    key = "id",
+    ...    on = ["town", "country", "continent"],
     ... )
 
-    >>> search
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    -----
+    >>> pipeline = (retriever_tfidf + documents) * (retriever_flash + documents)
 
-    >>> print(search("paris eiffel"))
-    [{'article': 'Eiffel tower is based in Paris.',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 0.5216793798120437,
-      'title': 'Eiffel tower'},
-     {'article': 'Paris is the capital of France',
-      'author': 'Wiki',
+    >>> pipeline = pipeline.add(documents)
+
+    >>> print(pipeline("Paris Europe spain canada", k=3))
+    [{'continent': 'Europe',
+      'country': 'Spain',
+      'id': 2,
+      'similarity': 2.4,
+      'town': 'Madrid'},
+     {'continent': 'Europe',
+      'country': 'France',
       'id': 0,
-      'similarity': 0.4783206201879563,
-      'title': 'Paris'}]
+      'similarity': 1.5,
+      'town': 'Paris'},
+     {'continent': 'North America',
+      'country': 'Canada',
+      'id': 1,
+      'similarity': 1.0,
+      'town': 'Montreal'}]
 
-    >>> search + documents
-    Voting Pipeline
-    -----
-    TfIdf retriever
-        key: id
-        on: title
-        documents: 3
-    Mapping to documents
-    TfIdf retriever
-        key: id
-        on: article
-        documents: 3
-    Mapping to documents
-    -----
-    Mapping to documents
-
-    >>> search * search
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> search & search
-    Intersection Pipeline
-    -----
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    -----
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
-    >>> search | search
-    Union Pipeline
-    -----
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    -----
-    Voting Pipeline
-    -----
-    TfIdf retriever
-         key: id
-         on: title
-         documents: 3
-    Mapping to documents
-    TfIdf retriever
-         key: id
-         on: article
-         documents: 3
-    Mapping to documents
-    -----
-    -----
-
+    >>> print(pipeline(["Paris Europe", "Spain Europe"]))
+    [[{'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 2.6666666666666665,
+       'town': 'Paris'},
+      {'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 1.5,
+       'town': 'Madrid'}],
+     [{'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 2.6666666666666665,
+       'town': 'Madrid'},
+      {'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 1.5,
+       'town': 'Paris'}]]
 
     """
 
@@ -695,50 +350,26 @@ class PipelineVote(Compose):
         return repr
 
     def __call__(
-        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
-    ) -> list:
-        """
-        Parameters
-        ----------
-        q
-            Input query.
-        user
-            Input user.
-
-        """
-        query = {"q": q, "user": user, **kwargs}
-
-        scores, documents = collections.defaultdict(float), collections.defaultdict(
-            dict
+        self,
+        q: typing.Union[
+            typing.List[str],
+            str,
+        ],
+        batch_size: typing.Optional[int] = None,
+        k: typing.Optional[int] = None,
+        documents: typing.Optional[typing.List[typing.Dict[str, str]]] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        query = self._build_query(
+            q=q, batch_size=batch_size, k=k, documents=documents, **kwargs
         )
-
-        for model in self.models:
-
-            retrieved = model(**query)
-
-            if not retrieved:
-                continue
-
-            similarities = softmax(
-                [doc.get("similarity", 1.0) for doc in retrieved], axis=0
-            )
-            for doc, similarity in zip(retrieved, similarities):
-                scores[doc[self.key]] += float(similarity) / len(self.models)
-                documents[doc[self.key]] = doc
-
-        ranked = []
-
-        if not scores or not documents:
-            return []
-
-        for key, similarity in sorted(
-            scores.items(), key=lambda item: item[1], reverse=True
-        ):
-            doc = documents[key]
-            doc["similarity"] = similarity
-            ranked.append(doc)
-
-        return ranked
+        match = self._build_match(query=query)
+        scores, counter = self._scores(match=match)
+        ranked = rank_vote(key=self.key, match=match, scores=scores)
+        return ranked[0] if isinstance(q, str) else ranked
 
     def __or__(self, other) -> "PipelineUnion":
         """Custom operator for union."""
@@ -754,7 +385,7 @@ class PipelineVote(Compose):
 
     def __add__(self, other) -> "Pipeline":
         if isinstance(other, list):
-            # Documents are part of the pipeline.
+            # Mapping to documents.
             return Pipeline(
                 models=[self, {document[self.key]: document for document in other}]
             )
@@ -771,108 +402,77 @@ class Pipeline(Compose):
 
     Examples
     --------
-
     >>> from pprint import pprint as print
-    >>> from cherche import retrieve, rank, qa, summary
+    >>> from cherche import retrieve, rank
     >>> from sentence_transformers import SentenceTransformer
-    >>> from transformers import pipeline
 
     >>> documents = [
-    ...     {"id": 0, "title": "Paris", "article": "Paris is the capital of France", "author": "Wiki"},
-    ...     {"id": 1, "title": "Eiffel tower", "article": "Eiffel tower is based in Paris.", "author": "Wiki"},
-    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada.", "author": "Wiki"},
+    ...    {"id": 0, "town": "Paris", "country": "France", "continent": "Europe"},
+    ...    {"id": 1, "town": "Montreal", "country": "Canada", "continent": "North America"},
+    ...    {"id": 2, "town": "Madrid", "country": "Spain", "continent": "Europe"},
     ... ]
 
-    >>> retriever = retrieve.TfIdf(key="id", on="article", documents=documents)
+    >>> retriever = retrieve.TfIdf(
+    ...     key="id", on=["town", "country", "continent"], documents=documents)
 
-    Retriever, Ranker:
     >>> ranker = rank.Encoder(
-    ...    on = "article",
-    ...    key = "id",
     ...    encoder = SentenceTransformer("sentence-transformers/all-mpnet-base-v2").encode,
-    ...    path = "pipeline_encoder.pkl"
+    ...    key = "id",
+    ...    on = ["town", "country", "continent"],
     ... )
 
-    >>> search = retriever + ranker + documents
+    >>> pipeline = retriever + ranker
 
-    >>> search.add(documents=documents)
-    TfIdf retriever
-        key: id
-        on: article
-        documents: 3
-    Encoder ranker
-        key: id
-        on: article
-        k: None
-        similarity: cosine
-        Embeddings pre-computed: 3
-    Mapping to documents
+    >>> pipeline = pipeline.add(documents)
 
-    >>> print(search(q = "Paris"))
-    [{'article': 'Paris is the capital of France',
-      'author': 'Wiki',
+    >>> print(pipeline("Paris Europe"))
+    [{'id': 0, 'similarity': 0.9149576}, {'id': 2, 'similarity': 0.8091332}]
+
+    >>> print(pipeline(["Paris", "Europe", "Paris Madrid Europe France Spain"]))
+    [[{'id': 0, 'similarity': 0.69523287}],
+     [{'id': 0, 'similarity': 0.7381397}, {'id': 2, 'similarity': 0.6488539}],
+     [{'id': 0, 'similarity': 0.8582063}, {'id': 2, 'similarity': 0.8200009}]]
+
+    >>> pipeline = retriever + ranker + documents
+
+    >>> print(pipeline("Paris Europe"))
+    [{'continent': 'Europe',
+      'country': 'France',
       'id': 0,
-      'similarity': 0.7014107704162598,
-      'title': 'Paris'},
-     {'article': 'Eiffel tower is based in Paris.',
-      'author': 'Wiki',
-      'id': 1,
-      'similarity': 0.5178720951080322,
-      'title': 'Eiffel tower'}]
-
-    Retriever, Ranker, Question Answering:
-    >>> search += qa.QA(
-    ...     model = pipeline(
-    ...         "question-answering",
-    ...         model = "deepset/roberta-base-squad2",
-    ...         tokenizer = "deepset/roberta-base-squad2"
-    ...     ),
-    ...     on = "article",
-    ... )
-
-    >>> search
-    TfIdf retriever
-        key: id
-        on: article
-        documents: 3
-    Encoder ranker
-        key: id
-        on: article
-        k: None
-        similarity: cosine
-        Embeddings pre-computed: 3
-    Mapping to documents
-    Question Answering
-        on: article
-
-    >>> print(search(q = "What is based in Paris?"))
-    [{'answer': 'Eiffel tower',
-      'article': 'Eiffel tower is based in Paris.',
-      'author': 'Wiki',
-      'end': 12,
-      'id': 1,
-      'qa_score': 0.9643093943595886,
-      'similarity': 0.6578713655471802,
-      'start': 0,
-      'title': 'Eiffel tower'},
-     {'answer': 'Paris is the capital of France',
-      'article': 'Paris is the capital of France',
-      'author': 'Wiki',
-      'end': 30,
-      'id': 0,
-      'qa_score': 4.2473871872061864e-05,
-      'similarity': 0.7062915563583374,
-      'start': 0,
-      'title': 'Paris'},
-     {'answer': 'Montreal is in Canada.',
-      'article': 'Montreal is in Canada.',
-      'author': 'Wiki',
-      'end': 22,
+      'similarity': 0.9149576,
+      'town': 'Paris'},
+     {'continent': 'Europe',
+      'country': 'Spain',
       'id': 2,
-      'qa_score': 1.7172791189068448e-08,
-      'similarity': 0.3316514492034912,
-      'start': 0,
-      'title': 'Montreal'}]
+      'similarity': 0.8091332,
+      'town': 'Madrid'}]
+
+    >>> print(pipeline(["Paris", "Europe", "Paris Madrid Europe France Spain"]))
+    [[{'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 0.69523287,
+       'town': 'Paris'}],
+     [{'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 0.7381397,
+       'town': 'Paris'},
+      {'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 0.6488539,
+       'town': 'Madrid'}],
+     [{'continent': 'Europe',
+       'country': 'France',
+       'id': 0,
+       'similarity': 0.8582063,
+       'town': 'Paris'},
+      {'continent': 'Europe',
+       'country': 'Spain',
+       'id': 2,
+       'similarity': 0.8200009,
+       'town': 'Madrid'}]]
 
     """
 
@@ -880,50 +480,99 @@ class Pipeline(Compose):
         super().__init__(models=models)
 
     def __call__(
-        self, q: str = "", user: typing.Union[str, int] = None, **kwargs
-    ) -> list:
-        """Compose pipeline
+        self,
+        q: typing.Union[
+            typing.List[str],
+            str,
+        ],
+        k: typing.Optional[int] = None,
+        batch_size: typing.Optional[int] = None,
+        documents: typing.Optional[typing.List[typing.Dict[str, str]]] = None,
+        **kwargs,
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """Pipeline main method. It takes a query and returns a list of documents.
+        If the query is a list of queries, it returns a list of list of documents.
+        If the batch_size_ranker, or batch_size_retriever it takes precedence over
+        the batch_size. If the k_ranker, or k_retriever it takes precedence over
+        the k parameter.
 
         Parameters
         ----------
         q
             Input query.
-        user
-            Input user.
-
+        k
+            Number of documents to return.
+        k_retriever
+            Number of documents to return for the retriever.
+        k_ranker
+            Number of documents to return for the ranker.
+        batch_size
+            Batch size.
+        batch_size_retriever
+            Batch size for the retriever.
+        batch_size_ranker
+            Batch size for the ranker.
         """
-        query = {"user": user, **kwargs}
-        summary = False
+        query = {**kwargs, "documents": documents}
 
         for model in self.models:
-
-            # mapping documents
             if isinstance(model, dict):
-
-                answer = [
-                    {**model[doc[self.key]], "similarity": doc["similarity"]}
-                    if "similarity" in doc
-                    else model[doc[self.key]]
-                    for doc in answer
-                ]
-
-            # retriever, ranker, qa, summarization
+                # Map documents to answers.
+                answer = self._map_documents(documents=model, answer=query["documents"])
             else:
-                answer = model(q=q, **query)
+                # Set k and batch_size.
+                answer = model(q=q, k=k, batch_size=batch_size, **query)
 
-            # retriever, ranker, qa,
-            if isinstance(answer, list):
-                query.update({"documents": answer})
+            query.update({"documents": answer})
 
-            # Query translation and summarization
-            elif isinstance(answer, str):
-                q = answer
+        return query["documents"]
 
-                # Translation of the summary may happend.
-                if model.type == "summary":
-                    summary = True
+    def _map_documents(
+        self,
+        documents: typing.Dict[str, typing.Dict[str, str]],
+        answer: typing.Union[
+            typing.List[typing.List[typing.Dict[str, str]]],
+            typing.List[typing.Dict[str, str]],
+        ],
+    ) -> typing.Union[
+        typing.List[typing.List[typing.Dict[str, str]]],
+        typing.List[typing.Dict[str, str]],
+    ]:
+        """Map retrieved documents to the set of documents.
 
-        return query["documents"] if not summary else q
+        Parameters
+        ----------
+        documents
+            Mapping of documents in order to map their content on documents ids.
+        answer
+            List of answers.
+
+        """
+        if not answer:
+            return answer
+
+        batch = True
+        if isinstance(answer[0], dict):
+            batch = False
+            answer = [answer]
+
+        mapping = []
+        for query_document in answer:
+            mapping.append(
+                [
+                    {
+                        **documents.get(document[self.key], {}),
+                        self.key: document[self.key],
+                        "similarity": document["similarity"],
+                    }
+                    for document in query_document
+                ]
+            )
+
+        return mapping[0] if not batch else mapping
 
     def __or__(self, other) -> PipelineUnion:
         """Custom operator for union."""
@@ -940,7 +589,7 @@ class Pipeline(Compose):
     def __add__(self, other) -> "Pipeline":
         """Pipeline operator."""
         if isinstance(other, list):
-            # Documents are part of the pipeline.
+            # Mapping to documents.
             return Pipeline(
                 models=self.models
                 + [{document[self.key]: document for document in other}]
