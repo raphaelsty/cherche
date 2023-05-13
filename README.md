@@ -199,7 +199,7 @@ TfIdf retriever is a wrapper around [scikit-learn's TfidfVectorizer](https://sci
 
 If you use cherche to produce results for your scientific publication, please refer to our SIGIR paper:
 
-```
+```bibtex
 @inproceedings{Sourty2022sigir,
     author = {Raphael Sourty and Jose G. Moreno and Lynda Tamine and Francois-Paul Servant},
     title = {CHERCHE: A new tool to rapidly implement pipelines in information retrieval},
