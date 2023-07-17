@@ -6,8 +6,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 base_packages = [
-    "numpy >= 1.24.3",
-    "scikit-learn >= 1.2.2",
+    "numpy >= 1.23.5",
+    "scikit-learn >= 1.1.2",
     "lunr >= 0.6.2",
     "rapidfuzz >= 3.0.0",
     "flashtext >= 2.7",
