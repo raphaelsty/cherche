@@ -133,6 +133,9 @@ class Fuzz(Retriever):
             query will be retrieved.
         """
         if k is None:
+            k = self.k
+
+        if k is None:
             k = len(self.documents)
 
         rank = []
