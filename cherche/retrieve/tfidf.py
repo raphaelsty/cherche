@@ -98,7 +98,7 @@ class TfIdf(Retriever):
                     for doc in documents
                 ]
             )
-        )
+        ).T
 
         self.k = len(self.documents) if k is None else k
         self.n = len(self.documents)
@@ -161,7 +161,7 @@ class TfIdf(Retriever):
             batch_size=batch_size if batch_size is not None else self.batch_size,
             desc=f"{self.__class__.__name__} retriever",
         ):
-            similarities = self.tfidf.transform(batch).dot(self.matrix.T).toarray()
+            similarities = self.tfidf.transform(batch).dot(self.matrix).toarray()
 
             batch_match, batch_similarities = self.top_k_by_partition(
                 similarities=similarities, k=k
