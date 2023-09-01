@@ -7,6 +7,7 @@ import numpy as np
 
 __all__ = ["evaluation"]
 
+
 class Mean:
     """Online running mean.
 

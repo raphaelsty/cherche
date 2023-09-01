@@ -89,6 +89,7 @@ class Lunr(Retriever):
         self,
         q: typing.Union[str, typing.List[str]],
         k: typing.Optional[int] = None,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> typing.Union[
         typing.List[typing.List[typing.Dict[str, str]]],
@@ -107,7 +108,9 @@ class Lunr(Retriever):
         rank = []
 
         for batch in yield_batch_single(
-            array=q, desc=f"{self.__class__.__name__} retriever"
+            array=q,
+            desc=f"{self.__class__.__name__} retriever",
+            tqdm_bar=tqdm_bar,
         ):
             batch = re.sub("[^a-zA-Z0-9 \n\.]", " ", batch)
             documents = [

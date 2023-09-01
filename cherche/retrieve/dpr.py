@@ -89,6 +89,7 @@ class DPR(Retriever):
         self,
         documents: typing.List[typing.Dict[str, str]],
         batch_size: int = 64,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> "DPR":
         """Add documents to the index.
@@ -105,6 +106,7 @@ class DPR(Retriever):
             array=documents,
             batch_size=batch_size,
             desc=f"{self.__class__.__name__} index creation",
+            tqdm_bar=tqdm_bar,
         ):
             self.index.add(
                 documents=batch,
@@ -124,6 +126,7 @@ class DPR(Retriever):
         q: typing.Union[typing.List[str], str],
         k: typing.Optional[int] = None,
         batch_size: typing.Optional[int] = None,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> typing.Union[
         typing.List[typing.List[typing.Dict[str, str]]],
@@ -149,6 +152,7 @@ class DPR(Retriever):
             array=q,
             batch_size=batch_size if batch_size is not None else self.batch_size,
             desc=f"{self.__class__.__name__} retriever",
+            tqdm_bar=tqdm_bar,
         ):
             rank.extend(
                 self.index(

@@ -110,6 +110,7 @@ class Flash(Retriever):
         self,
         q: typing.Union[typing.List[str], str],
         k: typing.Optional[int] = None,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> list:
         """Retrieve documents from the index.
@@ -124,7 +125,9 @@ class Flash(Retriever):
         """
         rank = []
 
-        for batch in yield_batch_single(q, desc=f"{self.__class__.__name__} retriever"):
+        for batch in yield_batch_single(
+            q, desc=f"{self.__class__.__name__} retriever", tqdm_bar=tqdm_bar
+        ):
             if self.lowercase:
                 batch = batch.lower()
 

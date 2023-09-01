@@ -125,6 +125,7 @@ class Embedding(Retriever):
         q: np.ndarray,
         k: typing.Optional[int] = None,
         batch_size: typing.Optional[int] = None,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> typing.Union[
         typing.List[typing.List[typing.Dict[str, str]]],
@@ -152,6 +153,7 @@ class Embedding(Retriever):
             array=q,
             batch_size=batch_size if batch_size is not None else self.batch_size,
             desc=f"{self.__class__.__name__} retriever",
+            tqdm_bar=tqdm_bar,
         ):
             rank.extend(
                 self.index(

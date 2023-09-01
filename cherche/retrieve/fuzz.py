@@ -120,6 +120,7 @@ class Fuzz(Retriever):
         self,
         q: typing.Union[typing.List[str], str],
         k: typing.Optional[int] = None,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> dict:
         """Retrieve documents from the index.
@@ -138,7 +139,7 @@ class Fuzz(Retriever):
         rank = []
 
         for batch in yield_batch_single(
-            array=q, desc=f"{self.__class__.__name__} retriever"
+            array=q, desc=f"{self.__class__.__name__} retriever", tqdm_bar=tqdm_bar
         ):
             rank.append(
                 [

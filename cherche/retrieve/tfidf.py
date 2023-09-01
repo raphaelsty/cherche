@@ -135,6 +135,7 @@ class TfIdf(Retriever):
         q: typing.Union[str, typing.List[str]],
         k: typing.Optional[int] = None,
         batch_size: typing.Optional[int] = None,
+        tqdm_bar: bool = True,
         **kwargs,
     ) -> typing.Union[
         typing.List[typing.List[typing.Dict[str, str]]],
@@ -160,6 +161,7 @@ class TfIdf(Retriever):
             q,
             batch_size=batch_size if batch_size is not None else self.batch_size,
             desc=f"{self.__class__.__name__} retriever",
+            tqdm_bar=tqdm_bar,
         ):
             similarities = self.tfidf.transform(batch).dot(self.matrix).toarray()
 
