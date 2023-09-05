@@ -3,8 +3,7 @@ __all__ = ["TfIdf"]
 import typing
 
 import numpy as np
-import tqdm
-from scipy.sparse import csc_matrix, csr_matrix
+from scipy.sparse import csc_matrix, hstack
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from ..utils import yield_batch
@@ -34,37 +33,52 @@ class TfIdf(Retriever):
 
     >>> from pprint import pprint as print
     >>> from cherche import retrieve
+    >>> from sklearn.feature_extraction.text import TfidfVectorizer
+
 
     >>> documents = [
     ...     {"id": 0, "title": "Paris", "article": "Eiffel tower"},
-    ...     {"id": 1, "title": "Paris", "article": "Paris is in France."},
-    ...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada."},
+    ...     {"id": 1, "title": "Montreal", "article": "Montreal is in Canada."},
+    ...     {"id": 2, "title": "Paris", "article": "Eiffel tower"},
+    ...     {"id": 3, "title": "Montreal", "article": "Montreal is in Canada."},
     ... ]
 
-    >>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents)
-    >>> retriever = retriever.to_csr()
+    >>> retriever = retrieve.TfIdf(
+    ...     key="id",
+    ...     on=["title", "article"],
+    ...     documents=documents,
+    ... )
 
-    >>> retriever
-    TfIdf retriever
-        key      : id
-        on       : title, article
-        documents: 3
+    >>> documents = [
+    ...     {"id": 4, "title": "Paris", "article": "Eiffel tower"},
+    ...     {"id": 5, "title": "Montreal", "article": "Montreal is in Canada."},
+    ...     {"id": 6, "title": "Paris", "article": "Eiffel tower"},
+    ...     {"id": 7, "title": "Montreal", "article": "Montreal is in Canada."},
+    ... ]
 
-    >>> print(retriever(q=["paris", "montreal paris"]))
-    [[{'id': 1, 'similarity': 0.366173437788525},
-      {'id': 0, 'similarity': 0.23008513690129015}],
-     [{'id': 2, 'similarity': 0.6568592005036291},
-      {'id': 1, 'similarity': 0.18870017418263602},
-      {'id': 0, 'similarity': 0.07522017339345569}]]
+    >>> retriever = retriever.add(documents)
+
+    >>> print(retriever(q=["paris", "canada"], k=4))
+    [[{'id': 6, 'similarity': 0.5404109029445249},
+      {'id': 0, 'similarity': 0.5404109029445249},
+      {'id': 2, 'similarity': 0.5404109029445249},
+      {'id': 4, 'similarity': 0.5404109029445249}],
+     [{'id': 7, 'similarity': 0.3157669764669935},
+      {'id': 5, 'similarity': 0.3157669764669935},
+      {'id': 3, 'similarity': 0.3157669764669935},
+      {'id': 1, 'similarity': 0.3157669764669935}]]
 
     >>> print(retriever(["unknown", "montreal paris"], k=2))
     [[],
-     [{'id': 2, 'similarity': 0.6568592005036291},
-      {'id': 1, 'similarity': 0.18870017418263602}]]
+     [{'id': 7, 'similarity': 0.7391866872635209},
+      {'id': 5, 'similarity': 0.7391866872635209}]]
 
-    >>> print(retriever(q="paris", k=2))
-    [{'id': 1, 'similarity': 0.366173437788525},
-     {'id': 0, 'similarity': 0.23008513690129015}]
+
+    >>> print(retriever(q="paris"))
+    [{'id': 6, 'similarity': 0.5404109029445249},
+     {'id': 0, 'similarity': 0.5404109029445249},
+     {'id': 2, 'similarity': 0.5404109029445249},
+     {'id': 4, 'similarity': 0.5404109029445249}]
 
     References
     ----------
@@ -77,7 +91,7 @@ class TfIdf(Retriever):
         self,
         key: str,
         on: typing.Union[str, list],
-        documents: typing.List[typing.Dict[str, str]],
+        documents: typing.List[typing.Dict[str, str]] = None,
         tfidf: TfidfVectorizer = None,
         k: typing.Optional[int] = None,
         batch_size: int = 1024,
@@ -86,12 +100,13 @@ class TfIdf(Retriever):
         super().__init__(key=key, on=on, k=k, batch_size=batch_size)
 
         self.tfidf = (
-            TfidfVectorizer(lowercase=True, ngram_range=(3, 7), analyzer="char")
+            TfidfVectorizer(lowercase=True, ngram_range=(3, 7), analyzer="char_wb")
             if tfidf is None
             else tfidf
         )
 
         self.documents = [{self.key: document[self.key]} for document in documents]
+        self.duplicates = {document[self.key]: True for document in documents}
 
         method = self.tfidf.fit_transform if fit else self.tfidf.transform
 
@@ -101,59 +116,68 @@ class TfIdf(Retriever):
                     " ".join([doc.get(field, "") for field in self.on])
                     for doc in documents
                 ]
-            )
+            ),
+            dtype=np.float32,
         ).T
 
         self.k = len(self.documents) if k is None else k
         self.n = len(self.documents)
-        self.is_csc = True
 
-    def to_csr(self) -> "TfIdf":
-        """Convert the matrix to a csr matrix.
+    def add(
+        self,
+        documents: list,
+        batch_size: int = 100_000,
+        tqdm_bar: bool = False,
+        **kwargs,
+    ):
+        """Add new documents to the TFIDF retriever. The tfidf won't be refitted."""
+        for batch in yield_batch(
+            documents,
+            batch_size=batch_size,
+            tqdm_bar=tqdm_bar,
+            desc="Adding documents to TfIdf retriever",
+        ):
+            batch = [
+                document
+                for document in batch
+                if document[self.key] not in self.duplicates
+            ]
 
-        Speed-up if you want to retrieve documents from multiples queries.
-        """
-        if self.is_csc:
-            self.matrix = csr_matrix(self.matrix.T)
-            self.is_csc = False
+            if not batch:
+                continue
+
+            sparse_matrix = csc_matrix(
+                self.tfidf.transform(
+                    [
+                        " ".join([doc.get(field, "") for field in self.on])
+                        for doc in batch
+                    ]
+                ),
+                dtype=np.float32,
+            ).T
+
+            self.matrix = hstack((self.matrix, sparse_matrix))
+
+            for document in batch:
+                self.documents.append({self.key: document[self.key]})
+                self.duplicates[document[self.key]] = True
+
+            self.n += len(batch)
+
         return self
 
-    def to_csc(self) -> "TfIdf":
-        """Convert the matrix to a csc matrix.
-
-        Speed-up if you want to retrieve documents from a sinle query.
-        """
-        if not self.is_csc:
-            self.matrix = csc_matrix(self.matrix.T)
-            self.is_csc = True
-        return self
-
-    def top_k_by_partition(
-        self, similarities: np.ndarray, k: int
-    ) -> typing.Tuple[np.ndarray, np.ndarray]:
-        """Top k elements by partition."""
-        similarities *= -1
-
-        if k < self.n:
-            ind = np.argpartition(similarities, k, axis=-1)
-
-            # k non-sorted indices
-            ind = np.take(ind, np.arange(k), axis=-1)
-
-            # k non-sorted values
-            similarities = np.take_along_axis(similarities, ind, axis=-1)
-
-            # sort within k elements
-            ind_part = np.argsort(similarities, axis=-1)
-            ind = np.take_along_axis(ind, ind_part, axis=-1)
-
-        else:
-            ind_part = np.argsort(similarities, axis=-1)
-            ind = ind_part
-
-        similarities *= -1
-        val = np.take_along_axis(similarities, ind_part, axis=-1)
-        return ind, val
+    def top_k(self, similarities: csc_matrix, k: int):
+        """Return the top k documents for each query."""
+        matchs, scores = [], []
+        for row in similarities:
+            _k = min(row.data.shape[0] - 1, k)
+            ind = np.argpartition(row.data, kth=_k, axis=0)[:k]
+            similarity = np.take_along_axis(row.data, ind, axis=0)
+            indices = np.take_along_axis(row.indices, ind, axis=0)
+            ind = np.argsort(similarity, axis=0)
+            scores.append(-1 * np.take_along_axis(similarity, ind, axis=0))
+            matchs.append(np.take_along_axis(indices, ind, axis=0))
+        return matchs, scores
 
     def __call__(
         self,
@@ -188,16 +212,9 @@ class TfIdf(Retriever):
             desc=f"{self.__class__.__name__} retriever",
             tqdm_bar=tqdm_bar,
         ):
-            if self.is_csc:
-                similarities = self.tfidf.transform(batch).dot(self.matrix).toarray()
-            else:
-                similarities = (
-                    self.matrix.dot(self.tfidf.transform(batch).T).toarray().T
-                )
+            similarities = -1 * self.tfidf.transform(batch).dot(self.matrix)
 
-            batch_match, batch_similarities = self.top_k_by_partition(
-                similarities=similarities, k=k
-            )
+            batch_match, batch_similarities = self.top_k(similarities=similarities, k=k)
 
             for match, similarities in zip(batch_match, batch_similarities):
                 ranked.append(
