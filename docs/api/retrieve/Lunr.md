@@ -64,6 +64,7 @@ Lunr retriever
 
     - **q**     (*Union[str, List[str]]*)    
     - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
 ## References

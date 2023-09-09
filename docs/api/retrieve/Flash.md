@@ -69,6 +69,7 @@ Flash retriever
 
     - **q**     (*Union[List[str], str]*)    
     - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
 ???- note "add"

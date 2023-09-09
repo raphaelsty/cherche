@@ -86,6 +86,7 @@ Embedding retriever
     - **q**     (*numpy.ndarray*)    
     - **k**     (*Optional[int]*)     – defaults to `None`    
     - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
 ???- note "add"

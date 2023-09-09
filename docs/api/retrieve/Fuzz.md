@@ -14,7 +14,7 @@
 
     Fields to use to match the query to the documents.
 
-- **fuzzer** – defaults to `<cyfunction partial_ratio at 0x156296190>`
+- **fuzzer** – defaults to `<cyfunction partial_ratio at 0x12fcc13c0>`
 
     [RapidFuzz scorer](https://maxbachmann.github.io/RapidFuzz/Usage/fuzz.html): fuzz.ratio, fuzz.partial_ratio, fuzz.token_set_ratio, fuzz.partial_token_set_ratio, fuzz.token_sort_ratio, fuzz.partial_token_sort_ratio, fuzz.token_ratio, fuzz.partial_token_ratio, fuzz.WRatio, fuzz.QRatio, string_metric.levenshtein, string_metric.normalized_levenshtein
 
@@ -73,6 +73,7 @@ Fuzz retriever
 
     - **q**     (*Union[List[str], str]*)    
     - **k**     (*Optional[int]*)     – defaults to `None`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
 ???- note "add"

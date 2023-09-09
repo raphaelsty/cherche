@@ -4,7 +4,8 @@ import typing
 from scipy.special import softmax
 
 from .base import Compose, rank_intersection, rank_union, rank_vote
-from .pipeline import Pipeline, PipelineIntersection, PipelineUnion, PipelineVote
+from .pipeline import (Pipeline, PipelineIntersection, PipelineUnion,
+                       PipelineVote)
 
 __all__ = ["Intersection", "Union", "Vote"]
 

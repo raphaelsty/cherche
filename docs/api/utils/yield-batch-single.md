@@ -10,6 +10,8 @@ Yield successive n-sized chunks from array.
 
 - **desc** (*str*)
 
+- **tqdm_bar** (*bool*) – defaults to `True`
+
 
 
 

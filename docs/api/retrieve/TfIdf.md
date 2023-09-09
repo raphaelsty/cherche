@@ -14,7 +14,7 @@ TfIdf retriever based on cosine similarities.
 
     Fields to use to match the query to the documents.
 
-- **documents** (*List[Dict[str, str]]*)
+- **documents** (*List[Dict[str, str]]*) – defaults to `None`
 
     Documents in TFIdf retriever are static. The retriever must be reseted to index new documents.
 
@@ -28,6 +28,8 @@ TfIdf retriever based on cosine similarities.
 
 - **batch_size** (*int*) – defaults to `1024`
 
+- **fit** (*bool*) – defaults to `True`
+
 
 
 ## Examples
@@ -35,36 +37,50 @@ TfIdf retriever based on cosine similarities.
 ```python
 >>> from pprint import pprint as print
 >>> from cherche import retrieve
+>>> from sklearn.feature_extraction.text import TfidfVectorizer
 
 >>> documents = [
 ...     {"id": 0, "title": "Paris", "article": "Eiffel tower"},
-...     {"id": 1, "title": "Paris", "article": "Paris is in France."},
-...     {"id": 2, "title": "Montreal", "article": "Montreal is in Canada."},
+...     {"id": 1, "title": "Montreal", "article": "Montreal is in Canada."},
+...     {"id": 2, "title": "Paris", "article": "Eiffel tower"},
+...     {"id": 3, "title": "Montreal", "article": "Montreal is in Canada."},
 ... ]
 
->>> retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents)
+>>> retriever = retrieve.TfIdf(
+...     key="id",
+...     on=["title", "article"],
+...     documents=documents,
+... )
 
->>> retriever
-TfIdf retriever
-    key      : id
-    on       : title, article
-    documents: 3
+>>> documents = [
+...     {"id": 4, "title": "Paris", "article": "Eiffel tower"},
+...     {"id": 5, "title": "Montreal", "article": "Montreal is in Canada."},
+...     {"id": 6, "title": "Paris", "article": "Eiffel tower"},
+...     {"id": 7, "title": "Montreal", "article": "Montreal is in Canada."},
+... ]
 
->>> print(retriever(q=["paris", "montreal paris"]))
-[[{'id': 1, 'similarity': 0.366173437788525},
-  {'id': 0, 'similarity': 0.23008513690129015}],
- [{'id': 2, 'similarity': 0.6568592005036291},
-  {'id': 1, 'similarity': 0.18870017418263602},
-  {'id': 0, 'similarity': 0.07522017339345569}]]
+>>> retriever = retriever.add(documents)
+
+>>> print(retriever(q=["paris", "canada"], k=4))
+[[{'id': 6, 'similarity': 0.5404109029445249},
+  {'id': 0, 'similarity': 0.5404109029445249},
+  {'id': 2, 'similarity': 0.5404109029445249},
+  {'id': 4, 'similarity': 0.5404109029445249}],
+ [{'id': 7, 'similarity': 0.3157669764669935},
+  {'id': 5, 'similarity': 0.3157669764669935},
+  {'id': 3, 'similarity': 0.3157669764669935},
+  {'id': 1, 'similarity': 0.3157669764669935}]]
 
 >>> print(retriever(["unknown", "montreal paris"], k=2))
 [[],
- [{'id': 2, 'similarity': 0.6568592005036291},
-  {'id': 1, 'similarity': 0.18870017418263602}]]
+ [{'id': 7, 'similarity': 0.7391866872635209},
+  {'id': 5, 'similarity': 0.7391866872635209}]]
 
->>> print(retriever(q="paris", k=2))
-[{'id': 1, 'similarity': 0.366173437788525},
- {'id': 0, 'similarity': 0.23008513690129015}]
+>>> print(retriever(q="paris"))
+[{'id': 6, 'similarity': 0.5404109029445249},
+ {'id': 0, 'similarity': 0.5404109029445249},
+ {'id': 2, 'similarity': 0.5404109029445249},
+ {'id': 4, 'similarity': 0.5404109029445249}]
 ```
 
 ## Methods
@@ -79,15 +95,28 @@ TfIdf retriever
     - **k**     (*Optional[int]*)     – defaults to `None`    
         Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
     - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
-???- note "top_k_by_partition"
+???- note "add"
 
-    Top k elements by partition.
+    Add new documents to the TFIDF retriever. The tfidf won't be refitted.
 
     **Parameters**
 
-    - **similarities**     (*numpy.ndarray*)    
+    - **documents**     (*list*)    
+        Documents in TFIdf retriever are static. The retriever must be reseted to index new documents.
+    - **batch_size**     (*int*)     – defaults to `100000`    
+    - **tqdm_bar**     (*bool*)     – defaults to `False`    
+    - **kwargs**    
+    
+???- note "top_k"
+
+    Return the top k documents for each query.
+
+    **Parameters**
+
+    - **similarities**     (*scipy.sparse._csc.csc_matrix*)    
     - **k**     (*int*)    
         Number of documents to retrieve. Default is `None`, i.e all documents that match the query will be retrieved.
     

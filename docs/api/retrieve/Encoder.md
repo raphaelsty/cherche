@@ -77,6 +77,7 @@ Encoder retriever
     - **q**     (*Union[List[str], str]*)    
     - **k**     (*Optional[int]*)     – defaults to `None`    
     - **batch_size**     (*Optional[int]*)     – defaults to `None`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
 ???- note "add"
@@ -87,5 +88,6 @@ Encoder retriever
 
     - **documents**     (*List[Dict[str, str]]*)    
     - **batch_size**     (*int*)     – defaults to `64`    
+    - **tqdm_bar**     (*bool*)     – defaults to `True`    
     - **kwargs**    
     
