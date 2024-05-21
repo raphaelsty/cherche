@@ -17,6 +17,8 @@
 
 Cherche enables the development of a neural search pipeline that employs retrievers and pre-trained language models both as retrievers and rankers. The primary advantage of Cherche lies in its capacity to construct end-to-end pipelines. Additionally, Cherche is well-suited for offline semantic search due to its compatibility with batch computation.
 
+Here are some of the features Cherche offers:
+
 [Live demo of a NLP search engine powered by Cherche](https://raphaelsty.github.io/knowledge/?query=cherche%20neural%20search)
 
 ![Alt text](docs/img/explain.png)
