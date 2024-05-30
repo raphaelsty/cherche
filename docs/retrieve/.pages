@@ -1,6 +1,7 @@
 title: Retrieve
 nav:
     - retrieve.md
+    - bm25.md
     - tfidf.md
     - flash.md
     - lunr.md

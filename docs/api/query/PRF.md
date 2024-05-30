@@ -12,9 +12,9 @@ Pseudo (or blind) Relevance-Feedback module. The Query-Augmentation method appli
 
 - **documents** (*list*)
 
-- **tf** (*sklearn.feature_extraction.text.CountVectorizer*) – defaults to `TfidfVectorizer()`
+- **tf** (*sklearn.feature_extraction.text.CountVectorizer*) – defaults to `sparse.TfidfVectorizer()`
 
-    defaults to sklearn.feature_extraction.text.TfidfVectorizer. If you want to implement your own tf, it needs to follow the sklearn base API and provides the `transform` `fit_transform` and `get_feature_names_out` methods. See sklearn documentation for more information.
+    defaults to sklearn.feature_extraction.text.sparse.TfidfVectorizer. If you want to implement your own tf, it needs to follow the sklearn base API and provides the `transform` `fit_transform` and `get_feature_names_out` methods. See sklearn documentation for more information.
 
 - **nb_docs** (*int*) – defaults to `5`
 

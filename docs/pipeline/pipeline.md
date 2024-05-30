@@ -162,7 +162,7 @@ And here is the code:
 ```python
 >>> from cherche import retrieve, rank, data
 >>> from sentence_transformers import SentenceTransformer
->>> from sklearn.feature_extraction.text import TfidfVectorizer
+>>> from lenlp import sparse
 
 >>> documents, _ = data.arxiv_tags(arxiv_title=True, arxiv_summary=False, comment=False)
 
@@ -185,7 +185,7 @@ And here is the code:
 ...    key = "uri",
 ...    on = ["prefLabel_text", "altLabel_text"],
 ...    documents = documents,
-...    tfidf = TfidfVectorizer(lowercase=True, min_df=1, max_df=0.9, ngram_range=(3, 7), analyzer="char"),
+...    tfidf = sparse.TfidfVectorizer(normalize=True, min_df=1, max_df=0.9, ngram_range=(3, 7), analyzer="char"),
 ...    k = 100,
 ... ) + ranker
 

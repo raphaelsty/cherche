@@ -3,8 +3,8 @@ __all__ = ["TfIdf"]
 import typing
 
 import numpy as np
+from lenlp import sparse
 from scipy.sparse import csc_matrix, hstack
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 from ..utils import yield_batch
 from .base import Retriever
@@ -92,7 +92,7 @@ class TfIdf(Retriever):
         key: str,
         on: typing.Union[str, list],
         documents: typing.List[typing.Dict[str, str]] = None,
-        tfidf: TfidfVectorizer = None,
+        tfidf: sparse.TfidfVectorizer = None,
         k: typing.Optional[int] = None,
         batch_size: int = 1024,
         fit: bool = True,
@@ -100,7 +100,9 @@ class TfIdf(Retriever):
         super().__init__(key=key, on=on, k=k, batch_size=batch_size)
 
         self.tfidf = (
-            TfidfVectorizer(lowercase=True, ngram_range=(3, 7), analyzer="char_wb")
+            sparse.TfidfVectorizer(
+                normalize=True, ngram_range=(3, 7), analyzer="char_wb"
+            )
             if tfidf is None
             else tfidf
         )
@@ -207,7 +209,7 @@ class TfIdf(Retriever):
         ranked = []
 
         for batch in yield_batch(
-            q,
+            array=q,
             batch_size=batch_size if batch_size is not None else self.batch_size,
             desc=f"{self.__class__.__name__} retriever",
             tqdm_bar=tqdm_bar,

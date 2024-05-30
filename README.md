@@ -84,12 +84,18 @@ Here is an example of a neural search pipeline composed of a TF-IDF that quickly
 ```python
 from cherche import data, retrieve, rank
 from sentence_transformers import SentenceTransformer
+from lenlp import sparse
 
 # List of dicts
 documents = data.load_towns()
 
 # Retrieve on fields title and article
-retriever = retrieve.TfIdf(key="id", on=["title", "article"], documents=documents, k=30)
+retriever = retrieve.BM25(
+  key="id", 
+  on=["title", "article"], 
+  documents=documents, 
+  k=30
+)
 
 # Rank on fields title and article
 ranker = rank.Encoder(
@@ -165,6 +171,7 @@ search(["Bordeaux", "Paris", "Toulouse"])
 Cherche provides [retrievers](https://raphaelsty.github.io/cherche/retrieve/retrieve/) that filter input documents based on a query.
 
 - retrieve.TfIdf
+- retrieve.BM25
 - retrieve.Lunr
 - retrieve.Flash
 - retrieve.Encoder
@@ -195,7 +202,7 @@ We welcome all contributions.
 
 ## Acknowledgements 👏
 
-TfIdf retriever is a wrapper around [scikit-learn's TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html). Lunr retriever is a wrapper around [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). Flash retriever is a wrapper around [FlashText](https://github.com/vi3k6i5/flashtext). DPR, Encode and CrossEncoder rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline.
+Lunr retriever is a wrapper around [Lunr.py](https://github.com/yeraydiazdiaz/lunr.py). Flash retriever is a wrapper around [FlashText](https://github.com/vi3k6i5/flashtext). DPR, Encode and CrossEncoder rankers are wrappers dedicated to the use of the pre-trained models of [SentenceTransformers](https://www.sbert.net/docs/pretrained_models.html) in a neural search pipeline.
 
 ## Citations
 

@@ -18,9 +18,9 @@ TfIdf retriever based on cosine similarities.
 
     Documents in TFIdf retriever are static. The retriever must be reseted to index new documents.
 
-- **tfidf** (*sklearn.feature_extraction.text.TfidfVectorizer*) – defaults to `None`
+- **tfidf** (*sklearn.feature_extraction.text.sparse.TfidfVectorizer*) – defaults to `None`
 
-    TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
+    sparse.TfidfVectorizer class of Sklearn to create a custom TfIdf retriever.
 
 - **k** (*Optional[int]*) – defaults to `None`
 
@@ -37,7 +37,7 @@ TfIdf retriever based on cosine similarities.
 ```python
 >>> from pprint import pprint as print
 >>> from cherche import retrieve
->>> from sklearn.feature_extraction.text import TfidfVectorizer
+>>> from lenlp import sparse
 
 >>> documents = [
 ...     {"id": 0, "title": "Paris", "article": "Eiffel tower"},
@@ -122,6 +122,6 @@ TfIdf retriever based on cosine similarities.
     
 ## References
 
-1. [sklearn.feature_extraction.text.TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+1. [sklearn.feature_extraction.text.sparse.TfidfVectorizer](https://github.com/raphaelsty/LeNLP)
 2. [Python: tf-idf-cosine: to find document similarity](https://stackoverflow.com/questions/12118720/python-tf-idf-cosine-to-find-document-similarity)
 
