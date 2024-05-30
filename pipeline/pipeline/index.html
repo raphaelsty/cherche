@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.8">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.2.8">
     
     
       
@@ -553,6 +553,26 @@
   
   <span class="md-ellipsis">
     Retrieve
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../retrieve/bm25/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TfIdf
   </span>
   
 
@@ -2273,7 +2293,7 @@
         
   
   <span class="md-ellipsis">
-    Save & Load
+    Save &amp; Load
   </span>
   
 
@@ -2458,7 +2478,7 @@
 <p>And here is the code:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">data</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">lenlp</span> <span class="kn">import</span> <span class="n">sparse</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arxiv_tags</span><span class="p">(</span><span class="n">arxiv_title</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arxiv_summary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2481,7 +2501,7 @@
 <span class="o">...</span>    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
 <span class="o">...</span>    <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;prefLabel_text&quot;</span><span class="p">,</span> <span class="s2">&quot;altLabel_text&quot;</span><span class="p">],</span>
 <span class="o">...</span>    <span class="n">documents</span> <span class="o">=</span> <span class="n">documents</span><span class="p">,</span>
-<span class="o">...</span>    <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char&quot;</span><span class="p">),</span>
+<span class="o">...</span>    <span class="n">tfidf</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char&quot;</span><span class="p">),</span>
 <span class="o">...</span>    <span class="n">k</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
 <span class="o">...</span> <span class="p">)</span> <span class="o">+</span> <span class="n">ranker</span>
 

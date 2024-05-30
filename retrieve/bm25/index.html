@@ -12,13 +12,13 @@
         <meta name="author" content="Raphael Sourty">
       
       
-        <link rel="canonical" href="https://raphaelsty.github.io/cherche/retrieve/retrieve/">
+        <link rel="canonical" href="https://raphaelsty.github.io/cherche/retrieve/bm25/">
       
       
-        <link rel="prev" href="../../documents/towns/">
+        <link rel="prev" href="../retrieve/">
       
       
-        <link rel="next" href="../bm25/">
+        <link rel="next" href="../tfidf/">
       
       
       <link rel="icon" href="../../img/favicon.ico">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Retrieve - cherche</title>
+        <title>TfIdf - cherche</title>
       
     
     
@@ -91,7 +91,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#retrieve" class="md-skip">
+        <a href="#tfidf" class="md-skip">
           Skip to content
         </a>
       
@@ -125,7 +125,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Retrieve
+              TfIdf
             
           </span>
         </div>
@@ -244,7 +244,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../retrieve/" class="md-tabs__link">
           
   
   Retrieve
@@ -548,6 +548,26 @@
                 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../retrieve/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Retrieve
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -563,7 +583,7 @@
           
   
   <span class="md-ellipsis">
-    Retrieve
+    TfIdf
   </span>
   
 
@@ -574,7 +594,7 @@
         
   
   <span class="md-ellipsis">
-    Retrieve
+    TfIdf
   </span>
   
 
@@ -596,29 +616,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#retrievers" class="md-nav__link">
-    Retrievers
+  <a href="#batch-retrieval" class="md-nav__link">
+    Batch retrieval
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#tutorial" class="md-nav__link">
-    Tutorial
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    Parameters
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#matching-indexes-to-documents" class="md-nav__link">
-    Matching indexes to documents
+  <a href="#map-keys-to-documents" class="md-nav__link">
+    Map keys to documents
   </a>
   
 </li>
@@ -627,26 +633,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../bm25/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    TfIdf
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -2330,29 +2316,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#retrievers" class="md-nav__link">
-    Retrievers
+  <a href="#batch-retrieval" class="md-nav__link">
+    Batch retrieval
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#tutorial" class="md-nav__link">
-    Tutorial
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    Parameters
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#matching-indexes-to-documents" class="md-nav__link">
-    Matching indexes to documents
+  <a href="#map-keys-to-documents" class="md-nav__link">
+    Map keys to documents
   </a>
   
 </li>
@@ -2372,30 +2344,8 @@
                   
 
 
-<h1 id="retrieve">Retrieve<a class="headerlink" href="#retrieve" title="Permanent link">&para;</a></h1>
-<p>Retrievers speed up the neural search pipeline by filtering out the majority of documents that are not relevant. Rankers (slower) will then pull up the most relevant documents based on semantic
-similarity.</p>
-<p><code>retrieve.Encoder</code>, <code>retrieve.DPR</code> and <code>retrieve.Embedding</code> retrievers rely on semantic similarity, unlike the other retrievers, which match exact words.</p>
-<h2 id="retrievers">Retrievers<a class="headerlink" href="#retrievers" title="Permanent link">&para;</a></h2>
-<p>Here is the list of available retrievers using Cherche:</p>
-<ul>
-<li><code>retrieve.TfIdf</code></li>
-<li><code>retrieve.Lunr</code></li>
-<li><code>retrieve.Flash</code></li>
-<li><code>retrieve.Fuzz</code></li>
-<li><code>retrieve.Encoder</code></li>
-<li><code>retrieve.DPR</code></li>
-<li><code>retrieve.Embedding</code></li>
-</ul>
-<p>To use <code>retrieve.Encoder</code>, <code>retrieve.DPR</code> or <code>retrieve.Embedding</code> we will need to install cherche using:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;cherche[cpu]&quot;</span>
-</code></pre></div>
-<p>If we want to run semantic retrievers on GPU:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;cherche[gpu]&quot;</span>
-</code></pre></div>
-<h2 id="tutorial">Tutorial<a class="headerlink" href="#tutorial" title="Permanent link">&para;</a></h2>
-<p>The main parameter of retrievers is <code>on</code>; it is the field(s) on which the retriever will perform the search. If multiple fields are specified, the retriever will concatenate all fields in the order provided. The <code>key</code>
-parameter is the name of the field that contain an unique identifier for the document.</p>
+<h1 id="tfidf">TfIdf<a class="headerlink" href="#tfidf" title="Permanent link">&para;</a></h1>
+<p>Our BM25 retriever relies on the <a href="https://github.com/raphaelsty/LeNLP">sparse.BM25Vectorizer</a> of LeNLP.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
@@ -2403,112 +2353,88 @@ parameter is the name of the field that contain an unique identifier for the doc
 <span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
 <span class="o">...</span>    <span class="p">{</span>
 <span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
 <span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
 <span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">BM25</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;france&quot;</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.1236413097778466</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.08907655343363269</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.0031730868527342104</span><span class="p">}]</span>
 </code></pre></div>
-<p>Calling a retriever with a single query output a list of documents.
-<div class="highlight"><pre><span></span><code><span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.21638007903488998</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.13897776006154242</span><span class="p">}]</span>
-</code></pre></div></p>
-<p>Calling a retriever with a list of queries output a list of list of documents. If we want to call
-retriever on multiples queries, we should opt for the following code:</p>
-<div class="highlight"><pre><span></span><code><span class="n">retriever</span><span class="p">([</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;art&quot;</span><span class="p">,</span> <span class="s2">&quot;finance&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="p">[[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.21638007903488998</span><span class="p">},</span>  <span class="c1"># Query 1</span>
-  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.13897776006154242</span><span class="p">}],</span>
- <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.03987124117278171</span><span class="p">}],</span> <span class="c1"># Query 2</span>
- <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.15208763286878763</span><span class="p">},</span>  <span class="c1"># Query 3</span>
-  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.02564158475123616</span><span class="p">}]]</span>
+<p>We can also initialize the retriever with a custom <a href="https://github.com/raphaelsty/LeNLP">sparse.BM25Vectorizer</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">lenlp</span> <span class="kn">import</span> <span class="n">sparse</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris is the capital and most populous city of France&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">},</span>
+<span class="o">...</span>    <span class="p">{</span>
+<span class="o">...</span>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="s2">&quot;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+<span class="o">...</span>        <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://en.wikipedia.org/wiki/Paris&quot;</span>
+<span class="o">...</span>    <span class="p">}</span>
+<span class="o">...</span> <span class="p">]</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">count_vectorizer</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">BM25Vectorizer</span><span class="p">(</span>
+<span class="o">...</span>  <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">BM25Vectorizer</span><span class="p">(</span>
+<span class="o">...</span>  <span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">count_vectorizer</span><span class="o">=</span><span class="n">count_vectorizer</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;fra&quot;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.15055477454160002</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.022883459495904895</span><span class="p">}]</span>
 </code></pre></div>
-<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Retriever</th>
-<th style="text-align: center;">Add</th>
-<th style="text-align: center;">Semantic</th>
-<th style="text-align: center;">Batch optmized</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">retrieve.Encoder</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">✅</td>
-</tr>
-<tr>
-<td style="text-align: center;">retrieve.DPR</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">✅</td>
-</tr>
-<tr>
-<td style="text-align: center;">retrieve.Embedding</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">✅</td>
-</tr>
-<tr>
-<td style="text-align: center;">retrieve.Flash</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">❌</td>
-<td style="text-align: center;">❌</td>
-</tr>
-<tr>
-<td style="text-align: center;">retrieve.Fuzz</td>
-<td style="text-align: center;">✅</td>
-<td style="text-align: center;">❌</td>
-<td style="text-align: center;">❌</td>
-</tr>
-<tr>
-<td style="text-align: center;">retrieve.TfIdf</td>
-<td style="text-align: center;">❌</td>
-<td style="text-align: center;">❌</td>
-<td style="text-align: center;">✅</td>
-</tr>
-<tr>
-<td style="text-align: center;">retrieve.Lunr</td>
-<td style="text-align: center;">❌</td>
-<td style="text-align: center;">❌</td>
-<td style="text-align: center;">❌</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>Add: Retriever has a <code>.add(documents)</code> method to index new documents along the way.</li>
-<li>Semantic: The Retriever is powered by a language model, enabling semantic similarity-based document retrieval.</li>
-<li>Batch-Optimized: The Retriever is optimized for batch processing, with a batch_size parameter that can be adjusted to handle multiple queries efficiently.</li>
-</ul>
-<p>We can call retrievers with a k-parameter, which enables the selection of the number of documents to be retrieved. By default, the value of k is set to None, meaning that the retrievers will retrieve all documents that match the query. However, if a specific value for k is chosen, the retriever will only retrieve the top k documents that are most likely to match the query.</p>
-<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">([</span><span class="s2">&quot;paris&quot;</span><span class="p">,</span> <span class="s2">&quot;art&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="p">[[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.21638007903488998</span><span class="p">},</span>
-  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.13897776006154242</span><span class="p">}],</span>
- <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.03987124117278171</span><span class="p">}]]</span>
+<h2 id="batch-retrieval">Batch retrieval<a class="headerlink" href="#batch-retrieval" title="Permanent link">&para;</a></h2>
+<p>If we have several queries for which we want to retrieve the top k documents then we can
+pass a list of queries to the retriever. This is much faster for multiple queries. In batch-mode,
+retriever returns a list of list of documents instead of a list of documents.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">([</span><span class="s2">&quot;fra&quot;</span><span class="p">,</span> <span class="s2">&quot;arts&quot;</span><span class="p">,</span> <span class="s2">&quot;capital&quot;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">[[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.051000705070125066</span><span class="p">},</span> <span class="c1"># Match query 1</span>
+  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.03415513704304113</span><span class="p">}],</span>
+ <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.07021399356970497</span><span class="p">}],</span> <span class="c1"># Match query 2</span>
+ <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.25972148184421534</span><span class="p">}]]</span> <span class="c1"># Match query 3</span>
 </code></pre></div>
-<h2 id="matching-indexes-to-documents">Matching indexes to documents<a class="headerlink" href="#matching-indexes-to-documents" title="Permanent link">&para;</a></h2>
-<p>It is possible to directly retrieve the content of the documents using the <code>+</code> operator between retriever and documents. Documents mapping is helpful if we want to plug our retriever on a <code>rank.CrossEncoder</code>.</p>
+<h2 id="map-keys-to-documents">Map keys to documents<a class="headerlink" href="#map-keys-to-documents" title="Permanent link">&para;</a></h2>
+<p>We can map documents to retrieved keys.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">+=</span> <span class="n">documents</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;Paris&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span><span class="p">(</span><span class="s2">&quot;fra&quot;</span><span class="p">)</span>
 <span class="p">[{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris is the capital and most populous city of France&#39;</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
- <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris has been one of Europe major centres of finance, diplomacy , commerce , fashion , gastronomy , science , and arts.&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.15055477454160002</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
   <span class="s1">&#39;article&#39;</span><span class="p">:</span> <span class="s1">&#39;The City of Paris is the centre and seat of government of the region and province of Île-de-France .&#39;</span><span class="p">,</span>
   <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Paris&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">}]</span>
+  <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://en.wikipedia.org/wiki/Paris&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.022883459495904895</span><span class="p">}]</span>
 </code></pre></div>
 
 

@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.8">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.2.8">
     
     
       
@@ -553,6 +553,26 @@
   
   <span class="md-ellipsis">
     Retrieve
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../retrieve/bm25/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TfIdf
   </span>
   
 
@@ -2275,7 +2295,7 @@
         
   
   <span class="md-ellipsis">
-    Save & Load
+    Save &amp; Load
   </span>
   
 
@@ -2380,8 +2400,8 @@
 <p><strong>documents</strong> (<em>list</em>)</p>
 </li>
 <li>
-<p><strong>tf</strong> (<em>sklearn.feature_extraction.text.CountVectorizer</em>) – defaults to <code>TfidfVectorizer()</code></p>
-<p>defaults to sklearn.feature_extraction.text.TfidfVectorizer. If you want to implement your own tf, it needs to follow the sklearn base API and provides the <code>transform</code> <code>fit_transform</code> and <code>get_feature_names_out</code> methods. See sklearn documentation for more information.</p>
+<p><strong>tf</strong> (<em>sklearn.feature_extraction.text.CountVectorizer</em>) – defaults to <code>sparse.TfidfVectorizer()</code></p>
+<p>defaults to sklearn.feature_extraction.text.sparse.TfidfVectorizer. If you want to implement your own tf, it needs to follow the sklearn base API and provides the <code>transform</code> <code>fit_transform</code> and <code>get_feature_names_out</code> methods. See sklearn documentation for more information.</p>
 </li>
 <li>
 <p><strong>nb_docs</strong> (<em>int</em>) – defaults to <code>5</code></p>

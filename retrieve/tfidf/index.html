@@ -15,14 +15,14 @@
         <link rel="canonical" href="https://raphaelsty.github.io/cherche/retrieve/tfidf/">
       
       
-        <link rel="prev" href="../retrieve/">
+        <link rel="prev" href="../bm25/">
       
       
         <link rel="next" href="../flash/">
       
       
       <link rel="icon" href="../../img/favicon.ico">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.8">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.2.8">
     
     
       
@@ -555,6 +555,26 @@
   
   <span class="md-ellipsis">
     Retrieve
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bm25/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TfIdf
   </span>
   
 
@@ -2252,7 +2272,7 @@
         
   
   <span class="md-ellipsis">
-    Save & Load
+    Save &amp; Load
   </span>
   
 
@@ -2325,7 +2345,7 @@
 
 
 <h1 id="tfidf">TfIdf<a class="headerlink" href="#tfidf" title="Permanent link">&para;</a></h1>
-<p>Our TF-IDF retriever relies on the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a> of Sklearn. It computes the dot product between the query TF-IDF vector and the documents TF-IDF matrix and retrieves the highest match. TfIdf retriever stores a sparse matrix and an index that links the rows of the matrix to document identifiers.</p>
+<p>Our TF-IDF retriever relies on the <a href="https://github.com/raphaelsty/LeNLP">sparse.TfidfVectorizer</a> of Sklearn. It computes the dot product between the query TF-IDF vector and the documents TF-IDF matrix and retrieves the highest match. TfIdf retriever stores a sparse matrix and an index that links the rows of the matrix to document identifiers.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
@@ -2356,9 +2376,9 @@
  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.10831402366399025</span><span class="p">},</span>
  <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="mf">0.02505818772920329</span><span class="p">}]</span>
 </code></pre></div>
-<p>We can also initialize the retriever with a custom <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">TfidfVectorizer</a>.</p>
+<p>We can also initialize the retriever with a custom <a href="https://github.com/raphaelsty/LeNLP">sparse.TfidfVectorizer</a>.</p>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">cherche</span> <span class="kn">import</span> <span class="n">retrieve</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">lenlp</span> <span class="kn">import</span> <span class="n">sparse</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
 <span class="o">...</span>    <span class="p">{</span>
@@ -2381,8 +2401,8 @@
 <span class="o">...</span>    <span class="p">}</span>
 <span class="o">...</span> <span class="p">]</span>
 
-<span class="o">&gt;&gt;&gt;</span> <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span>
-<span class="o">...</span>  <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">tfidf</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">TfidfVectorizer</span><span class="p">(</span>
+<span class="o">...</span>  <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="s2">&quot;char_wb&quot;</span><span class="p">)</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">retriever</span> <span class="o">=</span> <span class="n">retrieve</span><span class="o">.</span><span class="n">TfIdf</span><span class="p">(</span>
 <span class="o">...</span>  <span class="n">key</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;article&quot;</span><span class="p">],</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">tfidf</span><span class="o">=</span><span class="n">tfidf</span><span class="p">)</span>
