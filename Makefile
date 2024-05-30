@@ -1,19 +1,16 @@
 COMMIT_HASH := $(shell eval git rev-parse HEAD)
 
-cython:
-	python setup.py build_ext --inplace --force
-
 execute-notebooks:
 	jupyter nbconvert --execute --to notebook --inplace docs/*/*.ipynb --ExecutePreprocessor.timeout=-1
 
 render-notebooks:
 
-doc: render-notebooks
-	python docs/scripts/index.py
-	mkdocs build
-
-livedoc: doc
+livedoc:
+	mkdocs build --clean
 	mkdocs serve --dirtyreload
+
+deploydoc:
+	mkdocs gh-deploy --force
 
 .PHONY: bench
 bench:

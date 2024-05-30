@@ -33,7 +33,7 @@ Evaluation function
 ```python
 >>> from pprint import pprint as print
 >>> from cherche import data, evaluate, retrieve
->>> from sklearn.feature_extraction.text import TfidfVectorizer
+>>> from lenlp import sparse
 
 >>> documents, query_answers = data.arxiv_tags(
 ...    arxiv_title=True, arxiv_summary=False, comment=False
@@ -43,7 +43,7 @@ Evaluation function
 ...     key="uri",
 ...     on=["prefLabel_text", "altLabel_text"],
 ...     documents=documents,
-...     tfidf=TfidfVectorizer(lowercase=True, ngram_range=(3, 7), analyzer="char"),
+...     tfidf=sparse.TfidfVectorizer(normalize=True, ngram_range=(3, 7), analyzer="char"),
 ... ) + documents
 
 >>> scores = evaluate.evaluation(search=search, query_answers=query_answers, k=10)

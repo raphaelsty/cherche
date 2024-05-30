@@ -13,6 +13,7 @@ base_packages = [
     "flashtext >= 2.7",
     "tqdm >= 4.62.3",
     "scipy >= 1.7.3",
+    "lenlp >= 1.0.3",
 ]
 
 cpu = ["sentence-transformers >= 2.2.2", "faiss-cpu >= 1.7.4"]

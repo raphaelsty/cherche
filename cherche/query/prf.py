@@ -2,7 +2,7 @@ import typing
 
 import numpy as np
 import sklearn
-from sklearn.feature_extraction.text import TfidfVectorizer
+from lenlp import sparse
 from sklearn.metrics.pairwise import cosine_similarity
 
 from ..utils import yield_batch_single
@@ -21,7 +21,7 @@ class PRF(Query):
     on
         Fields to use for fitting the spelling corrector on.
     tf
-        defaults to sklearn.feature_extraction.text.TfidfVectorizer.
+        defaults to sklearn.feature_extraction.text.sparse.TfidfVectorizer.
         If you want to implement your own tf, it needs to follow the sklearn base API and provides the `transform`
         `fit_transform` and `get_feature_names_out` methods. See sklearn documentation for more information.
     nb_docs
@@ -65,7 +65,7 @@ class PRF(Query):
         self,
         on: typing.Union[str, list],
         documents: list,
-        tf: sklearn.feature_extraction.text.CountVectorizer = TfidfVectorizer(),
+        tf: sklearn.feature_extraction.text.CountVectorizer = sparse.TfidfVectorizer(),
         nb_docs: int = 5,
         nb_terms_per_doc: int = 3,
     ) -> None:
