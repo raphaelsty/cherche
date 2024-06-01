@@ -7,13 +7,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 base_packages = [
     "numpy >= 1.23.5",
-    "scikit-learn >= 1.1.2",
+    "scikit-learn >= 1.5.0",
     "lunr >= 0.6.2",
     "rapidfuzz >= 3.0.0",
     "flashtext >= 2.7",
     "tqdm >= 4.62.3",
     "scipy >= 1.7.3",
-    "lenlp == 1.0.5",
+    "lenlp == 1.1.0",
 ]
 
 cpu = ["sentence-transformers >= 2.2.2", "faiss-cpu >= 1.7.4"]
