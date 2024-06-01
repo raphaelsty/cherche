@@ -14,10 +14,11 @@ base_packages = [
     "tqdm >= 4.62.3",
     "scipy >= 1.7.3",
     "lenlp == 1.1.0",
+    "sentence-transformers >= 3.0.0",
 ]
 
-cpu = ["sentence-transformers >= 2.2.2", "faiss-cpu >= 1.7.4"]
-gpu = ["sentence-transformers >= 2.2.2", "faiss-gpu >= 1.7.4"]
+cpu = ["sentence-transformers >= 3.0.0", "faiss-cpu >= 1.7.4"]
+gpu = ["sentence-transformers >= 3.0.0", "faiss-gpu >= 1.7.4"]
 dev = [
     "numpydoc >= 1.4.0",
     "mkdocs_material >= 8.3.5",
